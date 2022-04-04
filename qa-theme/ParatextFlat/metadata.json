@@ -1,0 +1,10 @@
+{
+	"name": "ParatextFlat",
+	"description": "ParatextFlat responsive theme with RTL support, based on SnowFlat",
+	"version": "1.0",
+	"date": "2022-04-01",
+	"author": "Paratext Team",
+	"author_uri": "http://www.paratext.org",
+	"license": "GPLv2",
+	"min_q2a": "1.7"
+}

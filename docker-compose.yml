@@ -1,0 +1,27 @@
+version: '3.1'   
+
+services:
+  php:
+    build: php:7.4-cli
+    ports:
+      - 80:80
+    volumes:
+      - .:/var/www/html/
+         
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_USER: dummy
+      MYSQL_PASSWORD: Doolittle2232!
+      MYSQL_DATABASE: questions2answer
+      MYSQL_ROOT_PASSWORD: Doolittle2232!
+    volumes:
+      - ./src/Database:/docker-entrypoint-initdb.d
+  
+  adminer:
+    image: adminer
+    restart: always
+#    ports:
+#    - 8080:8080
