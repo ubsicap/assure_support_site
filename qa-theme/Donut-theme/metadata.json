@@ -1,0 +1,10 @@
+{
+	"name": "Donut",
+	"description": "Modern and Responsive theme for Question2Answer ( Q2A ) websites",
+	"version": "2.1.1",
+	"date": "2018-12-06",
+	"author": "Amiya Sahu",
+	"author_uri": "http://www.amiyasahu.github.io/",
+	"license": "GPLv2",
+	"min_q2a": "1.8"
+}

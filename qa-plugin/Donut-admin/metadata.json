@@ -1,0 +1,13 @@
+{
+  "name": "Donut theme Admin Panel",
+  "uri": "https://github.com/amiyasahu/Donut/",
+  "description": "Provides customization support for Donut theme",
+  "version": "2.1.0",
+  "date": "2018-12-06",
+  "author": "Amiya Sahu",
+  "author_uri": "http://www.amiyasahu.github.io/",
+  "license": "GPLv3",
+  "update_uri": "https://github.com/amiyasahu/Donut/blob/master/qa-plugin/Donut-admin/metadata.json",
+  "min_q2a": "1.6",
+  "min_php": "5.1.6"
+}
