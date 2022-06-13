@@ -1,27 +1,33 @@
-version: '3.1'   
+version: "3.8"
 
 services:
-  php:
-    build: php:7.4-cli
-    ports:
-      - 80:80
-    volumes:
-      - .:/var/www/html/
-         
+  # Configuration fot the Apache container running the Q2A site
+  php-apache-environment:
+    container_name: q2a-apache              # Custom name for the q2a Apache server
+    build:                                  # Build a new image
+      context: ./                           # Source of the container
+      dockerfile: Dockerfile                # Dockerfile to build from
+    depends_on:                             # Ensure this container starts *after* the DB container is running
+      - "db"
+    volumes:                                # Make sure the host (left) location is the folder containing `index.php`
+      - ./:/var/www/html/   # Allow the server to launch `index.php`
+    ports:                                  # Open port 8000 on the host
+      - "8000:80"
+
+  # Configuration for the Q2A database container
   db:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_USER: dummy
-      MYSQL_PASSWORD: Doolittle2232!
-      MYSQL_DATABASE: questions2answer
-      MYSQL_ROOT_PASSWORD: Doolittle2232!
-    volumes:
-      - ./src/Database:/docker-entrypoint-initdb.d
-  
-  adminer:
-    image: adminer
-    restart: always
-#    ports:
-#    - 8080:8080
+    container_name: q2a-db                  # DB name. Note that this is used for the `QA_MYSQL_HOSTNAME` env var in `qa-config.php` in the Q2A container
+    image: mysql                            # Using a mySQL database
+    restart: always                         # Always restart the container. See `https://www.cloudbees.com/blog/ensuring-containers-are-always-running-with-dockers-restart-policy` for more restart policies
+    environment:                            # Setting the mySQL environment variables
+      MYSQL_ROOT_PASSWORD: root_p@ssw0rd!   # Not set in `qa-config.php`
+      MYSQL_DATABASE: q2a-mysql-db          # Name of the *database*, not the container
+      MYSQL_USER: admin                     # Username used in `qa-config.php`
+      MYSQL_PASSWORD: p@ssw0rd!             # Password used in `qa-config.php`
+    ports:                                  # Disclaimer: I got these ports from `https://www.section.io/engineering-education/dockerized-php-apache-and-mysql-container-development-environment/`
+      - "9906:3306"                         # 3306 is default for SQL
+    volumes:                                # Store DB information in a volume
+      - q2a_db_volume:/var/lib/mysql        # Note this volume is on the HOST MACHINE, managed by Docker
+
+volumes:                                    # Define the volume used for the DB
+  q2a_db_volume:                            # This volume is stored on /var/lib/docker/volumes/ (on Linux)

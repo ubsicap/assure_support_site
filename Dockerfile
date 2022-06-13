@@ -1,9 +1,13 @@
-FROM php:7.4-cli
+# Note that q2a is incompatible with php 8.1 (Last checked 6/10/22)
+FROM php:8.0-apache
+
+# Copying all contents of the `question2answer/` directory
+#   and using that as this container's working directory
 COPY . /app
 WORKDIR /app
 
-RUN docker-php-ext-install mysqli
+# Install and enable the mysqli software to connect to our DB
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
-	
-CMD [ "php", "./index.php" ]
-#CMD [ "php", "./phpinfo.php" ]
+# General updates to ensure smooth runtime
+RUN apt-get update && apt-get upgrade -y
