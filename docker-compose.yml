@@ -26,3 +26,8 @@ services:
       MYSQL_PASSWORD: p@ssw0rd!             # Password used in `qa-config.php`
     ports:                                  # Disclaimer: I got these ports from `https://www.section.io/engineering-education/dockerized-php-apache-and-mysql-container-development-environment/`
       - "9906:3306"                         # 3306 is default for SQL
+    volumes:                                # Store DB information in a volume
+      - q2a_db_volume:/var/lib/mysql        # Note this volume is on the HOST MACHINE, managed by Docker
+
+volumes:                                    # Define the volume used for the DB
+  q2a_db_volume:                            # This volume is stored on /var/lib/docker/volumes/ (on Linux)
