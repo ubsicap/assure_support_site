@@ -3,7 +3,7 @@ qa-config.php
 .htaccess
 
 # Ignore cached files
-/qa-cache/*/
+qa-cache/*/
 
 # Other files
 .DS_Store
@@ -14,5 +14,5 @@ qa-config.php
 ehthumbs.db
 Thumbs.db
 .idea/
-/dbdata
+dbdata
 .vscode
