@@ -43,6 +43,23 @@ install_dependencies() {
     #rc-service docker start
 
     #rm install_docker.sh
+
+    # The following works on an AWS Amazon Linux server
+    sudo yum install -y docker docker-compose
+    #git clone --branch danny-docker https://github.com/ubsicap/assure_support_site.git
+    #cd assure_support_site
+
+    sudo systemctl start docker
+
+    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+    mkdir -p $DOCKER_CONFIG/cli-plugins
+    curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+    sudo groupadd docker
+    sudo usermod -aG docker ${USER}
+    sudo systemctl restart docker
+    sudo chmod 666 /var/run/docker.sock
 }
 
 
