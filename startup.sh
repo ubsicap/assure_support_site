@@ -1,5 +1,7 @@
 #!/bin/sh
 
+
+
 # Paths to the files that will be modified
 config_path=''
 compose_path=''
@@ -11,20 +13,28 @@ DATABASE_TO_REPLACE='DATABASE_TO_REPLACE'
 HOSTNAME_TO_REPLACE='HOSTNAME_TO_REPLACE'
 ROOT_PASSWORD_TO_REPLACE='ROOT_PASSWORD_TO_REPLACE'
 
-
-# The hostname of the database is already defined as the container's name
+# Values to be read from the user
 qa_mysql_hostname=''
 qa_mysql_username=''
 qa_mysql_password=''
 qa_mysql_database=''
 qa_mysql_root_password=''
 
-install_dependencies() {
-    echo -e "\nInstalling runtime dependencies..."
 
-    apt-get update -y
-    apt-get install -y docker docker-compose
-    apt-get install -y docker-compose-plugin
+
+#===============================================================================
+#
+# Installs any docker/git dependencies on this OS needed for the server to run.
+#
+# Currently only installs for debian-based distros, as VM is Ubuntu. 
+#
+#===============================================================================
+install_dependencies() {
+    echo '\nInstalling runtime dependencies...'
+
+    #apt-get update -y
+    #apt-get install -y docker docker-compose
+    #apt-get install -y docker-compose-plugin
     
     
     #apk add --update docker docker-compose docker-compose git openrc
@@ -35,27 +45,54 @@ install_dependencies() {
     #rm install_docker.sh
 }
 
+
+
+#===============================================================================
+#
+# Fetches the latest files from the GitHub repository.
+#
+# This function may not be used, depending on whether this setup script is
+# downloaded alongside the rest of the files.
+#
+#===============================================================================
 fetch_repository() {
-    echo -e "\nFetching GitHub repository..."
+    echo '\nFetching GitHub repository...'
 
     # TODO: Change this to the default repo link
     git clone --branch danny-docker https://github.com/ubsicap/assure_support_site.git
     cd assure_support_site
 }
 
+
+
+#===============================================================================
+#
+# Locates the configuration files for setting up the Q2A site and database.
+#
+# These files will get modified to hold the user-inputted credentials for the
+# MySQL database.
+#
+#===============================================================================
 locate_config_files() {
-    echo -e "\nLocating configuration files..."
+    echo '\nLocating configuration files...'
 
     config_path=$(find . -type f -name "qa-config.php")
     compose_path=$(find . -type f -name "docker-compose.yml")
 
     echo "Configuration files found:"
-    echo -e "\t$config_path"
-    echo -e "\t$compose_path"
+    echo "    $config_path"
+    echo "    $compose_path"
 }
 
+
+
+#===============================================================================
+#
+# Checks if the credentials have already been set, prompting the user if not.
+#
+#===============================================================================
 check_credentials() {
-    echo -e "\nChecking if MySQL credentials have been set..."
+    echo '\nChecking if MySQL credentials have been set...'
 
     # Set the database root password, if needed
     if grep -q $ROOT_PASSWORD_TO_REPLACE $compose_path;
@@ -66,7 +103,7 @@ check_credentials() {
         stty echo
         echo
     else
-        echo -e "\tRoot password already defined"
+        echo '\tRoot password already defined'
     fi
 
     # Set the username, if needed
@@ -74,7 +111,7 @@ check_credentials() {
     then
         read -p "Set username for new MySQL user account > " qa_mysql_username
     else
-        echo -e "\tUsername already defined"
+        echo '\tUsername already defined'
     fi
 
     # Set the database password, if needed
@@ -85,7 +122,7 @@ check_credentials() {
         stty echo
         echo
     else
-        echo -e "\tPassword already defined"
+        echo '\tPassword already defined'
     fi
 
     # Set the database hostname, if needed
@@ -93,7 +130,7 @@ check_credentials() {
     then
         echo -n
     else
-        echo -e "\tHostname already defined"
+        echo '\tHostname already defined'
     fi
 
     # Set the database name, if needed
@@ -101,16 +138,22 @@ check_credentials() {
     then
         read -p "Set name for MySQL database > " qa_mysql_database
     else
-        echo -e "\tDatabase name already defined"
+        echo '\tDatabase name already defined'
     fi
 
+    # Lastly, fetch the name of the container that the MySQL database will run in
     qa_mysql_hostname=$(awk '/container_name:/' $compose_path | awk 'FNR == 2 {print $2}')
 }
 
 
 
+#===============================================================================
+#
+# Sets the MySQL credentials provided by the user.
+#
+#===============================================================================
 set_credentials() {
-    echo -e "\nSetting MySQL credentials..."
+    echo '\nSetting MySQL credentials...'
 
     # Set the root password
     sed -i "s/$ROOT_PASSWORD_TO_REPLACE/$qa_mysql_root_password/" $compose_path
@@ -133,12 +176,26 @@ set_credentials() {
     echo "MySQL credentials set"
 }
 
-launch_service() {
-    echo -e "\nLaunching website service via docker"
 
-    docker compose up
+
+#===============================================================================
+#
+# Launches the web server through docker compose.
+#
+# This causes two containers to be spawned:
+#   q2a-apache      Php Apache web server hosting the website
+#   q2a-db          MySQL database to store website information
+#
+#===============================================================================
+launch_service() {
+    echo '\nLaunching website service via docker'
+
+    docker compose up -d
 }
 
+
+
+# Program execution
 install_dependencies
 #fetch_repository
 locate_config_files
