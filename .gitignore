@@ -1,6 +1,6 @@
 # Ignore Q2A config file and .htaccess in development
-qa-config.php
-.htaccess
+#qa-config.php
+#.htaccess
 
 # Ignore cached files
 qa-cache/*/
@@ -16,3 +16,8 @@ Thumbs.db
 .idea/
 dbdata
 .vscode
+
+
+# Just some dev scripts
+resetconfig.sh
+restoreconfig.sh
