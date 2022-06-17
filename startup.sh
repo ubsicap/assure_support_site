@@ -32,6 +32,7 @@ fetch_repository() {
 
     #git clone https://github.com/zpqrtbnk/test-repo
     git clone --branch danny-docker https://github.com/ubsicap/assure_support_site.git
+    cd assure_support_site
 }
 
 locate_config_files() {
