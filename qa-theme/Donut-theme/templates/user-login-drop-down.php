@@ -28,8 +28,8 @@
                                 $icon = 'class="' . @$class[1] . ' fa fa-github"';
                             elseif ( $k == 'foursquare' )
                                 $icon = 'class="' . @$class[1] . ' fa fa-foursquare"';
-                            elseif ( $k == 'google' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-google"';
+                             elseif ( $k == 'google' )
+                                 $icon = 'class="' . @$class[1] . ' fa"';
                             elseif ( $k == 'googleplus' )
                                 $icon = 'class="' . @$class[1] . ' fa fa-google-plus"';
                             elseif ( $k == 'live' )
