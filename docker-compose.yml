@@ -8,9 +8,9 @@ services:
       context: ./                           # Source of the container
       dockerfile: Dockerfile                # Dockerfile to build from
     depends_on:                             # Ensure this container starts *after* the DB container is running
-      - "db"
+      - "db"                                # Must be the name of the database *container*
     volumes:                                # Make sure the host (left) location is the folder containing `index.php`
-      - ./:/var/www/html/   # Allow the server to launch `index.php`
+      - ./:/var/www/html/                   # Allow the server to launch `index.php`
     ports:                                  # Open port 8000 on the host
       - "8000:80"
 
