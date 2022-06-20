@@ -30,7 +30,8 @@ qa_mysql_root_password=''
 #
 #===============================================================================
 install_dependencies() {
-    echo '\nInstalling runtime dependencies...'
+    echo
+    echo 'Installing runtime dependencies...'
 
     #apt-get update -y
     #apt-get install -y docker docker-compose
@@ -50,6 +51,7 @@ install_dependencies() {
     #cd assure_support_site
 
     sudo systemctl start docker
+    sudo systemctl enable docker
 
     DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
     mkdir -p $DOCKER_CONFIG/cli-plugins
@@ -73,7 +75,8 @@ install_dependencies() {
 #
 #===============================================================================
 fetch_repository() {
-    echo '\nFetching GitHub repository...'
+    echo
+    echo 'Fetching GitHub repository...'
 
     # TODO: Change this to the default repo link
     git clone --branch danny-docker https://github.com/ubsicap/assure_support_site.git
@@ -91,7 +94,8 @@ fetch_repository() {
 #
 #===============================================================================
 locate_config_files() {
-    echo '\nLocating configuration files...'
+    echo
+    echo 'Locating configuration files...'
 
     config_path=$(find . -type f -name "qa-config.php")
     compose_path=$(find . -type f -name "docker-compose.yml")
@@ -109,7 +113,8 @@ locate_config_files() {
 #
 #===============================================================================
 check_credentials() {
-    echo '\nChecking if MySQL credentials have been set...'
+    echo
+    echo 'Checking if MySQL credentials have been set...'
 
     # Set the database root password, if needed
     if grep -q $ROOT_PASSWORD_TO_REPLACE $compose_path;
@@ -120,7 +125,7 @@ check_credentials() {
         stty echo
         echo
     else
-        echo '\tRoot password already defined'
+        echo '    Root password already defined'
     fi
 
     # Set the username, if needed
@@ -128,7 +133,7 @@ check_credentials() {
     then
         read -p "Set username for new MySQL user account > " qa_mysql_username
     else
-        echo '\tUsername already defined'
+        echo '    Username already defined'
     fi
 
     # Set the database password, if needed
@@ -139,7 +144,7 @@ check_credentials() {
         stty echo
         echo
     else
-        echo '\tPassword already defined'
+        echo '    Password already defined'
     fi
 
     # Set the database hostname, if needed
@@ -147,7 +152,7 @@ check_credentials() {
     then
         echo -n
     else
-        echo '\tHostname already defined'
+        echo '    Hostname already defined'
     fi
 
     # Set the database name, if needed
@@ -155,7 +160,7 @@ check_credentials() {
     then
         read -p "Set name for MySQL database > " qa_mysql_database
     else
-        echo '\tDatabase name already defined'
+        echo '    Database name already defined'
     fi
 
     # Lastly, fetch the name of the container that the MySQL database will run in
@@ -170,7 +175,8 @@ check_credentials() {
 #
 #===============================================================================
 set_credentials() {
-    echo '\nSetting MySQL credentials...'
+    echo
+    echo 'Setting MySQL credentials...'
 
     # Set the root password
     sed -i "s/$ROOT_PASSWORD_TO_REPLACE/$qa_mysql_root_password/" $compose_path
@@ -205,7 +211,8 @@ set_credentials() {
 #
 #===============================================================================
 launch_service() {
-    echo '\nLaunching website service via docker'
+    echo
+    echo 'Launching website service via docker'
 
     docker compose up -d
 }
@@ -213,7 +220,7 @@ launch_service() {
 
 
 # Program execution
-install_dependencies
+#install_dependencies
 #fetch_repository
 locate_config_files
 check_credentials
