@@ -18,6 +18,8 @@ Repository and information for the Assure Support Site
 docker compose up -d
 ```
 
+Then navigate to `http://localhost:80` in your web browser
+
 ## Launching to AWS
 
 1. Create a new EC2 instance
