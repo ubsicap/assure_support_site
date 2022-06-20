@@ -203,6 +203,20 @@ set_credentials() {
 
 #===============================================================================
 #
+# Establishes the port mappings for the containers
+#
+# Note that this function might be useless and, if so, can be discarded
+#
+#===============================================================================
+set_port() {
+    echo
+    echo 'Sets up the correct port for the Apache container to allow incoming traffic'
+}
+
+
+
+#===============================================================================
+#
 # Launches the web server through docker compose.
 #
 # This causes two containers to be spawned:
@@ -220,7 +234,7 @@ launch_service() {
 
 
 # Program execution
-#install_dependencies
+install_dependencies
 #fetch_repository
 locate_config_files
 check_credentials

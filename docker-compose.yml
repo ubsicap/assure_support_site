@@ -12,8 +12,8 @@ services:
       - "db"                                # Must be the name of the database *container*
     volumes:                                # Make sure the host (left) location is the folder containing `index.php`
       - ./q2a_site:/var/www/html/           # Allow the server to launch `index.php`
-    ports:                                  # Open port 8000 on the host
-      - "8000:80"
+    ports:                                  # Define what ports should be open for traffic
+      - "80:80"                             # Open 80 on the host to allow HTTP traffic
 
   # Configuration for the Q2A database container
   db:

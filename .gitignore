@@ -16,6 +16,8 @@ Thumbs.db
 .idea/
 dbdata
 .vscode
+*.pem
+*.ppk
 
 
 # Just some dev scripts
