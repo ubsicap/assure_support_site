@@ -40,7 +40,7 @@ install_dependencies() {
     then
         # Ubuntu
         sudo apt update -y && apt upgrade -y
-        sudo apt install docker docker-compose
+        sudo apt install -y docker docker-compose
     elif [ "$distro" = 'amazon linux' ]
     then
         # Amazon Linux
@@ -54,17 +54,17 @@ install_dependencies() {
     sudo systemctl start docker
     sudo systemctl enable docker
 
-    # Manually install docker compose
-    sudo DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-    sudo mkdir -p $DOCKER_CONFIG/cli-plugins
-    sudo curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-    sudo chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
-
     # Docker user permissions
     sudo groupadd docker
     sudo usermod -aG docker ${USER}
     sudo systemctl restart docker
     sudo chmod 666 /var/run/docker.sock
+
+    # Manually install docker compose
+    sudo DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+    sudo mkdir -p $DOCKER_CONFIG/cli-plugins
+    sudo curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+    sudo chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 }
 
 
