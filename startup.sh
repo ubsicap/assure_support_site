@@ -33,35 +33,46 @@ install_dependencies() {
     echo
     echo 'Installing runtime dependencies...'
 
-    #apt-get update -y
-    #apt-get install -y docker docker-compose
-    #apt-get install -y docker-compose-plugin
-    
-    
-    #apk add --update docker docker-compose docker-compose git openrc
-    #addgroup root docker
-    #rc-update add docker boot
-    #rc-service docker start
+    # Fetch the name of the distro provided
+    distro=$(echo "$1" | /bin/tr '[:upper:]' '[:lower:]')
 
-    #rm install_docker.sh
+    # Superuser access to install dependencies
+    sudo su
 
-    # The following works on an AWS Amazon Linux server
-    sudo yum install -y docker docker-compose
-    #git clone --branch danny-docker https://github.com/ubsicap/assure_support_site.git
-    #cd assure_support_site
+    if [ "$distro" = "ubuntu" -o -z $distro ]
+    then
+        # Ubuntu
+        sudo su
+        apt update -y && apt upgrade -y
+        apt install docker docker-compose
+    elif [ "$distro" = 'amazon linux' ]
+    then
+        # Amazon Linux
+        sudo su
+        yum install -y docker docker-compose
+    else
+        echo "Distro not yet supported"
+        exit 1
+    fi
 
-    sudo systemctl start docker
-    sudo systemctl enable docker
+    # Start the docker process on boot
+    systemctl start docker
+    systemctl enable docker
 
+    # Manually install docker compose
     DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
     mkdir -p $DOCKER_CONFIG/cli-plugins
     curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
     chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
-    sudo groupadd docker
-    sudo usermod -aG docker ${USER}
-    sudo systemctl restart docker
-    sudo chmod 666 /var/run/docker.sock
+    # Docker user permissions
+    groupadd docker
+    usermod -aG docker ${USER}
+    systemctl restart docker
+    chmod 666 /var/run/docker.sock
+
+    # Exit superuser 
+    exit
 }
 
 
@@ -210,7 +221,7 @@ set_credentials() {
 #===============================================================================
 set_port() {
     echo
-    echo 'Sets up the correct port for the Apache container to allow incoming traffic'
+    echo 'Setting port mapping for Apache container'
 }
 
 
@@ -239,4 +250,5 @@ install_dependencies
 locate_config_files
 check_credentials
 set_credentials
+set_port
 launch_service
