@@ -36,43 +36,35 @@ install_dependencies() {
     # Fetch the name of the distro provided
     distro=$(echo "$1" | /bin/tr '[:upper:]' '[:lower:]')
 
-    # Superuser access to install dependencies
-    sudo su
-
     if [ "$distro" = "ubuntu" -o -z $distro ]
     then
         # Ubuntu
-        sudo su
-        apt update -y && apt upgrade -y
-        apt install docker docker-compose
+        sudo apt update -y && apt upgrade -y
+        sudo apt install docker docker-compose
     elif [ "$distro" = 'amazon linux' ]
     then
         # Amazon Linux
-        sudo su
-        yum install -y docker docker-compose
+        sudo yum install -y docker docker-compose
     else
         echo "Distro not yet supported"
         exit 1
     fi
 
     # Start the docker process on boot
-    systemctl start docker
-    systemctl enable docker
+    sudo systemctl start docker
+    sudo systemctl enable docker
 
     # Manually install docker compose
-    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-    mkdir -p $DOCKER_CONFIG/cli-plugins
-    curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+    sudo DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+    sudo mkdir -p $DOCKER_CONFIG/cli-plugins
+    sudo curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+    sudo chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
     # Docker user permissions
-    groupadd docker
-    usermod -aG docker ${USER}
-    systemctl restart docker
-    chmod 666 /var/run/docker.sock
-
-    # Exit superuser 
-    exit
+    sudo groupadd docker
+    sudo usermod -aG docker ${USER}
+    sudo systemctl restart docker
+    sudo chmod 666 /var/run/docker.sock
 }
 
 
