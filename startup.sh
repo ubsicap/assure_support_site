@@ -55,16 +55,15 @@ install_dependencies() {
     sudo systemctl enable docker
 
     # Docker user permissions
-    sudo groupadd docker
     sudo usermod -aG docker ${USER}
     sudo systemctl restart docker
     sudo chmod 666 /var/run/docker.sock
 
-    # Manually install docker compose
+    # Manually install docker compose, because *sometimes* it just doesn't work above
     DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-    sudo mkdir -p $DOCKER_CONFIG/cli-plugins
-    sudo curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-    sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+    mkdir -p $DOCKER_CONFIG/cli-plugins
+    curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 }
 
 
