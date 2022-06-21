@@ -34,10 +34,10 @@
 	define('QA_MYSQL_PORT', '3306');
 */
 
-define('QA_MYSQL_HOSTNAME', 'HOSTNAME_TO_REPLACE');
-define('QA_MYSQL_USERNAME', 'USERNAME_TO_REPLACE');
-define('QA_MYSQL_PASSWORD', 'PASSWORD_TO_REPLACE');
-define('QA_MYSQL_DATABASE', 'DATABASE_TO_REPLACE');
+define('QA_MYSQL_HOSTNAME', 'q2a-db');
+define('QA_MYSQL_USERNAME', 'admin');
+define('QA_MYSQL_PASSWORD', 'p@ssw0rd!');
+define('QA_MYSQL_DATABASE', 'q2a-mysql-db');
 /*
 	If you want to get these values from environment variables,
 	follow the example here: (Note the env can be named anything)
