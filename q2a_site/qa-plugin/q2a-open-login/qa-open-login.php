@@ -273,11 +273,11 @@ class qa_open_login {
   </a>
 HTML;
 		} else if ($key == 'facebook' && in_array($action, array('login', 'view', 'link'))) {
-			/*use Google's design for facebook, can be changed later*/
+			/*use Google's design for facebook, can be changed later, change $text to Login using Facebook to make unifomity with Google*/
 			$html = <<<HTML
 			<a class="google-signin" href="$url"> 
 				  <span class="facebook-signin-icon"></span>
-				<span class="google-signin-text">$text</span>
+				<span class="google-signin-text">Login using Facebook</span>
 			</a>
 HTML;
 		} else {
