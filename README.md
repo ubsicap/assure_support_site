@@ -14,11 +14,28 @@ Repository and information for the Assure Support Site
 
 ## Local Startup
 
+Make sure the following credentials are set:
+* In `q2a_site/qa-config.php`
+   * `QA_MYSQL_HOSTNAME`
+      * Must be set to the name of the DB container defined in `docker-compose.yml`
+   * `QA_MYSQL_USERNAME`
+      * Matches the `MYSQL_USER` environment variable below
+   * `QA_MYSQL_PASSWORD`
+      * Matches the `MYSQL_PASSWORD` environment variable below
+   * `QA_MYSQL_DATABASE`
+      * Matches the `MYSQL_DATABASE` environment variable below
+* In `./docker-compose.yml`
+   * `MYSQL_ROOT_PASSWORD`
+   * `MYSQL_DATABASE`
+   * `MYSQL_USER`
+   * `MYSQL_PASSWORD`
+
+Then run:
 ```sh
 docker compose up -d
 ```
 
-Then navigate to `http://localhost:80` in your web browser
+Finally, navigate to `http://localhost:80` in your web browser
 
 ## Launching to AWS
 
