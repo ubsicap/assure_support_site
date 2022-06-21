@@ -14,6 +14,7 @@ services:
       - ./q2a_site:/var/www/html/           # Allow the server to launch `index.php`
     ports:                                  # Define what ports should be open for traffic
       - "80:80"                             # Open 80 on the host to allow HTTP traffic
+      - "8000:80"                           # Keep 8000 open for localhost usage
 
   # Configuration for the Q2A database container
   db:
