@@ -1,6 +1,6 @@
 # Ignore Q2A config file and .htaccess in development
-#qa-config.php
-#.htaccess
+qa-config.php
+.htaccess
 
 # Ignore cached files
 qa-cache/*/
