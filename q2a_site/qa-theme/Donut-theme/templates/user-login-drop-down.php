@@ -23,7 +23,7 @@
                             preg_match( '/class="([^"]+)"/', @$custom['label'], $class );
 
                             if ( $k == 'facebook' )
-                                $icon = 'class="' . @$class[1] . ' fa fa-facebook"';
+                                $icon = 'class="' . @$class[1] . ' fa"';
                             elseif ( $k == 'github' )
                                 $icon = 'class="' . @$class[1] . ' fa fa-github"';
                             elseif ( $k == 'foursquare' )
