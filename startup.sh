@@ -20,6 +20,9 @@ qa_mysql_password=''
 qa_mysql_database=''
 qa_mysql_root_password=''
 
+# SSL Certification information
+SSL_EMAIL='daniel_hammer@sil.org'
+DOMAIN_NAME='supportsitetest.tk'
 
 
 #===============================================================================
@@ -80,8 +83,7 @@ fetch_repository() {
     echo
     echo 'Fetching GitHub repository...'
 
-    # TODO: Change this to the default repo link
-    git clone --branch danny-docker https://github.com/ubsicap/assure_support_site.git
+    git clone https://github.com/ubsicap/assure_support_site.git
     cd assure_support_site
 }
 
@@ -205,14 +207,28 @@ set_credentials() {
 
 #===============================================================================
 #
-# Establishes the port mappings for the containers
+# Sets up the auto-start script to automatically restart the docker containers
+# whenever the EC2 instance is restarted.
 #
-# Note that this function might be useless and, if so, can be discarded
+# Note that this doesn't effect machines not hosted on AWS EC2.
 #
 #===============================================================================
-set_port() {
+enable_autolaunch() {
     echo
-    echo 'Setting port mapping for Apache container'
+    echo 'Setting containers to launch automatically on system start...'
+    #AUTOSTART_SCRIPT_PATH='/var/lib/cloud/scripts/per-boot/startserver.sh'
+    #echo "#!/bin/sh
+    #sh /home/ubuntu/assure_support_site/startup.sh" > $AUTOSTART_SCRIPT_PATH
+    #chmod +x $AUTOSTART_SCRIPT_PATH
+
+    # Can't seem to get permissions to modify the cron_path file
+    #CRON_PATH="/var/spool/cron/crontabs/$USER"
+    #COMPOSE_FULL_PATH=$(realpath $compose_path)
+    #sudo  $USER:$USER $CRON_PATH
+    #chmod 600 $CRON_PATH
+    #echo "@reboot docker compose -f $COMPOSE_FULL_PATH up -d" >> $CRON_PATH
+
+    echo 'Autostart policy set'
 }
 
 
@@ -228,9 +244,49 @@ set_port() {
 #===============================================================================
 launch_service() {
     echo
-    echo 'Launching website service via docker'
+    echo 'Launching website service via docker...'
 
     docker compose up -d
+
+    echo 'Docker containers launched'
+}
+
+
+
+#===============================================================================
+#
+# Performs the SSL certification process on the web server.
+#
+# The certification process uses Certbot (certbot.eff.org)
+# It utilizes the following configuration variables:
+#   SSL_EMAIL
+#   DOMAIN_NAME
+#
+#===============================================================================
+ssl_certify() {
+    echo
+    echo 'Establishing SSL certification...'
+
+    # Install certbot and packages, if necessary
+    docker exec q2a-apache apt-get install -y certbot python3-certbot-apache
+
+    # Run certbot with the appropriate information
+    #docker exec q2a-apache certbot --apache --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME
+
+    #============================================
+    #
+    #             ***IMPORTANT***
+    #
+    # This line is for DEVELOPMENT ONLY. Notice
+    # the `--test-cert` flag? Removing that will
+    # run in production mode. Production mode is
+    # RATE LIMITED! Don't use it unless you need
+    # to!
+    #
+    #============================================
+    docker exec q2a-apache certbot --test-cert --apache --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME
+
+    echo 'SSL certification complete'
 }
 
 
@@ -241,5 +297,5 @@ install_dependencies
 locate_config_files
 check_credentials
 set_credentials
-set_port
 launch_service
+ssl_certify

@@ -11,3 +11,6 @@ RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
 # General updates to ensure smooth runtime
 RUN apt-get update && apt-get upgrade -y
+
+# Install SSL certification tools
+RUN apt-get install -y certbot python3-certbot-apache

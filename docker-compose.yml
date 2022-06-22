@@ -8,6 +8,7 @@ services:
       context: ./q2a_site                   # Source of the container
       dockerfile: Dockerfile                # Dockerfile to build from
     image: q2a-php-apache                   # Name of the image of the Apache server being created
+    restart: on-failure                     # Restart this container if a failure occurs
     depends_on:                             # Ensure this container starts *after* the DB container is running
       - "db"                                # Must be the name of the database *container*
     volumes:                                # Make sure the host (left) location is the folder containing `index.php`

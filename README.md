@@ -15,27 +15,29 @@ Repository and information for the Assure Support Site
 ## Local Startup
 
 Make sure the following credentials are set:
-* In `q2a_site/qa-config.php`
-   * `QA_MYSQL_HOSTNAME`
-      * Must be set to the name of the DB container defined in `docker-compose.yml`
-   * `QA_MYSQL_USERNAME`
-      * Matches the `MYSQL_USER` environment variable below
-   * `QA_MYSQL_PASSWORD`
-      * Matches the `MYSQL_PASSWORD` environment variable below
-   * `QA_MYSQL_DATABASE`
-      * Matches the `MYSQL_DATABASE` environment variable below
-* In `./docker-compose.yml`
-   * `MYSQL_ROOT_PASSWORD`
-   * `MYSQL_DATABASE`
-   * `MYSQL_USER`
-   * `MYSQL_PASSWORD`
+
+- In `q2a_site/qa-config.php`
+  - `QA_MYSQL_HOSTNAME`
+    - Must be set to the name of the DB container defined in `docker-compose.yml`
+  - `QA_MYSQL_USERNAME`
+    - Matches the `MYSQL_USER` environment variable below
+  - `QA_MYSQL_PASSWORD`
+    - Matches the `MYSQL_PASSWORD` environment variable below
+  - `QA_MYSQL_DATABASE`
+    - Matches the `MYSQL_DATABASE` environment variable below
+- In `./docker-compose.yml`
+  - `MYSQL_ROOT_PASSWORD`
+  - `MYSQL_DATABASE`
+  - `MYSQL_USER`
+  - `MYSQL_PASSWORD`
 
 Then run:
+
 ```sh
 docker compose up -d
 ```
 
-Finally, navigate to `http://localhost:80` in your web browser
+Finally, navigate to `http://localhost` in your web browser
 
 ## Launching to AWS
 
@@ -55,10 +57,71 @@ Finally, navigate to `http://localhost:80` in your web browser
    - `sudo yum install -y git`
    - `git clone https://github.com/ubsicap/assure_support_site.git`
    - `cd assure_support_site`
-      - **Note**: If you chose Amazon Linux, change line ~239 of the startup script to `install_dependencies "Amazon Linux"`
+     - **Note**: If you chose Amazon Linux, change the line near the bottom of the startup script to `install_dependencies "Amazon Linux"`
    - `sh startup.sh`
 1. You will be prompted to create a MySQL root password, account username, account password, and database name.
 1. Once you have created credentials, the `docker-compose.yml` file will be ran and two containers will start.
 1. Open your web browser to `http://<instance public IP>`
 1. You will be prompted to create an administrator account for the website.
 1. Once created, you can access the site through the aforementioned IP address.
+
+## Custom Domain Name
+
+Setting up a custom domain is split into multiple parts, listed below:
+
+### Elastic IP
+
+1. From the [AWS EC2 Console](https://console.aws.amazon.com/ec2/v2/home?#), search for "Elastic IP"
+1. Click "Allocate Elastic IP Address"
+   - Note there is a charge for this if the address does not get associated with an EC2 instance
+1. Select the IPv4 address pool option desired
+   - For development, we used "Amazon's pool of IPv4 addresses"
+1. Allocate the address
+1. After the IP was generated, click "Actions" and then "Associate"
+1. Associate the Elastic IP with the EC2 instance running the server
+
+More info can be found [here](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html).
+
+### Register Domain Name
+
+1. Register a domain name through your service of choice
+   - [freenom](https://my.freenom.com/domains.php) was used for development
+   - Dev domain name is `supportsitetest.tk`
+   - Used "freenom DNS" instead of custom name server
+1. Create the following DNS records:
+   | NAME | TYPE | TTL | TARGET |
+   |---------------|------|------|--------------|
+   | | `A` | `3600` | `<Elastic IP>` |
+   | `www` | `A` | `3600` | `<Elastic IP>` |
+
+### Link Together
+
+Once the above steps have been taken, you should be able to navigate to `http://<Elastic IP>` **OR** `http://<Domain Name>` and you will arrive at the same web page.
+
+## SSL Certification
+
+Before attempting this, please ensure that HTTPS traffic is not yet allowed by navigating to `https://<Domain Name>` in your web browser. Do not attempt the following steps if the site is already certified.
+
+**Note**: This requires a custom domain name to bet set up first. Also, every time `docker compose down` or an equivalent command is run to terminate the `q2a-apache` container, this process will need to be repeated.
+
+**VERY IMPORTANT NOTE**: If you are _developing_, be sure to include the `--test-cert` flag when running `certbot`, otherwise you risk being rate limited! For production, simply omit this flag.
+
+1. Ensure that the web server is live (EC2 instance & Docker containers).
+1. Connect to the EC2 instance (`ssh -i <your_key.pem> <user>@<domain name>`, just like above)
+1. Once connected, run the following two commands:
+
+   ```sh
+   # Install certbot & apache plugin
+   docker exec q2a-apache apt-get install -y certbot python3-certbot-apache
+
+   # Run certbot interactively
+   docker exec -it q2a-apache certbot --test-cert --apache
+   ```
+
+1. You will be prompted for your email, two y/n questions, and the domain name of the site
+   - The email is used for contact about SSL renewal
+   - The questions should be answered `Y` then `N`
+1. If successful, you will see a message stating that the site is now certified
+1. Navigate to `https://<Domain Name>` and verify that HTTPS traffic is allowed
+
+More information can be found [here](https://letsencrypt.org/getting-started/).
