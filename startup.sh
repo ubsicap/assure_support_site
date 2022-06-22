@@ -216,17 +216,17 @@ set_credentials() {
 enable_autolaunch() {
     echo
     echo 'Setting containers to launch automatically on system start...'
-    #AUTOSTART_SCRIPT_PATH='/var/lib/cloud/scripts/per-boot/startserver.sh'
-    #echo "#!/bin/sh
-    #sh /home/ubuntu/assure_support_site/startup.sh" > $AUTOSTART_SCRIPT_PATH
-    #chmod +x $AUTOSTART_SCRIPT_PATH
 
-    # Can't seem to get permissions to modify the cron_path file
-    #CRON_PATH="/var/spool/cron/crontabs/$USER"
-    #COMPOSE_FULL_PATH=$(realpath $compose_path)
-    #sudo  $USER:$USER $CRON_PATH
-    #chmod 600 $CRON_PATH
-    #echo "@reboot docker compose -f $COMPOSE_FULL_PATH up -d" >> $CRON_PATH
+    COMPOSE_FULL_PATH=$(realpath $compose_path)
+    AUTOSTART_SCRIPT_PATH='/var/lib/cloud/scripts/per-boot/startserver.sh'
+
+    # By default, just compose the containers,
+    # But we *may* want to re-run the startup script, so I'm leaving this here
+    #echo "#!/bin/sh\nsh /home/$USER/assure_support_site/startup.sh" > $AUTOSTART_SCRIPT_PATH
+    echo "#!/bin/sh\ndocker compose -f $COMPOSE_FULL_PATH up -d" > $AUTOSTART_SCRIPT_PATH
+
+    # Mark the script as executable for everyone
+    chmod 755 $AUTOSTART_SCRIPT_PATH
 
     echo 'Autostart policy set'
 }
@@ -297,5 +297,6 @@ install_dependencies
 locate_config_files
 check_credentials
 set_credentials
+enable_autolaunch
 launch_service
 ssl_certify
