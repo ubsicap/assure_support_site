@@ -218,15 +218,18 @@ enable_autolaunch() {
     echo 'Setting containers to launch automatically on system start...'
 
     COMPOSE_FULL_PATH=$(realpath $compose_path)
-    AUTOSTART_SCRIPT_PATH='/var/lib/cloud/scripts/per-boot/startserver.sh'
+    AUTOSTART_SCRIPT_PATH='/var/lib/cloud/scripts/per-boot'
+
+    # Allow a script to be created
+    sudo chmod -R 777 $AUTOSTART_SCRIPT_PATH
 
     # By default, just compose the containers,
     # But we *may* want to re-run the startup script, so I'm leaving this here
     #echo "#!/bin/sh\nsh /home/$USER/assure_support_site/startup.sh" > $AUTOSTART_SCRIPT_PATH
-    echo "#!/bin/sh\ndocker compose -f $COMPOSE_FULL_PATH up -d" > $AUTOSTART_SCRIPT_PATH
+    sudo echo "#!/bin/sh\ndocker compose -f $COMPOSE_FULL_PATH up -d" > $AUTOSTART_SCRIPT_PATH/startserver.sh
 
     # Mark the script as executable for everyone
-    chmod 755 $AUTOSTART_SCRIPT_PATH
+    sudo chmod -R 755 $AUTOSTART_SCRIPT_PATH
 
     echo 'Autostart policy set'
 }
