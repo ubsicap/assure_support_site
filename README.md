@@ -100,6 +100,8 @@ Once the above steps have been taken, you should be able to navigate to `http://
 
 ## SSL Certification
 
+### Using Certbot
+
 Before attempting this, please ensure that HTTPS traffic is not yet allowed by navigating to `https://<Domain Name>` in your web browser. Do not attempt the following steps if the site is already certified.
 
 **Note**: This requires a custom domain name to bet set up first. Also, every time `docker compose down` or an equivalent command is run to terminate the `q2a-apache` container, this process will need to be repeated.
@@ -111,7 +113,7 @@ Before attempting this, please ensure that HTTPS traffic is not yet allowed by n
 1. Once connected, run the following two commands:
 
    ```sh
-   # Install certbot & apache plugin
+   # Install certbot & apache plugin (if needed)
    docker exec q2a-apache apt-get install -y certbot python3-certbot-apache
 
    # Run certbot interactively
@@ -125,3 +127,17 @@ Before attempting this, please ensure that HTTPS traffic is not yet allowed by n
 1. Navigate to `https://<Domain Name>` and verify that HTTPS traffic is allowed
 
 More information can be found [here](https://letsencrypt.org/getting-started/).
+
+### Manually (For development ONLY)
+
+**Note**: In order for this to work, the following files must be located on the EC2 instance in `/home/$USER/ssl_keys/`:
+
+- `certificate.crt`
+- `ca_bundle.crt`
+- `private.key`
+
+Once these files are in place, open `startup.sh` and comment out the call to `ssl_certify` at the end of the file. Also, uncomment `manual_ssl_cert`.
+
+Now re-run `sh startup.sh` and navigate to `https://<Domain Name>` in your browser to verify that HTTPS traffic is allowed.
+
+More information can be found [here](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-debian-9).

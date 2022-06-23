@@ -250,7 +250,7 @@ launch_service() {
     echo
     echo 'Launching website service via docker...'
 
-    docker compose -f $compose_path -d
+    docker compose -f $compose_path up -d
 
     echo 'Docker containers launched'
 }
@@ -310,7 +310,7 @@ ssl_certify() {
 #   private.key
 #
 #===============================================================================
-copy_ssl_cert() {
+manual_ssl_cert() {
     echo
     echo 'Copying SSL certifications...'
 
@@ -335,6 +335,7 @@ copy_ssl_cert() {
     docker exec q2a-apache sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/ca_bundle.crt,g' $default_ssl_conf
     docker exec q2a-apache sed -i "s,.*ServerAdmin.*,ServerAdmin $SSL_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
     
+    # Uncomment these lines if you've ran certbot before
     #docker exec q2a-apache sed -i 's,.*SSLCertificateFile.*,SSLCertificateFile /etc/ssl/certificate.crt,g' $default_le_ssl_conf
     #docker exec q2a-apache sed -i 's,.*SSLCertificateKeyFile.*,SSLCertificateKeyFile /etc/ssl/private/private.key,g' $default_le_ssl_conf
 
@@ -343,7 +344,6 @@ copy_ssl_cert() {
 
     # Start/restart the necessary services
     docker exec q2a-apache a2enmod ssl
-    docker exec q2a-apache a2enmod rewrite
     docker exec q2a-apache apachectl restart
 
     echo 'SSL certifications copied'
@@ -358,4 +358,4 @@ set_credentials
 enable_autolaunch
 launch_service
 #ssl_certify
-copy_ssl_cert
+manual_ssl_cert
