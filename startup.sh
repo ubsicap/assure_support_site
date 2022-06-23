@@ -101,8 +101,8 @@ locate_config_files() {
     echo
     echo 'Locating configuration files...'
 
-    config_path=$(find . -type f -name "qa-config.php")
-    compose_path=$(find . -type f -name "docker-compose.yml")
+    config_path=$(realpath $(find . -type f -name "qa-config.php"))
+    compose_path=$(realpath $(find . -type f -name "docker-compose.yml"))
 
     echo "Configuration files found:"
     echo "    $config_path"
@@ -217,19 +217,20 @@ enable_autolaunch() {
     echo
     echo 'Setting containers to launch automatically on system start...'
 
-    COMPOSE_FULL_PATH=$(realpath $compose_path)
-    AUTOSTART_SCRIPT_PATH='/var/lib/cloud/scripts/per-boot'
+    BOOT_PATH='/var/lib/cloud/scripts/per-boot'
 
     # Allow a script to be created
-    sudo chmod -R 777 $AUTOSTART_SCRIPT_PATH
+    sudo chmod -R 777 $BOOT_PATH
 
     # By default, just compose the containers,
     # But we *may* want to re-run the startup script, so I'm leaving this here
-    #echo "#!/bin/sh\nsh /home/$USER/assure_support_site/startup.sh" > $AUTOSTART_SCRIPT_PATH
-    sudo echo "#!/bin/sh\ndocker compose -f $COMPOSE_FULL_PATH up -d" > $AUTOSTART_SCRIPT_PATH/startserver.sh
+    #echo "#!/bin/sh
+#sh /home/$USER/assure_support_site/startup.sh" > $BOOT_PATH
+    sudo echo "#!/bin/sh
+docker compose -f $compose_path -d" > $BOOT_PATH/startserver.sh
 
     # Mark the script as executable for everyone
-    sudo chmod -R 755 $AUTOSTART_SCRIPT_PATH
+    sudo chmod -R 755 $BOOT_PATH
 
     echo 'Autostart policy set'
 }
@@ -249,7 +250,7 @@ launch_service() {
     echo
     echo 'Launching website service via docker...'
 
-    docker compose up -d
+    docker compose -f $compose_path -d
 
     echo 'Docker containers launched'
 }
@@ -294,6 +295,52 @@ ssl_certify() {
 
 
 
+#===============================================================================
+#
+# Copies SSL certification into the Apache web server.
+#
+# Note that this is for DEVELOPMENT, not production. Certbot can handle
+# SSL certs in production. This just helps us keep a backup of SSL certs in
+# case something goes wrong.
+# 
+# This requires a folder in the home/$user directory called `ssl_keys/`
+# that contains the following files:
+#   certificate.crt
+#   ca_bundle.crt
+#   private.key
+#
+#===============================================================================
+copy_ssl_cert() {
+    echo
+    echo 'Copying SSL certifications...'
+
+    # Copy the SSL keys to the apache container
+    # TODO: Change this URL
+    SSL_PATH="/home/$USER/ssl_keys"
+    docker cp $SSL_PATH/certificate.crt q2a-apache:/etc/ssl
+    docker cp $SSL_PATH/ca_bundle.crt q2a-apache:/etc/ssl
+    docker cp $SSL_PATH/private.key q2a-apache:/etc/ssl/private
+
+    # Config files that will be modified
+    default_ssl_conf='/etc/apache2/sites-available/default-ssl.conf'
+    default_le_ssl_conf='/etc/apache2/sites-available/000-default-le-ssl.conf'
+
+    # Replace the necessary paths for the cert files
+	docker exec q2a-apache sed -i 's,/etc/ssl/certs/ssl-cert-snakeoil.pem,/etc/ssl/certificate.crt,g' $default_ssl_conf
+	docker exec q2a-apache sed -i 's,/etc/ssl/private/ssl-cert-snakeoil.key,/etc/ssl/private/private.key,g' $default_ssl_conf
+    docker exec q2a-apache sed -i 's,#SSLCertificateChainFile,SSLCertificateChainFile,g' $default_ssl_conf
+    docker exec q2a-apache sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/ca_bundle.crt,g' $default_ssl_conf
+    
+    docker exec q2a-apache sed -i 's,.*SSLCertificateFile.*,SSLCertificateFile /etc/ssl/certificate.crt,g' $default_le_ssl_conf
+    docker exec q2a-apache sed -i 's,.*SSLCertificateKeyFile.*,SSLCertificateKeyFile /etc/ssl/private/private.key,g' $default_le_ssl_conf
+
+    # Start/restart the necessary services
+    docker exec q2a-apache a2enmod ssl
+    docker exec q2a-apache apachectl restart
+
+    echo 'SSL certifications copied'
+}
+
 # Program execution
 install_dependencies
 #fetch_repository
@@ -303,3 +350,4 @@ set_credentials
 enable_autolaunch
 launch_service
 ssl_certify
+#copy_ssl_cert
