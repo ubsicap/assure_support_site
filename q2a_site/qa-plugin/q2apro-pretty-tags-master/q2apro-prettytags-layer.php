@@ -78,7 +78,7 @@
 	}
 	.autocomplete li.selected,
 	.autocomplete li.over {
-	background: #337ab7;
+	background: #555555;
 	color: #fff;  
 	}
 	.tagbox {
@@ -163,7 +163,7 @@
 	border-radius: 20px;
 	}
 	.tagbox .selected .tag {
-	background: red;
+	background: #555555;
 	}
 </style>');
 			}
