@@ -303,7 +303,7 @@ ssl_certify() {
 # SSL certs in production. This just helps us keep a backup of SSL certs in
 # case something goes wrong.
 # 
-# This requires a folder in the home/$user directory called `ssl_keys/`
+# This requires a folder in the home/$USER directory called `ssl_keys/`
 # that contains the following files:
 #   certificate.crt
 #   ca_bundle.crt
@@ -315,7 +315,7 @@ copy_ssl_cert() {
     echo 'Copying SSL certifications...'
 
     # Copy the SSL keys to the apache container
-    # TODO: Change this URL
+    # TODO: Change how the certificates are loaded into the q2a-apache container
     SSL_PATH="/home/$USER/ssl_keys"
     docker cp $SSL_PATH/certificate.crt q2a-apache:/etc/ssl
     docker cp $SSL_PATH/ca_bundle.crt q2a-apache:/etc/ssl
@@ -325,17 +325,25 @@ copy_ssl_cert() {
     default_ssl_conf='/etc/apache2/sites-available/default-ssl.conf'
     default_le_ssl_conf='/etc/apache2/sites-available/000-default-le-ssl.conf'
 
+    # Before we do anything, MAKE A BACKUP
+    docker exec q2a-apache cp $default_ssl_conf $default_ssl_conf.backup
+
     # Replace the necessary paths for the cert files
 	docker exec q2a-apache sed -i 's,/etc/ssl/certs/ssl-cert-snakeoil.pem,/etc/ssl/certificate.crt,g' $default_ssl_conf
 	docker exec q2a-apache sed -i 's,/etc/ssl/private/ssl-cert-snakeoil.key,/etc/ssl/private/private.key,g' $default_ssl_conf
     docker exec q2a-apache sed -i 's,#SSLCertificateChainFile,SSLCertificateChainFile,g' $default_ssl_conf
     docker exec q2a-apache sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/ca_bundle.crt,g' $default_ssl_conf
+    docker exec q2a-apache sed -i "s,.*ServerAdmin.*,ServerAdmin $SSL_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
     
-    docker exec q2a-apache sed -i 's,.*SSLCertificateFile.*,SSLCertificateFile /etc/ssl/certificate.crt,g' $default_le_ssl_conf
-    docker exec q2a-apache sed -i 's,.*SSLCertificateKeyFile.*,SSLCertificateKeyFile /etc/ssl/private/private.key,g' $default_le_ssl_conf
+    #docker exec q2a-apache sed -i 's,.*SSLCertificateFile.*,SSLCertificateFile /etc/ssl/certificate.crt,g' $default_le_ssl_conf
+    #docker exec q2a-apache sed -i 's,.*SSLCertificateKeyFile.*,SSLCertificateKeyFile /etc/ssl/private/private.key,g' $default_le_ssl_conf
+
+    # Copy the file into the sites-enabled directory
+    docker exec q2a-apache cp $default_ssl_conf /etc/apache2/sites-enabled/
 
     # Start/restart the necessary services
     docker exec q2a-apache a2enmod ssl
+    docker exec q2a-apache a2enmod rewrite
     docker exec q2a-apache apachectl restart
 
     echo 'SSL certifications copied'
@@ -349,5 +357,5 @@ check_credentials
 set_credentials
 enable_autolaunch
 launch_service
-ssl_certify
-#copy_ssl_cert
+#ssl_certify
+copy_ssl_cert
