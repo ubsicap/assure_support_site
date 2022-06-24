@@ -512,8 +512,7 @@ function qa_set_user_avatar($userid, $imagedata, $oldblobid = null)
 	if (qa_to_override(__FUNCTION__)) { $args=func_get_args(); return qa_call_override(__FUNCTION__, $args); }
 
 	require_once QA_INCLUDE_DIR . 'util/image.php';
-	if (qa_has_gd_image())
-		$imagedata = qa_image_constrain_data($imagedata, $width, $height, qa_opt('avatar_store_size'));
+	$imagedata = qa_image_constrain_data($imagedata, $width, $height, qa_opt('avatar_store_size'));
 
 	if (isset($imagedata)) {
 		require_once QA_INCLUDE_DIR . 'app/blobs.php';
