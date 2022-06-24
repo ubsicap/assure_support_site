@@ -242,7 +242,7 @@ class qa_open_login {
 			}
 			$classes = "$context action-login $zocial  $css";
 			$title = qa_lang_html_sub('plugin_open/login_using', $provider);
-			$text = ($key == 'google')?"Login using Google":$provider . ' ' . qa_lang_html('main/nav_login');
+			$text = ($key == 'google')?"Sign in with Google":$provider . ' ' . qa_lang_html('main/nav_login');
 
 			if($context != 'menu') {
 				$text = $title;
@@ -269,7 +269,7 @@ class qa_open_login {
 			$html = <<<HTML
   <a class="google-signin" href="$url">
   	  <span class="google-signin-icon"></span>
-      <span class="google-signin-text">$text</span>
+      <span class="google-signin-text">Sign in with Google</span>
   </a>
 HTML;
 		} else if ($key == 'facebook' && in_array($action, array('login', 'view', 'link'))) {
@@ -277,7 +277,7 @@ HTML;
 			$html = <<<HTML
 			<a class="google-signin" href="$url"> 
 				  <span class="facebook-signin-icon"></span>
-				<span class="google-signin-text">Login using Facebook</span>
+				<span class="google-signin-text">Sign in with Facebook</span>
 			</a>
 HTML;
 		} else {
