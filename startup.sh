@@ -59,8 +59,9 @@ install_dependencies() {
 
     # Docker user permissions
     sudo usermod -aG docker ${USER}
-    sudo systemctl restart docker
-    sudo chmod 666 /var/run/docker.sock
+    #sudo systemctl restart docker
+    # Check re-logging in the to see if chmod is necessary
+    #sudo chmod 666 /var/run/docker.sock
 
     # Manually install docker compose, because *sometimes* it just doesn't work above
     DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
@@ -227,7 +228,7 @@ enable_autolaunch() {
     #echo "#!/bin/sh
 #sh /home/$USER/assure_support_site/startup.sh" > $BOOT_PATH
     sudo echo "#!/bin/sh
-docker compose -f $compose_path -d" > $BOOT_PATH/startserver.sh
+docker compose -f $compose_path up -d" > $BOOT_PATH/startserver.sh
 
     # Mark the script as executable for everyone
     sudo chmod -R 755 $BOOT_PATH
