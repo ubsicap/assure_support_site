@@ -14,3 +14,6 @@ RUN docker-php-ext-install calendar
 
 # General updates to ensure smooth runtime
 RUN apt-get update && apt-get upgrade -y
+
+# Install SSL certification tools
+RUN apt-get install -y vim certbot python3-certbot-apache

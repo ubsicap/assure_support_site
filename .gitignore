@@ -23,3 +23,7 @@ dbdata
 # Just some dev scripts
 resetconfig.sh
 restoreconfig.sh
+
+
+# Anything in this folder will not be tracked, obviously
+untracked/

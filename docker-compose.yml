@@ -8,6 +8,7 @@ services:
       context: ./q2a_site                   # Source of the container
       dockerfile: Dockerfile                # Dockerfile to build from
     image: q2a-php-apache                   # Name of the image of the Apache server being created
+    restart: on-failure                     # Restart this container if a failure occurs
     depends_on:                             # Ensure this container starts *after* the DB container is running
       - "db"                                # Must be the name of the database *container*
     volumes:                                # Make sure the host (left) location is the folder containing `index.php`
@@ -24,13 +25,13 @@ services:
     restart: always                         # Always restart the container. See `https://www.cloudbees.com/blog/ensuring-containers-are-always-running-with-dockers-restart-policy` for more restart policies
     environment:                            # Setting the mySQL environment variables
       # Not set in `qa-config.php`
-      MYSQL_ROOT_PASSWORD: root_p@ssw0rd!
+      MYSQL_ROOT_PASSWORD: ROOT_PASSWORD_TO_REPLACE
       # Name of the *database*, not the container
-      MYSQL_DATABASE: q2a-mysql-db
+      MYSQL_DATABASE: DATABASE_TO_REPLACE
       # Username used in `qa-config.php`
-      MYSQL_USER: admin
+      MYSQL_USER: USERNAME_TO_REPLACE
       # Password used in `qa-config.php`
-      MYSQL_PASSWORD: p@ssw0rd!
+      MYSQL_PASSWORD: PASSWORD_TO_REPLACE
     ports:                                  # Disclaimer: I got these ports from `https://www.section.io/engineering-education/dockerized-php-apache-and-mysql-container-development-environment/`
       - "9906:3306"                         # 3306 is default for SQL
     volumes:                                # Store DB information in a volume

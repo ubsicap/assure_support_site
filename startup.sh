@@ -20,6 +20,9 @@ qa_mysql_password=''
 qa_mysql_database=''
 qa_mysql_root_password=''
 
+# SSL Certification information
+SSL_EMAIL='daniel_hammer@sil.org'
+DOMAIN_NAME='supportsitetest.tk'
 
 
 #===============================================================================
@@ -80,8 +83,7 @@ fetch_repository() {
     echo
     echo 'Fetching GitHub repository...'
 
-    # TODO: Change this to the default repo link
-    git clone --branch danny-docker https://github.com/ubsicap/assure_support_site.git
+    git clone https://github.com/ubsicap/assure_support_site.git
     cd assure_support_site
 }
 
@@ -99,8 +101,8 @@ locate_config_files() {
     echo
     echo 'Locating configuration files...'
 
-    config_path=$(find . -type f -name "qa-config.php")
-    compose_path=$(find . -type f -name "docker-compose.yml")
+    config_path=$(realpath $(find . -type f -name "qa-config.php"))
+    compose_path=$(realpath $(find . -type f -name "docker-compose.yml"))
 
     echo "Configuration files found:"
     echo "    $config_path"
@@ -205,14 +207,32 @@ set_credentials() {
 
 #===============================================================================
 #
-# Establishes the port mappings for the containers
+# Sets up the auto-start script to automatically restart the docker containers
+# whenever the EC2 instance is restarted.
 #
-# Note that this function might be useless and, if so, can be discarded
+# Note that this doesn't effect machines not hosted on AWS EC2.
 #
 #===============================================================================
-set_port() {
+enable_autolaunch() {
     echo
-    echo 'Setting port mapping for Apache container'
+    echo 'Setting containers to launch automatically on system start...'
+
+    BOOT_PATH='/var/lib/cloud/scripts/per-boot'
+
+    # Allow a script to be created
+    sudo chmod -R 777 $BOOT_PATH
+
+    # By default, just compose the containers,
+    # But we *may* want to re-run the startup script, so I'm leaving this here
+    #echo "#!/bin/sh
+#sh /home/$USER/assure_support_site/startup.sh" > $BOOT_PATH
+    sudo echo "#!/bin/sh
+docker compose -f $compose_path -d" > $BOOT_PATH/startserver.sh
+
+    # Mark the script as executable for everyone
+    sudo chmod -R 755 $BOOT_PATH
+
+    echo 'Autostart policy set'
 }
 
 
@@ -228,12 +248,106 @@ set_port() {
 #===============================================================================
 launch_service() {
     echo
-    echo 'Launching website service via docker'
+    echo 'Launching website service via docker...'
 
-    docker compose up -d
+    docker compose -f $compose_path up -d
+
+    echo 'Docker containers launched'
 }
 
 
+
+#===============================================================================
+#
+# Performs the SSL certification process on the web server.
+#
+# The certification process uses Certbot (certbot.eff.org)
+# It utilizes the following configuration variables:
+#   SSL_EMAIL
+#   DOMAIN_NAME
+#
+#===============================================================================
+ssl_certify() {
+    echo
+    echo 'Establishing SSL certification...'
+
+    # Install certbot and packages, if necessary
+    docker exec q2a-apache apt-get install -y certbot python3-certbot-apache
+
+    # Run certbot with the appropriate information
+    #docker exec q2a-apache certbot --apache --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME
+
+    #============================================
+    #
+    #             ***IMPORTANT***
+    #
+    # This line is for DEVELOPMENT ONLY. Notice
+    # the `--test-cert` flag? Removing that will
+    # run in production mode. Production mode is
+    # RATE LIMITED! Don't use it unless you need
+    # to!
+    #
+    #============================================
+    docker exec q2a-apache certbot --test-cert --apache --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME
+
+    echo 'SSL certification complete'
+}
+
+
+
+#===============================================================================
+#
+# Copies SSL certification into the Apache web server.
+#
+# Note that this is for DEVELOPMENT, not production. Certbot can handle
+# SSL certs in production. This just helps us keep a backup of SSL certs in
+# case something goes wrong.
+# 
+# This requires a folder in the home/$USER directory called `ssl_keys/`
+# that contains the following files:
+#   certificate.crt
+#   ca_bundle.crt
+#   private.key
+#
+#===============================================================================
+manual_ssl_cert() {
+    echo
+    echo 'Copying SSL certifications...'
+
+    # Copy the SSL keys to the apache container
+    # TODO: Change how the certificates are loaded into the q2a-apache container
+    SSL_PATH="/home/$USER/ssl_keys"
+    docker cp $SSL_PATH/certificate.crt q2a-apache:/etc/ssl
+    docker cp $SSL_PATH/ca_bundle.crt q2a-apache:/etc/ssl
+    docker cp $SSL_PATH/private.key q2a-apache:/etc/ssl/private
+
+    # Config files that will be modified
+    default_ssl_conf='/etc/apache2/sites-available/default-ssl.conf'
+    default_le_ssl_conf='/etc/apache2/sites-available/000-default-le-ssl.conf'
+
+    # Before we do anything, MAKE A BACKUP
+    docker exec q2a-apache cp $default_ssl_conf $default_ssl_conf.backup
+
+    # Replace the necessary paths for the cert files
+	docker exec q2a-apache sed -i 's,/etc/ssl/certs/ssl-cert-snakeoil.pem,/etc/ssl/certificate.crt,g' $default_ssl_conf
+	docker exec q2a-apache sed -i 's,/etc/ssl/private/ssl-cert-snakeoil.key,/etc/ssl/private/private.key,g' $default_ssl_conf
+    docker exec q2a-apache sed -i 's,#SSLCertificateChainFile,SSLCertificateChainFile,g' $default_ssl_conf
+    docker exec q2a-apache sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/ca_bundle.crt,g' $default_ssl_conf
+    docker exec q2a-apache sed -i "s,.*ServerAdmin.*,ServerAdmin $SSL_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
+    
+    # Uncomment these lines if you've ran certbot before
+    #docker exec q2a-apache sed -i 's,.*SSLCertificateFile.*,SSLCertificateFile /etc/ssl/certificate.crt,g' $default_le_ssl_conf
+    #docker exec q2a-apache sed -i 's,.*SSLCertificateKeyFile.*,SSLCertificateKeyFile /etc/ssl/private/private.key,g' $default_le_ssl_conf
+
+    # Copy the file into the sites-enabled directory
+    docker exec q2a-apache cp $default_ssl_conf /etc/apache2/sites-enabled/
+
+    # Start/restart the necessary services
+    docker exec q2a-apache a2enmod ssl
+    docker exec q2a-apache apachectl restart
+
+    echo 'SSL certifications copied'
+}
 
 # Program execution
 install_dependencies
@@ -241,5 +355,7 @@ install_dependencies
 locate_config_files
 check_credentials
 set_credentials
-set_port
+enable_autolaunch
 launch_service
+#ssl_certify
+manual_ssl_cert
