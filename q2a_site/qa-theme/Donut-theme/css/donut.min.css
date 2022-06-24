@@ -2735,7 +2735,7 @@ header#nav-header {
 }
 
 .qa-nav-sub .qa-nav-sub-list .qa-nav-sub-hot .qa-nav-sub-link {
-    color: #d9534f !important;
+    color: #337ab7 !important;
     font-weight: 700
 }
 
@@ -2955,11 +2955,18 @@ header#nav-header {
 .qa-form-wide-table>tbody>tr>td.qa-form-wide-error {
     display: table-cell !important
 }
-
-.qa-sidebar {
+/*make sidebar only appear in home page*/
+.qa-template-qa .qa-body-wrapper .qa-sidebar{
     background-color: #d9edf7;
     border-color: #bce8f1;
-    color: #31708f
+    color: #31708f;
+    display: inherit !important;
+}
+  .qa-sidebar {
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    color: #31708f;
+    display: none;
 }
 
 .qa-sidebar hr {
@@ -3059,8 +3066,8 @@ header#nav-header {
 }
 
 .qa-a-count-zero {
-    border: 1px solid #ebccd1;
-    color: #a94442
+    border: 1px solid #d6e9c6;
+    color: #3c763d;
 }
 
 .qa-a-count-selected {
@@ -4427,10 +4434,15 @@ a.qa-browse-cat-link:visited {
     border-bottom: none
 }
 
-.qa-user-link,
+.qa-user-link {
+    color: #337ab7;
+    font-weight: 700;
+}
+
 .qa-category-link {
     color: #337ab7;
-    font-weight: 700
+    font-weight: bold;
+    font-size: 15px;
 }
 
 .qa-widget-side a {

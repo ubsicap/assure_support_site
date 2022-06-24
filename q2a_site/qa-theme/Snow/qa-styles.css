@@ -561,7 +561,7 @@ div.header-banner {
 }
 
 .qa-nav-sub-hot .qa-nav-sub-link {
-	color: #af0000 !important;
+	color: #337ab7 !important;
 	font-weight: 700;
 	-moz-transition: all ease-in-out 0.5s;
 	-webkit-transition: all ease-in-out 0.5s;
@@ -571,7 +571,7 @@ div.header-banner {
 }
 
 .qa-nav-sub-hot .qa-nav-sub-link:hover, .qa-nav-sub-hot .qa-nav-sub-selected {
-	background: #cf0000;
+	background: #337ab7;
 	color: #fff !important;
 	border-radius: 3px !important;
 	border: 1px solid #ff0000;
@@ -2383,15 +2383,16 @@ a.qa-browse-cat-link:visited {
 }
 
 /* Classes passed to theme */
-.qa-user-link {
+.qa-user-link{
 	color: #3B5998 !important;
 	font-weight: 700;
-}
+  }
 
 .qa-category-link {
 	color: #1e5568;
-	font-weight: 700;
-}
+	font-weight: bold;
+	font-size: 15px;
+  }
 
 .qa-tag-link, .qa-widget-side .qa-q-view-tag-item, .qa-widget-side > div > a {
 	background: #eee;

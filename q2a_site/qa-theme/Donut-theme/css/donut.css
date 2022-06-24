@@ -1027,7 +1027,7 @@ header#nav-header {
   color: #5cb85c;
 }
 .qa-voted-down-button {
-  color: #d9534f;
+  color: #3c763d;
 }
 /* Standard form (light version - buttons only) */
 .qa-form-light-button {
@@ -2355,7 +2355,7 @@ header#nav-header {
   }
 }
 .qa-nav-sub .qa-nav-sub-list .qa-nav-sub-hot .qa-nav-sub-link {
-  color: #d9534f !important;
+  color: #337ab7 !important;
   font-weight: 700;
 }
 @media only screen and (max-width: 767px) {
@@ -2545,10 +2545,18 @@ header#nav-header {
 .qa-form-wide-table > tbody > tr > td.qa-form-wide-error {
   display: table-cell !important;
 }
+/*make sidebar only appear in home page*/
+.qa-template-qa .qa-body-wrapper .qa-sidebar{
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  color: #31708f;
+  display: inherit !important;
+}
 .qa-sidebar {
   background-color: #d9edf7;
   border-color: #bce8f1;
   color: #31708f;
+  display: none;
 }
 .qa-sidebar hr {
   border-top-color: #a6e1ec;
@@ -2635,8 +2643,8 @@ header#nav-header {
   border-radius: 5px;
 }
 .qa-a-count-zero {
-  border: 1px solid #ebccd1;
-  color: #a94442;
+  border: 1px solid #d6e9c6;
+  color: #3c763d;
 }
 .qa-a-count-selected {
   border: 1px solid #bbdba1;
@@ -3786,10 +3794,14 @@ a.qa-browse-cat-link:visited {
   border-bottom: none;
 }
 /* Classes passed to theme */
-.qa-user-link,
-.qa-category-link {
+.qa-user-link{
   color: #337ab7;
   font-weight: 700;
+}
+.qa-category-link {
+  color: #337ab7;
+  font-weight: bold;
+  font-size: 15px;
 }
 .qa-widget-side a {
   margin: 0 3px 3px 0;
