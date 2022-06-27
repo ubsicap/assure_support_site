@@ -1,7 +1,7 @@
 .google-signin {
 	width: auto;
-	background: #4285F4;
-	border: 1px solid #4285F4;
+	background: #0d51f3;
+	border: 1px solid #31708f;
 	padding: 0;
 	display: inline-block;
 	border-radius: 1px;
@@ -31,7 +31,7 @@
 	margin-right: 8px;
 }
 .facebook-signin-icon {
-	background-image: url('https://img.icons8.com/officel/512/000000/facebook-new.png');
+	background-image: url('https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/150px-Facebook_f_logo_%282021%29.svg.png');
 	background-size: 18px;
 	background-repeat: no-repeat;
 	background-position: 11px;

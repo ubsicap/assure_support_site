@@ -9,6 +9,9 @@ WORKDIR /app
 # Install and enable the mysqli software to connect to our DB
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
+#Install PHP extension calendar for use of badge plugin
+RUN docker-php-ext-install calendar
+
 # General updates to ensure smooth runtime
 RUN apt-get update && apt-get upgrade -y
 

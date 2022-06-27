@@ -700,7 +700,7 @@ function qa_content_prepare($voting = false, $categoryids = array())
 	$logourl = qa_opt('logo_url');
 	$logowidth = qa_opt('logo_width');
 	$logoheight = qa_opt('logo_height');
-
+	
 	if ($logoshow) {
 		$qa_content['logo'] = '<a href="' . qa_path_html('') . '" class="qa-logo-link" title="' . qa_html(qa_opt('site_title')) . '">' .
 			'<img src="' . qa_html(is_numeric(strpos($logourl, '://')) ? $logourl : qa_path_to_root() . $logourl) . '"' .
