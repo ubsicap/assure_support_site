@@ -74,7 +74,7 @@ install_dependencies() {
 #===============================================================================
 cleanup() {
     # Remove package lists
-    sudo rm /var/lib/apt/lists/*
+    sudo rm -rf /var/lib/apt/lists/*
 }
 
 
