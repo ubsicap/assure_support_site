@@ -36,37 +36,32 @@ install_dependencies() {
     echo
     echo 'Installing runtime dependencies...'
 
-    # Fetch the name of the distro provided
-    distro=$(echo "$1" | /bin/tr '[:upper:]' '[:lower:]')
-
-    if [ "$distro" = "ubuntu" -o "$distro" = "" ]
-    then
-        # Ubuntu
-        sudo apt update -y && apt upgrade -y
-        sudo apt install -y docker docker-compose
-    elif [ "$distro" = 'amazon linux' ]
-    then
-        # Amazon Linux
-        sudo yum install -y docker docker-compose
-    else
-        echo "Distro not yet supported"
-        exit 1
-    fi
+    # Follows the steps outlined on: https://docs.docker.com/engine/install/ubuntu/
+    # Pre-install setup
+    sudo apt-get update -y 
+    sudo apt-get install -y ca-certificates curl gnupg lsb-release # Doesnt do anything
+    
+    # Adding GPG key
+    sudo mkdir -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    
+    # Set up repository
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    
+    # Refresh & install Docker packages
+    sudo apt-get update -y
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    
+    # Allow non-root uses to use Docker
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    newgrp docker
 
     # Start the docker process on boot
-    sudo systemctl start docker
-    sudo systemctl enable docker
+    sudo systemctl enable docker.service
+    sudo systemctl enable containerd.service
 
-    # Docker user permissions
-    sudo usermod -aG docker ${USER}
-    sudo systemctl restart docker
-    sudo chmod 666 /var/run/docker.sock
-
-    # Manually install docker compose, because *sometimes* it just doesn't work above
-    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-    mkdir -p $DOCKER_CONFIG/cli-plugins
-    curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+    echo 'Docker installation complete'
 }
 
 
@@ -227,7 +222,7 @@ enable_autolaunch() {
     #echo "#!/bin/sh
 #sh /home/$USER/assure_support_site/startup.sh" > $BOOT_PATH
     sudo echo "#!/bin/sh
-docker compose -f $compose_path -d" > $BOOT_PATH/startserver.sh
+docker compose -f $compose_path up -d" > $BOOT_PATH/startserver.sh
 
     # Mark the script as executable for everyone
     sudo chmod -R 755 $BOOT_PATH
