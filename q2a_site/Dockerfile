@@ -13,4 +13,7 @@ RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 RUN apt-get update && apt-get upgrade -y
 
 # Install SSL certification tools
-RUN apt-get install -y vim certbot python3-certbot-apache
+RUN apt-get install -y certbot python3-certbot-apache
+
+# Install dev dependencies (These can be removed in production)
+RUN apt-get install -y sendmail vim
