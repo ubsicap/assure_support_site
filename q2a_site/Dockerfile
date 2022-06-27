@@ -19,4 +19,4 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y certbot python3-certbot-apache
 
 # Install dev dependencies (These can be removed in production)
-RUN apt-get install -y sendmail vim
+# RUN apt-get install -y sendmail vim
