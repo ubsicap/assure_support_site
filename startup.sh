@@ -43,7 +43,7 @@ install_dependencies() {
     
     # Adding GPG key
     sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
     
     # Set up repository
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
@@ -51,17 +51,30 @@ install_dependencies() {
     # Refresh & install Docker packages
     sudo apt-get update -y
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-    
-    # Allow non-root uses to use Docker
-    sudo groupadd docker
+
+    # Allow non-root users to use Docker (requires logout/login)
     sudo usermod -aG docker $USER
-    newgrp docker
+    
+    # Allow this script to continue using Docker commands (reverted at the end)
+    sudo chown $USER /var/run/docker.sock
 
     # Start the docker process on boot
     sudo systemctl enable docker.service
     sudo systemctl enable containerd.service
 
     echo 'Docker installation complete'
+}
+
+
+
+#===============================================================================
+#
+# Perform any necessary post-install cleanup
+#
+#===============================================================================
+cleanup() {
+    # Remove package lists
+    sudo rm /var/lib/apt/lists/*
 }
 
 
@@ -354,3 +367,4 @@ enable_autolaunch
 launch_service
 #ssl_certify
 manual_ssl_cert
+cleanup
