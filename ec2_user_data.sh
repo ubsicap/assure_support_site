@@ -1,6 +1,8 @@
 #!/bin/bash
 
+# Primary user of the system
 user='ubuntu'
+# Location to host/deploy the web server
 workdir="/home/$user/app"
 
 # Follows the steps outlined on: https://docs.docker.com/engine/install/ubuntu/
