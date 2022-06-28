@@ -53,5 +53,18 @@ services:
     ports:                                  # Allows us to access MySQL database remotely
       - "3306:80"                           # Port 3306 will access phpMyAdmin
 
-volumes:                                    # Define the volume used for the DB
-  q2a_db_volume:                            # This volume is stored on /var/lib/docker/volumes/ (on Linux)
+  # Configuration for Portainer container management system
+  portainer:
+    container_name: q2a-portainer           # Again, not super useful, but consistent!
+    image: portainer/portainer-ce           # Note this is the free community edition
+    restart: always                         # No crashy :)
+    volumes:                                # Portainer needs to access the docker socket to modify containers
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    ports:
+      - "9443:9443"                         # HTTPS access
+      #- "9000:9000"                         # HTTP access (Legacy; not recommended!)
+
+volumes:                                    # These volumes are stored on /var/lib/docker/volumes/ (on Linux)
+  q2a_db_volume:                            # Persistent storage for DB
+  portainer_data:                           # For Portainer usage

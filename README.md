@@ -2,10 +2,22 @@
 
 Repository and information for the Assure Support Site
 
+## Table of Contents
+
+1. [Structure](#structure)
+1. [Local Startup](#local-startup)
+1. [Launching to AWS](#launching-to-aws)
+1. [Custom Domain Name](#custom-domain-name)
+1. [SSL Certification](#ssl-certification)
+1. [Database Management](#database-management)
+1. [Container Management](#container-management)
+
 ## Structure
 
+Repository Contents:
+
 ```sh
-.
+assure_support_site/
 ├── README.md               # This file
 ├── docker-compose.yml      # Launches the web service in two containers
 ├── ec2_user_data.sh        # User Data for the EC2 instance (ran at launch)
@@ -141,3 +153,20 @@ Once these files are in place, open `startup.sh` and comment out the call to `ss
 Now re-run `sh startup.sh` and navigate to `https://<Domain Name>` in your browser to verify that HTTPS traffic is allowed.
 
 More information can be found [here](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-debian-9).
+
+## Database Management
+
+The database can be accessed through two methods:
+
+- [phpMyAdmin](https://www.phpmyadmin.net/), which is running in a container alongside the database, on port `3306`
+- [MySQL Workbench](https://www.mysql.com/products/workbench/) (or another MySQL access tool) on port `9906`
+
+**Note**: Not yet implemented with [SSL support](https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/)
+
+I don't know which method is preferred for production. Both are password protected using the credentials entered at first launch.
+
+## Container Management
+
+This installation is configured to work with [Portainer](https://www.portainer.io/), a web-based container management GUI. It's like Docker Desktop, but in a web browser.
+
+The service is launched automatically alongside the rest of the containers. To access, navigate to `https://<Domain Name>:9443`
