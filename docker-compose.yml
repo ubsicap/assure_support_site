@@ -33,12 +33,25 @@ services:
       MYSQL_USER: USERNAME_TO_REPLACE
       # Password used in `qa-config.php`
       MYSQL_PASSWORD: PASSWORD_TO_REPLACE
-    ports:                                  # This allows us to access the MySQL database remotely
+    ports:                                  # This allows us to access the MySQL database remotely (Remove after ETL)
       - "9906:3306"                         # 3306 is default for SQL
     volumes:                                # Volume for data persistence
       - type: volume                        # Use a Volume over a Bind to make managing data easier
         source: q2a_db_volume               # This voluem is located on the HOST MACHINE
         target: /var/lib/mysql              # Location of the MySQL database
+
+  # Configuration for phpMyAdmin database management container
+  phpmyadmin:
+    container_name: q2a-phpmyadmin          # Naming this container isn't super useful
+    image: phpmyadmin                       # https://hub.docker.com/_/phpmyadmin
+    links:                                  # Link this service to our DB
+      - db
+    restart: always                         # Like the DB, ensure this always restarts
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:                                  # Allows us to access MySQL database remotely
+      - "3306:80"                           # Port 3306 will access phpMyAdmin
 
 volumes:                                    # Define the volume used for the DB
   q2a_db_volume:                            # This volume is stored on /var/lib/docker/volumes/ (on Linux)
