@@ -21,6 +21,7 @@ qa_mysql_database=''
 qa_mysql_root_password=''
 
 # SSL Certification information
+# This information needs to be changed so that it is provided by the user/sysadmin
 SSL_EMAIL='daniel_hammer@sil.org'
 DOMAIN_NAME='supportsitetest.tk'
 
@@ -36,28 +37,40 @@ install_dependencies() {
     echo
     echo 'Installing runtime dependencies...'
 
-    # Follows the steps outlined on: https://docs.docker.com/engine/install/ubuntu/
-    # Pre-install setup
-    sudo apt-get update -y 
-    sudo apt-get install -y ca-certificates curl gnupg lsb-release # Doesnt do anything
-    
-    # Adding GPG key
-    sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
-    
-    # Set up repository
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    
-    # Refresh & install Docker packages
-    sudo apt-get update -y
-    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    # Only install if necessary
+    dpkg -l | grep docker > /dev/null 2>&1
+    if [ $? -eq 0 ];
+    then
+        echo 'Docker already detected on system. Skipping installation.'
+    else
+        # Follows the steps outlined on: https://docs.docker.com/engine/install/ubuntu/
+        # Pre-install setup
+        sudo apt-get update -y 
+        sudo apt-get install -y ca-certificates curl gnupg lsb-release # Doesnt do anything
+        
+        # Adding GPG key
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
+        
+        # Set up repository
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        
+        # Refresh & install Docker packages
+        sudo apt-get update -y
+        sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    fi
 
-    # Allow non-root users to use Docker (requires logout/login)
-    sudo usermod -aG docker $USER
+    # Add user to docker group if needed
+    grep 'docker' /etc/group | grep $USER > /dev/null 2>&1
+    if [ $? -eq 0 ];
+    then
+        echo "User $USER already has docker permissions."
+    else
+        # Allow non-root users to use Docker (requires logout/login)
+        sudo groupadd docker
+        sudo usermod -aG docker $USER
+    fi
     
-    # Allow this script to continue using Docker commands (reverted at the end)
-    sudo chown $USER /var/run/docker.sock
-
     # Start the docker process on boot
     sudo systemctl enable docker.service
     sudo systemctl enable containerd.service
@@ -75,24 +88,6 @@ install_dependencies() {
 cleanup() {
     # Remove package lists
     sudo rm -rf /var/lib/apt/lists/*
-}
-
-
-
-#===============================================================================
-#
-# Fetches the latest files from the GitHub repository.
-#
-# This function may not be used, depending on whether this setup script is
-# downloaded alongside the rest of the files.
-#
-#===============================================================================
-fetch_repository() {
-    echo
-    echo 'Fetching GitHub repository...'
-
-    git clone https://github.com/ubsicap/assure_support_site.git
-    cd assure_support_site
 }
 
 
@@ -233,7 +228,7 @@ enable_autolaunch() {
     # By default, just compose the containers,
     # But we *may* want to re-run the startup script, so I'm leaving this here
     #echo "#!/bin/sh
-#sh /home/$USER/assure_support_site/startup.sh" > $BOOT_PATH
+#sh $(realpath $0) > $BOOT_PATH
     sudo echo "#!/bin/sh
 docker compose -f $compose_path up -d" > $BOOT_PATH/startserver.sh
 
@@ -343,9 +338,13 @@ manual_ssl_cert() {
     docker exec q2a-apache sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/ca_bundle.crt,g' $default_ssl_conf
     docker exec q2a-apache sed -i "s,.*ServerAdmin.*,ServerAdmin $SSL_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
     
-    # Uncomment these lines if you've ran certbot before
-    #docker exec q2a-apache sed -i 's,.*SSLCertificateFile.*,SSLCertificateFile /etc/ssl/certificate.crt,g' $default_le_ssl_conf
-    #docker exec q2a-apache sed -i 's,.*SSLCertificateKeyFile.*,SSLCertificateKeyFile /etc/ssl/private/private.key,g' $default_le_ssl_conf
+    # If certbot was ran before, modify the config files it created
+    if [ -s $default_le_ssl_conf ];
+    then
+        echo 'Detected other .conf files. Modifying...'
+        docker exec q2a-apache sed -i 's,.*SSLCertificateFile.*,SSLCertificateFile /etc/ssl/certificate.crt,g' $default_le_ssl_conf
+        docker exec q2a-apache sed -i 's,.*SSLCertificateKeyFile.*,SSLCertificateKeyFile /etc/ssl/private/private.key,g' $default_le_ssl_conf
+    fi
 
     # Copy the file into the sites-enabled directory
     docker exec q2a-apache cp $default_ssl_conf /etc/apache2/sites-enabled/
@@ -359,7 +358,6 @@ manual_ssl_cert() {
 
 # Program execution
 install_dependencies
-#fetch_repository
 locate_config_files
 check_credentials
 set_credentials
