@@ -4,18 +4,17 @@ class qa_category_logo {
 
     public function admin_form(&$qa_content)
 	{
-        //$this->debug_to_console($qa_content);
-        $urls = $this->get_categories();
-        $categories_amount = count($urls);
+        $categories_backpaths = $this->get_categories_backpath();
         $saved = qa_clicked('category_logo_save_button');
+
 		if ($saved) {
 			qa_opt('category_logo_on', (int) qa_post_text('category_logo_on_field'));
-            for($i=0;$i<$categories_amount;$i++) {
-            	qa_opt('category_logo_url' .$i.'', qa_post_text('category_logo_url_field'.$i.''));
+            foreach($categories_backpaths as $category_backpath) {
+            	qa_opt('category_logo_url_' .$category_backpath['backpath'].'', qa_post_text('category_logo_url_field_'.$category_backpath['backpath'].''));
             }
 		}
 
-        $this -> qa_set_display_rules_helper($categories_amount);
+        //$this -> qa_set_display_rules_helper($categories_backpaths);
 
         //make array consists of prompt and specific labels with corresponding categories
         $fields = array(array(
@@ -24,8 +23,9 @@ class qa_category_logo {
             'value' => qa_opt('category_logo_on'),
             'tags' => 'name="category_logo_on_field" id="category_logo_on_field"',
         ));
-        foreach($urls as $url) {
-            array_push($fields, $url);
+        $results = $this->get_categories($categories_backpaths);
+        foreach($results as $result) {
+            array_push($fields, $result);
         }
 		return array(
 			'ok' => $saved ? 'Category logo settings saved' : null,
@@ -39,31 +39,35 @@ class qa_category_logo {
 		);
     }
 
-    private function get_categories() {
+    private function get_categories_backpath() {
+        return qa_db_query_raw( //get the backpaths of categories from db
+            'SELECT backpath From qa_categories'
+        );
+    }
+
+    private function get_categories($categories_backpaths) {
         $categories = array();
         $i = 0;
-        $results = qa_db_query_raw( //get the titles of categories from db
-            'SELECT title From qa_categories'
-        );
         //make array consists of specific labels with corresponding categories
-        foreach($results as $result) {
-            $tag_name = "category_logo_url_field" .$i. "";
+        foreach($categories_backpaths as $category_backpath) {
+            $tag_name = "category_logo_url_field_" .$category_backpath['backpath']. "";
             $categories[$i] = array( 
-                'id' => 'category_logo_url_display' .$i. '',
-                'label' => 'Url for logo for ' .$result['title']. ':',
+                'id' => 'category_logo_url_display_' .$category_backpath['backpath']. '',
+                'label' => 'URL of logo for category ' .$category_backpath['backpath']. ' - image address or local file (relative to Q2A root) :',
                 'type' => 'text',
-                'value' => qa_opt('category_logo_url'.$i. ''),
-                'tags' => 'name=' .$tag_name. "",
+                'value' => qa_opt('category_logo_url_'.$category_backpath['backpath']. ''),
+                'tags' => 'name="'.$tag_name.'"',
             );
             $i++;
         }
         return $categories;
     }
 
-    private function qa_set_display_rules_helper($categories_amount ) {
+    private function qa_set_display_rules_helper($categories_backpath) {
         $array = array();
-        for($i=0;$i<$categories_amount;$i++) {
-            $array += array('category_logo_url_display' .$i. '' => 'category_logo_url_field'.$i.'');
+        foreach($categories_backpath as $category_backpath) {
+            //$array += array('category_logo_url_display_' .$category_backpath['backpath']. '' => 'category_logo_on_field');
+            $array['category_logo_url_display_' .$category_backpath['backpath']. ''] = "category_logo_on_field";
         }
         qa_set_display_rules($qa_content, $array);
     }
