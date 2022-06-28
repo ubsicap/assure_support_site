@@ -24,6 +24,7 @@ qa_mysql_root_password=''
 # This information needs to be changed so that it is provided by the user/sysadmin
 SSL_EMAIL='daniel_hammer@sil.org'
 DOMAIN_NAME='supportsitetest.tk'
+WEBROOT='/home/$USER/app/q2a_site'
 
 
 #===============================================================================
@@ -278,12 +279,12 @@ launch_service() {
 #   DOMAIN_NAME
 #
 #===============================================================================
-ssl_certify() {
+generate_ssl() {
     echo
     echo 'Establishing SSL certification...'
 
     # Install certbot and packages, if necessary
-    docker exec q2a-apache apt-get install -y certbot python3-certbot-apache
+    ##docker exec q2a-apache apt-get install -y certbot python3-certbot-apache
 
     # Run certbot with the appropriate information
     #docker exec q2a-apache certbot --apache --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME
@@ -299,7 +300,12 @@ ssl_certify() {
     # to!
     #
     #============================================
-    docker exec q2a-apache certbot --test-cert --apache --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME
+    #docker exec q2a-apache certbot --test-cert --apache --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME
+
+    sudo apt-get install -y certbot
+
+    #certbot certonly --test-cert --non-interactive --agree-tos -m daniel_hammer@sil.org -d supportsitetest.tk -d www.supportsitetest.tk --webroot -w ./q2a_site/
+    certbot certonly --test-cert --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME -d www.$DOMAIN_NAME --webroot -w $WEBROOT
 
     echo 'SSL certification complete'
 }
@@ -308,51 +314,41 @@ ssl_certify() {
 
 #===============================================================================
 #
-# Copies SSL certification into the Apache web server.
-#
-# Note that this is for DEVELOPMENT, not production. Certbot can handle
-# SSL certs in production. This just helps us keep a backup of SSL certs in
-# case something goes wrong.
-# 
-# This requires a folder in the home/$USER directory called `ssl_keys/`
-# that contains the following files:
-#   certificate.crt
-#   ca_bundle.crt
-#   private.key
+# Copies SSL certification into the Apache web service container.
 #
 #===============================================================================
-manual_ssl_cert() {
+copy_ssl_apache() {
     echo
-    echo 'Copying SSL certifications...'
+    echo 'Copying SSL certifications to Apache service...'
 
     # Copy the SSL keys to the apache container
-    # TODO: Change how the certificates are loaded into the q2a-apache container
-    SSL_PATH="/home/$USER/ssl_keys"
-    docker cp $SSL_PATH/certificate.crt q2a-apache:/etc/ssl
-    docker cp $SSL_PATH/ca_bundle.crt q2a-apache:/etc/ssl
-    docker cp $SSL_PATH/private.key q2a-apache:/etc/ssl/private
+    SSL_PATH="/etc/letsencrypt/live/$DOMAIN_NAME/"
+    docker cp $SSL_PATH/cert.pem q2a-apache:/etc/ssl
+    docker cp $SSL_PATH/chain.pem q2a-apache:/etc/ssl
+    docker cp $SSL_PATH/fullchain.pem q2a-apache:/etc/ssl
+    docker cp $SSL_PATH/privkey.pem q2a-apache:/etc/ssl/private
 
     # Config files that will be modified
     default_ssl_conf='/etc/apache2/sites-available/default-ssl.conf'
-    default_le_ssl_conf='/etc/apache2/sites-available/000-default-le-ssl.conf'
 
     # Before we do anything, MAKE A BACKUP
     docker exec q2a-apache cp $default_ssl_conf $default_ssl_conf.backup
 
     # Replace the necessary paths for the cert files
-	docker exec q2a-apache sed -i 's,/etc/ssl/certs/ssl-cert-snakeoil.pem,/etc/ssl/certificate.crt,g' $default_ssl_conf
-	docker exec q2a-apache sed -i 's,/etc/ssl/private/ssl-cert-snakeoil.key,/etc/ssl/private/private.key,g' $default_ssl_conf
-    docker exec q2a-apache sed -i 's,#SSLCertificateChainFile,SSLCertificateChainFile,g' $default_ssl_conf
-    docker exec q2a-apache sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/ca_bundle.crt,g' $default_ssl_conf
-    docker exec q2a-apache sed -i "s,.*ServerAdmin.*,ServerAdmin $SSL_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
-    
-    # If certbot was ran before, modify the config files it created
-    if [ -s $default_le_ssl_conf ];
-    then
-        echo 'Detected other .conf files. Modifying...'
-        docker exec q2a-apache sed -i 's,.*SSLCertificateFile.*,SSLCertificateFile /etc/ssl/certificate.crt,g' $default_le_ssl_conf
-        docker exec q2a-apache sed -i 's,.*SSLCertificateKeyFile.*,SSLCertificateKeyFile /etc/ssl/private/private.key,g' $default_le_ssl_conf
-    fi
+	#docker exec q2a-apache sed -i 's,/etc/ssl/certs/ssl-cert-snakeoil.pem,/etc/ssl/cert.pem,g' $default_ssl_conf
+	#docker exec q2a-apache sed -i 's,/etc/ssl/private/ssl-cert-snakeoil.key,/etc/ssl/private/privkey.pem,g' $default_ssl_conf
+    #docker exec q2a-apache sed -i 's,#SSLCertificateChainFile,SSLCertificateChainFile,g' $default_ssl_conf
+    #docker exec q2a-apache sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/chain.pem,g' $default_ssl_conf
+    #docker exec q2a-apache sed -i "s,.*ServerAdmin.*,ServerAdmin $SSL_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
+
+    # Ensure that 443 is the default SSL port
+    docker exec q2a-apache sed -ri -e 's,80,443,' $default_ssl_conf 
+    # Enable SSL on the virtual host
+    docker exec q2a-apache sed -i -e '/^<\/VirtualHost>/i SSLEngine on' $default_ssl_conf
+    # Define cert file paths
+    docker exec q2a-apache sed -i -e '/^<\/VirtualHost>/i SSLCertificateFile /etc/ssl/cert.pem' $default_ssl_conf
+    docker exec q2a-apache sed -i -e '/^<\/VirtualHost>/i SSLCertificateChainFile /etc/ssl/fullchain.pem' $default_ssl_conf
+    docker exec q2a-apache sed -i -e '/^<\/VirtualHost>/i SSLCertificateKeyFile /etc/ssl/private/privkey.pem' $default_ssl_conf
 
     # Copy the file into the sites-enabled directory
     docker exec q2a-apache cp $default_ssl_conf /etc/apache2/sites-enabled/
@@ -361,8 +357,88 @@ manual_ssl_cert() {
     docker exec q2a-apache a2enmod ssl
     docker exec q2a-apache apachectl restart
 
-    echo 'SSL certifications copied'
+    echo 'SSL certifications copied to Apache service'
 }
+
+
+
+#===============================================================================
+#
+# Copies SSL certification into the phpMyAdmin service container.
+#
+#===============================================================================
+copy_ssl_phpmyadmin() {
+    echo
+    echo 'Copying all SSL certifications to phpMyAdmin service...'
+
+    # Copy the SSL keys to the apache container
+    SSL_PATH="/etc/letsencrypt/live/$DOMAIN_NAME/"
+    docker cp $SSL_PATH/cert.pem q2a-phpmyadmin:/etc/ssl
+    docker cp $SSL_PATH/chain.pem q2a-phpmyadmin:/etc/ssl
+    docker cp $SSL_PATH/fullchain.pem q2a-phpmyadmin:/etc/ssl
+    docker cp $SSL_PATH/privkey.pem q2a-phpmyadmin:/etc/ssl/private
+
+    # Config files that will be modified
+    ssl_conf='/etc/apache2/sites-available/000-default.conf'
+
+    # Enable SSL module
+    docker exec q2a-phpmyadmin a2enmod ssl
+
+    docker exec q2a-phpmyadmin sed -ri -e 's,80,443,' $ssl_conf
+    docker exec q2a-phpmyadmin sed -i -e '/^<\/VirtualHost>/i SSLEngine on' $ssl_conf
+    docker exec q2a-phpmyadmin sed -i -e '/^<\/VirtualHost>/i SSLCertificateFile /etc/ssl/cert.pem' $ssl_conf
+    docker exec q2a-phpmyadmin sed -i -e '/^<\/VirtualHost>/i SSLCertificateChainFile /etc/ssl/fullchain.pem' $ssl_conf
+    docker exec q2a-phpmyadmin sed -i -e '/^<\/VirtualHost>/i SSLCertificateKeyFile /etc/ssl/private/privkey.pem' $ssl_conf
+    
+    # Restart the necessary services
+    docker exec q2a-apache apachectl restart
+
+    echo 'SSL certifications copied to phpMyAdmin service'
+}
+
+
+
+#===============================================================================
+#
+# Copies SSL certification into the Portainer service container.
+#
+#===============================================================================
+copy_ssl_portainer() {
+    echo
+    echo 'Copying all SSL certifications to Portainer service...'
+
+    echo 'SSL certifications copied to Portainer service'
+}
+
+
+
+#===============================================================================
+#
+# Copies SSL certification into the necessary containers
+# 
+#
+# This accesses the cert files stored at the following:
+#   `/etc/letsencrypt/live/<Domain Name>`
+#
+# The following files are located there:
+#   cert.pem
+#   chain.pem
+#   fullchain.pem
+#   privkey.pem
+#
+#===============================================================================
+copy_ssl() {
+    echo
+    echo 'Copying all SSL certifications...'
+
+    copy_ssl_apache()
+    copy_ssl_phpmyadmin()
+    copy_ssl_portainer()
+
+    echo 'All SSL certifications copied'
+}
+
+
 
 # Program execution
 install_dependencies
@@ -371,6 +447,6 @@ check_credentials
 set_credentials
 enable_autolaunch
 launch_service
-#ssl_certify
-manual_ssl_cert
+generate_ssl
+copy_ssl
 cleanup
