@@ -1,5 +1,8 @@
 #!/bin/bash
 
+user='ubuntu'
+workdir="/home/$user/app"
+
 # Follows the steps outlined on: https://docs.docker.com/engine/install/ubuntu/
 # Pre-install setup
 sudo apt-get update -y 
@@ -18,13 +21,13 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plu
 
 # Allow non-root users to use Docker (requires logout/login)
 sudo groupadd docker
-sudo usermod -aG docker ubuntu
+sudo usermod -aG docker $user
 
 # Start the docker process on boot
 sudo systemctl enable docker.service
 sudo systemctl enable containerd.service
 
 # Clone the development repo
-mkdir -p /home/ubuntu
-git clone https://github.com/ubsicap/assure_support_site /home/ubuntu/app
-chown -R ubuntu /home/ubuntu/app
+mkdir -p $workdir
+git clone https://github.com/ubsicap/assure_support_site $workdir
+chown -R $user $workdir
