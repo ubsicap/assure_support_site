@@ -2,12 +2,25 @@
 
 Repository and information for the Assure Support Site
 
+## Table of Contents
+
+1. [Structure](#structure)
+1. [Local Startup](#local-startup)
+1. [Launching to AWS](#launching-to-aws)
+1. [Custom Domain Name](#custom-domain-name)
+1. [SSL Certification](#ssl-certification)
+1. [Database Management](#database-management)
+1. [Container Management](#container-management)
+
 ## Structure
 
+Repository Contents:
+
 ```sh
-.
+assure_support_site/
 ├── README.md               # This file
 ├── docker-compose.yml      # Launches the web service in two containers
+├── ec2_user_data.sh        # User Data for the EC2 instance (ran at launch)
 ├── q2a_site/               # Question2Answer website source code
 └── startup.sh              # Startup script for launching on remote server
 ```
@@ -42,28 +55,27 @@ Finally, navigate to `http://localhost` in your web browser
 ## Launching to AWS
 
 1. Create a new EC2 instance
-   - Name can be anything
-1. Select an image (Ubuntu 20.04 was used for testing, Amazon Linux works if you change a line in the startup script)
+1. Select Ubuntu 20.04 as the image
 1. Select/create a key pair for `ssh` access
 1. Select/create a network security group with the following rules:
    - **Type**: HTTP, **Protocol**: TCP, **Port Range**: 80, **Source**: 0.0.0.0/0
+   - **Type**: HTTPS, **Protocol**: TCP, **Port Range**: 443, **Source**: 0.0.0.0/0
    - **Type**: ssh, **Protocol**: TCP, **Port Range**: 22, **Source**: <Your IP>
 1. Click `Launch Instance`
 1. While waiting for the instance to boot, click on it and copy its public IPv4 address
-1. Connect to your instace with the following command (note you may need to `sudo`, depending on file permissions):
+1. Connect to your instance with the following command (note you may need to `sudo`, depending on file permissions):
    - `ssh -i <your .pem key> <user>@<instance public IPv4>`
-   - `<username>` will either be `ubuntu` or `ec2-user`, depending on whether you chose Ubuntu or Amazon Linux as the image
+   - `<username>` should be `ubuntu`
 1. Once connected, run the following commands:
-   - `sudo yum install -y git`
+   - `sudo apt install -y git`
    - `git clone https://github.com/ubsicap/assure_support_site.git`
    - `cd assure_support_site`
-     - **Note**: If you chose Amazon Linux, change the line near the bottom of the startup script to `install_dependencies "Amazon Linux"`
    - `sh startup.sh`
 1. You will be prompted to create a MySQL root password, account username, account password, and database name.
 1. Once you have created credentials, the `docker-compose.yml` file will be ran and two containers will start.
 1. Open your web browser to `http://<instance public IP>`
 1. You will be prompted to create an administrator account for the website.
-1. Once created, you can access the site through the aforementioned IP address.
+1. Once created, you will be brought to the site's homepage.
 
 ## Custom Domain Name
 
@@ -141,3 +153,20 @@ Once these files are in place, open `startup.sh` and comment out the call to `ss
 Now re-run `sh startup.sh` and navigate to `https://<Domain Name>` in your browser to verify that HTTPS traffic is allowed.
 
 More information can be found [here](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-debian-9).
+
+## Database Management
+
+The database can be accessed through two methods:
+
+- [phpMyAdmin](https://www.phpmyadmin.net/), which is running in a container alongside the database, on port `3306`
+- [MySQL Workbench](https://www.mysql.com/products/workbench/) (or another MySQL access tool) on port `9906`
+
+**Note**: Not yet implemented with [SSL support](https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/)
+
+I don't know which method is preferred for production. Both are password protected using the credentials entered at first launch.
+
+## Container Management
+
+This installation is configured to work with [Portainer](https://www.portainer.io/), a web-based container management GUI. It's like Docker Desktop, but in a web browser.
+
+The service is launched automatically alongside the rest of the containers. To access, navigate to `https://<Domain Name>:9443`
