@@ -349,6 +349,8 @@ generate_ssl() {
 #
 # General structure copied from https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/
 #
+# Note that this modifies the `/etc/apache2/sites-available/000-default.conf` file.
+#
 # Parameters:
 #   $1  The name of the container to copy SSL cert files into
 #
@@ -376,19 +378,16 @@ copy_ssl_to_container() {
     # Enable SSL module
     docker exec $container a2enmod ssl
 
-    # Ensure default SSL port is 443
-    docker exec $container sed -ri -e 's,80,443,' $ssl_conf_path
-
-    # Enable SSL on virtual host
-    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLEngine on' $ssl_conf_path
-
     # Define paths for cert files
     docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateFile /etc/ssl/cert.pem' $ssl_conf_path
     docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateChainFile /etc/ssl/fullchain.pem' $ssl_conf_path
     docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateKeyFile /etc/ssl/private/privkey.pem' $ssl_conf_path
-    
+
+    # Redirect all HTTP traffic to HTTPS
+    docker exec $container sed -i -e "/^<\/VirtualHost>/i Redirect \"/\" \"https://$DOMAIN_NAME\"" $ssl_conf_path
+
     # Restart the necessary services
-    docker exec $container apachectl restart
+    docker exec $container apachectl start
 
     echo "SSL certifications copied to $container service"
 }
@@ -422,6 +421,19 @@ copy_ssl() {
 
 
 
+#===============================================================================
+#
+# Displays status of docker containers after launch.
+#
+#===============================================================================
+display_status() {
+    echo
+    echo 'All docker containers:'
+    docker ps -a
+}
+
+
+
 # Program execution
 install_dependencies
 locate_config_files
@@ -432,3 +444,4 @@ launch_service
 generate_ssl
 copy_ssl
 cleanup
+display_status
