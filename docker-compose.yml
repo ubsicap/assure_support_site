@@ -51,7 +51,7 @@ services:
       PMA_HOST: db
       PMA_PORT: 3306
     ports:                                  # Allows us to access MySQL database remotely
-      - "3306:80"                           # Port 3306 will access phpMyAdmin
+      - "3306:443"                          # Port 3306 will access phpMyAdmin via HTTPS
 
   # Configuration for Portainer container management system
   portainer:
@@ -61,9 +61,13 @@ services:
     volumes:                                # Portainer needs to access the docker socket to modify containers
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
+      - /local_certs:/certs                 # Allow Portainer SSL certs
     ports:
       - "9443:9443"                         # HTTPS access
       #- "9000:9000"                         # HTTP access (Legacy; not recommended!)
+    command:                                # Pass these into portainer for SSL access
+      --sslcert /certs/portainer.crt
+      --sslkey /certs/portainer.key
 
 volumes:                                    # These volumes are stored on /var/lib/docker/volumes/ (on Linux)
   q2a_db_volume:                            # Persistent storage for DB
