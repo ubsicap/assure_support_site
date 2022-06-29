@@ -1,7 +1,3 @@
-# Ignore Q2A config file and .htaccess in development
-qa-config.php
-.htaccess
-
 # Ignore cached files
 qa-cache/*/
 
@@ -18,12 +14,6 @@ dbdata
 .vscode
 *.pem
 *.ppk
-
-
-# Just some dev scripts
-resetconfig.sh
-restoreconfig.sh
-
 
 # Anything in this folder will not be tracked, obviously
 untracked/

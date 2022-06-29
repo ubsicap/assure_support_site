@@ -24,7 +24,7 @@ QA_MYSQL_ROOT_PASSWORD=''
 # This information needs to be changed so that it is provided by the user/sysadmin
 SSL_EMAIL='daniel_hammer@sil.org'
 DOMAIN_NAME='supportsitetest.tk'
-WEBROOT=$(realpath q2a_site)
+WEBROOT=$(realpath public)
 
 
 
@@ -329,7 +329,7 @@ generate_ssl() {
     # to!
     #
     #============================================
-    #certbot certonly --dry-run --non-interactive --agree-tos -m daniel_hammer@sil.org -d supportsitetest.tk -d www.supportsitetest.tk --webroot -w ./q2a_site/
+    #certbot certonly --dry-run --non-interactive --agree-tos -m daniel_hammer@sil.org -d supportsitetest.tk -d www.supportsitetest.tk --webroot -w $WEBROOT
     sudo certbot certonly --dry-run \
         --non-interactive \
         --agree-tos \

@@ -21,7 +21,7 @@ assure_support_site/
 ├── README.md               # This file
 ├── docker-compose.yml      # Launches the web service in two containers
 ├── ec2_user_data.sh        # User Data for the EC2 instance (ran at launch)
-├── q2a_site/               # Question2Answer website source code
+├── public/                 # Question2Answer website source code
 └── startup.sh              # Startup script for launching on remote server
 ```
 
@@ -29,7 +29,7 @@ assure_support_site/
 
 Make sure the following credentials are set:
 
-- In `q2a_site/qa-config.php`
+- In `public/qa-config.php`
   - `QA_MYSQL_HOSTNAME`
     - Must be set to the name of the DB container defined in `docker-compose.yml`
   - `QA_MYSQL_USERNAME`
