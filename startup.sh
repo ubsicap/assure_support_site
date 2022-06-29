@@ -301,6 +301,27 @@ launch_service() {
 
 #===============================================================================
 #
+# Stores the `qa-config.php` file in a location not served by the web server.
+#
+# This creates a neighboring folder to the root at `/var/www/config` and stores
+# the file there.
+#
+# Implemented according to Q2A's suggestion here:
+#       https://docs.question2answer.org/install/security/
+#
+#===============================================================================
+move_config_file() {
+    echo
+    echo 'Moving qa-config.php to /var/www/config for security'
+
+    docker exec q2a-apache mkdir -p /var/www/config
+    docker cp qa-config.php q2a-apache:/var/www/config
+}
+
+
+
+#===============================================================================
+#
 # Performs the SSL certification process on the web server.
 #
 # The certification process uses Certbot (certbot.eff.org)
@@ -484,6 +505,7 @@ check_credentials
 set_credentials
 enable_autolaunch
 launch_service
+move_config_file
 generate_ssl
 copy_ssl
 cleanup
