@@ -7,9 +7,9 @@
 	Plugin Version: 1.0
 	Plugin Date: 2014-10-05
 	Plugin Author: q2apro.com
-	Plugin Author URI: http://www.q2apro.com
+	//Plugin Author URI: http://www.q2apro.com
 	Plugin Minimum Question2Answer Version: 1.5
-	Plugin Update Check URI: http://www.q2apro.com/pluginupdate?id=59
+	//Plugin Update Check URI: http://www.q2apro.com/pluginupdate?id=59
 	
 	Licence: Copyright © q2apro.com - All rights reserved
 

@@ -14,8 +14,7 @@ class qa_category_logo {
             }
 		}
 
-        //$this -> qa_set_display_rules_helper($categories_backpaths);
-
+        $this -> qa_set_display_rules_helper($categories_backpaths);
         //make array consists of prompt and specific labels with corresponding categories
         $fields = array(array(
             'label' => 'Add specific logo to corresponding categories',
@@ -39,12 +38,14 @@ class qa_category_logo {
 		);
     }
 
+    //get the backpaths of categories from db
     private function get_categories_backpath() {
-        return qa_db_query_raw( //get the backpaths of categories from db
+        return qa_db_query_raw( 
             'SELECT backpath From qa_categories'
         );
     }
 
+    //returns the well-written array of categories needed for admin form
     private function get_categories($categories_backpaths) {
         $categories = array();
         $i = 0;
@@ -66,7 +67,6 @@ class qa_category_logo {
     private function qa_set_display_rules_helper($categories_backpath) {
         $array = array();
         foreach($categories_backpath as $category_backpath) {
-            //$array += array('category_logo_url_display_' .$category_backpath['backpath']. '' => 'category_logo_on_field');
             $array['category_logo_url_display_' .$category_backpath['backpath']. ''] = "category_logo_on_field";
         }
         qa_set_display_rules($qa_content, $array);
