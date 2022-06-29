@@ -1,8 +1,6 @@
 # Ignore cached files
 qa-cache/*/
 
-public/qa-config.php
-
 # Other files
 .DS_Store
 .DS_Store?

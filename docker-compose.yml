@@ -51,7 +51,7 @@ services:
       PMA_HOST: db
       PMA_PORT: 3306
     ports:                                  # Allows us to access MySQL database remotely
-      - "3307:443"                          # Port 3306 will access phpMyAdmin via HTTPS
+      - "3306:443"                          # Port 3306 will access phpMyAdmin via HTTPS
 
   # Configuration for Portainer container management system
   portainer:
