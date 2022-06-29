@@ -316,27 +316,28 @@ generate_ssl() {
     echo 'Establishing SSL certification...'
 
     # Install certbot and packages, if necessary
-    ##docker exec q2a-apache apt-get install -y certbot python3-certbot-apache
     sudo apt-get install -y certbot
-
-    # Run certbot with the appropriate information
-    #docker exec q2a-apache certbot --apache --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME
 
     #============================================
     #
     #             ***IMPORTANT***
     #
     # This line is for DEVELOPMENT ONLY. Notice
-    # the `--test-cert` flag? Removing that will
+    # the `--dry-run` flag? Removing that will
     # run in production mode. Production mode is
     # RATE LIMITED! Don't use it unless you need
     # to!
     #
     #============================================
-    #docker exec q2a-apache certbot --test-cert --apache --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME
-
-    #certbot certonly --test-cert --non-interactive --agree-tos -m daniel_hammer@sil.org -d supportsitetest.tk -d www.supportsitetest.tk --webroot -w ./q2a_site/
-    sudo certbot certonly --test-cert --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME -d www.$DOMAIN_NAME --webroot -w $WEBROOT
+    #certbot certonly --dry-run --non-interactive --agree-tos -m daniel_hammer@sil.org -d supportsitetest.tk -d www.supportsitetest.tk --webroot -w ./q2a_site/
+    sudo certbot certonly --dry-run \
+        --non-interactive \                 # Run without user input
+        --agree-tos \                       # Automatically agree to the ToS
+        --expand \                          # Expand and renew domains (in case we're adding subdomains)
+        -m $SSL_EMAIL \                     # Email associated with these certificates
+        --webroot -w $WEBROOT \             # Location of the web server
+        -d $DOMAIN_NAME \                   # Domains to certify
+        -d www.$DOMAIN_NAME
 
     echo 'SSL certification complete'
 }
@@ -367,10 +368,10 @@ copy_ssl_to_container() {
 
     # Copy the SSL keys to the container
     host_ssl_path="/etc/letsencrypt/live/$DOMAIN_NAME/"
-    docker cp $host_ssl_path/cert.pem $container:/etc/ssl
-    docker cp $host_ssl_path/chain.pem $container:/etc/ssl
-    docker cp $host_ssl_path/fullchain.pem $container:/etc/ssl
-    docker cp $host_ssl_path/privkey.pem $container:/etc/ssl/private
+    sudo docker cp -L $host_ssl_path/cert.pem $container:/etc/ssl
+    sudo docker cp -L $host_ssl_path/chain.pem $container:/etc/ssl
+    sudo docker cp -L $host_ssl_path/fullchain.pem $container:/etc/ssl
+    sudo docker cp -L $host_ssl_path/privkey.pem $container:/etc/ssl/private
 
     # Config files that will be modified
     ssl_conf_path='/etc/apache2/sites-available/000-default.conf'

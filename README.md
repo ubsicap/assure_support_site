@@ -118,7 +118,7 @@ Before attempting this, please ensure that HTTPS traffic is not yet allowed by n
 
 **Note**: This requires a custom domain name to bet set up first. Also, every time `docker compose down` or an equivalent command is run to terminate the `q2a-apache` container, this process will need to be repeated.
 
-**VERY IMPORTANT NOTE**: If you are _developing_, be sure to include the `--test-cert` flag when running `certbot`, otherwise you risk being rate limited! For production, simply omit this flag.
+**VERY IMPORTANT NOTE**: If you are _developing_, be sure to include the `--test-cert` and `--dry-run` flags when running `certbot`, otherwise you will be rate limited! For production, simply omit these flags.
 
 1. Ensure that the web server is live (EC2 instance & Docker containers).
 1. Connect to the EC2 instance (`ssh -i <your_key.pem> <user>@<domain name>`, just like above)
