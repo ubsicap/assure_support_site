@@ -54,7 +54,7 @@ class qa_category_logo {
             $tag_name = "category_logo_url_field_" .$category_backpath['backpath']. "";
             $categories[$i] = array( 
                 'id' => 'category_logo_url_display_' .$category_backpath['backpath']. '',
-                'label' => 'URL of logo for category ' .$category_backpath['backpath']. ' - image address or local file (relative to Q2A root) :',
+                'label' => 'URL of logo for category ' .str_replace("-", " ", $category_backpath['backpath']). ' - image address or local file (relative to Q2A root) :',
                 'type' => 'text',
                 'value' => qa_opt('category_logo_url_'.$category_backpath['backpath']. ''),
                 'tags' => 'name="'.$tag_name.'"',
