@@ -331,12 +331,12 @@ generate_ssl() {
     #============================================
     #certbot certonly --dry-run --non-interactive --agree-tos -m daniel_hammer@sil.org -d supportsitetest.tk -d www.supportsitetest.tk --webroot -w ./q2a_site/
     sudo certbot certonly --dry-run \
-        --non-interactive \                 # Run without user input
-        --agree-tos \                       # Automatically agree to the ToS
-        --expand \                          # Expand and renew domains (in case we're adding subdomains)
-        -m $SSL_EMAIL \                     # Email associated with these certificates
-        --webroot -w $WEBROOT \             # Location of the web server
-        -d $DOMAIN_NAME \                   # Domains to certify
+        --non-interactive \
+        --agree-tos \
+        --expand \
+        -m $SSL_EMAIL \
+        --webroot -w $WEBROOT \
+        -d $DOMAIN_NAME \
         -d www.$DOMAIN_NAME
 
     echo 'SSL certification complete'
