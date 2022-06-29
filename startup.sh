@@ -24,7 +24,7 @@ qa_mysql_root_password=''
 # This information needs to be changed so that it is provided by the user/sysadmin
 SSL_EMAIL='daniel_hammer@sil.org'
 DOMAIN_NAME='supportsitetest.tk'
-WEBROOT='/home/$USER/app/q2a_site'
+WEBROOT="/home/$USER/app/q2a_site"
 
 
 #===============================================================================
@@ -305,7 +305,7 @@ generate_ssl() {
     sudo apt-get install -y certbot
 
     #certbot certonly --test-cert --non-interactive --agree-tos -m daniel_hammer@sil.org -d supportsitetest.tk -d www.supportsitetest.tk --webroot -w ./q2a_site/
-    certbot certonly --test-cert --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME -d www.$DOMAIN_NAME --webroot -w $WEBROOT
+    sudo certbot certonly --test-cert --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME -d www.$DOMAIN_NAME --webroot -w $WEBROOT
 
     echo 'SSL certification complete'
 }
@@ -367,33 +367,34 @@ copy_ssl_apache() {
 # Copies SSL certification into the phpMyAdmin service container.
 #
 #===============================================================================
-copy_ssl_phpmyadmin() {
+copy_ssl() {
+    container=$1
     echo
-    echo 'Copying all SSL certifications to phpMyAdmin service...'
+    echo "Copying all SSL certifications to $container service..."
 
-    # Copy the SSL keys to the apache container
+    # Copy the SSL keys to the container
     SSL_PATH="/etc/letsencrypt/live/$DOMAIN_NAME/"
-    docker cp $SSL_PATH/cert.pem q2a-phpmyadmin:/etc/ssl
-    docker cp $SSL_PATH/chain.pem q2a-phpmyadmin:/etc/ssl
-    docker cp $SSL_PATH/fullchain.pem q2a-phpmyadmin:/etc/ssl
-    docker cp $SSL_PATH/privkey.pem q2a-phpmyadmin:/etc/ssl/private
+    docker cp $SSL_PATH/cert.pem $container:/etc/ssl
+    docker cp $SSL_PATH/chain.pem $container:/etc/ssl
+    docker cp $SSL_PATH/fullchain.pem $container:/etc/ssl
+    docker cp $SSL_PATH/privkey.pem $container:/etc/ssl/private
 
     # Config files that will be modified
     ssl_conf='/etc/apache2/sites-available/000-default.conf'
 
     # Enable SSL module
-    docker exec q2a-phpmyadmin a2enmod ssl
+    docker exec $container a2enmod ssl
 
-    docker exec q2a-phpmyadmin sed -ri -e 's,80,443,' $ssl_conf
-    docker exec q2a-phpmyadmin sed -i -e '/^<\/VirtualHost>/i SSLEngine on' $ssl_conf
-    docker exec q2a-phpmyadmin sed -i -e '/^<\/VirtualHost>/i SSLCertificateFile /etc/ssl/cert.pem' $ssl_conf
-    docker exec q2a-phpmyadmin sed -i -e '/^<\/VirtualHost>/i SSLCertificateChainFile /etc/ssl/fullchain.pem' $ssl_conf
-    docker exec q2a-phpmyadmin sed -i -e '/^<\/VirtualHost>/i SSLCertificateKeyFile /etc/ssl/private/privkey.pem' $ssl_conf
+    docker exec $container sed -ri -e 's,80,443,' $ssl_conf
+    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLEngine on' $ssl_conf
+    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateFile /etc/ssl/cert.pem' $ssl_conf
+    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateChainFile /etc/ssl/fullchain.pem' $ssl_conf
+    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateKeyFile /etc/ssl/private/privkey.pem' $ssl_conf
     
     # Restart the necessary services
-    docker exec q2a-apache apachectl restart
+    docker exec $container apachectl restart
 
-    echo 'SSL certifications copied to phpMyAdmin service'
+    echo 'SSL certifications copied to $container service'
 }
 
 
@@ -431,9 +432,11 @@ copy_ssl() {
     echo
     echo 'Copying all SSL certifications...'
 
-    copy_ssl_apache()
-    copy_ssl_phpmyadmin()
-    copy_ssl_portainer()
+    copy_ssl q2a-apache
+    copy_ssl q2a-phpmyadmin
+    #copy_ssl_apache
+    #copy_ssl_phpmyadmin
+    #copy_ssl_portainer
 
     echo 'All SSL certifications copied'
 }
