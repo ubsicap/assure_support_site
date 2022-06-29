@@ -5,7 +5,7 @@ services:
   php-apache-environment:
     container_name: q2a-apache              # Custom name for the q2a Apache server
     build:                                  # Build a new image
-      context: ./q2a_site                   # Source of the container
+      context: ./public                     # Source of the container
       dockerfile: Dockerfile                # Dockerfile to build from
     image: q2a-php-apache                   # Name of the image of the Apache server being created
     restart: on-failure                     # Restart this container if a failure occurs
@@ -13,7 +13,7 @@ services:
       - "db"                                # Must be the name of the database *container*
     volumes:                                # Bind the source directory to the website container
       - type: bind                          # Bind instead of Volume because we want to be able to make changes to the source folder without re-composing the container
-        source: ./q2a_site                  # Must be the directory containing `index.php`
+        source: ./public                    # Must be the directory containing `index.php`
         target: /var/www/html/              # Default root for Apache web server
     ports:                                  # Define what ports should be open for traffic
       - "80:80"                             # Open 80 on the host to allow HTTP traffic
