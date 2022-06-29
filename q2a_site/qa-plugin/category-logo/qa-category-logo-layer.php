@@ -29,7 +29,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 	public function nav_link($navlink, $class)
 	{
 		//check to see if it is a category in sidepanel
-		if (!strcmp($class, "nav-cat") && strlen($navlink['note'])) {
+		if (!strcmp($class, "nav-cat") && strlen(@$navlink['note'])) {
 			$logo = $this->get_logo($navlink['label']);
 			if (isset($navlink['url'])) {
 				$this->output(
