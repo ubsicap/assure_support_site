@@ -388,7 +388,7 @@ copy_ssl_to_container() {
 	docker exec $container sed -i 's,/etc/ssl/certs/ssl-cert-snakeoil.pem,/etc/ssl/cert.pem,g' $default_ssl_conf
 	docker exec $container sed -i 's,/etc/ssl/private/ssl-cert-snakeoil.key,/etc/ssl/private/privkey.pem,g' $default_ssl_conf
     docker exec $container sed -i 's,#SSLCertificateChainFile,SSLCertificateChainFile,g' $default_ssl_conf
-    docker exec $container sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/fullchain.crt,g' $default_ssl_conf
+    docker exec $container sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/fullchain.pem,g' $default_ssl_conf
     docker exec $container sed -i "s,.*ServerAdmin.*,ServerAdmin $SSL_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
 
     # Define paths for cert files
@@ -426,7 +426,7 @@ copy_ssl_to_container() {
 #===============================================================================
 copy_portainer_certs() {
     # Make the directory
-    sudo mkdir /local_certs/
+    sudo mkdir /local_certs/ &> /dev/null
 
     host_ssl_path="/etc/letsencrypt/live/$DOMAIN_NAME/"
 
