@@ -2,9 +2,9 @@
 
 
 
-# Paths to the files that will be modified
-config_path=''
-compose_path=''
+# Paths to app configuration files that will be modified during startup
+CONFIG_PATH=''
+COMPOSE_PATH=''
 
 # Default values that will be replaced in the above files
 USERNAME_TO_REPLACE='USERNAME_TO_REPLACE'
@@ -14,17 +14,18 @@ HOSTNAME_TO_REPLACE='HOSTNAME_TO_REPLACE'
 ROOT_PASSWORD_TO_REPLACE='ROOT_PASSWORD_TO_REPLACE'
 
 # Values to be read from the user
-qa_mysql_hostname=''
-qa_mysql_username=''
-qa_mysql_password=''
-qa_mysql_database=''
-qa_mysql_root_password=''
+QA_MYSQL_HOSTNAME=''
+QA_MYSQL_USERNAME=''
+QA_MYSQL_PASSWORD=''
+QA_MYSQL_DATABASE=''
+QA_MYSQL_ROOT_PASSWORD=''
 
 # SSL Certification information
 # This information needs to be changed so that it is provided by the user/sysadmin
 SSL_EMAIL='daniel_hammer@sil.org'
 DOMAIN_NAME='supportsitetest.tk'
-WEBROOT="/home/$USER/app/q2a_site"
+WEBROOT=$(realpath q2a_site)
+
 
 
 #===============================================================================
@@ -47,7 +48,7 @@ install_dependencies() {
         # Follows the steps outlined on: https://docs.docker.com/engine/install/ubuntu/
         # Pre-install setup
         sudo apt-get update -y 
-        sudo apt-get install -y ca-certificates curl gnupg lsb-release # Doesnt do anything
+        sudo apt-get install -y ca-certificates curl gnupg lsb-release
         
         # Adding GPG key
         sudo mkdir -p /etc/apt/keyrings
@@ -90,8 +91,8 @@ cleanup() {
     # Remove package lists
     sudo rm -rf /var/lib/apt/lists/*
 
-    # This script is copied to /var/lib/cloud/instance/user-data.txt upon,
-    # launching the instance so it can safely be removed.
+    # This script is copied to /var/lib/cloud/instance/user-data.txt upon
+    # launching the instance, so it can safely be removed.
     if [ -s ./ec2_user_data.sh ];
     then
         echo "Deleting EC2 User Data script"
@@ -108,17 +109,21 @@ cleanup() {
 # These files will get modified to hold the user-inputted credentials for the
 # MySQL database.
 #
+# Global variables used:
+#   COMPOSE_PATH
+#   CONFIG_PATH
+#
 #===============================================================================
 locate_config_files() {
     echo
     echo 'Locating configuration files...'
 
-    config_path=$(realpath $(find . -type f -name "qa-config.php"))
-    compose_path=$(realpath $(find . -type f -name "docker-compose.yml"))
+    CONFIG_PATH=$(realpath $(find . -type f -name "qa-config.php"))
+    COMPOSE_PATH=$(realpath $(find . -type f -name "docker-compose.yml"))
 
     echo "Configuration files found:"
-    echo "    $config_path"
-    echo "    $compose_path"
+    echo "    $CONFIG_PATH"
+    echo "    $COMPOSE_PATH"
 }
 
 
@@ -127,17 +132,26 @@ locate_config_files() {
 #
 # Checks if the credentials have already been set, prompting the user if not.
 #
+# Global variables used:
+#   COMPOSE_PATH
+#   CONFIG_PATH
+#   USERNAME_TO_REPLACE
+#   PASSWORD_TO_REPLACE
+#   DATABASE_TO_REPLACE
+#   HOSTNAME_TO_REPLACE
+#   ROOT_PASSWORD_TO_REPLACE
+#
 #===============================================================================
 check_credentials() {
     echo
     echo 'Checking if MySQL credentials have been set...'
 
     # Set the database root password, if needed
-    if grep -q $ROOT_PASSWORD_TO_REPLACE $compose_path;
+    if grep -q $ROOT_PASSWORD_TO_REPLACE $COMPOSE_PATH;
     then
         # Toggle echo off when reading the password
         stty -echo
-        read -p "Set new password for MySQL root account > " qa_mysql_root_password
+        read -p "Set new password for MySQL root account > " QA_MYSQL_ROOT_PASSWORD
         stty echo
         echo
     else
@@ -145,18 +159,18 @@ check_credentials() {
     fi
 
     # Set the username, if needed
-    if grep -q $USERNAME_TO_REPLACE $config_path;
+    if grep -q $USERNAME_TO_REPLACE $CONFIG_PATH;
     then
-        read -p "Set username for new MySQL user account > " qa_mysql_username
+        read -p "Set username for new MySQL user account > " QA_MYSQL_USERNAME
     else
         echo '    Username already defined'
     fi
 
     # Set the database password, if needed
-    if grep -q $PASSWORD_TO_REPLACE $config_path;
+    if grep -q $PASSWORD_TO_REPLACE $CONFIG_PATH;
     then
         stty -echo
-        read -p "Set password for new MySQL user account > " qa_mysql_password
+        read -p "Set password for new MySQL user account > " QA_MYSQL_PASSWORD
         stty echo
         echo
     else
@@ -164,7 +178,7 @@ check_credentials() {
     fi
 
     # Set the database hostname, if needed
-    if grep -q $HOSTNAME_TO_REPLACE $config_path;
+    if grep -q $HOSTNAME_TO_REPLACE $CONFIG_PATH;
     then
         echo -n
     else
@@ -172,15 +186,15 @@ check_credentials() {
     fi
 
     # Set the database name, if needed
-    if grep -q $DATABASE_TO_REPLACE $config_path;
+    if grep -q $DATABASE_TO_REPLACE $CONFIG_PATH;
     then
-        read -p "Set name for MySQL database > " qa_mysql_database
+        read -p "Set name for MySQL database > " QA_MYSQL_DATABASE
     else
         echo '    Database name already defined'
     fi
 
     # Lastly, fetch the name of the container that the MySQL database will run in
-    qa_mysql_hostname=$(awk '/container_name:/' $compose_path | awk 'FNR == 2 {print $2}')
+    QA_MYSQL_HOSTNAME=$(awk '/container_name:/' $COMPOSE_PATH | awk 'FNR == 2 {print $2}')
 }
 
 
@@ -189,28 +203,37 @@ check_credentials() {
 #
 # Sets the MySQL credentials provided by the user.
 #
+# Global variables used:
+#   COMPOSE_PATH
+#   CONFIG_PATH
+#   USERNAME_TO_REPLACE
+#   PASSWORD_TO_REPLACE
+#   DATABASE_TO_REPLACE
+#   HOSTNAME_TO_REPLACE
+#   ROOT_PASSWORD_TO_REPLACE
+#
 #===============================================================================
 set_credentials() {
     echo
     echo 'Setting MySQL credentials...'
 
     # Set the root password
-    sed -i "s/$ROOT_PASSWORD_TO_REPLACE/$qa_mysql_root_password/" $compose_path
+    sed -i "s/$ROOT_PASSWORD_TO_REPLACE/$QA_MYSQL_ROOT_PASSWORD/" $COMPOSE_PATH
 
     # Set the standard account's username
-    sed -i "s/$USERNAME_TO_REPLACE/$qa_mysql_username/" $config_path
-    sed -i "s/$USERNAME_TO_REPLACE/$qa_mysql_username/" $compose_path
+    sed -i "s/$USERNAME_TO_REPLACE/$QA_MYSQL_USERNAME/" $CONFIG_PATH
+    sed -i "s/$USERNAME_TO_REPLACE/$QA_MYSQL_USERNAME/" $COMPOSE_PATH
 
     # Set the standard account's password
-    sed -i "s/$PASSWORD_TO_REPLACE/$qa_mysql_password/" $config_path
-    sed -i "s/$PASSWORD_TO_REPLACE/$qa_mysql_password/" $compose_path
+    sed -i "s/$PASSWORD_TO_REPLACE/$QA_MYSQL_PASSWORD/" $CONFIG_PATH
+    sed -i "s/$PASSWORD_TO_REPLACE/$QA_MYSQL_PASSWORD/" $COMPOSE_PATH
 
     # Set the hostname of the database (name of the DB container)
-    sed -i "s/$HOSTNAME_TO_REPLACE/$qa_mysql_hostname/" $config_path
+    sed -i "s/$HOSTNAME_TO_REPLACE/$QA_MYSQL_HOSTNAME/" $CONFIG_PATH
 
     # Set the database's name
-    sed -i "s/$DATABASE_TO_REPLACE/$qa_mysql_database/" $config_path
-    sed -i "s/$DATABASE_TO_REPLACE/$qa_mysql_database/" $compose_path
+    sed -i "s/$DATABASE_TO_REPLACE/$QA_MYSQL_DATABASE/" $CONFIG_PATH
+    sed -i "s/$DATABASE_TO_REPLACE/$QA_MYSQL_DATABASE/" $COMPOSE_PATH
 
     echo "MySQL credentials set"
 }
@@ -224,25 +247,29 @@ set_credentials() {
 #
 # Note that this doesn't effect machines not hosted on AWS EC2.
 #
+# Global variables used:
+#   COMPOSE_PATH
+#
 #===============================================================================
 enable_autolaunch() {
     echo
     echo 'Setting containers to launch automatically on system start...'
 
-    BOOT_PATH='/var/lib/cloud/scripts/per-boot'
+    boot_path='/var/lib/cloud/scripts/per-boot'
 
     # Allow a script to be created
-    sudo chmod -R 777 $BOOT_PATH
+    sudo chmod -R 777 $boot_path
 
     # By default, just compose the containers,
     # But we *may* want to re-run the startup script, so I'm leaving this here
     #echo "#!/bin/sh
-#sh $(realpath $0) > $BOOT_PATH
+#sh $(realpath $0) > $boot_path
+
     sudo echo "#!/bin/sh
-docker compose -f $compose_path up -d" > $BOOT_PATH/startserver.sh
+docker compose -f $COMPOSE_PATH up -d" > $boot_path/startserver.sh
 
     # Mark the script as executable for everyone
-    sudo chmod -R 755 $BOOT_PATH
+    sudo chmod -R 755 $boot_path
 
     echo 'Autostart policy set'
 }
@@ -257,12 +284,15 @@ docker compose -f $compose_path up -d" > $BOOT_PATH/startserver.sh
 #   q2a-apache      Php Apache web server hosting the website
 #   q2a-db          MySQL database to store website information
 #
+# Global variables used:
+#   COMPOSE_PATH
+#
 #===============================================================================
 launch_service() {
     echo
     echo 'Launching website service via docker...'
 
-    docker compose -f $compose_path up -d
+    docker compose -f $COMPOSE_PATH up -d
 
     echo 'Docker containers launched'
 }
@@ -274,9 +304,11 @@ launch_service() {
 # Performs the SSL certification process on the web server.
 #
 # The certification process uses Certbot (certbot.eff.org)
-# It utilizes the following configuration variables:
+#
+# Global variables used:
 #   SSL_EMAIL
 #   DOMAIN_NAME
+#   WEBROOT
 #
 #===============================================================================
 generate_ssl() {
@@ -285,6 +317,7 @@ generate_ssl() {
 
     # Install certbot and packages, if necessary
     ##docker exec q2a-apache apt-get install -y certbot python3-certbot-apache
+    sudo apt-get install -y certbot
 
     # Run certbot with the appropriate information
     #docker exec q2a-apache certbot --apache --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME
@@ -302,8 +335,6 @@ generate_ssl() {
     #============================================
     #docker exec q2a-apache certbot --test-cert --apache --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME
 
-    sudo apt-get install -y certbot
-
     #certbot certonly --test-cert --non-interactive --agree-tos -m daniel_hammer@sil.org -d supportsitetest.tk -d www.supportsitetest.tk --webroot -w ./q2a_site/
     sudo certbot certonly --test-cert --non-interactive --agree-tos -m $SSL_EMAIL -d $DOMAIN_NAME -d www.$DOMAIN_NAME --webroot -w $WEBROOT
 
@@ -314,101 +345,52 @@ generate_ssl() {
 
 #===============================================================================
 #
-# Copies SSL certification into the Apache web service container.
+# Copies SSL certification into the specificed container.
+#
+# General structure copied from https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/
+#
+# Parameters:
+#   $1  The name of the container to copy SSL cert files into
+#
+# Global variables used:
+#   DOMAIN_NAME
 #
 #===============================================================================
-copy_ssl_apache() {
-    echo
-    echo 'Copying SSL certifications to Apache service...'
-
-    # Copy the SSL keys to the apache container
-    SSL_PATH="/etc/letsencrypt/live/$DOMAIN_NAME/"
-    docker cp $SSL_PATH/cert.pem q2a-apache:/etc/ssl
-    docker cp $SSL_PATH/chain.pem q2a-apache:/etc/ssl
-    docker cp $SSL_PATH/fullchain.pem q2a-apache:/etc/ssl
-    docker cp $SSL_PATH/privkey.pem q2a-apache:/etc/ssl/private
-
-    # Config files that will be modified
-    default_ssl_conf='/etc/apache2/sites-available/default-ssl.conf'
-
-    # Before we do anything, MAKE A BACKUP
-    docker exec q2a-apache cp $default_ssl_conf $default_ssl_conf.backup
-
-    # Replace the necessary paths for the cert files
-	#docker exec q2a-apache sed -i 's,/etc/ssl/certs/ssl-cert-snakeoil.pem,/etc/ssl/cert.pem,g' $default_ssl_conf
-	#docker exec q2a-apache sed -i 's,/etc/ssl/private/ssl-cert-snakeoil.key,/etc/ssl/private/privkey.pem,g' $default_ssl_conf
-    #docker exec q2a-apache sed -i 's,#SSLCertificateChainFile,SSLCertificateChainFile,g' $default_ssl_conf
-    #docker exec q2a-apache sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/chain.pem,g' $default_ssl_conf
-    #docker exec q2a-apache sed -i "s,.*ServerAdmin.*,ServerAdmin $SSL_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
-
-    # Ensure that 443 is the default SSL port
-    docker exec q2a-apache sed -ri -e 's,80,443,' $default_ssl_conf 
-    # Enable SSL on the virtual host
-    docker exec q2a-apache sed -i -e '/^<\/VirtualHost>/i SSLEngine on' $default_ssl_conf
-    # Define cert file paths
-    docker exec q2a-apache sed -i -e '/^<\/VirtualHost>/i SSLCertificateFile /etc/ssl/cert.pem' $default_ssl_conf
-    docker exec q2a-apache sed -i -e '/^<\/VirtualHost>/i SSLCertificateChainFile /etc/ssl/fullchain.pem' $default_ssl_conf
-    docker exec q2a-apache sed -i -e '/^<\/VirtualHost>/i SSLCertificateKeyFile /etc/ssl/private/privkey.pem' $default_ssl_conf
-
-    # Copy the file into the sites-enabled directory
-    docker exec q2a-apache cp $default_ssl_conf /etc/apache2/sites-enabled/
-
-    # Start/restart the necessary services
-    docker exec q2a-apache a2enmod ssl
-    docker exec q2a-apache apachectl restart
-
-    echo 'SSL certifications copied to Apache service'
-}
-
-
-
-#===============================================================================
-#
-# Copies SSL certification into the phpMyAdmin service container.
-#
-#===============================================================================
-copy_ssl() {
+copy_ssl_to_container() {
+    # Setup parameters
     container=$1
+
     echo
     echo "Copying all SSL certifications to $container service..."
 
     # Copy the SSL keys to the container
-    SSL_PATH="/etc/letsencrypt/live/$DOMAIN_NAME/"
-    docker cp $SSL_PATH/cert.pem $container:/etc/ssl
-    docker cp $SSL_PATH/chain.pem $container:/etc/ssl
-    docker cp $SSL_PATH/fullchain.pem $container:/etc/ssl
-    docker cp $SSL_PATH/privkey.pem $container:/etc/ssl/private
+    host_ssl_path="/etc/letsencrypt/live/$DOMAIN_NAME/"
+    docker cp $host_ssl_path/cert.pem $container:/etc/ssl
+    docker cp $host_ssl_path/chain.pem $container:/etc/ssl
+    docker cp $host_ssl_path/fullchain.pem $container:/etc/ssl
+    docker cp $host_ssl_path/privkey.pem $container:/etc/ssl/private
 
     # Config files that will be modified
-    ssl_conf='/etc/apache2/sites-available/000-default.conf'
+    ssl_conf_path='/etc/apache2/sites-available/000-default.conf'
 
     # Enable SSL module
     docker exec $container a2enmod ssl
 
-    docker exec $container sed -ri -e 's,80,443,' $ssl_conf
-    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLEngine on' $ssl_conf
-    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateFile /etc/ssl/cert.pem' $ssl_conf
-    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateChainFile /etc/ssl/fullchain.pem' $ssl_conf
-    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateKeyFile /etc/ssl/private/privkey.pem' $ssl_conf
+    # Ensure default SSL port is 443
+    docker exec $container sed -ri -e 's,80,443,' $ssl_conf_path
+
+    # Enable SSL on virtual host
+    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLEngine on' $ssl_conf_path
+
+    # Define paths for cert files
+    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateFile /etc/ssl/cert.pem' $ssl_conf_path
+    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateChainFile /etc/ssl/fullchain.pem' $ssl_conf_path
+    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateKeyFile /etc/ssl/private/privkey.pem' $ssl_conf_path
     
     # Restart the necessary services
     docker exec $container apachectl restart
 
-    echo 'SSL certifications copied to $container service'
-}
-
-
-
-#===============================================================================
-#
-# Copies SSL certification into the Portainer service container.
-#
-#===============================================================================
-copy_ssl_portainer() {
-    echo
-    echo 'Copying all SSL certifications to Portainer service...'
-
-    echo 'SSL certifications copied to Portainer service'
+    echo "SSL certifications copied to $container service"
 }
 
 
@@ -417,7 +399,6 @@ copy_ssl_portainer() {
 #
 # Copies SSL certification into the necessary containers
 # 
-#
 # This accesses the cert files stored at the following:
 #   `/etc/letsencrypt/live/<Domain Name>`
 #
@@ -432,11 +413,9 @@ copy_ssl() {
     echo
     echo 'Copying all SSL certifications...'
 
-    copy_ssl q2a-apache
-    copy_ssl q2a-phpmyadmin
-    #copy_ssl_apache
-    #copy_ssl_phpmyadmin
-    #copy_ssl_portainer
+    copy_ssl_to_container q2a-apache
+    copy_ssl_to_container q2a-phpmyadmin
+    #copy_ssl_to_container q2a-portainer
 
     echo 'All SSL certifications copied'
 }
