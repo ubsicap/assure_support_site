@@ -357,6 +357,7 @@ generate_ssl() {
 #
 # Global variables used:
 #   DOMAIN_NAME
+#   SSL_EMAIL
 #
 #===============================================================================
 copy_ssl_to_container() {
@@ -375,9 +376,20 @@ copy_ssl_to_container() {
 
     # Config files that will be modified
     ssl_conf_path='/etc/apache2/sites-available/000-default.conf'
+    default_ssl_conf='/etc/apache2/sites-available/default-ssl.conf'
 
     # Enable SSL module
     docker exec $container a2enmod ssl
+
+    # Before we do anything, MAKE A BACKUP
+    docker exec $container cp $default_ssl_conf $default_ssl_conf.backup
+
+    # Replace the necessary paths for the cert files
+	docker exec $container sed -i 's,/etc/ssl/certs/ssl-cert-snakeoil.pem,/etc/ssl/certificate.crt,g' $default_ssl_conf
+	docker exec $container sed -i 's,/etc/ssl/private/ssl-cert-snakeoil.key,/etc/ssl/private/private.key,g' $default_ssl_conf
+    docker exec $container sed -i 's,#SSLCertificateChainFile,SSLCertificateChainFile,g' $default_ssl_conf
+    docker exec $container sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/ca_bundle.crt,g' $default_ssl_conf
+    docker exec $container sed -i "s,.*ServerAdmin.*,ServerAdmin $SSL_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
 
     # Define paths for cert files
     docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateFile /etc/ssl/cert.pem' $ssl_conf_path
@@ -386,6 +398,9 @@ copy_ssl_to_container() {
 
     # Redirect all HTTP traffic to HTTPS
     docker exec $container sed -i -e "/^<\/VirtualHost>/i Redirect \"/\" \"https://$DOMAIN_NAME\"" $ssl_conf_path
+
+    # Copy the file into the sites-enabled directory
+    docker exec $container cp $default_ssl_conf /etc/apache2/sites-enabled/
 
     # Restart the necessary services
     docker exec $container apachectl restart
