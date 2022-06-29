@@ -387,7 +387,7 @@ copy_ssl_to_container() {
     docker exec $container sed -i -e "/^<\/VirtualHost>/i Redirect \"/\" \"https://$DOMAIN_NAME\"" $ssl_conf_path
 
     # Restart the necessary services
-    docker exec $container apachectl start
+    docker exec $container apachectl restart
 
     echo "SSL certifications copied to $container service"
 }
