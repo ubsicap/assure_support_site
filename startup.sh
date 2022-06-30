@@ -315,7 +315,7 @@ move_config_file() {
     echo 'Moving qa-config.php to /var/www/config for security'
 
     docker exec q2a-apache mkdir -p /var/www/config
-    docker cp qa-config.php q2a-apache:/var/www/config
+    docker cp qa-config-external.php q2a-apache:/var/www/config
 }
 
 
