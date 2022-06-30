@@ -98,10 +98,6 @@ cleanup() {
         echo "Deleting EC2 User Data script"
         rm ./ec2_user_data.sh
     fi
-
-    # Remove the `qa-install.php` script responsible for creating the database
-    # Source: https://docs.question2answer.org/install/security/
-    mv ./public/qa-include/qa-install.php ./config
 }
 
 
