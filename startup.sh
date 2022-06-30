@@ -118,7 +118,7 @@ locate_config_files() {
     echo
     echo 'Locating configuration files...'
 
-    CONFIG_PATH=$(realpath $(find . -type f -name "qa-config.php"))
+    CONFIG_PATH=$(realpath $(find . -type f -name "qa-config-secure.php"))
     COMPOSE_PATH=$(realpath $(find . -type f -name "docker-compose.yml"))
 
     echo "Configuration files found:"
@@ -309,13 +309,16 @@ launch_service() {
 # Implemented according to Q2A's suggestion here:
 #       https://docs.question2answer.org/install/security/
 #
+# Global variables used:
+#   CONFIG_PATH
+#
 #===============================================================================
 move_config_file() {
     echo
-    echo 'Moving qa-config.php to /var/www/config for security'
+    echo 'Moving qa-config-secure.php to /var/www/config for security.'
 
     docker exec q2a-apache mkdir -p /var/www/config
-    docker cp qa-config-external.php q2a-apache:/var/www/config
+    docker cp $CONFIG_PATH q2a-apache:/var/www/config
 }
 
 

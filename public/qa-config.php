@@ -12,4 +12,4 @@
  * are more secure.
  */
 
-require '../config/qa-config-external.php';
+require '../config/qa-config-secure.php';
