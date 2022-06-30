@@ -18,17 +18,18 @@ Notable Repository Contents:
 
 ```sh
 ./
-├── public/                # Question2Answer website source code
-│   ├── assets/            # Images, audio/video files, etc.
-│   ├── qa-plugin/         # External plugins; new feature develoment
-│   ├── qa-theme/          # Custom UI themes
-│   ├── Dockerfile         # Constructs an image of the website
-│   ├── index.php          # Initial file served by site
-│   └── qa-config.php      # Sets up MySQL database
-├── docker-compose.yml     # Launches all web service containers
-├── ec2_user_data.sh       # User Data for the EC2 instance (ran at launch)
-├── qa-config-secure.php   # Contains MySQL credentials*
-└── startup.sh             # Startup script for launching on remote server
+├── config/                   # Question2Answer website source code
+│   └── qa-config-secure.php  # Contains MySQL credentials*
+├── public/                   # Question2Answer website source code
+│   ├── assets/               # Images, audio/video files, etc.
+│   ├── qa-plugin/            # External plugins; new feature develoment
+│   ├── qa-theme/             # Custom UI themes
+│   ├── Dockerfile            # Constructs an image of the website
+│   ├── index.php             # Initial file served by site
+│   └── qa-config.php         # Sets up MySQL database
+├── docker-compose.yml        # Launches all web service containers
+├── ec2_user_data.sh          # User Data for the EC2 launch
+└── startup.sh                # Startup script for launching in AWS
 ```
 `*` Removed from `public/` and referenced by `public/qa-config.php` for [security](https://docs.question2answer.org/install/security/).
 
@@ -36,7 +37,7 @@ Notable Repository Contents:
 
 Make sure the following credentials are set:
 
-- In `./qa-config-secure.php`
+- In `./config/qa-config-secure.php`
   - `QA_MYSQL_HOSTNAME`
     - Must be set to the name of the DB container defined in `docker-compose.yml`
   - `QA_MYSQL_USERNAME`
