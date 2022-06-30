@@ -92,12 +92,16 @@ cleanup() {
     sudo rm -rf /var/lib/apt/lists/*
 
     # This script is copied to /var/lib/cloud/instance/user-data.txt upon
-    # launching the instance, so it can safely be removed.
+    #   launching the instance, so it can safely be removed.
     if [ -s ./ec2_user_data.sh ];
     then
         echo "Deleting EC2 User Data script"
         rm ./ec2_user_data.sh
     fi
+
+    # Remove the `qa-install.php` script responsible for creating the database
+    # Source: https://docs.question2answer.org/install/security/
+    mv ./public/qa-include/qa-install.php ./config
 }
 
 
