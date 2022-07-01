@@ -18,7 +18,7 @@ Notable Repository Contents:
 
 ```sh
 ./
-├── config/                   # Question2Answer website source code
+├── config/                   # Secure config info
 │   └── qa-config-secure.php  # Contains MySQL credentials*
 ├── public/                   # Question2Answer website source code
 │   ├── assets/               # Images, audio/video files, etc.
