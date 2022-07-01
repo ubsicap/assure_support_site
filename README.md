@@ -197,11 +197,33 @@ Migrating data to the server depends on which database is implemented.
 1. Unzip the archive so that the new `_data` volume is located in place of the folder you just backed up.
 1. Re-start containers and ensure that all data was transported successfully.
 
-### Amazon RDS (Section not finished)
+### Amazon RDS
 
-1. On the host of the source of the database, create a MySQL dump:
-   1. `mysqldump -u root -p --opt [database name] > [database name].sql`
-1. Transfer the dump to the destination machine.
-   1. `scp [database name].sql [username]@[servername]:path/to/database/`
-1. Import the new database:
-   1. `mysql -u root -p newdatabase < /path/to/newdatabase.sql`
+1. Getting a dump of the desired data from your local machine.
+
+   1. View your database from MySql Workbench.
+   1. Go to Server > Data Export
+   1. Select the schema with the desired tables (if you don’t want to overwrite the tables storing site configuration do not select `qa_options` and `qa_pages`).
+   1. Choose Export to Self-Contained File
+   1. Start Export
+
+1. Moving the dump to the EC2 instance.
+
+   1. Before you do this make sure you can SSH (secure shell) into the EC2 instance.
+   1. Use `scp` to send the dump file to the EC2 instance
+      - `scp -i <your .pem key> <local dump file> <user>@<Elastic IP>:<destination of dump file>`
+      - Example: `scp -i q2a_intern_key Dump20220701.sql ubuntu@supportsitetest.tk:~/dumps/Dump20220701.sql`
+
+1. Importing the data to the RDS instance.
+   1. Now that the dump is on the EC2 instance we can import the data to RDS.
+   1. Connect to the EC2 instance via ssh.
+      - `ssh -i <your .pem key> ubuntu@<Elastic IP>`
+   1. Make sure mysql is installed
+      - `sudo apt install -y mysql-client-core-8.0`
+   1. (Optional) Verify your connection to the database works, for example:
+      - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p`
+      - You can run `\q` to exit the MySQL connection
+   1. Import the file into RDS, for example:
+      - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p q2adb < Dump20220701.sql`
+
+Congratulations, you’re done. You can verify by either checking the site or the data through MySQL Workbench.
