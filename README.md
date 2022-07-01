@@ -11,25 +11,35 @@ Repository and information for the Assure Support Site
 1. [SSL Certification](#ssl-certification)
 1. [Database Management](#database-management)
 1. [Container Management](#container-management)
+1. [Migrating Database Content](#migrating-database-content)
 
 ## Structure
 
-Repository Contents:
+Notable Repository Contents:
 
 ```sh
-assure_support_site/
-├── README.md               # This file
-├── docker-compose.yml      # Launches the web service in two containers
-├── ec2_user_data.sh        # User Data for the EC2 instance (ran at launch)
-├── public/                 # Question2Answer website source code
-└── startup.sh              # Startup script for launching on remote server
+./
+├── config/                   # Secure config info
+│   └── qa-config-secure.php  # Contains MySQL credentials*
+├── public/                   # Question2Answer website source code
+│   ├── assets/               # Images, audio/video files, etc.
+│   ├── qa-plugin/            # External plugins; new feature develoment
+│   ├── qa-theme/             # Custom UI themes
+│   ├── Dockerfile            # Constructs an image of the website
+│   ├── index.php             # Initial file served by site
+│   └── qa-config.php         # Sets up MySQL database
+├── docker-compose.yml        # Launches all web service containers
+├── ec2_user_data.sh          # User Data for the EC2 launch
+└── startup.sh                # Startup script for launching in AWS
 ```
+
+`*` Removed from `public/` and referenced by `public/qa-config.php` for [security](https://docs.question2answer.org/install/security/).
 
 ## Local Startup
 
 Make sure the following credentials are set:
 
-- In `public/qa-config.php`
+- In `./config/qa-config-secure.php`
   - `QA_MYSQL_HOSTNAME`
     - Must be set to the name of the DB container defined in `docker-compose.yml`
   - `QA_MYSQL_USERNAME`
@@ -65,7 +75,7 @@ Finally, navigate to `http://localhost` in your web browser
 1. While waiting for the instance to boot, click on it and copy its public IPv4 address
 1. Connect to your instance with the following command (note you may need to `sudo`, depending on file permissions):
    - `ssh -i <your .pem key> <user>@<instance public IPv4>`
-   - `<username>` should be `ubuntu`
+   - `<username>` should be `ubuntu` if you chose an Ubuntu AMI.
 1. Once connected, run the following commands:
    - `sudo apt install -y git`
    - `git clone https://github.com/ubsicap/assure_support_site.git`
@@ -146,10 +156,8 @@ More information can be found [here](https://www.digitalocean.com/community/tuto
 
 The database can be accessed through two methods:
 
-- [phpMyAdmin](https://www.phpmyadmin.net/), which is running in a container alongside the database, on port `3306`
-- [MySQL Workbench](https://www.mysql.com/products/workbench/) (or another MySQL access tool) on port `9906`
-
-**Note**: Not yet implemented with [SSL support](https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/)
+- [phpMyAdmin](https://www.phpmyadmin.net/), which is running in a container alongside the database, on port [`3306`](https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/)
+- [MySQL Workbench](https://www.mysql.com/products/workbench/) (or another MySQL access tool) on port [`9906`](https://www.digitalocean.com/community/tutorials/how-to-connect-to-a-mysql-server-remotely-with-mysql-workbench)
 
 I don't know which method is preferred for production. Both are password protected using the credentials entered at first launch.
 
@@ -158,3 +166,35 @@ I don't know which method is preferred for production. Both are password protect
 This installation is configured to work with [Portainer](https://www.portainer.io/), a web-based container management GUI. It's like Docker Desktop, but in a web browser.
 
 The service is launched automatically alongside the rest of the containers. To access, navigate to `https://<Domain Name>:9443`
+
+## Migrating Database Content
+
+**Note**: Migrating database content, regardless of the method you choose, requires you to migrate _all_ database content. This includes site-specific configuration (theme settings, moderation flags, etc.), not just user and post data. Any content not backed up on the destination machine will be deleted!
+
+There are two distinct ways to host the database:
+
+- Presently, a Docker container is running MySQL and its data is stored using a Docker volume
+- [AWS RDS](https://aws.amazon.com/rds/) is a cloud-based database solution
+
+Migrating data to the server depends on which database is implemented.
+
+### Docker Volumes
+
+1. On the host of the source of the database, archive the `_data` folder located in `/var/lib/docker/volumes/<db container volume>/`
+   1. `<db container volume>` is either `app_q2a_db_volume` or `assure_support_site_q2a_db_volume`
+1. Ensure the destination machine has enough storage capacity for the new database. If not, [increase its disk space](https://linuxhint.com/increase-disk-space-ec2/).
+1. Transfer the archive to the destination machine ([`gdown`](https://pypi.org/project/gdown/) for downloading from Google Drive)
+1. Stop all running containers.
+1. Create a backup of `/var/lib/docker/volumes/app_q2a_db_volume/_data` on the destination machine.
+   1. `sudo mv /var/lib/docker/volumes/app_q2a_db_volume/_data ./_data_db_backup`
+1. Unzip the archive so that the new `_data` volume is located in place of the folder you just backed up.
+1. Re-start containers and ensure that all data was transported successfully.
+
+### Amazon RDS (Section not finished)
+
+1. On the host of the source of the database, create a MySQL dump:
+   1. `mysqldump -u root -p --opt [database name] > [database name].sql`
+1. Transfer the dump to the destination machine.
+   1. `scp [database name].sql [username]@[servername]:path/to/database/`
+1. Import the new database:
+   1. `mysql -u root -p newdatabase < /path/to/newdatabase.sql`

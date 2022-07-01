@@ -92,7 +92,7 @@ cleanup() {
     sudo rm -rf /var/lib/apt/lists/*
 
     # This script is copied to /var/lib/cloud/instance/user-data.txt upon
-    # launching the instance, so it can safely be removed.
+    #   launching the instance, so it can safely be removed.
     if [ -s ./ec2_user_data.sh ];
     then
         echo "Deleting EC2 User Data script"
@@ -118,7 +118,7 @@ locate_config_files() {
     echo
     echo 'Locating configuration files...'
 
-    CONFIG_PATH=$(realpath $(find . -type f -name "qa-config.php"))
+    CONFIG_PATH=$(realpath $(find . -type f -name "qa-config-secure.php"))
     COMPOSE_PATH=$(realpath $(find . -type f -name "docker-compose.yml"))
 
     echo "Configuration files found:"
@@ -260,13 +260,13 @@ enable_autolaunch() {
     # Allow a script to be created
     sudo chmod -R 777 $boot_path
 
-    # By default, just compose the containers,
-    # But we *may* want to re-run the startup script, so I'm leaving this here
-    #echo "#!/bin/sh
-#sh $(realpath $0) > $boot_path
-
+    # Re-run this startup script
     sudo echo "#!/bin/sh
-docker compose -f $COMPOSE_PATH up -d" > $boot_path/startserver.sh
+sh $(realpath $0)" > $boot_path/startserver.sh
+
+    # In case we just want to re-start the containers, uncomment this
+    #sudo echo "#!/bin/sh
+#docker compose -f $COMPOSE_PATH up -d" > $boot_path/startserver.sh
 
     # Mark the script as executable for everyone
     sudo chmod -R 755 $boot_path
