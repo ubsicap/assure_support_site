@@ -31,6 +31,7 @@ Notable Repository Contents:
 ├── ec2_user_data.sh          # User Data for the EC2 launch
 └── startup.sh                # Startup script for launching in AWS
 ```
+
 `*` Removed from `public/` and referenced by `public/qa-config.php` for [security](https://docs.question2answer.org/install/security/).
 
 ## Local Startup
@@ -157,7 +158,6 @@ The database can be accessed through two methods:
 - [phpMyAdmin](https://www.phpmyadmin.net/), which is running in a container alongside the database, on port [`3306`](https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/)
 - [MySQL Workbench](https://www.mysql.com/products/workbench/) (or another MySQL access tool) on port [`9906`](https://www.digitalocean.com/community/tutorials/how-to-connect-to-a-mysql-server-remotely-with-mysql-workbench)
 
-
 I don't know which method is preferred for production. Both are password protected using the credentials entered at first launch.
 
 ## Container Management
@@ -165,3 +165,35 @@ I don't know which method is preferred for production. Both are password protect
 This installation is configured to work with [Portainer](https://www.portainer.io/), a web-based container management GUI. It's like Docker Desktop, but in a web browser.
 
 The service is launched automatically alongside the rest of the containers. To access, navigate to `https://<Domain Name>:9443`
+
+## Migrating Database Content
+
+**Note**: Migrating database content, regardless of the method you choose, requires you to migrate _all_ database content. This includes site-specific configuration (theme settings, moderation flags, etc.), not just user and post data. Any content not backed up on the destination machine will be deleted!
+
+There are two distinct ways to host the database:
+
+- Presently, a Docker container is running MySQL and its data is stored using a Docker volume
+- [AWS RDS](https://aws.amazon.com/rds/) is a cloud-based database solution
+
+Migrating data to the server depends on which database is implemented.
+
+### Docker Volumes
+
+1. On the host of the source of the database, archive the `_data` folder located in `/var/lib/docker/volumes/<db container volume>/`
+   1. `<db container volume>` is either `app_q2a_db_volume` or `assure_support_site_q2a_db_volume`
+1. Ensure the destination machine has enough storage capacity for the new database. If not, [increase its disk space](https://linuxhint.com/increase-disk-space-ec2/).
+1. Transfer the archive to the destination machine ([`gdown`](https://pypi.org/project/gdown/) for downloading from Google Drive)
+1. Stop all running containers.
+1. Create a backup of `/var/lib/docker/volumes/app_q2a_db_volume/_data` on the destination machine.
+   1. `sudo mv /var/lib/docker/volumes/app_q2a_db_volume/_data ./_data_db_backup`
+1. Unzip the archive so that the new `_data` volume is located in place of the folder you just backed up.
+1. Re-start containers and ensure that all data was transported successfully.
+
+### Amazon RDS (Section not finished)
+
+1. On the host of the source of the database, create a MySQL dump:
+   1. `mysqldump -u root -p --opt [database name] > [database name].sql`
+1. Transfer the dump to the destination machine.
+   1. `scp [database name].sql [username]@[servername]:path/to/database/`
+1. Import the new database:
+   1. `mysql -u root -p newdatabase < /path/to/newdatabase.sql`
