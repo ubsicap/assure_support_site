@@ -6,7 +6,7 @@ services:
     container_name: q2a-apache              # Custom name for the q2a Apache server
     build:                                  # Build a new image
       context: ./public                     # Source of the container
-      dockerfile: Dockerfile                # Dockerfile to build from
+      dockerfile: Dockerfile_no_ssl         # Dockerfile to build from
     image: q2a-php-apache                   # Name of the image of the Apache server being created
     restart: on-failure                     # Restart this container if a failure occurs
     depends_on:                             # Ensure this container starts *after* the DB container is running
@@ -18,11 +18,10 @@ services:
       - type: bind                          # This bind mount allows the web server to access config information
         source: ./config                    #   without the website having direct access to those files
         target: /var/www/config/            #
-      #- ./etc/letsencrypt/live/supportsitetest.tk/cert.pem:/etc/ssl/certs/cert.pem
-      #- ./etc/letsencrypt/live/supportsitetest.tk/chain.pem:/etc/ssl/certs/chain.pem
-      #- ./etc/letsencrypt/live/supportsitetest.tk/fullchain.pem:/etc/ssl/certs/fullchain.pem
-      #- ./etc/letsencrypt/live/supportsitetest.tk/fullchain.pem:/etc/ssl/certs/fullchain.pem
-      - ./etc/letsencrypt/live/supportsitetest.tk:/etc/ssl/certs
+      # Directly source the cert files
+      - /etc/letsencrypt/live/supportsitetest.tk/cert.pem:/etc/ssl/certs/cert.pem
+      - /etc/letsencrypt/live/supportsitetest.tk/fullchain.pem:/etc/ssl/certs/fullchain.pem
+      - /etc/letsencrypt/live/supportsitetest.tk/privkey.pem:/etc/ssl/certs/private/privkey.pem
     ports:                                  # Define what ports should be open for traffic
       - "80:80"                             # Open 80 on the host to allow HTTP traffic
       - "443:443"                           # Open 443 on the host to allow HTTPS traffic
