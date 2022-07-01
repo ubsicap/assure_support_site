@@ -11,6 +11,7 @@ Repository and information for the Assure Support Site
 1. [SSL Certification](#ssl-certification)
 1. [Database Management](#database-management)
 1. [Container Management](#container-management)
+1. [Migrating Database Content](#migrating-database-content)
 
 ## Structure
 
