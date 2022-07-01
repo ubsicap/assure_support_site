@@ -64,28 +64,35 @@ Finally, navigate to `http://localhost` in your web browser
 
 ## Launching to AWS
 
-1. Create a new EC2 instance
-1. Select Ubuntu 20.04 as the image
-1. Select/create a key pair for `ssh` access
+1. Create a new EC2 instance.
+1. Select Ubuntu 20.04 as the image.
+1. Select/create a key pair for `ssh` access.
+   - Make sure you save the `.pem` key file
 1. Select/create a network security group with the following rules:
-   - **Type**: HTTP, **Protocol**: TCP, **Port Range**: 80, **Source**: 0.0.0.0/0
-   - **Type**: HTTPS, **Protocol**: TCP, **Port Range**: 443, **Source**: 0.0.0.0/0
-   - **Type**: ssh, **Protocol**: TCP, **Port Range**: 22, **Source**: <Your IP>
+   - **Type**: `HTTP`, **Protocol**: `TCP`, **Port Range**: `80`, **Source**: `0.0.0.0/0`
+   - **Type**: `HTTPS`, **Protocol**: `TCP`, **Port Range**: `443`, **Source**: `0.0.0.0/0`
+   - **Type**: `ssh`, **Protocol**: `TCP`, **Port Range**: `22`, **Source**: `<Your IP>`
+   - **Type**: `MYSQL/Aurora`, **Protocol**: `TCP`, **Port Range**: `3306`, **Source**: `<Your IP>`
+1. Expand the `Advanced details` section.
+1. Scroll down until you see a field marked `User data`.
+1. Paste the contents of `ec2_user_data.sh` into this field.
 1. Click `Launch Instance`
-1. While waiting for the instance to boot, click on it and copy its public IPv4 address
+1. While waiting for the instance to boot (it may take up to 3 minutes), click on it and copy its public IPv4 address
 1. Connect to your instance with the following command (note you may need to `sudo`, depending on file permissions):
    - `ssh -i <your .pem key> <user>@<instance public IPv4>`
    - `<username>` should be `ubuntu` if you chose an Ubuntu AMI.
 1. Once connected, run the following commands:
-   - `sudo apt install -y git`
-   - `git clone https://github.com/ubsicap/assure_support_site.git`
-   - `cd assure_support_site`
+   - `cd app`
    - `sh startup.sh`
 1. You will be prompted to create a MySQL root password, account username, account password, and database name.
-1. Once you have created credentials, the `docker-compose.yml` file will be ran and two containers will start.
+1. Once you have created credentials, the `docker-compose.yml` file will be ran and the Docker containers will start.
 1. Open your web browser to `http://<instance public IP>`
 1. You will be prompted to create an administrator account for the website.
 1. Once created, you will be brought to the site's homepage.
+
+## Creating RDS Database
+
+`Coming Soon :)`
 
 ## Custom Domain Name
 
