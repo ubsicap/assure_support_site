@@ -349,9 +349,10 @@ generate_ssl() {
 #
 # Copies SSL certification into the specificed container.
 #
-# General structure copied from https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/
+# General structure copied from:
+#       https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/
 #
-# Note that this modifies the `/etc/apache2/sites-available/000-default.conf` file.
+# Note that this modifies the `/etc/apache2/sites-available/000-default.conf`.
 #
 # Parameters:
 #   $1  The name of the container to copy SSL cert files into
@@ -440,31 +441,14 @@ copy_portainer_certs() {
 
 #===============================================================================
 #
-# Copies SSL certification into the necessary containers
-# 
-# This accesses the cert files stored at the following:
-#   `/etc/letsencrypt/live/<Domain Name>`
+# Copies SSL certs into /local_certs/ as a backup.
 #
-# The following files are located there:
-#   cert.pem
-#   chain.pem
-#   fullchain.pem
-#   privkey.pem
+# Also makes copies labeled for Portainer.
+#
+# Global variables used:
+#   DOMAIN_NAME
 #
 #===============================================================================
-copy_ssl() {
-    echo
-    echo 'Copying all SSL certifications...'
-
-    copy_ssl_to_container q2a-apache
-    copy_portainer_certs
-
-    echo 'All SSL certifications copied'
-}
-
-
-
-#
 init_ssl() {
     echo
     echo 'Configuring and backing up SSL certificates...'
@@ -480,6 +464,17 @@ init_ssl() {
 
 
 
+#===============================================================================
+#
+# Builds and launches a HTTP docker container of the web server.
+#
+# This is used for generating SSL certificates and nothing more. The container
+# automatically deletes itself after stopping.
+#
+# Global variables used:
+#   WEBROOT
+#
+#===============================================================================
 launch_http() {
     echo
     echo 'Launching basic HTTP web service'
@@ -498,6 +493,12 @@ launch_http() {
 }
 
 
+
+#===============================================================================
+#
+# Stops and deletes the HTTP container
+#
+#===============================================================================
 kill_http() {
     echo
     echo 'Stopping HTTP service container'
@@ -508,6 +509,18 @@ kill_http() {
     echo 'HTTP service stopped'
 }
 
+
+
+#===============================================================================
+#
+# Builds and launches a HTTPS docker container of the web server.
+#
+# This web service automatically redirects all traffic to HTTPS.
+#
+# Global variables used:
+#   COMPOSE_PATH
+#
+#===============================================================================
 launch_https() {
     echo
     echo 'Launching HTTPS web service'
@@ -515,20 +528,6 @@ launch_https() {
     docker compose -f $COMPOSE_PATH up -d
 
     echo 'Launched HTTPS web service'
-}
-
-
-
-
-launch() {
-    if [ ! -d /etc/letsnecrypt/live/$DOMAIN_NAME ]; then
-        launch_http
-        generate_ssl
-        init_ssl
-        kill_http
-    fi
-
-    launch_https
 }
 
 
@@ -546,16 +545,37 @@ display_status() {
 
 
 
-# Program execution
-install_dependencies
-locate_config_files
-check_credentials
-set_credentials
-enable_autolaunch
-launch
-#launch_service
-#generate_ssl
-#init_ssl
-#copy_ssl
-#cleanup
-display_status
+#===============================================================================
+#
+# Entrypoint of this startup script.
+#
+# Installs dependencies, fetches credentials, generates SSL certificates, and
+# launches an autostarting web service via Docker.
+#
+# Global variables used:
+#   DOMAIN_NAME
+#
+#===============================================================================
+main() {
+    # Program execution
+    install_dependencies
+    locate_config_files
+    check_credentials
+    set_credentials
+    enable_autolaunch
+    
+    # If SSL certs have not yet been generated, do so
+    if [ ! -d /etc/letsnecrypt/live/$DOMAIN_NAME ]; then
+        launch_http
+        generate_ssl
+        init_ssl
+        kill_http
+    fi
+    # Now launch the web server with HTTPS
+    launch_https
+
+    #cleanup
+    display_status
+}
+
+main

@@ -35,5 +35,8 @@ RUN sed -i 's,/etc/ssl/certs/ssl-cert-snakeoil.pem,/etc/ssl/cert.pem,g' ${ssl_pa
 # Redirect all HTTP traffic to HTTPS
 RUN sed -i -e "/^<\/VirtualHost>/i Redirect \"/\" \"https://${DOMAIN_NAME}\"" '/etc/apache2/sites-available/000-default.conf'
 
+# Copy the file into the sites-enabled directory
+# RUN cp /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-enabled/
+
 # Active the SSL configuration
 RUN a2ensite default-ssl
