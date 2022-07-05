@@ -1,9 +1,31 @@
 #!/bin/bash
 
+#===============================================================================
+#
+# Automatically installs runtime dependencies and downloads the GitHub repo
+# containing the Support Site code.
+#
+# This script is to placed in the User Data of the AWS EC2 instance BEFORE the
+# instance is launched for the first time. For best results, include it in a
+# launch template.
+#
+# Steps:
+#   1. Click `Launch Instance`
+#   2. Scroll down and expand `Advanced details`
+#   3. Paste the contents of this script into the `User Data` field
+#   4. That's it! Launch the instance.
+#===============================================================================
+
+
+
 # Primary user of the system
 user='ubuntu'
 # Location to host/deploy the web server
 workdir="/home/$user/app"
+# Link to the GitHub repository to download
+repo='https://github.com/ubsicap/assure_support_site'
+
+
 
 # Follows the steps outlined on: https://docs.docker.com/engine/install/ubuntu/
 # Pre-install setup
@@ -29,7 +51,10 @@ sudo usermod -aG docker $user
 sudo systemctl enable docker.service
 sudo systemctl enable containerd.service
 
+# Install runtime dependencies and dev tools
+sudo apt-get install -y certbot
+
 # Clone the development repo
 mkdir -p $workdir
-git clone https://github.com/ubsicap/assure_support_site $workdir
+git clone $repo $workdir
 chown -R $user $workdir
