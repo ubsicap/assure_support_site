@@ -92,7 +92,43 @@ Finally, navigate to `http://localhost` in your web browser
 
 ## Creating RDS Database
 
-`Coming Soon :)`
+Configuration will be dependent on your preferences and needs, this section will setup a simple, free RDS instance.
+
+In AWS create an RDS instance with the following settings:
+  Create Database (Standard)
+  MySql 8.0.28 (default)
+
+  Burstable classes: db.t3.micro
+  General Purpose SSD
+  20 GiB allocated
+  Enable storage autoscaling
+  100 GiB maximum
+  Default VPC (make sure id matches the existing EC2 instance)
+  Public Access: No
+  VPC security groups: MySQL Access (if that isn't a group, just use default)
+  Password authentication
+  Additional Configuration > Initial database name: q2adb
+
+Make sure to note down the database password and username (admin by default).
+
+Configuring security:
+  To protect the site data, the database should have been configured so that only instances on the same VPC (i.e. the EC2 instance) can access it. 
+  The EC2 instance should only have ports open for ssh (22), http (80), ssl (443), MySql (3306). 
+  For the RDS instance, the only inbound port permitted should be MySql(3306). The source ip of the inbound rule should be the private ip of the EC2 instance.
+  This can be configured in the security groups of the EC2 and RDS instance. 
+  
+Accessing data in the RDS instance:
+  If you would like to view the database from MySql Workbench, this can be done by configuring a connection through ssh. This is necessary as only the EC2 instance is allowed to access the database.
+  
+  Use the following settings under the connection in MySql Workbench:
+    Connection Method: Standard TCP/IP over SSH
+    SSH Hostname: The hostname of the EC2 instance (i.e. ec2-...amazonaw.com)
+    SSH Username: Username of account on EC2 instance (i.e. ubuntu)
+    SSH Key File: The key file path of the credentials needed to log into the EC2 instance
+    MySQL Hostname: The hostname of the RDS instance (i.e. q2a-db-test...rds.amazon.com)
+    MySQL Server port: 3306
+    Username: admin
+    Password: Whatever you configured as the RDS password
 
 ## Custom Domain Name
 
