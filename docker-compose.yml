@@ -16,6 +16,10 @@ services:
       - type: bind                          # This bind mount allows the web server to access config information
         source: ./config                    #   without the website having direct access to those files
         target: /var/www/config/            #
+      - /local_certs/cert.pem:/etc/ssl/cert.pem
+      - /local_certs/fullchain.pem:/etc/ssl/fullchain.pem
+      - /local_certs/privkey.pem:/etc/ssl/private/privkey.pem
+      - ./config/qa-config-secure.php:/var/www/config/qa-config-secure.php
     ports:                                  # Define what ports should be open for traffic
       - "80:80"                             # Open 80 on the host to allow HTTP traffic
       - "443:443"                           # Open 443 on the host to allow HTTPS traffic
