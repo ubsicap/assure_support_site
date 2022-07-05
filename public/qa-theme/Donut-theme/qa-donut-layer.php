@@ -262,8 +262,8 @@
 
             $this->output( '</div> <!-- END container -->' );
             $this->output( '</div> <!-- END body-wrapper -->' );
-
-            $this->body_suffix();
+            //remove the donut-theme footer from Q2A website
+            //$this->body_suffix(); 
         }
 
         function page_title_error()
