@@ -185,15 +185,17 @@ check_credentials() {
     if [ -z $DOMAIN_NAME ]; then
         read -p "Enter the domain name of the site to be hosted > " DOMAIN
     else
-        echo "Domain name already set to $DOMAIN_NAME"
-        echo "To change this, modify /etc/environment"
+        echo "    Domain name already set to $DOMAIN_NAME"
+        echo "      To change this, modify /etc/environment"
+        DOMAIN=$DOMAIN_NAME
     fi
 
     if [ -z $ADMIN_EMAIL ]; then
         read -p "Enter an email account to utilize as the administrator contact > " ADMIN_EMAIL_ADDRESS
     else
-        echo "Administrator email already set to $ADMIN_EMAIL"
-        echo "To change this, modify /etc/environment"
+        echo "    Administrator email already set to $ADMIN_EMAIL"
+        echo "      To change this, modify /etc/environment"
+        ADMIN_EMAIL_ADDRESS=$ADMIN_EMAIL
     fi
 }
 
@@ -232,12 +234,16 @@ set_credentials() {
     sed -i "s/$RDS_DB_NAME/$QA_MYSQL_DATABASE/" $CONFIG_PATH
 
     # Set the web server's domain name
-    export DOMAIN_NAME=$DOMAIN
-    echo "export DOMAIN_NAME=$DOMAIN" >> /etc/environment
+    if [ ! -z $DOMAIN ]; then
+        export DOMAIN_NAME=$DOMAIN
+        echo "export DOMAIN_NAME=$DOMAIN" | sudo tee -a /etc/environment
+    fi
 
     # Set the web server's admin email
-    export ADMIN_EMAIL=$ADMIN_EMAIL_ADDRESS
-    echo "export ADMIN_EMAIL=$ADMIN_EMAIL_ADDRESS" >> /etc/environment
+    if [ ! -z $ADMIN_EMAIL_ADDRESS ]; then
+        export ADMIN_EMAIL=$ADMIN_EMAIL_ADDRESS
+        echo "export ADMIN_EMAIL=$ADMIN_EMAIL_ADDRESS" | sudo tee -a /etc/environment
+    fi
 
     echo "MySQL credentials set"
 }
@@ -430,7 +436,7 @@ copy_portainer_certs() {
     # Make the directory
     sudo mkdir /local_certs/ &> /dev/null
 
-    host_ssl_path="/etc/letsencrypt/live/$DOMAIN_NAME/"
+    host_ssl_path="/etc/letsencrypt/live/$DOMAIN_NAME"
 
     # Copy and rename the cert files for Portainer
     sudo cp $host_ssl_path/cert.pem /local_certs/portainer.crt
@@ -479,13 +485,19 @@ launch_http() {
     echo
     echo 'Launching basic HTTP web service'
 
+    # The name of this container doesn't really matter
+    container_name='apache-no-ssl'
+
     # First, build the image with no SSL support
     docker build -t q2a-apache-no-ssl -f $WEBROOT/DockerfileNoSSL $WEBROOT
 
+    # If the container is already running, stop it
+    docker stop $container_name
+
     # Now run the no-ssl container and delete it afterwards
-    docker run -d --rm --name apache-no-ssl \
-        -v "./public:/var/www/html" \
-        -v "./config:/var/www/config" \
+    docker run -d --rm --name $container_name \
+        -v "$WEBROOT:/var/www/html" \
+        -v "$(pwd)/config:/var/www/config" \
         -p "80:80" -p "443:443" \
         q2a-apache-no-ssl
 
