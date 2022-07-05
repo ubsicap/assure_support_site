@@ -12,4 +12,5 @@
  * are more secure.
  */
 
+ 
 require '../config/qa-config-secure.php';

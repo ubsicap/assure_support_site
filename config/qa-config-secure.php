@@ -31,13 +31,13 @@
 	prepend the hostname with 'p:'.
 
 	To use a non-default port, add the following line to the list of defines, with the appropriate port number:
-	define('QA_MYSQL_PORT', '3306');
-*/
-
-define('QA_MYSQL_HOSTNAME', 'RDS_ENDPOINT');
-define('QA_MYSQL_USERNAME', 'RDS_MASTER_USERNAME');
-define('QA_MYSQL_PASSWORD', 'RDS_MASTER_PASSWORD');
-define('QA_MYSQL_DATABASE', 'RDS_DB_NAME');
+	*/
+	
+#define('QA_MYSQL_PORT', '3306');
+define('QA_MYSQL_HOSTNAME', 'q2a-db');
+define('QA_MYSQL_USERNAME', 'admin');
+define('QA_MYSQL_PASSWORD', 'password');
+define('QA_MYSQL_DATABASE', 'q2a-local');
 /*
 	If you want to get these values from environment variables,
 	follow the example here: (Note the env can be named anything)
