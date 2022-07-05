@@ -7,18 +7,16 @@ CONFIG_PATH=''
 COMPOSE_PATH=''
 
 # Default values that will be replaced in the above files
-USERNAME_TO_REPLACE='USERNAME_TO_REPLACE'
-PASSWORD_TO_REPLACE='PASSWORD_TO_REPLACE'
-DATABASE_TO_REPLACE='DATABASE_TO_REPLACE'
-HOSTNAME_TO_REPLACE='HOSTNAME_TO_REPLACE'
-ROOT_PASSWORD_TO_REPLACE='ROOT_PASSWORD_TO_REPLACE'
+RDS_MASTER_USERNAME='RDS_MASTER_USERNAME'
+RDS_MASTER_PASSWORD='RDS_MASTER_PASSWORD'
+RDS_DB_NAME='RDS_DB_NAME'
+RDS_ENDPOINT='RDS_ENDPOINT'
 
 # Values to be read from the user
 QA_MYSQL_HOSTNAME=''
 QA_MYSQL_USERNAME=''
 QA_MYSQL_PASSWORD=''
 QA_MYSQL_DATABASE=''
-QA_MYSQL_ROOT_PASSWORD=''
 
 # SSL Certification information
 # This information needs to be changed so that it is provided by the user/sysadmin
@@ -133,44 +131,34 @@ locate_config_files() {
 # Checks if the credentials have already been set, prompting the user if not.
 #
 # Global variables used:
-#   COMPOSE_PATH
 #   CONFIG_PATH
-#   USERNAME_TO_REPLACE
-#   PASSWORD_TO_REPLACE
-#   DATABASE_TO_REPLACE
-#   HOSTNAME_TO_REPLACE
-#   ROOT_PASSWORD_TO_REPLACE
+#   RDS_MASTER_USERNAME
+#   RDS_MASTER_PASSWORD
+#   RDS_DB_NAME
+#   RDS_ENDPOINT
+#   QA_MYSQL_HOSTNAME
+#   QA_MYSQL_USERNAME
+#   QA_MYSQL_PASSWORD
+#   QA_MYSQL_DATABASE
 #
 #===============================================================================
 check_credentials() {
     echo
     echo 'Checking if MySQL credentials have been set...'
 
-    # Set the database root password, if needed
-    if grep -q $ROOT_PASSWORD_TO_REPLACE $COMPOSE_PATH;
-    then
-        # Toggle echo off when reading the password
-        stty -echo
-        read -p "Set new password for MySQL root account > " QA_MYSQL_ROOT_PASSWORD
-        stty echo
-        echo
-    else
-        echo '    Root password already defined'
-    fi
-
     # Set the username, if needed
-    if grep -q $USERNAME_TO_REPLACE $CONFIG_PATH;
+    if grep -q $RDS_MASTER_USERNAME $CONFIG_PATH;
     then
-        read -p "Set username for new MySQL user account > " QA_MYSQL_USERNAME
+        read -p "Set username for the RDS MySQL master account > " QA_MYSQL_USERNAME
     else
         echo '    Username already defined'
     fi
 
     # Set the database password, if needed
-    if grep -q $PASSWORD_TO_REPLACE $CONFIG_PATH;
+    if grep -q $RDS_MASTER_PASSWORD $CONFIG_PATH;
     then
         stty -echo
-        read -p "Set password for new MySQL user account > " QA_MYSQL_PASSWORD
+        read -p "Set password for the RDS MySQL master account > " QA_MYSQL_PASSWORD
         stty echo
         echo
     else
@@ -178,23 +166,21 @@ check_credentials() {
     fi
 
     # Set the database hostname, if needed
-    if grep -q $HOSTNAME_TO_REPLACE $CONFIG_PATH;
+    if grep -q $RDS_ENDPOINT $CONFIG_PATH;
     then
-        echo -n
+        read -p "Provide the endpoint/URL of RDS MySQL database to connect to > " QA_MYSQL_HOSTNAME
     else
         echo '    Hostname already defined'
     fi
 
     # Set the database name, if needed
-    if grep -q $DATABASE_TO_REPLACE $CONFIG_PATH;
+    if grep -q $RDS_DB_NAME $CONFIG_PATH;
     then
-        read -p "Set name for MySQL database > " QA_MYSQL_DATABASE
+        read -p "Provide the name of the RDS MySQL database (Probably already defined in AWS) > " QA_MYSQL_DATABASE
     else
         echo '    Database name already defined'
     fi
 
-    # Lastly, fetch the name of the container that the MySQL database will run in
-    QA_MYSQL_HOSTNAME=$(awk '/container_name:/' $COMPOSE_PATH | awk 'FNR == 2 {print $2}')
 }
 
 
@@ -204,36 +190,32 @@ check_credentials() {
 # Sets the MySQL credentials provided by the user.
 #
 # Global variables used:
-#   COMPOSE_PATH
 #   CONFIG_PATH
-#   USERNAME_TO_REPLACE
-#   PASSWORD_TO_REPLACE
-#   DATABASE_TO_REPLACE
-#   HOSTNAME_TO_REPLACE
-#   ROOT_PASSWORD_TO_REPLACE
+#   RDS_MASTER_USERNAME
+#   RDS_MASTER_PASSWORD
+#   RDS_DB_NAME
+#   RDS_ENDPOINT
+#   QA_MYSQL_HOSTNAME
+#   QA_MYSQL_USERNAME
+#   QA_MYSQL_PASSWORD
+#   QA_MYSQL_DATABASE
 #
 #===============================================================================
 set_credentials() {
     echo
     echo 'Setting MySQL credentials...'
 
-    # Set the root password
-    sed -i "s/$ROOT_PASSWORD_TO_REPLACE/$QA_MYSQL_ROOT_PASSWORD/" $COMPOSE_PATH
-
     # Set the standard account's username
-    sed -i "s/$USERNAME_TO_REPLACE/$QA_MYSQL_USERNAME/" $CONFIG_PATH
-    sed -i "s/$USERNAME_TO_REPLACE/$QA_MYSQL_USERNAME/" $COMPOSE_PATH
+    sed -i "s/$RDS_MASTER_USERNAME/$QA_MYSQL_USERNAME/" $CONFIG_PATH
 
     # Set the standard account's password
-    sed -i "s/$PASSWORD_TO_REPLACE/$QA_MYSQL_PASSWORD/" $CONFIG_PATH
-    sed -i "s/$PASSWORD_TO_REPLACE/$QA_MYSQL_PASSWORD/" $COMPOSE_PATH
+    sed -i "s/$RDS_MASTER_PASSWORD/$QA_MYSQL_PASSWORD/" $CONFIG_PATH
 
     # Set the hostname of the database (name of the DB container)
-    sed -i "s/$HOSTNAME_TO_REPLACE/$QA_MYSQL_HOSTNAME/" $CONFIG_PATH
+    sed -i "s/$RDS_ENDPOINT/$QA_MYSQL_HOSTNAME/" $CONFIG_PATH
 
     # Set the database's name
-    sed -i "s/$DATABASE_TO_REPLACE/$QA_MYSQL_DATABASE/" $CONFIG_PATH
-    sed -i "s/$DATABASE_TO_REPLACE/$QA_MYSQL_DATABASE/" $COMPOSE_PATH
+    sed -i "s/$RDS_DB_NAME/$QA_MYSQL_DATABASE/" $CONFIG_PATH
 
     echo "MySQL credentials set"
 }
@@ -279,10 +261,6 @@ sh $(realpath $0)" > $boot_path/startserver.sh
 #===============================================================================
 #
 # Launches the web server through docker compose.
-#
-# This causes two containers to be spawned:
-#   q2a-apache      Php Apache web server hosting the website
-#   q2a-db          MySQL database to store website information
 #
 # Global variables used:
 #   COMPOSE_PATH
@@ -456,7 +434,6 @@ copy_ssl() {
     echo 'Copying all SSL certifications...'
 
     copy_ssl_to_container q2a-apache
-    copy_ssl_to_container q2a-phpmyadmin
     copy_portainer_certs
 
     echo 'All SSL certifications copied'
