@@ -19,3 +19,21 @@ RUN mkdir -p /var/www/config
 
 # Install dev dependencies (These can be removed in production)
 # RUN apt-get install -y sendmail vim
+
+# Enable SSL modules
+RUN a2enmod rewrite && a2enmod ssl && a2enmod socache_shmcb
+
+# Copy SSL certificates
+ARG domain_name=supportsitetest.tk
+ENV DOMAIN_NAME=${domain_name}
+COPY /etc/letsencrypt/live/${DOMAIN_NAME}/* /etc/ssl
+
+# Modify SSL config files
+ARG ssl_path=/etc/apache2/sites-available/default-ssl.conf
+RUN sed -i 's,/etc/ssl/certs/ssl-cert-snakeoil.pem,/etc/ssl/cert.pem,g' ${ssl_path} && 's,/etc/ssl/private/ssl-cert-snakeoil.key,/etc/ssl/private/privkey.pem,g' ${ssl_path} && 's,#SSLCertificateChainFile,SSLCertificateChainFile,g' ${ssl_path} && 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/fullchain.pem,g' ${ssl_path}
+
+# Redirect all HTTP traffic to HTTPS
+RUN sed -i -e "/^<\/VirtualHost>/i Redirect \"/\" \"https://${DOMAIN_NAME}\"" '/etc/apache2/sites-available/000-default.conf'
+
+# Active the SSL configuration
+RUN a2ensite default-ssl

@@ -19,9 +19,8 @@ QA_MYSQL_PASSWORD=''
 QA_MYSQL_DATABASE=''
 
 # SSL Certification information
-# This information needs to be changed so that it is provided by the user/sysadmin
-SSL_EMAIL='daniel_hammer@sil.org'
-DOMAIN_NAME='supportsitetest.tk'
+ADMIN_EMAIL_ADDRESS=''
+DOMAIN=''
 WEBROOT=$(realpath public)
 
 
@@ -181,6 +180,21 @@ check_credentials() {
         echo '    Database name already defined'
     fi
 
+    # Reload the environment variables
+    . /etc/environment
+    if [ -z $DOMAIN_NAME ]; then
+        read -p "Enter the domain name of the site to be hosted > " DOMAIN
+    else
+        echo "Domain name already set to $DOMAIN_NAME"
+        echo "To change this, modify /etc/environment"
+    fi
+
+    if [ -z $ADMIN_EMAIL ]; then
+        read -p "Enter an email account to utilize as the administrator contact > " ADMIN_EMAIL_ADDRESS
+    else
+        echo "Administrator email already set to $ADMIN_EMAIL"
+        echo "To change this, modify /etc/environment"
+    fi
 }
 
 
@@ -216,6 +230,14 @@ set_credentials() {
 
     # Set the database's name
     sed -i "s/$RDS_DB_NAME/$QA_MYSQL_DATABASE/" $CONFIG_PATH
+
+    # Set the web server's domain name
+    export DOMAIN_NAME=$DOMAIN
+    echo "export DOMAIN_NAME=$DOMAIN" >> /etc/environment
+
+    # Set the web server's admin email
+    export ADMIN_EMAIL=$ADMIN_EMAIL_ADDRESS
+    echo "export ADMIN_EMAIL=$ADMIN_EMAIL_ADDRESS" >> /etc/environment
 
     echo "MySQL credentials set"
 }
@@ -281,7 +303,8 @@ launch_service() {
 #
 # Performs the SSL certification process on the web server.
 #
-# The certification process uses Certbot (certbot.eff.org)
+# The certification process uses Certbot (certbot.eff.org) and stores the cert
+# files in `/etc/letsencrypt/live/<DOMAIN_NAME>/``
 #
 # Global variables used:
 #   SSL_EMAIL
@@ -312,7 +335,7 @@ generate_ssl() {
         --non-interactive \
         --agree-tos \
         --expand \
-        -m $SSL_EMAIL \
+        -m $ADMIN_EMAIL \
         --webroot -w $WEBROOT \
         -d $DOMAIN_NAME \
         -d www.$DOMAIN_NAME
@@ -367,7 +390,7 @@ copy_ssl_to_container() {
 	docker exec $container sed -i 's,/etc/ssl/private/ssl-cert-snakeoil.key,/etc/ssl/private/privkey.pem,g' $default_ssl_conf
     docker exec $container sed -i 's,#SSLCertificateChainFile,SSLCertificateChainFile,g' $default_ssl_conf
     docker exec $container sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/fullchain.pem,g' $default_ssl_conf
-    docker exec $container sed -i "s,.*ServerAdmin.*,ServerAdmin $SSL_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
+    docker exec $container sed -i "s,.*ServerAdmin.*,ServerAdmin $ADMIN_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
 
     # Define paths for cert files
     docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateFile /etc/ssl/cert.pem' $ssl_conf_path
@@ -441,6 +464,75 @@ copy_ssl() {
 
 
 
+#
+init_ssl() {
+    echo
+    echo 'Configuring and backing up SSL certificates...'
+
+    # Make a backup directory for the SSL certs
+    mkdir /local_certs/ &> /dev/null
+    cp /etc/letsencrypt/live/$DOMAIN_NAME/* /local_certs/
+
+    # Copy the appropriate certs for Portainer
+    cp /local_certs/cert.pem /local_certs/portainer.crt
+    cp /local_certs/privkey.pem /local_certs/portainer.key
+}
+
+
+
+launch_http() {
+    echo
+    echo 'Launching basic HTTP web service'
+
+    # First, build the image with no SSL support
+    docker build -t q2a-apache-no-ssl -f $WEBROOT/DockerfileNoSSL $WEBROOT
+
+    # Now run the no-ssl container and delete it afterwards
+    docker run -d --rm --name apache-no-ssl \
+        -v "./public:/var/www/html" \
+        -v "./config:/var/www/config" \
+        -p "80:80" -p "443:443" \
+        q2a-apache-no-ssl
+
+    echo 'Launched HTTP web service'
+}
+
+
+kill_http() {
+    echo
+    echo 'Stopping HTTP service container'
+
+    docker stop apache-no-ssl
+    docker rm apache-no-ssl
+
+    echo 'HTTP service stopped'
+}
+
+launch_https() {
+    echo
+    echo 'Launching HTTPS web service'
+
+    docker compose -f $COMPOSE_PATH up -d
+
+    echo 'Launched HTTPS web service'
+}
+
+
+
+
+launch() {
+    if [ ! -d /etc/letsnecrypt/live/$DOMAIN_NAME ]; then
+        launch_http
+        generate_ssl
+        init_ssl
+        kill_http
+    fi
+
+    launch_https
+}
+
+
+
 #===============================================================================
 #
 # Displays status of docker containers after launch.
@@ -460,8 +552,10 @@ locate_config_files
 check_credentials
 set_credentials
 enable_autolaunch
-launch_service
-generate_ssl
-copy_ssl
-cleanup
+launch
+#launch_service
+#generate_ssl
+#init_ssl
+#copy_ssl
+#cleanup
 display_status
