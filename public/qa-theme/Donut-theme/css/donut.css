@@ -285,7 +285,8 @@ header#nav-header {
   vertical-align: middle;
 }
 .navbar .qa-logo-link {
-  font-size: 30px;
+  font-size: 14px;
+  color: #4b4a4a;
   opacity: 1;
 }
 .navbar .qa-logo-link:hover,

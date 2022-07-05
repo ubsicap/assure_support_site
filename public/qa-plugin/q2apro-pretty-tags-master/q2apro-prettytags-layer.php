@@ -16,6 +16,73 @@
 */
 
 	class qa_html_theme_layer extends qa_html_theme_base {
+
+		public function form_field($field, $style)
+		{
+			$this->form_prefix($field, $style);
+	
+			$this->output_raw(@$field['html_prefix']);
+	
+			switch (@$field['type']) {
+				case 'checkbox':
+					$this->form_checkbox($field, $style);
+					break;
+	
+				case 'static':
+					$this->form_static($field, $style);
+					break;
+	
+				case 'password':
+					$this->form_password($field, $style);
+					break;
+	
+				case 'number':
+					$this->form_number($field, $style);
+					break;
+	
+				case 'file':
+					$this->form_file($field, $style);
+					break;
+	
+				case 'select':
+					$this->form_select($field, $style);
+					break;
+	
+				case 'select-radio':
+					$this->form_select_radio($field, $style);
+					break;
+	
+				case 'image':
+					$this->form_image($field, $style);
+					break;
+	
+				case 'custom':
+					$this->output_raw(@$field['html']);
+					break;
+	
+				default:
+					if (@$field['type'] == 'textarea' || @$field['rows'] > 1)
+						$this->form_text_multi_row($field, $style);
+					else {
+						if(strpos($field['tags'], 'id="tags"') !== false) {
+							$this->output('<div class="tagbox">');
+							$this->output('<ul>');
+							$this->output('<script type="text/javascript" src="'.QA_HTML_THEME_LAYER_URLTOROOT.'script.js"></script>');
+							$this->output('<li class="new">');
+							$this->form_text_single_row($field, $style);
+							$this->output('</li>');
+							$this->output('</ul>');
+							$this->output('</div>');
+						} else 
+							$this->form_text_single_row($field, $style);
+					}
+					break;
+			}
+	
+			$this->output_raw(@$field['html_suffix']);
+	
+			$this->form_suffix($field, $style);
+		}
 		
 		function head_script(){
 			qa_html_theme_base::head_script();
@@ -28,7 +95,7 @@
 				</script>');
 			
 				// load script
-				$this->output('<script type="text/javascript" src="'.QA_HTML_THEME_LAYER_URLTOROOT.'script.js"></script>');
+				//$this->output('<script type="text/javascript" src="'.QA_HTML_THEME_LAYER_URLTOROOT.'script.js"></script>');
 				
 				$this->output(' 
 	<style type="text/css">
