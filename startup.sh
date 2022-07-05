@@ -7,10 +7,10 @@ CONFIG_PATH=''
 COMPOSE_PATH=''
 
 # Default values that will be replaced in the above files
-USERNAME_TO_REPLACE='USERNAME_TO_REPLACE'
-PASSWORD_TO_REPLACE='PASSWORD_TO_REPLACE'
-DATABASE_TO_REPLACE='DATABASE_TO_REPLACE'
-HOSTNAME_TO_REPLACE='HOSTNAME_TO_REPLACE'
+RDS_MASTER_USERNAME='RDS_MASTER_USERNAME'
+RDS_MASTER_PASSWORD='RDS_MASTER_PASSWORD'
+RDS_DB_NAME='RDS_DB_NAME'
+RDS_ENDPOINT='RDS_ENDPOINT'
 
 # Values to be read from the user
 QA_MYSQL_HOSTNAME=''
@@ -132,10 +132,10 @@ locate_config_files() {
 #
 # Global variables used:
 #   CONFIG_PATH
-#   USERNAME_TO_REPLACE
-#   PASSWORD_TO_REPLACE
-#   DATABASE_TO_REPLACE
-#   HOSTNAME_TO_REPLACE
+#   RDS_MASTER_USERNAME
+#   RDS_MASTER_PASSWORD
+#   RDS_DB_NAME
+#   RDS_ENDPOINT
 #   QA_MYSQL_HOSTNAME
 #   QA_MYSQL_USERNAME
 #   QA_MYSQL_PASSWORD
@@ -147,18 +147,18 @@ check_credentials() {
     echo 'Checking if MySQL credentials have been set...'
 
     # Set the username, if needed
-    if grep -q $USERNAME_TO_REPLACE $CONFIG_PATH;
+    if grep -q $RDS_MASTER_USERNAME $CONFIG_PATH;
     then
-        read -p "Set username for the MySQL master account > " QA_MYSQL_USERNAME
+        read -p "Set username for the RDS MySQL master account > " QA_MYSQL_USERNAME
     else
         echo '    Username already defined'
     fi
 
     # Set the database password, if needed
-    if grep -q $PASSWORD_TO_REPLACE $CONFIG_PATH;
+    if grep -q $RDS_MASTER_PASSWORD $CONFIG_PATH;
     then
         stty -echo
-        read -p "Set password for the MySQL master account > " QA_MYSQL_PASSWORD
+        read -p "Set password for the RDS MySQL master account > " QA_MYSQL_PASSWORD
         stty echo
         echo
     else
@@ -166,17 +166,17 @@ check_credentials() {
     fi
 
     # Set the database hostname, if needed
-    if grep -q $HOSTNAME_TO_REPLACE $CONFIG_PATH;
+    if grep -q $RDS_ENDPOINT $CONFIG_PATH;
     then
-        read -p "Provide the endpoint/URL of a MySQL database to connect to > " QA_MYSQL_HOSTNAME
+        read -p "Provide the endpoint/URL of RDS MySQL database to connect to > " QA_MYSQL_HOSTNAME
     else
         echo '    Hostname already defined'
     fi
 
     # Set the database name, if needed
-    if grep -q $DATABASE_TO_REPLACE $CONFIG_PATH;
+    if grep -q $RDS_DB_NAME $CONFIG_PATH;
     then
-        read -p "Provide the name of the MySQL database (Probably already defined in AWS) > " QA_MYSQL_DATABASE
+        read -p "Provide the name of the RDS MySQL database (Probably already defined in AWS) > " QA_MYSQL_DATABASE
     else
         echo '    Database name already defined'
     fi
@@ -191,10 +191,10 @@ check_credentials() {
 #
 # Global variables used:
 #   CONFIG_PATH
-#   USERNAME_TO_REPLACE
-#   PASSWORD_TO_REPLACE
-#   DATABASE_TO_REPLACE
-#   HOSTNAME_TO_REPLACE
+#   RDS_MASTER_USERNAME
+#   RDS_MASTER_PASSWORD
+#   RDS_DB_NAME
+#   RDS_ENDPOINT
 #   QA_MYSQL_HOSTNAME
 #   QA_MYSQL_USERNAME
 #   QA_MYSQL_PASSWORD
@@ -206,16 +206,16 @@ set_credentials() {
     echo 'Setting MySQL credentials...'
 
     # Set the standard account's username
-    sed -i "s/$USERNAME_TO_REPLACE/$QA_MYSQL_USERNAME/" $CONFIG_PATH
+    sed -i "s/$RDS_MASTER_USERNAME/$QA_MYSQL_USERNAME/" $CONFIG_PATH
 
     # Set the standard account's password
-    sed -i "s/$PASSWORD_TO_REPLACE/$QA_MYSQL_PASSWORD/" $CONFIG_PATH
+    sed -i "s/$RDS_MASTER_PASSWORD/$QA_MYSQL_PASSWORD/" $CONFIG_PATH
 
     # Set the hostname of the database (name of the DB container)
-    sed -i "s/$HOSTNAME_TO_REPLACE/$QA_MYSQL_HOSTNAME/" $CONFIG_PATH
+    sed -i "s/$RDS_ENDPOINT/$QA_MYSQL_HOSTNAME/" $CONFIG_PATH
 
     # Set the database's name
-    sed -i "s/$DATABASE_TO_REPLACE/$QA_MYSQL_DATABASE/" $CONFIG_PATH
+    sed -i "s/$RDS_DB_NAME/$QA_MYSQL_DATABASE/" $CONFIG_PATH
 
     echo "MySQL credentials set"
 }
