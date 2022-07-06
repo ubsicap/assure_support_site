@@ -1,6 +1,9 @@
 # Ignore cached files
 qa-cache/*/
 
+# Ignore backed up SSL certs
+local_certs
+
 # Other files
 .DS_Store
 .DS_Store?
