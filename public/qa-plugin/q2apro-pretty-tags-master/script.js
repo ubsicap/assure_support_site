@@ -26,9 +26,10 @@ $ (document).ready (function () {
     $(this).parent().remove();
   });
 
-  $('body').on('mouseup', '#tag_hints', function(e) {
+  $('#tag_hints').on('mouseup', '.qa-tag-link', function(e) {
     setTimeout(function() {
-      var tag = $('#tags').val().trim();
+      //var tag = $('#tags').val().trim();
+      var tag = $(this).text();
       if(makeLiTag(tag)) allTags.push(tag);
       $('#tags').val('');
     }, 100);
