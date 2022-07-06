@@ -7,12 +7,12 @@ Repository and information for the Assure Support Site
 1. [Structure](#structure)
 1. [Local Startup](#local-startup)
 1. [Launching to AWS](#launching-to-aws)
-2. [Creating RDS Database](#creating-rds-database)
-3. [Custom Domain Name](#custom-domain-name)
-4. [SSL Certification](#ssl-certification)
-5. [Database Management](#database-management)
-6. [Container Management](#container-management)
-7. [Migrating Database Content](#migrating-database-content)
+1. [Creating RDS Database](#creating-rds-database)
+1. [Custom Domain Name](#custom-domain-name)
+1. [SSL Certification](#ssl-certification)
+1. [Database Management](#database-management)
+1. [Container Management](#container-management)
+1. [Migrating Database Content](#migrating-database-content)
 
 ## Structure
 
@@ -97,42 +97,43 @@ Configuration will be dependent on your preferences and needs, this section will
 
 In AWS create an RDS instance with the following settings:
 
-  - Create Database (Standard)
-  - MySql 8.0.28 (default)
+- Create Database (Standard)
+- MySql 8.0.28 (default)
 
-  - Burstable classes: db.t3.micro
-  - General Purpose SSD
-  - 20 GiB allocated
-  - Enable storage autoscaling
-  - 100 GiB maximum
-  - Default VPC (make sure id matches the existing EC2 instance)
-  - Public Access: No
-  - VPC security groups: MySQL Access (if that isn't a group, just use default)
-  - Password authentication
-  - Additional Configuration > Initial database name: q2adb
+- Burstable classes: db.t3.micro
+- General Purpose SSD
+- 20 GiB allocated
+- Enable storage autoscaling
+- 100 GiB maximum
+- Default VPC (make sure id matches the existing EC2 instance)
+- Public Access: No
+- VPC security groups: MySQL Access (if that isn't a group, just use default)
+- Password authentication
+- Additional Configuration > Initial database name: q2adb
 
 - Make sure to note down the database password and username (admin by default).
 
 ## Configuring security:
 
-  - To protect the site data, the database should have been configured so that only instances on the same VPC (i.e. the EC2 instance) can access it. 
-  - The EC2 instance should only have ports open for ssh (22), http (80), ssl (443), MySql (3306). 
-  - For the RDS instance, the only inbound port permitted should be MySql(3306). The source ip of the inbound rule should be the private ip of the EC2 instance.
-  - This can be configured in the security groups of the EC2 and RDS instance. 
-  
+- To protect the site data, the database should have been configured so that only instances on the same VPC (i.e. the EC2 instance) can access it.
+- The EC2 instance should only have ports open for ssh (22), http (80), ssl (443), MySql (3306).
+- For the RDS instance, the only inbound port permitted should be MySql(3306). The source ip of the inbound rule should be the private ip of the EC2 instance.
+- This can be configured in the security groups of the EC2 and RDS instance.
+
 ## Accessing data in the RDS instance:
+
 If you would like to view the database from MySql Workbench, this can be done by configuring a connection through ssh. This is necessary as only the EC2 instance is allowed to access the database.
-  
+
 Use the following settings under the connection in MySql Workbench:
-  
-  - Connection Method: Standard TCP/IP over SSH
-  - SSH Hostname: The hostname of the EC2 instance (i.e. ec2...amazonaw.com)
-  - SSH Username: Username of account on EC2 instance (i.e. ubuntu)
-  - SSH Key File: The key file path of the credentials needed to log into the EC2 instance
-  - MySQL Hostname: The hostname of the RDS instance (i.e. q2a...rds.amazon.com)
-  - MySQL Server port: 3306
-  - Username: admin
-  - Password: Whatever you configured as the RDS password
+
+- Connection Method: Standard TCP/IP over SSH
+- SSH Hostname: The hostname of the EC2 instance (i.e. ec2...amazonaw.com)
+- SSH Username: Username of account on EC2 instance (i.e. ubuntu)
+- SSH Key File: The key file path of the credentials needed to log into the EC2 instance
+- MySQL Hostname: The hostname of the RDS instance (i.e. q2a...rds.amazon.com)
+- MySQL Server port: 3306
+- Username: admin
+- Password: Whatever you configured as the RDS password
 
 ## Custom Domain Name
 
@@ -186,10 +187,21 @@ Before attempting this, please ensure that HTTPS traffic is not yet allowed by n
    apt-get install -y certbot
 
    # Run certbot interactively
-   certbot --test-cert --webroot
+   certbot --dry-run --webroot
    ```
 
 1. Follow the prompts
+1. Alternative, running certbot can be run in "non-interactive" mode:
+   ```sh
+   certbot certonly --dry-run \  # Just generate the cert files
+        --non-interactive \
+        --agree-tos \            # Automatically agree to the ToS
+        --expand \               # Append new domains
+        -m $ADMIN_EMAIL \        # Email to contact about renewal
+        --webroot -w $WEBROOT \  # Root dir of the website
+        -d $DOMAIN_NAME \        # Each domain you want to certify
+        -d www.$DOMAIN_NAME
+   ```
 1. If successful, you will see a message stating that the site is now certified
 1. Navigate to `https://<Domain Name>` and verify that HTTPS traffic is allowed
 
@@ -203,7 +215,8 @@ More information can be found [here](https://www.digitalocean.com/community/tuto
 
 The database can be accessed through two methods:
 
-- [phpMyAdmin](https://www.phpmyadmin.net/), which is running in a container alongside the database, on port [`3306`](https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/)
+- ~~[phpMyAdmin](https://www.phpmyadmin.net/), which is running in a container alongside the database, on port [`3306`](https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/)~~
+  - Currently deprecated
 - [MySQL Workbench](https://www.mysql.com/products/workbench/) (or another MySQL access tool) on port [`9906`](https://www.digitalocean.com/community/tutorials/how-to-connect-to-a-mysql-server-remotely-with-mysql-workbench)
 
 I don't know which method is preferred for production. Both are password protected using the credentials entered at first launch.
