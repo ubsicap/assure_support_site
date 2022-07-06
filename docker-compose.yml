@@ -15,9 +15,9 @@ services:
       - type: bind                          # Bind instead of Volume because we want to be able to make changes to the source folder without re-composing the container
         source: ./public                    # Must be the directory containing `index.php`
         target: /var/www/html/              # Default root for Apache web server
-      - /local_certs/cert.pem:/etc/ssl/cert.pem
-      - /local_certs/fullchain.pem:/etc/ssl/fullchain.pem
-      - /local_certs/privkey.pem:/etc/ssl/private/privkey.pem
+      - ./local_certs/cert.pem:/etc/ssl/cert.pem
+      - ./local_certs/fullchain.pem:/etc/ssl/fullchain.pem
+      - ./local_certs/privkey.pem:/etc/ssl/private/privkey.pem
       - ./config/qa-config-secure.php:/var/www/config/qa-config-secure.php
     ports:                                  # Define what ports should be open for traffic
       - "80:80"                             # Open 80 on the host to allow HTTP traffic

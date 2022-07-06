@@ -420,34 +420,7 @@ copy_ssl_to_container() {
 
 #===============================================================================
 #
-# Copies SSL certs to allow Portainer SSL access
-#
-# Ideas referenced from: https://docs.portainer.io/advanced/ssl
-#
-# Note that this creates `/local_certs` containing two files:
-#   portainer.crt
-#   portainer.key
-#
-# Global variables used:
-#   DOMAIN_NAME
-#
-#===============================================================================
-copy_portainer_certs() {
-    # Make the directory
-    sudo mkdir /local_certs/ &> /dev/null
-
-    host_ssl_path="/etc/letsencrypt/live/$DOMAIN_NAME"
-
-    # Copy and rename the cert files for Portainer
-    sudo cp $host_ssl_path/cert.pem /local_certs/portainer.crt
-    sudo cp $host_ssl_path/privkey.pem /local_certs/portainer.key
-}
-
-
-
-#===============================================================================
-#
-# Copies SSL certs into /local_certs/ as a backup.
+# Copies SSL certs into ./local_certs as a backup.
 #
 # Also makes copies labeled for Portainer.
 #
@@ -460,12 +433,12 @@ init_ssl() {
     echo 'Configuring and backing up SSL certificates...'
 
     # Make a backup directory for the SSL certs
-    mkdir /local_certs/ &> /dev/null
-    cp /etc/letsencrypt/live/$DOMAIN_NAME/* /local_certs/
+    sudo mkdir ./local_certs > /dev/null 2>&1
+    sudo cp -Lr /etc/letsencrypt/live/$DOMAIN_NAME/* ./local_certs
 
     # Copy the appropriate certs for Portainer
-    cp /local_certs/cert.pem /local_certs/portainer.crt
-    cp /local_certs/privkey.pem /local_certs/portainer.key
+    sudo cp -L ./local_certs/cert.pem ./local_certs/portainer.crt
+    sudo cp -L ./local_certs/privkey.pem ./local_certs/portainer.key
 }
 
 
@@ -492,7 +465,7 @@ launch_http() {
     docker build -t q2a-apache-no-ssl -f $WEBROOT/DockerfileNoSSL $WEBROOT
 
     # If the container is already running, stop it
-    docker stop $container_name
+    docker stop $container_name 2> /dev/null
 
     # Now run the no-ssl container and delete it afterwards
     docker run -d --rm --name $container_name \
@@ -501,6 +474,8 @@ launch_http() {
         -p "80:80" -p "443:443" \
         q2a-apache-no-ssl
 
+    docker ps
+
     echo 'Launched HTTP web service'
 }
 
@@ -508,17 +483,17 @@ launch_http() {
 
 #===============================================================================
 #
-# Stops and deletes the HTTP container
+# Stops and deletes ALL running containers
 #
 #===============================================================================
-kill_http() {
+kill_containers() {
     echo
-    echo 'Stopping HTTP service container'
+    echo 'Stopping and removing all containers...'
 
-    docker stop apache-no-ssl
-    docker rm apache-no-ssl
+    docker stop $(docker ps -aq) 2> /dev/null
+    docker rm $(docker ps -aq) 2> /dev/null
 
-    echo 'HTTP service stopped'
+    echo 'Containers removed'
 }
 
 
@@ -575,13 +550,14 @@ main() {
     check_credentials
     set_credentials
     enable_autolaunch
+    kill_containers
     
     # If SSL certs have not yet been generated, do so
-    if [ ! -d /etc/letsnecrypt/live/$DOMAIN_NAME ]; then
+    if [ ! -d /etc/letsencrypt/live/$DOMAIN_NAME ]; then
         launch_http
         generate_ssl
         init_ssl
-        kill_http
+        kill_containers
     fi
     # Now launch the web server with HTTPS
     launch_https
