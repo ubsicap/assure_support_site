@@ -245,13 +245,15 @@ set_credentials() {
     # Set the web server's domain name
     if [ ! -z $DOMAIN ]; then
         export DOMAIN_NAME=$DOMAIN
-        echo "export DOMAIN_NAME=$DOMAIN" | sudo tee -a /etc/environment
+        echo "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\"
+export DOMAIN_NAME=$DOMAIN" | sudo tee /etc/environment
     fi
 
     # Set the web server's admin email
     if [ ! -z $ADMIN_EMAIL_ADDRESS ]; then
         export ADMIN_EMAIL=$ADMIN_EMAIL_ADDRESS
-        echo "export ADMIN_EMAIL=$ADMIN_EMAIL_ADDRESS" | sudo tee -a /etc/environment
+        echo "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\"
+export ADMIN_EMAIL=$ADMIN_EMAIL_ADDRESS" | sudo tee /etc/environment
     fi
 
     echo "MySQL credentials set"
@@ -278,11 +280,11 @@ enable_autolaunch() {
 
     # Re-run this startup script
     #sudo echo "#!/bin/sh
-#sh $(realpath $0)" | sudo tee -a $boot_path/startserver.sh
+#sh $(realpath $0)" | sudo tee $boot_path/startserver.sh
 
     # In case we just want to re-start the containers, uncomment this
     echo "#!/bin/sh
-docker compose -f $COMPOSE_PATH up -d" | sudo tee -a $boot_path/startserver.sh
+docker compose -f $COMPOSE_PATH up -d" | sudo tee $boot_path/startserver.sh
 
     echo 'Autostart policy set'
 }
