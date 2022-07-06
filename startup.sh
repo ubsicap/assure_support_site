@@ -1,5 +1,14 @@
 #!/bin/sh
-
+#===============================================================================
+#
+# Initialization script for the Q2A web server, to be deployed on AWS.
+#
+# Deployment Requirements:
+#   AWS RDS MySQL must be instantiated
+#   Ubuntu 20.04 or newer
+#   Custom domain name must be claimed
+#
+#===============================================================================
 
 
 # Paths to app configuration files that will be modified during startup
@@ -150,7 +159,7 @@ check_credentials() {
     then
         read -p "Set username for the RDS MySQL master account > " QA_MYSQL_USERNAME
     else
-        echo '    Username already defined'
+        echo '- Username already defined'
     fi
 
     # Set the database password, if needed
@@ -161,7 +170,7 @@ check_credentials() {
         stty echo
         echo
     else
-        echo '    Password already defined'
+        echo '- Password already defined'
     fi
 
     # Set the database hostname, if needed
@@ -169,7 +178,7 @@ check_credentials() {
     then
         read -p "Provide the endpoint/URL of RDS MySQL database to connect to > " QA_MYSQL_HOSTNAME
     else
-        echo '    Hostname already defined'
+        echo '- Hostname already defined'
     fi
 
     # Set the database name, if needed
@@ -177,7 +186,7 @@ check_credentials() {
     then
         read -p "Provide the name of the RDS MySQL database (Probably already defined in AWS) > " QA_MYSQL_DATABASE
     else
-        echo '    Database name already defined'
+        echo '- Database name already defined'
     fi
 
     # Reload the environment variables
@@ -185,16 +194,16 @@ check_credentials() {
     if [ -z $DOMAIN_NAME ]; then
         read -p "Enter the domain name of the site to be hosted > " DOMAIN
     else
-        echo "    Domain name already set to $DOMAIN_NAME"
-        echo "      To change this, modify /etc/environment"
+        echo "- Domain name already set to $DOMAIN_NAME"
+        echo "    To change this, modify /etc/environment"
         DOMAIN=$DOMAIN_NAME
     fi
 
     if [ -z $ADMIN_EMAIL ]; then
         read -p "Enter an email account to utilize as the administrator contact > " ADMIN_EMAIL_ADDRESS
     else
-        echo "    Administrator email already set to $ADMIN_EMAIL"
-        echo "      To change this, modify /etc/environment"
+        echo "- Administrator email already set to $ADMIN_EMAIL"
+        echo "    To change this, modify /etc/environment"
         ADMIN_EMAIL_ADDRESS=$ADMIN_EMAIL
     fi
 }
@@ -267,19 +276,13 @@ enable_autolaunch() {
 
     boot_path='/var/lib/cloud/scripts/per-boot'
 
-    # Allow a script to be created
-    sudo chmod -R 777 $boot_path
-
     # Re-run this startup script
-    sudo echo "#!/bin/sh
-sh $(realpath $0)" > $boot_path/startserver.sh
+    #sudo echo "#!/bin/sh
+#sh $(realpath $0)" | sudo tee -a $boot_path/startserver.sh
 
     # In case we just want to re-start the containers, uncomment this
-    #sudo echo "#!/bin/sh
-#docker compose -f $COMPOSE_PATH up -d" > $boot_path/startserver.sh
-
-    # Mark the script as executable for everyone
-    sudo chmod -R 755 $boot_path
+    echo "#!/bin/sh
+docker compose -f $COMPOSE_PATH up -d" | sudo tee -a $boot_path/startserver.sh
 
     echo 'Autostart policy set'
 }
@@ -353,73 +356,6 @@ generate_ssl() {
 
 #===============================================================================
 #
-# Copies SSL certification into the specificed container.
-#
-# General structure copied from:
-#       https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/
-#
-# Note that this modifies the `/etc/apache2/sites-available/000-default.conf`.
-#
-# Parameters:
-#   $1  The name of the container to copy SSL cert files into
-#
-# Global variables used:
-#   DOMAIN_NAME
-#   SSL_EMAIL
-#
-#===============================================================================
-copy_ssl_to_container() {
-    # Setup parameters
-    container=$1
-
-    echo
-    echo "Copying all SSL certifications to $container service..."
-
-    # Copy the SSL keys to the container
-    host_ssl_path="/etc/letsencrypt/live/$DOMAIN_NAME/"
-    sudo docker cp -L $host_ssl_path/cert.pem $container:/etc/ssl
-    sudo docker cp -L $host_ssl_path/chain.pem $container:/etc/ssl
-    sudo docker cp -L $host_ssl_path/fullchain.pem $container:/etc/ssl
-    sudo docker cp -L $host_ssl_path/privkey.pem $container:/etc/ssl/private
-
-    # Config files that will be modified
-    ssl_conf_path='/etc/apache2/sites-available/000-default.conf'
-    default_ssl_conf='/etc/apache2/sites-available/default-ssl.conf'
-
-    # Enable SSL module
-    docker exec $container a2enmod ssl
-
-    # Before we do anything, MAKE A BACKUP
-    docker exec $container cp $default_ssl_conf $default_ssl_conf.backup
-
-    # Replace the necessary paths for the cert files
-	docker exec $container sed -i 's,/etc/ssl/certs/ssl-cert-snakeoil.pem,/etc/ssl/cert.pem,g' $default_ssl_conf
-	docker exec $container sed -i 's,/etc/ssl/private/ssl-cert-snakeoil.key,/etc/ssl/private/privkey.pem,g' $default_ssl_conf
-    docker exec $container sed -i 's,#SSLCertificateChainFile,SSLCertificateChainFile,g' $default_ssl_conf
-    docker exec $container sed -i 's,/etc/apache2/ssl.crt/server-ca.crt,/etc/ssl/fullchain.pem,g' $default_ssl_conf
-    docker exec $container sed -i "s,.*ServerAdmin.*,ServerAdmin $ADMIN_EMAIL\nServerName $DOMAIN_NAME,g" $default_ssl_conf
-
-    # Define paths for cert files
-    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateFile /etc/ssl/cert.pem' $ssl_conf_path
-    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateChainFile /etc/ssl/fullchain.pem' $ssl_conf_path
-    docker exec $container sed -i -e '/^<\/VirtualHost>/i SSLCertificateKeyFile /etc/ssl/private/privkey.pem' $ssl_conf_path
-
-    # Redirect all HTTP traffic to HTTPS
-    docker exec $container sed -i -e "/^<\/VirtualHost>/i Redirect \"/\" \"https://$DOMAIN_NAME\"" $ssl_conf_path
-
-    # Copy the file into the sites-enabled directory
-    docker exec $container cp $default_ssl_conf /etc/apache2/sites-enabled/
-
-    # Restart the necessary services
-    docker exec $container apachectl restart
-
-    echo "SSL certifications copied to $container service"
-}
-
-
-
-#===============================================================================
-#
 # Copies SSL certs into ./local_certs as a backup.
 #
 # Also makes copies labeled for Portainer.
@@ -456,7 +392,7 @@ init_ssl() {
 #===============================================================================
 launch_http() {
     echo
-    echo 'Launching basic HTTP web service'
+    echo 'Launching basic HTTP web service...'
 
     # The name of this container doesn't really matter
     container_name='apache-no-ssl'
@@ -510,7 +446,7 @@ kill_containers() {
 #===============================================================================
 launch_https() {
     echo
-    echo 'Launching HTTPS web service'
+    echo 'Launching HTTPS web service...'
 
     docker compose -f $COMPOSE_PATH up -d
 
@@ -526,8 +462,8 @@ launch_https() {
 #===============================================================================
 display_status() {
     echo
-    echo 'All docker containers:'
-    docker ps -a
+    echo 'All docker containers containers:'
+    docker ps -a 2> /dev/null
 }
 
 
