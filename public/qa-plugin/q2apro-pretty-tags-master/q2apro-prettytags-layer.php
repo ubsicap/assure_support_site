@@ -20,7 +20,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 
 	public function form_field($field, $style)
 	{
-		if (strpos($field['tags'], 'id="tags"') !== false) {
+		if (array_key_exists('tags',$field) && strpos($field['tags'], 'id="tags"') !== false) {
 			$this->form_prefix($field, $style);
 
 			$this->output_raw(@$field['html_prefix']);
