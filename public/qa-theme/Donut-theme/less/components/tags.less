@@ -15,6 +15,12 @@
 		display: inline-block;
 		margin-right: 5px;
 		padding: 6px 0;
+
+		border: 1px solid @light-border;
+		border-radius: @border-radius-small;
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 }
 
@@ -29,8 +35,6 @@
 	text-decoration: none;
 	cursor: pointer;
 	padding: 4px 10px;
-	border: 1px solid @light-border;
-	border-radius: @border-radius-small;
 
 	&:hover {
 		color: darken(@brand-primary, 10%);

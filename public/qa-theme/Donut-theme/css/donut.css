@@ -2172,6 +2172,11 @@ header#nav-header {
   display: inline-block;
   margin-right: 5px;
   padding: 6px 0;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .qa-q-view-tags {
   margin-bottom: 20px;
@@ -2181,8 +2186,6 @@ header#nav-header {
   text-decoration: none;
   cursor: pointer;
   padding: 4px 10px;
-  border: 1px solid #e2e2e2;
-  border-radius: 3px;
 }
 .qa-tag-link:hover {
   color: #286090;
