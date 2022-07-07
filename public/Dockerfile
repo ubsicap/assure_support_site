@@ -12,7 +12,8 @@ RUN docker-php-ext-install calendar
 RUN apt-get update && apt-get upgrade -y && apt-get install -y libpng-dev
 
 # Install GD library for dynamic image creation
-RUN docker-php-ext-install gd
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install -j$(nproc) gd
 
 # Use the webroot as the working directory
 WORKDIR /var/www/html
