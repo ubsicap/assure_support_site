@@ -276,15 +276,18 @@ enable_autolaunch() {
     echo
     echo 'Setting containers to launch automatically on system start...'
 
-    boot_path='/var/lib/cloud/scripts/per-boot'
+    startserver='/var/lib/cloud/scripts/per-boot/startserver.sh'
 
     # Re-run this startup script
     #sudo echo "#!/bin/sh
-#sh $(realpath $0)" | sudo tee $boot_path/startserver.sh
+#sh $(realpath $0)" | sudo tee $startserver
 
     # In case we just want to re-start the containers, uncomment this
     echo "#!/bin/sh
-docker compose -f $COMPOSE_PATH up -d" | sudo tee $boot_path/startserver.sh
+docker compose -f $COMPOSE_PATH up -d" | sudo tee $startserver
+
+    # Mark as executable
+    sudo chmod a+x $startserver
 
     echo 'Autostart policy set'
 }
