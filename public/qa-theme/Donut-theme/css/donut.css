@@ -1,5 +1,3 @@
-/* @import url(/public/qa-plugin/q2a-open-login/css/zocial.css);
-@import url(qa-open-login.css); */
 @media screen and (max-width: 767px) {
 }@media (min-width: 768px) {
 }@media (min-width: 768px) {
@@ -285,8 +283,7 @@ header#nav-header {
   vertical-align: middle;
 }
 .navbar .qa-logo-link {
-  font-size: 14px;
-  color: #4b4a4a;
+  font-size: 30px;
   opacity: 1;
 }
 .navbar .qa-logo-link:hover,
@@ -1028,7 +1025,7 @@ header#nav-header {
   color: #5cb85c;
 }
 .qa-voted-down-button {
-  color: #3c763d;
+  color: #d9534f;
 }
 /* Standard form (light version - buttons only) */
 .qa-form-light-button {
@@ -2356,7 +2353,7 @@ header#nav-header {
   }
 }
 .qa-nav-sub .qa-nav-sub-list .qa-nav-sub-hot .qa-nav-sub-link {
-  color: #337ab7 !important;
+  color: #d9534f !important;
   font-weight: 700;
 }
 @media only screen and (max-width: 767px) {
@@ -2546,18 +2543,10 @@ header#nav-header {
 .qa-form-wide-table > tbody > tr > td.qa-form-wide-error {
   display: table-cell !important;
 }
-/*make sidebar only appear in home page*/
-.qa-template-qa .qa-body-wrapper .qa-sidebar{
-  background-color: #d9edf7;
-  border-color: #bce8f1;
-  color: #31708f;
-  display: inherit !important;
-}
 .qa-sidebar {
   background-color: #d9edf7;
   border-color: #bce8f1;
   color: #31708f;
-  display: none;
 }
 .qa-sidebar hr {
   border-top-color: #a6e1ec;
@@ -2615,6 +2604,9 @@ header#nav-header {
   background-color: #f0ad4e;
   color: #fff;
 }
+.page-title {
+  overflow-wrap: break-word;
+}
 .page-title.has-favorite .qa-rss-feed {
   right: 0px;
   bottom: 40px;
@@ -2644,8 +2636,8 @@ header#nav-header {
   border-radius: 5px;
 }
 .qa-a-count-zero {
-  border: 1px solid #d6e9c6;
-  color: #3c763d;
+  border: 1px solid #ebccd1;
+  color: #a94442;
 }
 .qa-a-count-selected {
   border: 1px solid #bbdba1;
@@ -2915,6 +2907,7 @@ header#nav-header {
     font-size: 8px;
   }
   .qa-q-list .qa-q-item-main {
+    overflow-wrap: break-word;
     padding-left: 0;
     padding-right: 5px;
   }
@@ -2997,6 +2990,7 @@ header#nav-header {
   }
 }
 .qa-q-item-title {
+  overflow-wrap: break-word;
   color: #000;
   font-size: 16px;
 }
@@ -3604,6 +3598,7 @@ a.qa-browse-cat-link:visited {
 }
 /* Comment list  */
 .qa-c-list-item {
+  overflow-wrap: break-word;
   padding: 8px;
   border-bottom: 1px solid #e2e2e2;
 }
@@ -3612,6 +3607,9 @@ a.qa-browse-cat-link:visited {
 }
 .qa-a-list-item-selected .qa-a-item-c-list {
   border-top: 1px dashed #d6e9c6;
+}
+.qa-c-item {
+  overflow-wrap: break-word;
 }
 .qa-c-item-hidden .qa-c-item-content {
   color: #777777;
@@ -3733,6 +3731,7 @@ a.qa-browse-cat-link:visited {
   margin-bottom: 10px;
 }
 .qa-message-content-wrapper .qa-message-content {
+  overflow-wrap: break-word;
   display: block;
   padding: 15px;
 }
@@ -3795,7 +3794,7 @@ a.qa-browse-cat-link:visited {
   border-bottom: none;
 }
 /* Classes passed to theme */
-.qa-user-link{
+.qa-user-link {
   color: #337ab7;
   font-weight: 700;
 }
@@ -3871,7 +3870,7 @@ a.qa-browse-cat-link:visited {
   min-height: 1px;
   padding: 15px;
   margin-bottom: 3px;
-  overflow: hidden;
+  /* overflow: hidden; */
   width: 100%;
   float: right;
   clear: right;
@@ -4028,55 +4027,3 @@ a.qa-browse-cat-link:visited {
   padding: 5px;
   margin: 10px 0;
 }
-
-
-	/* Open Login buttons */
-	.open-login-button.context-associate,
-	.open-login-button.context-login,
-	.open-login-button.context-register {
-		font-weight: bold;
-		display: inline-block;
-		margin-top: 5px;
-		width: 30%;
-	}
-	
-	.open-login-button.context-sidebar {
-		font-weight: bold;
-		margin: 0 10px 5px 10px;
-		display: block;
-		max-width: 90%;
-	}
-
-	.open-login-button.context-menu.zocial {
-		margin-top: -4px;
-		font-size: 11px;
-	}
-	
-	.open-login-profile, .open-login-accounts, .open-login-others {
-		padding-bottom: 40px;
-		border-bottom: 1px solid gray;
-	}
-	
-	.qa-nav-user { /* this should not have negative effects */
-		height: 24px;
-		margin-top: 4px;
-	}
-	
-	.open-login-others .opacxhtml select {
-		margin: 5px 0;
-	}
-	
-	.open-login-others .opacxhtml {
-		padding-left: 35px;
-	}
-	
-	.open-login-accounts a.opacxdel:hover {
-		text-decoration: none;
-	}
-	
-	.open-login-accounts a.opacxdel{
-		display: inline-block;
-		line-height: 25px;
-		margin: 0 5px;
-	}
-	/* End of Open Login buttons */
