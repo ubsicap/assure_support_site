@@ -9,12 +9,15 @@ require_once QA_INCLUDE_DIR . 'app/captcha.php';
 
 class qa_account_reclaim
 {
+    // URL of the page, relative to the site root directory
+    const PAGE_URL = 'account-reclaim';
+
     function match_request($request)
     {
         /*
         Should return true if your page module will respond to Q2A page $request.
         */
-        return $request == 'accountreclaim';
+        return $request == self::PAGE_URL;
     }
     function suggest_requests()
     {
@@ -32,9 +35,9 @@ class qa_account_reclaim
         */
         return array(
             array(
-                'title' => 'Account Reclaim', // title of page
-                'request' => 'accountreclaim', // request name
-                'nav' => 'M', // 'M'=main, 'F'=footer, 'B'=before main, 'O'=opposite main, null=none
+                'title' => qa_lang('accountreclaim/title'), // title of page
+                'request' => self::PAGE_URL, // request name
+                'nav' => null, // 'M'=main, 'F'=footer, 'B'=before main, 'O'=opposite main, null=none
             ),
         );
     }
