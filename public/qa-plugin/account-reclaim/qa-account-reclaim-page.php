@@ -64,7 +64,7 @@ class qa_account_reclaim
 
         $qa_content = qa_content_prepare();
 
-        $qa_content['title'] = qa_lang_html('users/reset_title'); // qa_lang_html('accountreclaim/title')
+        $qa_content['title'] = qa_lang_html('accountreclaim/title');
         $qa_content['error'] = @$errors['page'];
 
         $qa_content['form'] = array(
@@ -74,17 +74,17 @@ class qa_account_reclaim
 
             'fields' => array(
                 'email_handle' => array(
-                    'label' => qa_opt('allow_login_email_only') ? qa_lang_html('users/email_label') : qa_lang_html('users/email_handle_label'),
+                    'label' => qa_lang_html('accountreclaim/email_label'),
                     'tags' => 'name="emailhandle" id="emailhandle"',
                     'value' => qa_html(@$inemailhandle),
                     'error' => qa_html(@$errors['emailhandle']),
-                    'note' => qa_lang_html('users/send_reset_note'),
+                    'note' => qa_lang_html('accountreclaim/send_reclaim_note'),
                 ),
             ),
 
             'buttons' => array(
                 'send' => array(
-                    'label' => qa_lang_html('users/send_reset_button'),
+                    'label' => qa_lang_html('account_reclaim/send_reset_button'),
                 ),
             ),
 
