@@ -2172,7 +2172,7 @@ header#nav-header {
 .qa-q-view-tag-item {
   display: inline-block;
   margin-right: 5px;
-  padding: 6px 0;
+  padding: 2px 0; /*make the padding less when there are multiple lines of tags*/
   /* border: 1px solid #e2e2e2; */
   border-radius: 3px;
   max-width: 100%;
