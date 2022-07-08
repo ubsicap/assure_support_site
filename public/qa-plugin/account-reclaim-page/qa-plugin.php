@@ -6,4 +6,4 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 }
 
 
-qa_register_plugin_module('page', 'qa-account-reclaim.php', 'qa_account_reclaim', 'Account Reclaim Page');
+qa_register_plugin_module('page', 'qa-account-reclaim-page.php', 'qa_account_reclaim', 'Account Reclaim Page');

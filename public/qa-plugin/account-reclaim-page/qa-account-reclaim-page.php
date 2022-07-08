@@ -14,11 +14,7 @@ class qa_account_reclaim
         /*
         Should return true if your page module will respond to Q2A page $request.
         */
-        if (false) {
-            return true;
-        }
-
-        return false;
+        return $request == 'accountreclaim';
     }
     function suggest_requests()
     {
