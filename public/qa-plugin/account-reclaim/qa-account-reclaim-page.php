@@ -64,7 +64,7 @@ class qa_account_reclaim
 
         $qa_content = qa_content_prepare();
 
-        $qa_content['title'] = qa_lang_html('users/reset_title');
+        $qa_content['title'] = qa_lang_html('users/reset_title'); // qa_lang_html('accountreclaim/title')
         $qa_content['error'] = @$errors['page'];
 
         $qa_content['form'] = array(
