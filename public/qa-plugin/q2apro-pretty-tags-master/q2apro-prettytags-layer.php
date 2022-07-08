@@ -88,6 +88,14 @@ class qa_html_theme_layer extends qa_html_theme_base
 			parent::form_field($field, $style);
 	}
 
+	public function form_text_single_row($field, $style)
+	{
+		if (strpos($field['tags'], 'id="tags"') !== false) 
+			$this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text"/>');
+		else
+			parent::form_text_single_row($field, $style);
+	}
+
 	function head_script()
 	{
 		qa_html_theme_base::head_script();
@@ -181,6 +189,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 	-webkit-box-shadow: rgba(0,0,0,.07) 0px 2px 4px inset;
 	-moz-box-shadow: rgba(0,0,0,.07) 0px 2px 4px inset;
 	box-shadow: rgba(0,0,0,.07) 0px 2px 4px inset;
+	width: 809.5px;
 	}
 	.tagbox li {
 	position: relative;

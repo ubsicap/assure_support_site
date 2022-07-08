@@ -2516,7 +2516,7 @@ header#nav-header {
     display: inline-block;
     margin-right: 5px;
     padding: 6px 0;
-    border: 1px solid #e2e2e2;
+    /* border: 1px solid #e2e2e2; */
     border-radius: 3px;
     max-width: 100%;
     overflow: hidden;
@@ -2531,7 +2531,9 @@ header#nav-header {
     color: #337ab7;
     text-decoration: none;
     cursor: pointer;
-    padding: 4px 10px
+    padding: 0px 10px;
+    border: 1px solid;
+    border-radius: 15px;
 }
 
 .qa-tag-link:hover {

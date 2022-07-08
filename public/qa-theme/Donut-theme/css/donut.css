@@ -283,7 +283,8 @@ header#nav-header {
   vertical-align: middle;
 }
 .navbar .qa-logo-link {
-  font-size: 30px;
+  font-size: 14px;
+  color: #4b4a4a;
   opacity: 1;
 }
 .navbar .qa-logo-link:hover,
@@ -1025,7 +1026,7 @@ header#nav-header {
   color: #5cb85c;
 }
 .qa-voted-down-button {
-  color: #d9534f;
+  color: #3c763d;
 }
 /* Standard form (light version - buttons only) */
 .qa-form-light-button {
@@ -2172,7 +2173,7 @@ header#nav-header {
   display: inline-block;
   margin-right: 5px;
   padding: 6px 0;
-  border: 1px solid #e2e2e2;
+  /* border: 1px solid #e2e2e2; */
   border-radius: 3px;
   max-width: 100%;
   overflow: hidden;
@@ -2185,7 +2186,9 @@ header#nav-header {
   color: #337ab7;
   text-decoration: none;
   cursor: pointer;
-  padding: 4px 10px;
+  padding: 0px 10px; /*making sure no overlap when viewed in mobile*/
+  border: 1px solid;
+  border-radius: 15px;
 }
 .qa-tag-link:hover {
   color: #286090;
