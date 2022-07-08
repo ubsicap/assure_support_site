@@ -84,7 +84,7 @@ class qa_account_reclaim
 
             'buttons' => array(
                 'send' => array(
-                    'label' => qa_lang_html('account_reclaim/send_reset_button'),
+                    'label' => qa_lang_html('accountreclaim/send_reset_button'),
                 ),
             ),
 
