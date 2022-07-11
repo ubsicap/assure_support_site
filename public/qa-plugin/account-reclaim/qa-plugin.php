@@ -15,7 +15,7 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 }
 
 // Register all language files
-qa_register_plugin_phrases('lang/qa-account-reclaim-lang-*.php', 'qa-ac');
+qa_register_plugin_phrases('lang/qa-ar-lang-*.php', 'qa-ar');
 
 /*
 Register the actual plugin.
@@ -25,4 +25,4 @@ Parameters are:
     - Name of the class declaration
     - Module name
 */
-qa_register_plugin_module('page', 'qa-account-reclaim-page.php', 'qa_account_reclaim', 'Account Reclaim Page');
+qa_register_plugin_module('page', 'qa-ar-page.php', 'qa_account_reclaim', 'Account Reclaim Page');

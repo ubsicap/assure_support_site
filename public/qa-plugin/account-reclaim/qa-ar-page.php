@@ -35,7 +35,7 @@ class qa_account_reclaim
         */
         return array(
             array(
-                'title' => qa_lang('qa-ac/title'), // title of page
+                'title' => qa_lang('qa-ar/title'), // title of page
                 'request' => self::PAGE_URL, // request name
                 'nav' => null, // 'M'=main, 'F'=footer, 'B'=before main, 'O'=opposite main, null=none
             ),
@@ -69,11 +69,11 @@ class qa_account_reclaim
         $qa_content = qa_content_prepare();
 
         // Setting the title and errors of the page
-        $qa_content['title'] = qa_lang_html('qa-ac/title');
+        $qa_content['title'] = qa_lang_html('qa-ar/title');
         $qa_content['error'] = @$errors['page'];
 
         // Body text to describe the purpose of this page and describe the reclaim process
-        $qa_content['custom_description'] = qa_lang_html('qa-ac/page_description');
+        $qa_content['custom_description'] = qa_lang_html('qa-ar/page_description');
 
         // This form is for entering your email and activating the reclaim process
         $qa_content['form'] = array(
@@ -83,19 +83,19 @@ class qa_account_reclaim
 
             'fields' => array(
                 'email_handle' => array(
-                    'label' => qa_lang_html('qa-ac/email_label'),
+                    'label' => qa_lang_html('qa-ar/email_label'),
                     'tags' => 'name="emailhandle" id="emailhandle"',
                     'value' => qa_html(@$inemailhandle),
                     'error' => qa_html(@$errors['emailhandle']),
-                    'note' => qa_lang_html('qa-ac/send_reclaim_note'),
+                    'note' => qa_lang_html('qa-ar/send_reclaim_note'),
                 ),
             ),
 
             'buttons' => array(
                 'send' => array(
-                    'label' => qa_lang_html('qa-ac/send_reclaim_button'),
+                    'label' => qa_lang_html('qa-ar/send_reclaim_button'),
                     // Important! We have to name the button in order to see when it's been clicked
-                    'tags' => 'name="qa-ac-send-reclaim" id="qa-ac-send-reclaim"', 
+                    'tags' => 'name="qa-ar-send-reclaim" id="qa-ar-send-reclaim"', 
                 ),
             ),
 
@@ -122,7 +122,7 @@ if (qa_is_logged_in())
 
 
 // Start the 'Reclaim Account' process, sending email if appropriate
-if (qa_clicked('qa-ac-send-reclaim')) {
+if (qa_clicked('qa-ar-send-reclaim')) {
     require_once QA_INCLUDE_DIR . 'app/users-edit.php';
 
     $inemailhandle = qa_post_text('emailhandle');
@@ -133,24 +133,26 @@ if (qa_clicked('qa-ac-send-reclaim')) {
         $errors['page'] = qa_lang_html('misc/form_security_again');
 
     else {
-        if (strpos($inemailhandle, '@') === false) { // handles can't contain @ symbols
-            $matchusers = qa_db_user_find_by_handle($inemailhandle);
-            $passemailhandle = !qa_opt('allow_login_email_only');
-        } else {
-            $matchusers = qa_db_user_find_by_email($inemailhandle);
-            $passemailhandle = true;
-        }
+        // Fetch the user from the Account Reclaim table
+        $matchusers = qa_db_ac_user_find_by_email($inemailhandle);
 
-        if (count($matchusers) != 1 || !$passemailhandle) // if we get more than one match (should be impossible) also give an error
+        if (count($matchusers) != 1) // if we get more than one match (should be impossible) also give an error
             $errors['emailhandle'] = qa_lang('users/user_not_found');
 
         if (qa_opt('captcha_on_reset_password'))
             qa_captcha_validate_post($errors);
 
         if (empty($errors)) {
+            // TODO: Make sure this field is the correct userid!
             $inuserid = $matchusers[0];
-            qa_start_reset_user($inuserid);
-            qa_redirect('reset', $passemailhandle ? array('e' => $inemailhandle, 's' => '1') : null); // redirect to page where code is entered
+
+            // TODO: Make a custom reclaim function to replace this one:
+            // qa_start_reset_user($inuserid);
+            // We could use this one:
+            qa_ar_start_reclaim_user($inuserid);
+            // OR we could override the original in a separate plugin module
+
+            qa_redirect('reset', array('e' => $inemailhandle, 's' => '1')); // redirect to page where code is entered
         }
     }
 } else
