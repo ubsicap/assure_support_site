@@ -70,6 +70,8 @@ class qa_account_reclaim
         $qa_content['title'] = qa_lang_html('accountreclaim/title');
         $qa_content['error'] = @$errors['page'];
 
+        $qa_content['custom_description'] = qa_lang_html('accountreclaim/page_description');
+
         $qa_content['form'] = array(
             'tags' => 'method="post" action="' . qa_self_html() . '"',
 
