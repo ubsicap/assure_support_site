@@ -1,7 +1,7 @@
 <?php
 /*
         File: qa-plugin/account-reclaim/qa-account-reclaim.php
-        Description: Page plugin for Account Reclaim process
+        Description: Controller for the 'Account Reclaim' page
 */
 
 require_once QA_INCLUDE_DIR . 'db/users.php';
@@ -106,3 +106,49 @@ class qa_account_reclaim
         return $qa_content;
     }
 }
+
+
+// Check we're not using single-sign on integration and that we're not logged in
+
+if (QA_FINAL_EXTERNAL_USERS)
+    qa_fatal_error('User login is handled by external code');
+
+if (qa_is_logged_in())
+    qa_redirect('');
+
+
+// Start the 'I forgot my password' process, sending email if appropriate
+
+if (qa_clicked('doforgot')) {
+    require_once QA_INCLUDE_DIR . 'app/users-edit.php';
+
+    $inemailhandle = qa_post_text('emailhandle');
+
+    $errors = array();
+
+    if (!qa_check_form_security_code('forgot', qa_post_text('code')))
+        $errors['page'] = qa_lang_html('misc/form_security_again');
+
+    else {
+        if (strpos($inemailhandle, '@') === false) { // handles can't contain @ symbols
+            $matchusers = qa_db_user_find_by_handle($inemailhandle);
+            $passemailhandle = !qa_opt('allow_login_email_only');
+        } else {
+            $matchusers = qa_db_user_find_by_email($inemailhandle);
+            $passemailhandle = true;
+        }
+
+        if (count($matchusers) != 1 || !$passemailhandle) // if we get more than one match (should be impossible) also give an error
+            $errors['emailhandle'] = qa_lang('users/user_not_found');
+
+        if (qa_opt('captcha_on_reset_password'))
+            qa_captcha_validate_post($errors);
+
+        if (empty($errors)) {
+            $inuserid = $matchusers[0];
+            qa_start_reset_user($inuserid);
+            qa_redirect('reset', $passemailhandle ? array('e' => $inemailhandle, 's' => '1') : null); // redirect to page where code is entered
+        }
+    }
+} else
+    $inemailhandle = qa_get('e');
