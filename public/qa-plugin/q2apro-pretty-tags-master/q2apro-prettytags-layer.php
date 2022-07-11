@@ -17,10 +17,41 @@
 
 class qa_html_theme_layer extends qa_html_theme_base
 {
+	public function form_data($field, $style, $columns, $showfield, $colspan)
+	{
+		if (qa_opt('q2apro_prettytags_enabled') && $style == 'tall' && $showfield && array_key_exists('tags', $field) && strpos($field['tags'], 'id="tags"') !== false) {
+			if ($showfield || (!empty($field['error'])) || (!empty($field['note']))) {
+				$this->output(
+					'<td class="qa-form-' . $style . '-data"' . (isset($colspan) ? (' colspan="' . $colspan . '"') : '') . '>'
+				);
+
+				if ($showfield)
+					$this->form_field($field, $style);
+
+				$this->output(
+					'<div class="tag-length"> 
+							<p2>Length of current tag: <span>0</span>/25</p2>
+							<br>
+							<p2>Number of Tags: <span>0</span>/5</p2>
+						</div>'
+				);
+
+				if (!empty($field['error'])) {
+					if (@$field['note_force'])
+						$this->form_note($field, $style, $columns);
+					$this->form_error($field, $style, $columns);
+				} elseif (!empty($field['note']))
+					$this->form_note($field, $style, $columns);
+
+				$this->output('</td>');
+			}
+		} else
+			parent::form_data($field, $style, $columns, $showfield, $colspan);
+	}
 
 	public function form_field($field, $style)
 	{
-		if (array_key_exists('tags',$field) && strpos($field['tags'], 'id="tags"') !== false) {
+		if (qa_opt('q2apro_prettytags_enabled') && array_key_exists('tags', $field) && strpos($field['tags'], 'id="tags"') !== false) {
 			$this->form_prefix($field, $style);
 
 			$this->output_raw(@$field['html_prefix']);
@@ -84,13 +115,13 @@ class qa_html_theme_layer extends qa_html_theme_base
 			$this->output_raw(@$field['html_suffix']);
 
 			$this->form_suffix($field, $style);
-		} else 
+		} else
 			parent::form_field($field, $style);
 	}
 
 	public function form_text_single_row($field, $style)
 	{
-		if (strpos($field['tags'], 'id="tags"') !== false) 
+		if (strpos($field['tags'], 'id="tags"') !== false)
 			$this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text"/>');
 		else
 			parent::form_text_single_row($field, $style);
@@ -249,9 +280,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 </style>');
 		}
 	}
-} // end qa_html_theme_layer
-	
 
-/*
-	Omit PHP closing tag to help avoid accidental output
-*/
+
+	// end qa_html_theme_layer
+}

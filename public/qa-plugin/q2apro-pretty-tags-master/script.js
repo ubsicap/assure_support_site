@@ -6,6 +6,10 @@ $ (document).ready (function () {
     $('#tags').val('');
   }
 
+  $('#tags').parent().parent().click(function(){
+    $('#tags').focus();
+  });
+
   $('#tags').keydown(function (e) { 
     if(e.keyCode === 32) {
       var tag = $('#tags').val().trim();
