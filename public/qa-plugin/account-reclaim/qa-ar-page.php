@@ -6,6 +6,7 @@
 
 require_once QA_INCLUDE_DIR . 'db/users.php';
 require_once QA_INCLUDE_DIR . 'app/captcha.php';
+require_once __DIR__ . '/qa-ar-functions.php';
 
 class qa_account_reclaim
 {
