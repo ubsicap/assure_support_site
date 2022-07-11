@@ -35,7 +35,7 @@ class qa_account_reclaim
         */
         return array(
             array(
-                'title' => qa_lang('accountreclaim/title'), // title of page
+                'title' => qa_lang('qa-ac/title'), // title of page
                 'request' => self::PAGE_URL, // request name
                 'nav' => null, // 'M'=main, 'F'=footer, 'B'=before main, 'O'=opposite main, null=none
             ),
@@ -65,13 +65,17 @@ class qa_account_reclaim
             The elements in $qa_content are displayed in array order, with a few exceptions such as page titles and errors.
         */
 
+        // Initialize the qa_content form to include titles/headers/etc.
         $qa_content = qa_content_prepare();
 
-        $qa_content['title'] = qa_lang_html('accountreclaim/title');
+        // Setting the title and errors of the page
+        $qa_content['title'] = qa_lang_html('qa-ac/title');
         $qa_content['error'] = @$errors['page'];
 
-        $qa_content['custom_description'] = qa_lang_html('accountreclaim/page_description');
+        // Body text to describe the purpose of this page and describe the reclaim process
+        $qa_content['custom_description'] = qa_lang_html('qa-ac/page_description');
 
+        // This form is for entering your email and activating the reclaim process
         $qa_content['form'] = array(
             'tags' => 'method="post" action="' . qa_self_html() . '"',
 
@@ -79,56 +83,53 @@ class qa_account_reclaim
 
             'fields' => array(
                 'email_handle' => array(
-                    'label' => qa_lang_html('accountreclaim/email_label'),
+                    'label' => qa_lang_html('qa-ac/email_label'),
                     'tags' => 'name="emailhandle" id="emailhandle"',
                     'value' => qa_html(@$inemailhandle),
                     'error' => qa_html(@$errors['emailhandle']),
-                    'note' => qa_lang_html('accountreclaim/send_reclaim_note'),
+                    'note' => qa_lang_html('qa-ac/send_reclaim_note'),
                 ),
             ),
 
             'buttons' => array(
                 'send' => array(
-                    'label' => qa_lang_html('accountreclaim/send_reset_button'),
+                    'label' => qa_lang_html('qa-ac/send_reclaim_button'),
+                    // Important! We have to name the button in order to see when it's been clicked
+                    'tags' => 'name="qa-ac-send-reclaim" id="qa-ac-send-reclaim"', 
                 ),
             ),
 
             'hidden' => array(
-                'doforgot' => '1',
-                'code' => qa_get_form_security_code('forgot'),
+                'doreclaim' => '1',
+                'code' => qa_get_form_security_code('reclaim'),
             ),
         );
 
+        // Enable CAPTCHA on this page, if applicable
         if (qa_opt('captcha_on_reset_password'))
             qa_set_up_captcha_field($qa_content, $qa_content['form']['fields'], @$errors);
 
         $qa_content['focusid'] = 'emailhandle';
-
 
         return $qa_content;
     }
 }
 
 
-// Check we're not using single-sign on integration and that we're not logged in
-
-if (QA_FINAL_EXTERNAL_USERS)
-    qa_fatal_error('User login is handled by external code');
-
+// If the user is already logged in, redirect them
 if (qa_is_logged_in())
     qa_redirect('');
 
 
-// Start the 'I forgot my password' process, sending email if appropriate
-
-if (qa_clicked('doforgot')) {
+// Start the 'Reclaim Account' process, sending email if appropriate
+if (qa_clicked('qa-ac-send-reclaim')) {
     require_once QA_INCLUDE_DIR . 'app/users-edit.php';
 
     $inemailhandle = qa_post_text('emailhandle');
 
     $errors = array();
 
-    if (!qa_check_form_security_code('forgot', qa_post_text('code')))
+    if (!qa_check_form_security_code('reclaim', qa_post_text('code')))
         $errors['page'] = qa_lang_html('misc/form_security_again');
 
     else {

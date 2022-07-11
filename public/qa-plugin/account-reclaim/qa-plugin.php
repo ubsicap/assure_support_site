@@ -15,7 +15,7 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 }
 
 // Register all language files
-qa_register_plugin_phrases('lang/qa-account-reclaim-lang-*.php', 'accountreclaim');
+qa_register_plugin_phrases('lang/qa-account-reclaim-lang-*.php', 'qa-ac');
 
 /*
 Register the actual plugin.
