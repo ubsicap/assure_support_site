@@ -157,7 +157,7 @@ if (qa_clicked('qa-ar-send-reclaim')) {
 
             // Call the overridden function to reclaim instead of reset
             // Thus, the second (optional) parameter is `true`
-            qa_start_reset_user($inuserid, reclaim: true);
+            qa_start_reset_user($inuserid, $reclaim = true);
 
             // TODO: We'll likely need to copy/modify this "reset" page as well
             qa_redirect('reset', array('e' => $inemailhandle, 's' => '1')); // redirect to page where code is entered

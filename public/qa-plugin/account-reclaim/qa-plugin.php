@@ -17,6 +17,9 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 // Register all language files
 qa_register_plugin_phrases('lang/qa-ar-lang-*.php', 'qa-ar');
 
+// Register all function overrides
+qa_register_plugin_overrides('qa-ar-overrides.php');
+
 /*
 Register the actual plugin.
 Parameters are:

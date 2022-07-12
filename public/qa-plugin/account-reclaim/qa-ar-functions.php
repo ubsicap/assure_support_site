@@ -37,7 +37,7 @@ function qa_db_ac_user_find_by_email($email) {
  * @param string|array $fields
  * @param string|null $value
  */
-function qa_db_user_set($userid, $fields, $value = null)
+function qa_ar_db_user_set($userid, $fields, $value = null)
 {
 	if (!is_array($fields)) {
 		$fields = array(
