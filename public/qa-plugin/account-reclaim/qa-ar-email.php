@@ -16,7 +16,7 @@ class qa_ar_filter
      */
     public function filter_email(&$email, $olduser)
 	{
-        return qa_lang_html('qa-ar/archived_warning'); //user exists
+        return qa_lang('qa-ar/archived_warning'); //user exists
 	}
 }
 

@@ -24,5 +24,5 @@ return array(
     
     'archived_warning' => 'Email belongs to an archived account see: 
     <a href="https://supportsitetest.tk/recover-account">Reclaim your account</a>
-    Click register again to abandon your archived account to create a new one.',
+    <br>Click register again to abandon your archived account to create a new one.',
 );
