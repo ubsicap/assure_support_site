@@ -22,8 +22,8 @@ class qa_ar_filter
         //if so check the last login attempt
         //return nothing otherwise
 
-        $this->callCount++;
-        return strval($callCount);
+        self::$callCount++;
+        return strval(self::$callCount);
         //return qa_lang('qa-ar/archived_warning'); //user exists
 	}
 }
