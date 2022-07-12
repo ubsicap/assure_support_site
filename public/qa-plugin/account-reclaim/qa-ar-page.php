@@ -98,6 +98,7 @@ class qa_ar_page
 
 
 // Start the 'Recover Account' process, sending email if appropriate
+// I really don't know where else to put this code
 if (qa_clicked('qa-ar-send-recover')) {
     require_once QA_INCLUDE_DIR . 'app/users-edit.php';
 

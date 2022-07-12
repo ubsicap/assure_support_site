@@ -29,6 +29,7 @@ function qa_start_reset_user($userid, $reclaim = false)
         require_once QA_INCLUDE_DIR . 'db/selects.php';
 
         // Generates a random email code for the reclaim process
+        // Note that this uses our modified function
         qa_ar_db_user_set($userid, 'reclaimcode', qa_db_user_rand_emailcode());
 
         // This query gets us the correct row from qa_accountreclaim

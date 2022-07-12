@@ -18,7 +18,7 @@ return array(
 <br>5 - Format this text cleanly, like ending with a horizontal line.
 <br>6 - Explain that they must be LOGGED OUT to reclaim an account',
     'already_logged_in' => 'You cannot reclaim an account- you are already logged in!',
-    'recover_body' => "Please click below to recover your previous Discourse account for ^site_title.\n\n^url\n\nAlternatively, enter the code below into the field provided.\n\nCode: ^code\n\nIf you did not ask to reset your password, please ignore this message.\n\nThank you,\n^site_title",
+    'recover_body' => "Please click below to recover your previous Discourse account and migrate it to ^site_title.\n\n^url\n\nAlternatively, enter the code below into the field provided.\n\nCode: ^code\n\nIf you did not ask to reset your password, please ignore this message.\n\nThank you,\n^site_title",
     'recover_subject' => '^site_title - Recover Existing Account', 
     'reclaim_page_title' => 'Finish Reclaiming Your Account',
 );

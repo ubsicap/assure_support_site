@@ -6,7 +6,11 @@
         originally modified user-related tables and now modify custom tables.
 */
 
+
+
 require_once QA_INCLUDE_DIR . 'db/users.php';
+
+
 
 /**
  * Return the ids of all users in the Account Reclaim table which match $email (should be one or none)
@@ -57,6 +61,7 @@ function qa_ar_db_user_set($userid, $fields, $value = null)
 
     qa_db_query_sub_params($sql, $params);
 }
+
 
 
 /**
@@ -117,7 +122,11 @@ function generate_recover_content($request, $qa_content)
     }
 
     $qa_content['focusid'] = 'emailhandle';
+
+    return $qa_content;
 }
+
+
 
 /**
  * Assembles content for the Reclaim page.
