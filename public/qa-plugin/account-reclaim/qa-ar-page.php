@@ -110,7 +110,7 @@ if (qa_clicked('qa-ar-send-recover')) {
         $errors['page'] = qa_lang_html('misc/form_security_again');
     } else {
         // Fetch the user from the Account Reclaim table
-        $matchusers = qa_db_ac_user_find_by_email($inemailhandle);
+        $matchusers = qa_ar_db_user_find_by_email($inemailhandle);
 
         if (count($matchusers) != 1) { // if we get more than one match (should be impossible) also give an error
             $errors['emailhandle'] = qa_lang('users/user_not_found');

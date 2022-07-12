@@ -7,7 +7,7 @@
 
 
 
-require_once QA_PLUGIN_DIR . '/account-reclaim/qa-ar-functions.php';
+require_once QA_PLUGIN_DIR . 'account-reclaim/qa-ar-functions.php';
 
 
 

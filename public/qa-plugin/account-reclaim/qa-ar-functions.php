@@ -21,7 +21,7 @@ require_once QA_INCLUDE_DIR . 'db/users.php';
  * @param $email
  * @return array
  */
-function qa_db_ac_user_find_by_email($email)
+function qa_ar_db_user_find_by_email($email)
 {
     return qa_db_read_all_values(qa_db_query_sub(
         'SELECT userid FROM ^accountreclaim WHERE email=$',
