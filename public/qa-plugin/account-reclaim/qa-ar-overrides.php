@@ -30,7 +30,12 @@ function qa_start_reset_user($userid, $reclaim = false)
 
         // Generates a random email code for the reclaim process
         // Note that this uses our modified function
-        qa_ar_db_user_set($userid, 'reclaimcode', qa_db_user_rand_emailcode());
+        // Note that this also CRASHES and I have no idea why
+        //qa_ar_db_user_set($userid, 'reclaimcode', qa_db_user_rand_emailcode());
+
+        // Generate a random email code for the reclaim process
+        $sql = 'UPDATE ^accountreclaim SET ^accountreclaim.reclaimcode=$ WHERE ^accountreclaim.userid=$';
+        qa_db_query_sub($sql, qa_db_user_rand_emailcode(), $userid);
 
         // This query gets us the correct row from qa_accountreclaim
         $selectspec = array(
