@@ -1,17 +1,17 @@
 <?php
 /*
-        File: qa-plugin/account-reclaim/qa-ar-reclaim.php
-        Description: Controller for the 'Account Reclaim' page
+        File: qa-plugin/account-reclaim/qa-ar-email-page.php
+        Description: Controller for the 'Start Account Reclaim' page
 */
 
 require_once QA_INCLUDE_DIR . 'db/users.php';
 require_once QA_INCLUDE_DIR . 'app/captcha.php';
 require_once __DIR__ . '/qa-ar-functions.php';
 
-class qa_account_reclaim_email_page
+class qa_account_recover_page
 {
     // URL of the page, relative to the site root directory
-    const PAGE_URL = 'start-account-reclaim';
+    const PAGE_URL = 'recover-account';
 
     function match_request($request)
     {
@@ -37,7 +37,7 @@ class qa_account_reclaim_email_page
         */
         return array(
             array(
-                'title' => qa_lang('qa-ar/title'), // title of page
+                'title' => qa_lang('qa-ar/recover_page_title'), // title of page
                 'request' => self::PAGE_URL, // request name
                 'nav' => null, // 'M'=main, 'F'=footer, 'B'=before main, 'O'=opposite main, null=none
             ),
@@ -71,11 +71,11 @@ class qa_account_reclaim_email_page
         $qa_content = qa_content_prepare();
 
         // Setting the title and errors of the page
-        $qa_content['title'] = qa_lang_html('qa-ar/title');
+        $qa_content['title'] = qa_lang_html('qa-ar/recover_page_title');
         $qa_content['error'] = @$errors['page'];
 
         // Body text to describe the purpose of this page and describe the reclaim process
-        $qa_content['custom_description'] = qa_lang('qa-ar/page_description');
+        $qa_content['custom_description'] = qa_lang('qa-ar/recover_page_description');
 
         // If the user is already logged in, they cannot reclaim an account
         if (qa_is_logged_in()) {
@@ -96,21 +96,21 @@ class qa_account_reclaim_email_page
                     'tags' => 'name="emailhandle" id="emailhandle"',
                     'value' => qa_html(@$inemailhandle),
                     'error' => qa_html(@$errors['emailhandle']),
-                    'note' => qa_lang_html('qa-ar/send_reclaim_note'),
+                    'note' => qa_lang_html('qa-ar/send_recover_note'),
                 ),
             ),
 
             'buttons' => array(
                 'send' => array(
-                    'label' => qa_lang_html('qa-ar/send_reclaim_button'),
+                    'label' => qa_lang_html('qa-ar/send_recover_button'),
                     // Important! We have to name the button in order to see when it's been clicked
-                    'tags' => 'name="qa-ar-send-reclaim" id="qa-ar-send-reclaim"', 
+                    'tags' => 'name="qa-ar-send-recover" id="qa-ar-send-recover"', 
                 ),
             ),
 
             'hidden' => array(
-                'doreclaim' => '0',
-                'code' => qa_get_form_security_code('reclaim'),
+                'dorecover' => '0',
+                'code' => qa_get_form_security_code('recover'),
             ),
         );
 
@@ -128,14 +128,14 @@ class qa_account_reclaim_email_page
 
 
 // Start the 'Reclaim Account' process, sending email if appropriate
-if (qa_clicked('qa-ar-send-reclaim')) {
+if (qa_clicked('qa-ar-send-recover')) {
     require_once QA_INCLUDE_DIR . 'app/users-edit.php';
 
     $inemailhandle = qa_post_text('emailhandle');
 
     $errors = array();
 
-    if (!qa_check_form_security_code('reclaim', qa_post_text('code'))) {
+    if (!qa_check_form_security_code('recover', qa_post_text('code'))) {
         $errors['page'] = qa_lang_html('misc/form_security_again');
     }
 
@@ -155,12 +155,12 @@ if (qa_clicked('qa-ar-send-reclaim')) {
             // TODO: Make sure this field is the correct userid!
             $inuserid = $matchusers[0];
 
-            // Call the overridden function to reclaim instead of reset
+            // Call the overridden function to recover instead of reset
             // Thus, the second (optional) parameter is `true`
             qa_start_reset_user($inuserid, $reclaim = true);
 
             // TODO: We'll likely need to copy/modify this "reset" page as well
-            //qa_redirect('reset', array('e' => $inemailhandle, 's' => '1')); // redirect to page where code is entered
+            qa_redirect('reset', array('e' => $inemailhandle, 's' => '1')); // redirect to page where code is entered
         }
     }
 } else

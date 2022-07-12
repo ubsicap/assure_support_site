@@ -21,21 +21,21 @@ qa_register_plugin_phrases('lang/qa-ar-lang-*.php', 'qa-ar');
 qa_register_plugin_overrides('qa-ar-overrides.php');
 
 /*
-Register the plugin's "Send Reclaim Email" page
+Register the plugin's "Recover Account" page
 Parameters are:
     - Plugin module type
     - Location of the module's class declaration
     - Name of the class declaration
     - Module name
 */
-qa_register_plugin_module('page', 'qa-ar-email-page.php', 'qa_account_reclaim_email_page', 'Account Reclaim Email Page');
+qa_register_plugin_module('page', 'qa-ar-recover-page.php', 'qa_account_recover_page', 'Recover Existing Account Page');
 
 /*
-Register the plugin's "Update Reclaimed Account" page
+Register the plugin's "Reclaim Account" page
 Parameters are:
     - Plugin module type
     - Location of the module's class declaration
     - Name of the class declaration
     - Module name
 */
-qa_register_plugin_module('page', 'qa-ar-update-page.php', 'qa_account_reclaim_update_page', 'Account Reclaim Update Page');
+qa_register_plugin_module('page', 'qa-ar-reclaim-page.php', 'qa_account_reclaim_page', 'Reclaim Existing Account Page');

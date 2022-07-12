@@ -41,7 +41,7 @@ function qa_start_reset_user($userid, $reclaim = false)
 
         $userinfo = qa_db_single_select($selectspec);
 
-        if (!qa_send_notification($userid, $userinfo['email'], null, qa_lang('qa-ar/reclaim_subject'), qa_lang('qa-ar/reclaim_body'), array(
+        if (!qa_send_notification($userid, $userinfo['email'], null, qa_lang('qa-ar/recover_subject'), qa_lang('qa-ar/recover_body'), array(
             '^code' => $userinfo['reclaimcode'],
             '^url' => qa_path_absolute('reset', array('c' => $userinfo['reclaimcode'], 'e' => $userinfo['email'])),
         ))) {
