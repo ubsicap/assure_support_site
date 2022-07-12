@@ -1,34 +1,38 @@
 var allTags = [];
 var hasHints = false;
+var tagNumber = Math.max(0,$('.tagbox ul li').length - 1);
 $ (document).ready (function () {
+  var maxLength = $('#tags').attr("maxlength");
   if($('#tags').val().trim() != '') {
     splitTags($('#tags').val().trim());
     $('#tags').val('');
   }
 
+  $('.tag-length').append('<p2>Length of current tag: <span id="tagLength">0/'+maxLength+'</span></p2><br><p2>Number of Tags: <span id="tagNumber">'+tagNumber+'/5</span></p2>');
+
   $('#tags').parent().parent().click(function(){
     $('#tags').focus();
   });
 
-  $('#tags').keydown(function (e) { 
+  $('#tags').keyup(function (e) { 
+    //style the pushed tag
     if(e.keyCode === 32) {
       var tag = $('#tags').val().trim();
       if(makeLiTag(tag)) allTags.push(tag);
        $('#tags').val('');
     }
     //widen the input when text grows
-    $(this)[0].style.width = ($("#tags").val().length+1) + 'em';
+    var length = $("#tags").val().length;
+    $(this)[0].style.width = (length+1) + 'em';
+    //style the tag length label
+    if (length >= maxLength) {
+      $('#tagLength').addClass('exceed');
+    } else {
+      $('#tagLength').removeClass('exceed');
+    }
+    //update the tag length label
+    $('#tagLength').text(length+'/'+maxLength);
   });
-  
-  // $(function(){
-  //   if(qa_opt("pupi_mtl_plugin_enabled")) 
-  //     $('#tags').maxLength({
-  //       maxChars: qa_opt("pupi_mtl_maximum_tag_length"),
-  //       onLimitOver: function() {
-  //         alert("????");
-  //       }
-  //     })
-  // });
   
   //triggered after mousedown or simply lose focus
   $('#tags').focusout(function() {
@@ -46,6 +50,10 @@ $ (document).ready (function () {
       if($('#tags').val().trim() == ''){
         allTags.pop();
         $('.tagbox ul li').last().prev().remove();
+        $('#tagNumber').text(Math.max(0, $('.tagbox ul li').length-1)+'/5');
+        if ($('.tagbox ul li').length-1 < 5) {
+          $('#tagNumber').removeClass('exceed');
+        }
       }
     }
   })
@@ -53,10 +61,15 @@ $ (document).ready (function () {
   $('body').on('click', '.delete', function(e) {
     findAndRemove(allTags, $(this).prev().text().trim());
     $(this).parent().remove();
+    $('#tagNumber').text(Math.max(0, $('.tagbox ul li').length-1)+'/5');
+    if ($('.tagbox ul li').length-1 < 5) {
+      $('#tagNumber').removeClass('exceed');
+    }
   });
 
   $('#tag_hints').on('mousedown', '.qa-tag-link', function(e) {
     $('#tags').val('');
+    $('#tagLength').text('0/'+maxLength);
   });
 
   $('#tag_hints').on('mouseup', '.qa-tag-link', function(e) {
@@ -80,9 +93,18 @@ function makeLiTag(tag) {
   if(allTags.indexOf(tag) === -1 && tag != '') {
     var newTag = $('<li><span class="tag">'+tag+'</span>'+'<span class="delete">&#215;</span></li>');
     $(newTag).insertBefore('.tagbox li.new');
-    return true;
+    tagNumber += 1;
+    $('#tagNumber').text(Math.max(0, $('.tagbox ul li').length-1)+'/5');
+  } else {
+    return false;
+    
+  } 
+  if ($('.tagbox ul li').length-1 >= 5) {
+    $('#tagNumber').addClass('exceed');
+  } else {
+    $('#tagNumber').removeClass('exceed');
   }
-  return false;
+  return true;
 }
 
 function splitTags(tags) {

@@ -21,8 +21,13 @@ class q2apro_prettytags_admin
 	// option's value is requested but the option has not yet been set
 	function option_default($option)
 	{
-		if ($option === 'tag_max_len')
-			return 25;
+		switch ($option) {
+			case 'q2apro_prettytags_enabled':
+				return true;
+			case 'tag_max_len':
+				return 25;
+			default:
+		}
 	}
 
 	function allow_template($template)
@@ -59,7 +64,8 @@ class q2apro_prettytags_admin
 					'label' => 'Maximum length of a tag:',
 					'type' => 'number',
 					'suffix' => 'characters',
-					'value' => (int) qa_opt('tag_max_len')
+					'value' => (int) qa_opt('tag_max_len'),
+					'tags' => 'name="tag_max_len"'
 				),
 			),
 			'buttons' => array(

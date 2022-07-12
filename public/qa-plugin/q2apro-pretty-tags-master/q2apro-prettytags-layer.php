@@ -30,9 +30,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 
 				$this->output(
 					'<div class="tag-length"> 
-							<p2>Length of current tag: <span>0</span>/25</p2>
-							<br>
-							<p2>Number of Tags: <span>0</span>/5</p2>
+							
 						</div>'
 				);
 
@@ -121,8 +119,8 @@ class qa_html_theme_layer extends qa_html_theme_base
 
 	public function form_text_single_row($field, $style)
 	{
-		if (strpos($field['tags'], 'id="tags"') !== false)
-			$this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text"/>');
+		if (qa_opt('q2apro_prettytags_enabled') && strpos($field['tags'], 'id="tags"') !== false)
+			$this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text" maxlength="'.qa_opt('tag_max_len').'"/>');
 		else
 			parent::form_text_single_row($field, $style);
 	}
@@ -274,8 +272,14 @@ class qa_html_theme_layer extends qa_html_theme_base
 	-moz-border-radius: 20px;
 	border-radius: 20px;
 	}
+	.exceed {
+		color: red;
+	}
 	.tagbox .selected .tag {
 	background: #555555;
+	}
+	.tag-length, .tag-length p2 {
+	float: right;
 	}
 </style>');
 		}
