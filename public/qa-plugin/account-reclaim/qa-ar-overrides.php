@@ -44,9 +44,9 @@ function qa_start_reset_user($userid, $reclaim = false)
             'arguments' => array($userid),
             'single' => true,
         );
-
         $userinfo = qa_db_single_select($selectspec);
 
+        // Send an email to the user. Note we don't have their username, so that's null
         if (!qa_send_notification($userid, $userinfo['email'], null, qa_lang('qa-ar/recover_subject'), qa_lang('qa-ar/recover_body'), array(
             '^code' => $userinfo['reclaimcode'],
             '^url' => qa_path_absolute('reset', array('c' => $userinfo['reclaimcode'], 'e' => $userinfo['email'])),

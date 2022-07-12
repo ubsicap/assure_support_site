@@ -7,7 +7,9 @@
 
 return array(
     'recover_page_title' => 'Reclaim an Existing Discourse Account',
-    'email_label' => 'Enter the email address associated with your original account',
+    'recover_email_label' => 'Enter the email address associated with your original account',
+    'reclaim_email_label' => 'A recovery code has been sent to the following email address:',
+    'reclaim_code_label' => 'Enter the recovery code here:',
     'send_recover_note' => 'An email will be sent to you with further instructions',
     'send_recover_button' => 'Send Recover Account Email',
     'recover_page_description' => 'In here goes the text that describes the account reclaim process.
