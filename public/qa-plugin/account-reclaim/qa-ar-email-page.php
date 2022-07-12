@@ -8,10 +8,10 @@ require_once QA_INCLUDE_DIR . 'db/users.php';
 require_once QA_INCLUDE_DIR . 'app/captcha.php';
 require_once __DIR__ . '/qa-ar-functions.php';
 
-class qa_account_reclaim
+class qa_account_reclaim_email_page
 {
     // URL of the page, relative to the site root directory
-    const PAGE_URL = 'account-reclaim';
+    const PAGE_URL = 'start-account-reclaim';
 
     function match_request($request)
     {
