@@ -1,1 +1,1 @@
-<?php return "Facebook,Google" ?>
+<?php return "" ?>

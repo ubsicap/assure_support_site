@@ -1,14 +1,43 @@
 var allTags = [];
+var hasHints = false;
 $ (document).ready (function () {
   if($('#tags').val().trim() != '') {
     splitTags($('#tags').val().trim());
     $('#tags').val('');
   }
+
+  $('#tags').parent().parent().click(function(){
+    $('#tags').focus();
+  });
+
   $('#tags').keydown(function (e) { 
     if(e.keyCode === 32) {
       var tag = $('#tags').val().trim();
-        if(makeLiTag(tag)) allTags.push(tag);
-        $('#tags').val('');
+      if(makeLiTag(tag)) allTags.push(tag);
+       $('#tags').val('');
+    }
+    //widen the input when text grows
+    $(this)[0].style.width = ($("#tags").val().length+1) + 'em';
+  });
+  
+  // $(function(){
+  //   if(qa_opt("pupi_mtl_plugin_enabled")) 
+  //     $('#tags').maxLength({
+  //       maxChars: qa_opt("pupi_mtl_maximum_tag_length"),
+  //       onLimitOver: function() {
+  //         alert("????");
+  //       }
+  //     })
+  // });
+  
+  //triggered after mousedown or simply lose focus
+  $('#tags').focusout(function() {
+    var tag = $('#tags').val().trim();
+    if(tag.length > 0) {
+      if(makeLiTag(tag)) allTags.push(tag);
+      $('#tags').val('');
+      //hide the tag hints
+      $("#tag_hints").parent().css({"display":"none"});
     }
   });
 
@@ -26,10 +55,13 @@ $ (document).ready (function () {
     $(this).parent().remove();
   });
 
+  $('#tag_hints').on('mousedown', '.qa-tag-link', function(e) {
+    $('#tags').val('');
+  });
+
   $('#tag_hints').on('mouseup', '.qa-tag-link', function(e) {
     setTimeout(function() {
-      //var tag = $('#tags').val().trim();
-      var tag = $(this).text();
+      var tag = $('#tags').val().trim();
       if(makeLiTag(tag)) allTags.push(tag);
       $('#tags').val('');
     }, 100);
