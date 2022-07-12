@@ -8,6 +8,8 @@
 
 class qa_ar_filter
 {
+    static $callCount = 0; //how many times the function has been called
+
     /**
      * Check 
      * 
@@ -16,12 +18,11 @@ class qa_ar_filter
      */
     public function filter_email(&$email, $olduser)
 	{
-        static $callCount = 0; //how many times the function has been called
         //check if email belongs to an archived account
         //if so check the last login attempt
         //return nothing otherwise
 
-        $callCount++;
+        $this->callCount++;
         return strval($callCount);
         //return qa_lang('qa-ar/archived_warning'); //user exists
 	}
