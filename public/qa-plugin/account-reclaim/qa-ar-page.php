@@ -1,6 +1,6 @@
 <?php
 /*
-        File: qa-plugin/account-reclaim/qa-account-reclaim.php
+        File: qa-plugin/account-reclaim/qa-ar-reclaim.php
         Description: Controller for the 'Account Reclaim' page
 */
 
@@ -20,6 +20,7 @@ class qa_account_reclaim
         */
         return $request == self::PAGE_URL;
     }
+
     function suggest_requests()
     {
         /*
@@ -76,6 +77,13 @@ class qa_account_reclaim
         // Body text to describe the purpose of this page and describe the reclaim process
         $qa_content['custom_description'] = qa_lang_html('qa-ar/page_description');
 
+        // If the user is already logged in, they cannot reclaim an account
+        if (qa_is_logged_in()) {
+            //qa_redirect(''); // Redirect user to homepage
+            $qa_content['error'] = qa_lang_html('qa-ar/already_logged_in');
+            return $qa_content;
+        }
+
         // This form is for entering your email and activating the reclaim process
         $qa_content['form'] = array(
             'tags' => 'method="post" action="' . qa_self_html() . '"',
@@ -101,14 +109,15 @@ class qa_account_reclaim
             ),
 
             'hidden' => array(
-                'doreclaim' => '1',
+                'doreclaim' => '0',
                 'code' => qa_get_form_security_code('reclaim'),
             ),
         );
 
         // Enable CAPTCHA on this page, if applicable
-        if (qa_opt('captcha_on_reset_password'))
+        if (qa_opt('captcha_on_reset_password')) {
             qa_set_up_captcha_field($qa_content, $qa_content['form']['fields'], @$errors);
+        }
 
         $qa_content['focusid'] = 'emailhandle';
 
@@ -116,10 +125,6 @@ class qa_account_reclaim
     }
 }
 
-
-// If the user is already logged in, redirect them
-if (qa_is_logged_in())
-    qa_redirect('');
 
 
 // Start the 'Reclaim Account' process, sending email if appropriate
@@ -130,29 +135,31 @@ if (qa_clicked('qa-ar-send-reclaim')) {
 
     $errors = array();
 
-    if (!qa_check_form_security_code('reclaim', qa_post_text('code')))
+    if (!qa_check_form_security_code('reclaim', qa_post_text('code'))) {
         $errors['page'] = qa_lang_html('misc/form_security_again');
+    }
 
     else {
         // Fetch the user from the Account Reclaim table
         $matchusers = qa_db_ac_user_find_by_email($inemailhandle);
 
-        if (count($matchusers) != 1) // if we get more than one match (should be impossible) also give an error
+        if (count($matchusers) != 1) { // if we get more than one match (should be impossible) also give an error
             $errors['emailhandle'] = qa_lang('users/user_not_found');
+        }
 
-        if (qa_opt('captcha_on_reset_password'))
+        if (qa_opt('captcha_on_reset_password')) {
             qa_captcha_validate_post($errors);
+        }
 
         if (empty($errors)) {
             // TODO: Make sure this field is the correct userid!
             $inuserid = $matchusers[0];
 
-            // TODO: Make a custom reclaim function to replace this one:
-            // qa_start_reset_user($inuserid);
-            // We could use this one:
-            qa_ar_start_reclaim_user($inuserid);
-            // OR we could override the original in a separate plugin module
+            // Call the overridden function to reclaim instead of reset
+            // Thus, the second (optional) parameter is `true`
+            qa_start_reset_user($inuserid, reclaim: true);
 
+            // TODO: We'll likely need to copy/modify this "reset" page as well
             qa_redirect('reset', array('e' => $inemailhandle, 's' => '1')); // redirect to page where code is entered
         }
     }
