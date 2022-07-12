@@ -80,7 +80,7 @@ class qa_account_reclaim
         // If the user is already logged in, they cannot reclaim an account
         if (qa_is_logged_in()) {
             //qa_redirect(''); // Redirect user to homepage
-            $qa_content['error'] = qa_lang_html('qa-ar/already_logged_in');
+            $qa_content['error'] .= qa_lang_html('qa-ar/already_logged_in');
             return $qa_content;
         }
 
