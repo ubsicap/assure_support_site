@@ -75,7 +75,7 @@ class qa_account_reclaim
         $qa_content['error'] = @$errors['page'];
 
         // Body text to describe the purpose of this page and describe the reclaim process
-        $qa_content['custom_description'] = qa_lang_html('qa-ar/page_description');
+        $qa_content['custom_description'] = qa_lang('qa-ar/page_description');
 
         // If the user is already logged in, they cannot reclaim an account
         if (qa_is_logged_in()) {
