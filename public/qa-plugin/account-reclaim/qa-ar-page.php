@@ -1,18 +1,17 @@
 <?php
 /*
-        File: qa-plugin/account-reclaim/qa-ar-email-page.php
-        Description: Controller for the 'Start Account Reclaim' page
+        File: qa-plugin/account-reclaim/qa-ar-page.php
+        Description: Controller for the 'Reclaim Account' pages
 */
 
-require_once QA_INCLUDE_DIR . 'db/users.php';
 require_once QA_INCLUDE_DIR . 'app/captcha.php';
-require_once __DIR__ . '/qa-ar-functions.php';
+require_once QA_PLUGIN_DIR . '/account-reclaim/qa-ar-functions.php';
 
-class qa_account_recover_page
+class qa_ar_page
 {
-    // URL of the page, relative to the site root directory
-    const PAGE_URL = 'recover-account';
-
+    // URL of the pages, relative to the site root directory
+    const RECOVER_PAGE_URL = 'recover-account';
+    const RECLAIM_PAGE_URL = 'account-reclaim';
 
 
     /**
@@ -24,7 +23,7 @@ class qa_account_recover_page
      */
     function match_request($request)
     {
-        return $request == self::PAGE_URL;
+        return $request == self::RECOVER_PAGE_URL || $request == self::RECLAIM_PAGE_URL;
     }
 
 
@@ -47,9 +46,14 @@ class qa_account_recover_page
     function suggest_requests()
     {
         return array(
-            array(
+            array( // Initiating the process; sending recovery email
                 'title' => qa_lang('qa-ar/recover_page_title'), // title of page
-                'request' => self::PAGE_URL, // request name
+                'request' => self::RECOVER_PAGE_URL, // request name
+                'nav' => null, // 'M'=main, 'F'=footer, 'B'=before main, 'O'=opposite main, null=none
+            ),
+            array( // Completing the process; resetting account info
+                'title' => qa_lang('qa-ar/reclaim_page_title'), // title of page
+                'request' => self::RECLAIM_PAGE_URL, // request name
                 'nav' => null, // 'M'=main, 'F'=footer, 'B'=before main, 'O'=opposite main, null=none
             ),
         );
@@ -69,57 +73,23 @@ class qa_account_recover_page
     {
         // Initialize the qa_content form to include titles/headers/etc.
         $qa_content = qa_content_prepare();
-
-        // Setting the title and errors of the page
-        $qa_content['title'] = qa_lang_html('qa-ar/recover_page_title');
         $qa_content['error'] = @$errors['page'];
 
-        // Body text to describe the purpose of this page and describe the reclaim process
-        $qa_content['custom_description'] = qa_lang('qa-ar/recover_page_description');
-
-        // If the user is already logged in, they cannot reclaim an account
-        if (qa_is_logged_in()) {
-            //qa_redirect(''); // Redirect user to homepage
-            $qa_content['error'] .= qa_lang_html('qa-ar/already_logged_in');
-            return $qa_content;
+        // Process the request appropriately, depending on the page
+        switch ($request) {
+            case self::RECOVER_PAGE_URL:
+                // Content for initiating the reclaim process
+                $qa_content = generate_recover_content($request, $qa_content);
+                break;
+            case self::RECLAIM_PAGE_URL:
+                // Content for resetting account info
+                $qa_content = generate_reclaim_content($request, $qa_content);
+                break;
+            default:
+                // Invalid page requested
+                $qa_content['error'] = qa_lang_html('main/page_not_found');
+                break;
         }
-
-        // This form is for entering your email and activating the reclaim process
-        $qa_content['form'] = array(
-            'tags' => 'method="post" action="' . qa_self_html() . '"',
-
-            'style' => 'tall',
-
-            'fields' => array(
-                'email_handle' => array(
-                    'label' => qa_lang_html('qa-ar/email_label'),
-                    'tags' => 'name="emailhandle" id="emailhandle"',
-                    'value' => qa_html(@$inemailhandle),
-                    'error' => qa_html(@$errors['emailhandle']),
-                    'note' => qa_lang_html('qa-ar/send_recover_note'),
-                ),
-            ),
-
-            'buttons' => array(
-                'send' => array(
-                    'label' => qa_lang_html('qa-ar/send_recover_button'),
-                    // Important! We have to name the button in order to see when it's been clicked
-                    'tags' => 'name="qa-ar-send-recover" id="qa-ar-send-recover"',
-                ),
-            ),
-
-            'hidden' => array(
-                'dorecover' => '0',
-                'code' => qa_get_form_security_code('recover'),
-            ),
-        );
-
-        // Enable CAPTCHA on this page, if applicable
-        if (qa_opt('captcha_on_reset_password')) {
-            qa_set_up_captcha_field($qa_content, $qa_content['form']['fields'], @$errors);
-        }
-
-        $qa_content['focusid'] = 'emailhandle';
 
         return $qa_content;
     }
@@ -127,7 +97,7 @@ class qa_account_recover_page
 
 
 
-// Start the 'Reclaim Account' process, sending email if appropriate
+// Start the 'Recover Account' process, sending email if appropriate
 if (qa_clicked('qa-ar-send-recover')) {
     require_once QA_INCLUDE_DIR . 'app/users-edit.php';
 
@@ -150,16 +120,13 @@ if (qa_clicked('qa-ar-send-recover')) {
         }
 
         if (empty($errors)) {
-            // TODO: Make sure this field is the correct userid!
             $inuserid = $matchusers[0];
 
             // Call the overridden function to recover instead of reset
             // Thus, the second (optional) parameter is `true`
             qa_start_reset_user($inuserid, $reclaim = true);
 
-            // TODO: We'll likely need to copy/modify this "reset" page as well
-            qa_redirect('reset', array('e' => $inemailhandle, 's' => '1')); // redirect to page where code is entered
+            qa_redirect('account-reclaim', array('e' => $inemailhandle, 's' => '1')); // redirect to page where code is entered
         }
     }
-} else
-    $inemailhandle = qa_get('e');
+}

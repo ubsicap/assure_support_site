@@ -21,21 +21,11 @@ qa_register_plugin_phrases('lang/qa-ar-lang-*.php', 'qa-ar');
 qa_register_plugin_overrides('qa-ar-overrides.php');
 
 /*
-Register the plugin's "Recover Account" page
+Register the plugin's "Reclaim Account" pages
 Parameters are:
     - Plugin module type
     - Location of the module's class declaration
     - Name of the class declaration
     - Module name
 */
-qa_register_plugin_module('page', 'qa-ar-recover-page.php', 'qa_account_recover_page', 'Recover Existing Account Page');
-
-/*
-Register the plugin's "Reclaim Account" page
-Parameters are:
-    - Plugin module type
-    - Location of the module's class declaration
-    - Name of the class declaration
-    - Module name
-*/
-qa_register_plugin_module('page', 'qa-ar-reclaim-page.php', 'qa_account_reclaim_page', 'Reclaim Existing Account Page');
+qa_register_plugin_module('page', 'qa-ar-page.php', 'qa_ar_page', 'Reclaim Account');
