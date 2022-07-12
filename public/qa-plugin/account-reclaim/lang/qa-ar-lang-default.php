@@ -22,7 +22,6 @@ return array(
     'recover_subject' => '^site_title - Recover Existing Account', 
     'reclaim_page_title' => 'Finish Reclaiming Your Account',
     
-    'archived_warning' => 'Email belongs to an archived account see: 
-    <a href="https://supportsitetest.tk/recover-account">Reclaim your account</a>
-    <br>Click register again to abandon your archived account to create a new one.',
+    'archived_warning' => "Email belongs to an archived account see the \"Reclaim your account\" page!
+    \nClick \"Register\" again to abandon your archived account (Not recommended).",
 );
