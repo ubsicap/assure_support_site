@@ -160,7 +160,7 @@ if (qa_clicked('qa-ar-send-reclaim')) {
             qa_start_reset_user($inuserid, $reclaim = true);
 
             // TODO: We'll likely need to copy/modify this "reset" page as well
-            qa_redirect('reset', array('e' => $inemailhandle, 's' => '1')); // redirect to page where code is entered
+            //qa_redirect('reset', array('e' => $inemailhandle, 's' => '1')); // redirect to page where code is entered
         }
     }
 } else

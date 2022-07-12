@@ -45,7 +45,7 @@ function qa_ar_db_user_set($userid, $fields, $value = null)
 		);
 	}
 
-	$sql = 'UPDATE ^users SET ';
+	$sql = 'UPDATE ^accountreclaim SET ';
 	foreach ($fields as $field => $fieldValue) {
 		$sql .= qa_db_escape_string($field) . ' = $, ';
 	}

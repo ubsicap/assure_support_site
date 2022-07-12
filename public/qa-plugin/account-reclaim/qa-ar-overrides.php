@@ -7,6 +7,10 @@
 
 
 
+require_once QA_PLUGIN_DIR . '/account-reclaim/qa-ar-functions.php';
+
+
+
 /**
  * Start the 'Reclaim Account' process for $userid, sending reset code
  * 
@@ -24,13 +28,22 @@ function qa_start_reset_user($userid, $reclaim = false)
         require_once QA_INCLUDE_DIR . 'app/emails.php';
         require_once QA_INCLUDE_DIR . 'db/selects.php';
 
-        qa_db_user_set($userid, 'emailcode', qa_db_user_rand_emailcode());
+        // Generates a random email code for the reclaim process
+        qa_ar_db_user_set($userid, 'reclaimcode', qa_db_user_rand_emailcode());
 
-        $userinfo = qa_db_select_with_pending(qa_db_user_account_selectspec($userid, true));
+        // This query gets us the correct row from qa_accountreclaim
+        $selectspec = array(
+            'columns' => array('^accountreclaim.userid', '^accountreclaim.email', '^accountreclaim.reclaimcode'),
+            'source' => '^accountreclaim WHERE ^accountreclaim.userid=$',
+            'arguments' => array($userid),
+            'single' => true,
+        );
 
-        if (!qa_send_notification($userid, $userinfo['email'], $userinfo['handle'], qa_lang('emails/reset_subject'), qa_lang('emails/reset_body'), array(
-            '^code' => $userinfo['emailcode'],
-            '^url' => qa_path_absolute('reset', array('c' => $userinfo['emailcode'], 'e' => $userinfo['email'])),
+        $userinfo = qa_db_single_select($selectspec);
+
+        if (!qa_send_notification($userid, $userinfo['email'], null, qa_lang('qa-ar/reclaim_subject'), qa_lang('qa-ar/reclaim_body'), array(
+            '^code' => $userinfo['reclaimcode'],
+            '^url' => qa_path_absolute('reset', array('c' => $userinfo['reclaimcode'], 'e' => $userinfo['email'])),
         ))) {
             qa_fatal_error('Could not send reset password email');
         }

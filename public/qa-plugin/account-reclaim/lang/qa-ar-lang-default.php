@@ -6,7 +6,7 @@
 */
 
 return array(
-    'title' => 'Reclaim an Unmigrated Account',
+    'title' => 'Reclaim an Existing Discourse Account',
     'email_label' => 'Enter the email address associated with your original account',
     'send_reclaim_note' => 'An email will be sent to you with further instructions',
     'send_reclaim_button' => 'Send Reclaim Account Email',
@@ -18,4 +18,6 @@ return array(
 <br>5 - Format this text cleanly, like ending with a horizontal line.
 <br>6 - Explain that they must be LOGGED OUT to reclaim an account',
     'already_logged_in' => 'You cannot reclaim an account- you are already logged in!',
+    'reclaim_subject' => 'Account Reclaim Email Subject Line',
+    'reclaim_body' => 'Account Reclaim Email Body Text',
 );
