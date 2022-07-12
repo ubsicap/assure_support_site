@@ -9,28 +9,39 @@ class qa_account_reclaim_page
     // URL of the page, relative to the site root directory
     const PAGE_URL = 'reclaim-account';
 
+
+
+    /**
+     * Determines if the URL requested matches this page. Used to check whether
+     * this page should be delivered.
+     * 
+     * @param $request The URL request being checked
+     * @return bool True if the request matches this page
+     */
     function match_request($request)
     {
-        /*
-        Should return true if your page module will respond to Q2A page $request.
-        */
         return $request == self::PAGE_URL;
     }
 
+
+
+    /**
+     * Returns an array of suggested pages for your module.
+     * 
+     * These suggestions will be displayed within the Q2A admin interface.
+     * Each element for a page in the array is itself an array, containing the following elements:
+     *      - title contains a human-readable title used to describe the page, e.g. 'More Stats'.
+     *      - request contains the Q2A $request string for the page, e.g. 'stats/more'.
+     *          Your match_request() function should of course return true for this string.
+     *      - nav contains a suggestion about where this page should be linked in the navigation menus.
+     *          This is only a hint and can easily be changed by the site's administrator.
+     *          Use 'M' for after the main menu, 'B' for before the main menu,
+     *          'O' for opposite the main menu, 'F' for the footer, or null for no navigation element.
+     * 
+     * @return array An array of suggest pages for this module
+     */
     function suggest_requests()
     {
-        /*
-        Should return an array of suggested pages for your module.
-        These suggestions will be displayed within the Q2A admin interface.
-        Each element for a page in the array is itself an array, containing the following elements:
-                - title contains a human-readable title used to describe the page, e.g. 'More Stats'.
-                 - request contains the Q2A $request string for the page, e.g. 'stats/more'.
-                        Your match_request() function should of course return true for this string.
-                - nav contains a suggestion about where this page should be linked in the navigation menus.
-                        This is only a hint and can easily be changed by the site's administrator.
-                     Use 'M' for after the main menu, 'B' for before the main menu,
-                        'O' for opposite the main menu, 'F' for the footer, or null for no navigation element.
-        */
         return array(
             array(
                 'title' => qa_lang('qa-ar/reclaim_page_title'), // title of page
@@ -40,15 +51,19 @@ class qa_account_reclaim_page
         );
     }
 
+
+
+    /**
+     * Assembles a page with which to respond to the given $request.
+     * 
+     * This sets up `$qa_content`, which is an array of page elements.
+     * 
+     * @param string $request The page being requested
+     * @return mixed The HTML array of the page.
+     */
     function process_request($request)
     {
-        if (!defined('QA_VERSION')) { // don't allow this page to be requested directly from browser
-            header('Location: ../../');
-            exit;
-        }
-
         // Check we're not using single-sign on integration and that we're not logged in
-
         if (QA_FINAL_EXTERNAL_USERS) {
             qa_fatal_error('User login is handled by external code');
         }
