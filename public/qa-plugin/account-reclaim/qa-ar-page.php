@@ -265,6 +265,7 @@ function generate_reclaim_content($request, $qa_content)
         'formcode' => qa_get_form_security_code('reclaim'),
     );
 
+    // If an email address has been provided, perform the reclaim process
     if (strlen($emailHandle) > 0) {
         require_once QA_INCLUDE_DIR . 'app/users-edit.php';
         require_once QA_INCLUDE_DIR . 'db/users.php';
@@ -281,18 +282,19 @@ function generate_reclaim_content($request, $qa_content)
             // strlen() check is vital otherwise we can reset code for most users by entering the empty string
             if (strlen($code) > 0) {
                 $userId = $matchingUsers[0];
-                //$userInfo = qa_db_select_with_pending(qa_db_user_account_selectspec($userId, true));
+                // This is the correct row from qa_users
+                $userInfo = qa_db_select_with_pending(qa_db_user_account_selectspec($userId, true));
 
                 // This query gets us the correct row from qa_accountreclaim
-                $selectspec = array(
+                $reclaimInfo = qa_db_single_select(array(
                     'columns' => array('^accountreclaim.userid', '^accountreclaim.email', '^accountreclaim.reclaimcode'),
                     'source' => '^accountreclaim WHERE ^accountreclaim.userid=$',
                     'arguments' => array($userId),
                     'single' => true,
-                );
-                $userInfo = qa_db_single_select($selectspec);
+                ));
 
-                if (strtolower(trim($userInfo['reclaimcode'])) == strtolower($code)) {
+                // Check if the reclaim code generated is the same as the code entered
+                if (strtolower(trim($reclaimInfo['reclaimcode'])) == strtolower($code)) {
                     // User input a valid code so no need to ask for it but pass it to the next step
                     unset($fields['code']);
                     $hidden['code'] = $code;
