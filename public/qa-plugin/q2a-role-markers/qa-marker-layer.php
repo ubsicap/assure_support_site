@@ -15,7 +15,7 @@ class qa_html_theme_layer extends qa_html_theme_base
     {
         if (isset($post['avatar']) && (($class == 'qa-q-view' && qa_opt('marker_plugin_a_qv')) || ($class == 'qa-q-item' && qa_opt('marker_plugin_a_qi')) || ($class == 'qa-a-item' && qa_opt('marker_plugin_a_a')) || ($class == 'qa-c-item' && qa_opt('marker_plugin_a_c')))) {
             $uid = $post['raw']['userid'];
-            $image = $this->get_role_marker($uid, qa_opt('marker_plugin_icons_images'));
+            $image = $this->get_role_marker($uid);
             $post['avatar'] = $image . @$post['avatar'];
         }
         qa_html_theme_base::post_avatar($post, $class, $prefix);
@@ -26,16 +26,14 @@ class qa_html_theme_layer extends qa_html_theme_base
         if (isset($post['who']) && (($class == 'qa-q-view' && qa_opt('marker_plugin_w_qv')) || ($class == 'qa-q-item' && qa_opt('marker_plugin_w_qi')) || ($class == 'qa-a-item' && qa_opt('marker_plugin_w_a')) || ($class == 'qa-c-item' && qa_opt('marker_plugin_w_c')))) {
             $handle = strip_tags($post['who']['data']);
             $uid = $this->getuserfromhandle($handle);
-            $rolename = $this->getrolename($uid, qa_opt('marker_plugin_role_names'));
-            $image = $this->get_role_marker($uid, qa_opt('marker_plugin_icons_images'));
-            $post['who']['data'] = $rolename . $image . $post['who']['data'];
+            $image = $this->get_role_marker($uid);
+            $post['who']['data'] = $image . $post['who']['data'];
         }
         if (isset($post['who_2']) && (($class == 'qa-q-view' && qa_opt('marker_plugin_w_qv')) || ($class == 'qa-q-item' && qa_opt('marker_plugin_w_qi')) || ($class == 'qa-a-item' && qa_opt('marker_plugin_w_a')) || ($class == 'qa-c-item' && qa_opt('marker_plugin_w_c')))) {
             $handle = strip_tags($post['who_2']['data']);
             $uid = $this->getuserfromhandle($handle);
-            $rolename = $this->getrolename($uid, qa_opt('marker_plugin_role_names'));
-            $image = $this->get_role_marker($uid, qa_opt('marker_plugin_icons_images'));
-            $post['who_2']['data'] = $rolename . $image . $post['who_2']['data'];
+            $image = $this->get_role_marker($uid);
+            $post['who_2']['data'] = $image . $post['who_2']['data'];
         }
 
         qa_html_theme_base::post_meta($post, $class, $prefix, $separator);
@@ -45,16 +43,15 @@ class qa_html_theme_layer extends qa_html_theme_base
         if (qa_opt('marker_plugin_w_users') && $class == 'qa-top-users') {
             $handle = strip_tags($item['label']);
             $uid = $this->getuserfromhandle($handle);
-            $rolename = $this->getrolename($uid, qa_opt('marker_plugin_role_names'));
-            $image = $this->get_role_marker($uid, qa_opt('marker_plugin_icons_images'));
-            $item['label'] = $rolename . $image . $item['label'];
+            $image = $this->get_role_marker($uid);
+            $item['label'] = $image . $item['label'];
         }
         qa_html_theme_base::ranking_label($item, $class);
     }
 
     // worker
 
-    function get_role_marker($uid, $switch)
+    function get_role_marker($uid)
     {
         if (QA_FINAL_EXTERNAL_USERS) {
             $user = get_userdata($uid);
@@ -93,10 +90,14 @@ class qa_html_theme_layer extends qa_html_theme_base
                 return;
         }
 
-        if ($switch)
+        if (qa_opt('marker_plugin_icons_images')) {
             return '<div class="qa-avatar-marker"><img title="' . qa_html($level) . '" width="20" src="' . QA_HTML_THEME_LAYER_URLTOROOT . $img . '.png"/></div>';
-        else
-            return '<span class="qa-who-marker qa-who-marker-' . $img . '" title="' . qa_html($level) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
+        } else {
+            if (qa_opt('marker_plugin_role_names'))
+                return '<span class="qa-who-marker qa-who-marker-' . $img . '" title="' . qa_html($level) . '"> [' . $this->getrolename($uid) . '] ' . qa_opt('marker_plugin_who_text') . '</span>';
+            else
+                return '<span class="qa-who-marker qa-who-marker-' . $img . '" title="' . qa_html($level) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
+        }
     }
     function getuserfromhandle($handle)
     {
@@ -117,7 +118,7 @@ class qa_html_theme_layer extends qa_html_theme_base
         if (!isset($userid)) return;
         return $userid;
     }
-    function getrolename($uid, $switch)
+    function getrolename($uid)
     {
         $rolename = '';
         $levelno = qa_db_read_one_value(
@@ -139,6 +140,7 @@ class qa_html_theme_layer extends qa_html_theme_base
         else
             return;
 
-        return $switch ? '<b>[' . $rolename . ']</b> ' : '';
+        //return $switch ? '<b>[' . $rolename . ']</b> ' : '';
+        return $rolename;
     }
 }
