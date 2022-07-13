@@ -12,6 +12,7 @@ RUN docker-php-ext-install calendar
 RUN apt-get update && apt-get upgrade -y && apt-get install -y libpng-dev
 
 # Install GD library for dynamic image creation
+RUN apt-get install -y libjpeg-dev libfreetype6-dev
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install -j$(nproc) gd
 

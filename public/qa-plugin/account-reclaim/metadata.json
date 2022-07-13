@@ -1,0 +1,14 @@
+{
+    "name": "Account Reclaim Page",
+    "uri": "TODO",
+    "description": "Adds an Account Reclamation page",
+    "version": "0.1",
+    "date": "2022-07-08",
+    "author": "Lingxin Chen, Danny Hammer, Daniel March",
+    "author_uri": "TODO",
+    "license": "GPLv2",
+    "update_uri": "TODO",
+    "min_q2a": "1.8.6",
+    "min_php": "7.4",
+    "load_order": "after_db_init"
+}
