@@ -23,5 +23,5 @@ return array(
     'reclaim_page_title' => 'Finish Reclaiming Your Account',
     
     'archived_warning' => "Email belongs to an archived account see the \"Reclaim your account\" page!
-    \n\nClick \"Register\" again to abandon your archived account (Not recommended).",
+    \n\nIf you click \"Register\" again you will abandon your archived account and create a new one (Not recommended).",
 );

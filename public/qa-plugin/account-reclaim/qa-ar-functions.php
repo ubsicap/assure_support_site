@@ -29,6 +29,47 @@ function qa_ar_db_user_find_by_email($email)
     ));
 }
 
+/**
+ * Return if the email matches an entry on the archived email list
+ *
+ * @param $email
+ * @return array
+ */
+function qa_ar_db_is_archived_email($email)
+{
+    $returnVal = qa_db_read_one_value(qa_db_query_sub(
+		'SELECT COUNT(*) FROM ^accountreclaim WHERE email=$', $email
+	));
+    return ($returnVal==null);
+}
+
+/**
+ * Return the flag value of the lastcreate of the given email, assumes the email is in the list
+ *
+ * @param $email
+ * @return array
+ */
+function qa_ar_db_get_email_flag($email)
+{
+    return qa_db_read_one_value(qa_db_query_sub(
+		'SELECT lastcreate FROM ^accountreclaim WHERE email=$', $email
+	));
+}
+
+/**
+ * Remove an account by email from qa_accountreclaim
+ *
+ * @param $email
+ * @return none
+ */
+function qa_ar_db_remove_email($email)
+{
+    qa_db_query_sub(
+		'DELETE FROM ^accountreclaim WHERE email=#',
+		$email
+	);
+}
+
 
 
 /**
