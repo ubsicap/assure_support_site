@@ -10,6 +10,7 @@ return array(
     'recover_email_label' => 'Enter the email address associated with your original account',
     'reclaim_email_label' => 'A recovery code has been sent to the following email address:',
     'reclaim_code_label' => 'Enter the recovery code here:',
+    'recover_user_not_found' => 'Could not find account associated with that email. Please try another address.',
     'send_recover_note' => 'An email will be sent to you with further instructions',
     'send_recover_button' => 'Send Recover Account Email',
     'recover_page_description' => 'In here goes the text that describes the account reclaim process.
@@ -20,7 +21,8 @@ return array(
 <br>5 - Format this text cleanly, like ending with a horizontal line.
 <br>6 - Explain that they must be LOGGED OUT to reclaim an account',
     'already_logged_in' => 'You cannot reclaim an account- you are already logged in!',
-    'recover_body' => "Please click below to recover your previous Discourse account and migrate it to ^site_title.\n\n^url\n\nAlternatively, enter the code below into the field provided.\n\nCode: ^code\n\nIf you did not ask to reset your password, please ignore this message.\n\nThank you,\n^site_title",
+    'recover_name' => 'Paratext Support User',
+    'recover_body' => "Please click below to recover your previous support.paratext.org account and migrate it to ^site_title.\n\n^url\n\nAlternatively, enter the code below into the field provided.\n\nCode: ^code\n\nIf you did not ask to reset your password, please ignore this message.\n\nThank you,\n^site_title",
     'recover_subject' => '^site_title - Recover Existing Account',
     'reclaim_page_title' => 'Finish Reclaiming Your Account',
     'reclaim_enter_new_username' => 'We recommend that you update your username. The current username for your account is provided below. You may choose to keep this username, or create a new one. Please note that this forum is publicly available, so be mindful about choosing a username that contains any identifying information.',

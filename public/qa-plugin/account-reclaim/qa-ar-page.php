@@ -120,7 +120,7 @@ function generate_recover_content($request, $qa_content)
             $matchusers = qa_ar_db_user_find_by_email($inemailhandle);
 
             if (count($matchusers) != 1) { // if we get more than one match (should be impossible) also give an error
-                $errors['emailhandle'] = qa_lang('users/user_not_found');
+                $errors['emailhandle'] = qa_lang('qa-ar/recover_user_not_found');
             }
 
             if (qa_opt('captcha_on_reset_password')) {
