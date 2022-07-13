@@ -218,7 +218,7 @@ function generate_reclaim_content($request, $qa_content)
     }
 
     if (qa_is_logged_in()) {
-        //qa_redirect('');
+        qa_redirect('');
     }
 
     // Fetch the email or handle from POST or GET
