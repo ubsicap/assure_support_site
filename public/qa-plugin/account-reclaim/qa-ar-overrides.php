@@ -101,7 +101,7 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
 
         // Delete this user's entry in the account reclaim table
         $sql = 'DELETE FROM ^accountreclaim WHERE ^accountreclaim.userid=$';
-        qa_db_query_sub($sql, $userid);
+        qa_db_query_sub($sql, $userId);
 
         $userInfo = qa_db_select_with_pending(qa_db_user_account_selectspec($userId, true));
 
