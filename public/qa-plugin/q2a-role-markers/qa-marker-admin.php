@@ -57,6 +57,7 @@ class qa_marker_admin
             qa_opt('marker_plugin_css_2', qa_post_text('marker_plugin_css_2'));
             qa_opt('marker_plugin_who_text', qa_post_text('marker_plugin_who_text'));
             qa_opt('marker_plugin_icons_images', (bool)qa_post_text('marker_plugin_icons_images'));
+            qa_opt('marker_plugin_role_names', (bool)qa_post_text('marker_plugin_role_names'));
 
 
             qa_opt('marker_plugin_a_qv', (bool)qa_post_text('marker_plugin_a_qv'));
@@ -176,6 +177,12 @@ class qa_marker_admin
             'label' => 'Show images instead of icons',
             'tags' => 'NAME="marker_plugin_icons_images"',
             'value' => qa_opt('marker_plugin_icons_images'),
+            'type' => 'checkbox',
+        );
+        $fields[] = array(
+            'label' => 'Show role names',
+            'tags' => 'NAME="marker_plugin_role_names"',
+            'value' => qa_opt('marker_plugin_role_names'),
             'type' => 'checkbox',
         );
 
