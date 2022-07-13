@@ -139,6 +139,6 @@ class qa_html_theme_layer extends qa_html_theme_base
         else
             return;
 
-        return $switch ? '<b>[' . $rolename . ']</b>' : '';
+        return $switch ? '<b>[' . $rolename . ']</b> ' : '';
     }
 }
