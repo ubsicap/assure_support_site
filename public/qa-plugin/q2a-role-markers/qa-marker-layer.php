@@ -94,7 +94,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             return '<div class="qa-avatar-marker"><img title="' . qa_html($level) . '" width="20" src="' . QA_HTML_THEME_LAYER_URLTOROOT . $img . '.png"/></div>';
         } else {
             if (qa_opt('marker_plugin_role_names'))
-                return '<span class="qa-who-marker-' . $img . '" title="' . qa_html($level) . '">  [' . $this->getrolename($uid) . ']  </span><span class="qa-who-marker qa-who-marker-' . $img . '" title="' . qa_html($level) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
+                return '<span class="qa-who-marker-' . $img . '" title="' . qa_html($level) . '">&nbsp;[' . $this->getrolename($uid) . ']  </span><span class="qa-who-marker qa-who-marker-' . $img . '" title="' . qa_html($level) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
             else
                 return '<span class="qa-who-marker qa-who-marker-' . $img . '" title="' . qa_html($level) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
         }
