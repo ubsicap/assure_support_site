@@ -6,11 +6,7 @@
 		
 		function process_event($event, $userid, $handle, $cookieid, $params) {
 			
-			if (qa_opt('badge_active')) 
-			{
-				debug_to_console($event);
-
-
+			if (qa_opt('badge_active')) {
 				switch ($event) {
 
 					// when a new question, answer or comment is created. The $params array contains full information about the new post, including its ID in $params['postid'] and textual content in $params['text'].
@@ -651,25 +647,3 @@
 			return $result;
 		}
 	}
-
-
-
-/**
- * Simple helper to debug to the console
- *
- * @param $data object, array, string $data
- * @param $context string  Optional a description.
- *
- * @return string
- */
-function debug_to_console($data, $context = 'Debug in Console') {
-
-    // Buffering to solve problems frameworks, like header() in this and not a solid return.
-    ob_start();
-
-    $output  = 'console.info(\'' . $context . ':\');';
-    $output .= 'console.log(' . json_encode($data) . ');';
-    $output  = sprintf('<script>%s</script>', $output);
-
-    echo $output;
-}
