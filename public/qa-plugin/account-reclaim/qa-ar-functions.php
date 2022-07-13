@@ -39,8 +39,10 @@ function qa_ar_db_is_archived_email($email)
 {
     $returnVal = qa_db_read_one_value(qa_db_query_sub(
 		'SELECT COUNT(*) FROM ^accountreclaim WHERE email=$', $email
-	));
-    return ($returnVal==null);
+	), true); //allow empty
+
+    
+    return ($returnVal==null); //if value is not null account exists
 }
 
 /**

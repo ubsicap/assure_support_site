@@ -19,7 +19,8 @@ class qa_ar_filter
     {
 
         //check if email belongs to an archived account
-        return qa_ar_db_is_archived_email($email);
+        debug_to_console($email);
+        debug_to_console(qa_ar_db_is_archived_email($email));
         if(qa_ar_db_is_archived_email($email))
         {
             //if so check the last login attempt time, if it was recent (< 10 minutes)
@@ -29,4 +30,23 @@ class qa_ar_filter
     }
 }
 
+/**
+ * Simple helper to debug to the console
+ *
+ * @param $data object, array, string $data
+ * @param $context string  Optional a description.
+ *
+ * @return string
+ */
+function debug_to_console($data, $context = 'Debug in Console') {
+
+    // Buffering to solve problems frameworks, like header() in this and not a solid return.
+    ob_start();
+
+    $output  = 'console.info(\'' . $context . ':\');';
+    $output .= 'console.log(' . json_encode($data) . ');';
+    $output  = sprintf('<script>%s</script>', $output);
+
+    echo $output;
+}
 
