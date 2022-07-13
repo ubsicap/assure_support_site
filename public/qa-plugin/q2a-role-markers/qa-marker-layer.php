@@ -15,7 +15,7 @@ class qa_html_theme_layer extends qa_html_theme_base
     {
         if (isset($post['avatar']) && (($class == 'qa-q-view' && qa_opt('marker_plugin_a_qv')) || ($class == 'qa-q-item' && qa_opt('marker_plugin_a_qi')) || ($class == 'qa-a-item' && qa_opt('marker_plugin_a_a')) || ($class == 'qa-c-item' && qa_opt('marker_plugin_a_c')))) {
             $uid = $post['raw']['userid'];
-            $image = $this->get_role_marker($uid, qa_opt('market_plugin_icons_images'));
+            $image = $this->get_role_marker($uid, qa_opt('marker_plugin_icons_images'));
             $post['avatar'] = $image . @$post['avatar'];
         }
         qa_html_theme_base::post_avatar($post, $class, $prefix);
@@ -25,13 +25,13 @@ class qa_html_theme_layer extends qa_html_theme_base
         if (isset($post['who']) && (($class == 'qa-q-view' && qa_opt('marker_plugin_w_qv')) || ($class == 'qa-q-item' && qa_opt('marker_plugin_w_qi')) || ($class == 'qa-a-item' && qa_opt('marker_plugin_w_a')) || ($class == 'qa-c-item' && qa_opt('marker_plugin_w_c')))) {
             $handle = strip_tags($post['who']['data']);
             $uid = $this->getuserfromhandle($handle);
-            $image = $this->get_role_marker($uid, qa_opt('market_plugin_icons_images'));
+            $image = $this->get_role_marker($uid, qa_opt('marker_plugin_icons_images'));
             $post['who']['data'] = $image . $post['who']['data'];
         }
         if (isset($post['who_2']) && (($class == 'qa-q-view' && qa_opt('marker_plugin_w_qv')) || ($class == 'qa-q-item' && qa_opt('marker_plugin_w_qi')) || ($class == 'qa-a-item' && qa_opt('marker_plugin_w_a')) || ($class == 'qa-c-item' && qa_opt('marker_plugin_w_c')))) {
             $handle = strip_tags($post['who_2']['data']);
             $uid = $this->getuserfromhandle($handle);
-            $image = $this->get_role_marker($uid, qa_opt('market_plugin_icons_images'));
+            $image = $this->get_role_marker($uid, qa_opt('marker_plugin_icons_images'));
             $post['who_2']['data'] = $image . $post['who_2']['data'];
         }
 
@@ -42,7 +42,7 @@ class qa_html_theme_layer extends qa_html_theme_base
         if (qa_opt('marker_plugin_w_users') && $class == 'qa-top-users') {
             $handle = strip_tags($item['label']);
             $uid = $this->getuserfromhandle($handle);
-            $image = $this->get_role_marker($uid, qa_opt('market_plugin_icons_images'));
+            $image = $this->get_role_marker($uid, qa_opt('marker_plugin_icons_images'));
             $item['label'] = $image . $item['label'];
         }
         qa_html_theme_base::ranking_label($item, $class);
