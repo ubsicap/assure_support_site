@@ -56,7 +56,7 @@ function qa_ar_db_get_email_flag($email)
 	));
 
     if($dateTime == null) //null, return earliest time
-        return new DateTime('0');
+        return (new DateTime())->setTimestamp(0); //1970
     else //return as a DateTime object
         return new DateTime($dateTime);
 }
