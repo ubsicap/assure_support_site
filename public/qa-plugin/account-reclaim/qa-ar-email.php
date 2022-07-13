@@ -21,8 +21,6 @@ class qa_ar_filter
         //check if email belongs to an archived account
         if(qa_ar_db_is_archived_email($email))
         {
-            debug_to_console(qa_ar_db_get_email_flag($email));
-            debug_to_console(new DateTime());
             if(true) //not a recent login attempt
             {
                 qa_ar_db_update_email_flag($email); //update the flag
