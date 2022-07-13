@@ -29,6 +29,6 @@ return array(
     'reclaim_set_new_pass' => 'Set a new password for this account.',
     'reclaim_finish' => 'Update Username and Password',
 
-    'archived_warning' => "Email belongs to an archived account, see the <a href='https://supportsitetest.tk/recover-account' rel='noopener noreferrer'>Reclaim Your Account</a> page! 
+    'archived_warning' => "Email belongs to an archived account, see the \"<a href='https://supportsitetest.tk/recover-account' rel='noopener noreferrer'>Reclaim Account</a>\" page! 
     If you click \"Register\" again you will abandon your archived account to create a new one (Not recommended).",
 );
