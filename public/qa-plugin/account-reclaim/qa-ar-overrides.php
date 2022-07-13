@@ -45,12 +45,12 @@ function qa_start_reset_user($userid, $reclaim = false)
             'single' => true,
         ));
 
-        // Send an email to the user. Note we don't have their username, so that's null
-        if (!qa_send_notification($userid, $userinfo['email'], null, qa_lang('qa-ar/recover_subject'), qa_lang('qa-ar/recover_body'), array(
+        // Send an email to the user.
+        if (!qa_send_notification($userid, $userinfo['email'], qa_lang('qa-ar/recover_name'), qa_lang('qa-ar/recover_subject'), qa_lang('qa-ar/recover_body'), array(
             '^code' => $userinfo['reclaimcode'],
-            '^url' => qa_path_absolute('reset', array('c' => $userinfo['reclaimcode'], 'e' => $userinfo['email'])),
+            '^url' => qa_path_absolute('reclaim', array('c' => $userinfo['reclaimcode'], 'e' => $userinfo['email'])),
         ))) {
-            qa_fatal_error('Could not send reset password email');
+            qa_fatal_error('Could not send Account Recovery email');
         }
     } else {
         qa_start_reset_user_base($userid);
