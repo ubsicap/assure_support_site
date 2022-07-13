@@ -38,15 +38,14 @@ function qa_start_reset_user($userid, $reclaim = false)
         qa_db_query_sub($sql, qa_db_user_rand_emailcode(), $userid);
 
         // This query gets us the correct row from qa_accountreclaim
-        $selectspec = array(
+        $userinfo = qa_db_single_select(array(
             'columns' => array('^accountreclaim.userid', '^accountreclaim.email', '^accountreclaim.reclaimcode'),
             'source' => '^accountreclaim WHERE ^accountreclaim.userid=$',
             'arguments' => array($userid),
             'single' => true,
-        );
+        ));
 
-        $userinfo = qa_db_single_select($selectspec);
-
+        // Send an email to the user. Note we don't have their username, so that's null
         if (!qa_send_notification($userid, $userinfo['email'], null, qa_lang('qa-ar/recover_subject'), qa_lang('qa-ar/recover_body'), array(
             '^code' => $userinfo['reclaimcode'],
             '^url' => qa_path_absolute('reset', array('c' => $userinfo['reclaimcode'], 'e' => $userinfo['email'])),

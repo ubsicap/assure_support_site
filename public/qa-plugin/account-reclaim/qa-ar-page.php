@@ -169,7 +169,7 @@ function generate_recover_content($request, $qa_content)
 
         'fields' => array(
             'email_handle' => array(
-                'label' => qa_lang_html('qa-ar/email_label'),
+                'label' => qa_lang_html('qa-ar/recover_email_label'),
                 'tags' => 'name="emailhandle" id="emailhandle"',
                 'value' => qa_html(@$inemailhandle),
                 'error' => qa_html(@$errors['emailhandle']),
@@ -235,7 +235,7 @@ function generate_reclaim_content($request, $qa_content)
     }
     $code = trim($code); // if $code is null, trim returns an empty string
 
-    $forgotPath = strlen($emailHandle) > 0 ? qa_path('forgot', array('e' => $emailHandle)) : qa_path('forgot');
+    $recoverPath = strlen($emailHandle) > 0 ? qa_path('recover-account', array('e' => $emailHandle)) : qa_path('recover-account');
 
     $focusId = 'code';
 
@@ -243,16 +243,16 @@ function generate_reclaim_content($request, $qa_content)
     $fields = array(
         'email_handle' => array(
             'type' => 'static',
-            'label' => qa_lang_html(qa_opt('allow_login_email_only') ? 'users/email_label' : 'users/email_handle_label'),
+            'label' => qa_lang_html('qa-ar/reclaim_email_label'),
             'value' => qa_html($emailHandle),
         ),
         'code' => array(
-            'label' => qa_lang_html('users/email_code_label'),
+            'label' => qa_lang_html('qa-ar/reclaim_code_label'),
             'tags' => 'name="code" id="code"',
             'value' => isset($code) ? qa_html($code) : null,
             'note_force' => true,
             'note' => qa_lang_html('users/email_code_emailed') . ' - ' .
-                '<a href="' . qa_html($forgotPath) . '">' . qa_lang_html('users/email_code_another') . '</a>',
+                '<a href="' . qa_html($recoverPath) . '">' . qa_lang_html('users/email_code_another') . '</a>',
         ),
     );
     $buttons = array(
@@ -262,18 +262,18 @@ function generate_reclaim_content($request, $qa_content)
         ),
     );
     $hidden = array(
-        'formcode' => qa_get_form_security_code('reset'),
+        'formcode' => qa_get_form_security_code('reclaim'),
     );
 
+    // If an email address has been provided, perform the reclaim process
     if (strlen($emailHandle) > 0) {
         require_once QA_INCLUDE_DIR . 'app/users-edit.php';
         require_once QA_INCLUDE_DIR . 'db/users.php';
 
         $hidden['emailhandle'] = $emailHandle;
 
-        $matchingUsers = qa_opt('allow_login_email_only') || strpos($emailHandle, '@') !== false // handles can't contain @ symbols
-            ? qa_db_user_find_by_email($emailHandle)
-            : qa_db_user_find_by_handle($emailHandle);
+        // Find the user in the qa_accountreclaim table
+        $matchingUsers = qa_ar_db_user_find_by_email($emailHandle);
 
         // Make sure there is only one match
         if (count($matchingUsers) == 1) {
@@ -282,9 +282,19 @@ function generate_reclaim_content($request, $qa_content)
             // strlen() check is vital otherwise we can reset code for most users by entering the empty string
             if (strlen($code) > 0) {
                 $userId = $matchingUsers[0];
+                // This is the correct row from qa_users
                 $userInfo = qa_db_select_with_pending(qa_db_user_account_selectspec($userId, true));
 
-                if (strtolower(trim($userInfo['emailcode'])) == strtolower($code)) {
+                // This query gets us the correct row from qa_accountreclaim
+                $reclaimInfo = qa_db_single_select(array(
+                    'columns' => array('^accountreclaim.userid', '^accountreclaim.email', '^accountreclaim.reclaimcode'),
+                    'source' => '^accountreclaim WHERE ^accountreclaim.userid=$',
+                    'arguments' => array($userId),
+                    'single' => true,
+                ));
+
+                // Check if the reclaim code generated is the same as the code entered
+                if (strtolower(trim($reclaimInfo['reclaimcode'])) == strtolower($code)) {
                     // User input a valid code so no need to ask for it but pass it to the next step
                     unset($fields['code']);
                     $hidden['code'] = $code;
@@ -302,7 +312,7 @@ function generate_reclaim_content($request, $qa_content)
                         $newPassword = qa_post_text('newpassword1');
                         $repeatPassword = qa_post_text('newpassword2');
 
-                        if (!qa_check_form_security_code('reset', qa_post_text('formcode'))) {
+                        if (!qa_check_form_security_code('reclaim', qa_post_text('formcode'))) {
                             $errors['page'] = qa_lang_html('misc/form_security_again');
                         } else {
                             $passwordError = qa_password_validate($newPassword, $userInfo);
@@ -357,13 +367,13 @@ function generate_reclaim_content($request, $qa_content)
 
     $qa_content = qa_content_prepare();
 
-    $qa_content['title'] = qa_lang_html('users/reset_title');
+    $qa_content['title'] = qa_lang_html('qa-ar/reclaim_page_title');
     $qa_content['error'] = isset($errors['page']) ? $errors['page'] : null;
 
     if (!isset($errors['page'])) {
         // Using this form action instead of qa_self_html() to get rid of the 's' (success) GET parameter from forgot.php
         $qa_content['form'] = array(
-            'tags' => 'method="post" action="' . qa_path_html('reset') . '"',
+            'tags' => 'method="post" action="' . qa_path_html('account-reclaim') . '"',
 
             'style' => 'tall',
 
