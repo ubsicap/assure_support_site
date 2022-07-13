@@ -29,13 +29,13 @@ class qa_marker_admin
 	color: #4D90FE;
 }				
 .qa-who-marker-editor {
-	color: #CB9114;
+	color: #2ccb14;
 }				
 .qa-who-marker-moderator {
-	color: #CDCDCD;
+	color: #db0707;
 }				
 .qa-who-marker-admin {
-	color: #EEDD0F;
+	color: #a8a822;
 }				
 .qa-avatar-marker {
 	right:0;
