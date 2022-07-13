@@ -6,8 +6,10 @@
 
     This plugin provides the following modules:
         - A page module for the Account Reclaim page
-        - A module for managing an Account Reclaim table
-            in the database
+        - A module for managing an Account Reclaim table in the database
+        - An override module for handling user account resetting
+        - A language module
+        - A filter module for alerting users if they try to login with an archived account
 */
 if (!defined('QA_VERSION')) { // don't allow this page to be requested directly from browser
     header('Location: ../../');
