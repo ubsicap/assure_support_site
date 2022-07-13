@@ -27,6 +27,9 @@ class qa_ar_filter
             {
                 $currTime = new DateTime();
                 $timeSinceLogin = date_diff($currTime, $lastAttemptTime); //difference
+                debug_to_console($currTime);
+                debug_to_console($lastAttemptTime);
+                debug_to_console($currTime - $lastAttemptTime);
             }
             debug_to_console($timeSinceLogin);
             if(true) //not a recent login attempt
