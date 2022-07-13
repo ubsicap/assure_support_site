@@ -325,9 +325,10 @@ function generate_reclaim_content($request, $qa_content)
                             }
 
                             if (empty($errors)) {
-                                // Update password, login user, fire events and redirect to home page
-                                qa_finish_reset_user($userId, $newPassword);
-                                qa_redirect('');
+                                // Update password, login user, fire events and redirect to account page
+                                $newUsername = strtok($emailHandle, '@');
+                                qa_finish_reset_user($userId, $newPassword, $emailHandle, $newUsername);
+                                qa_redirect('account');
                             }
                         }
                     }
