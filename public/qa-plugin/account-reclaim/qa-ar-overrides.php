@@ -138,7 +138,7 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
 function qa_create_new_user($email, $password, $handle, $level = QA_USER_LEVEL_BASIC, $confirmed = false)
 {
     //remove if an archived account exists with that email
-    if(qa_ar_db_is_archived_email($email))
+    if($email!=null && qa_ar_db_is_archived_email($email))
         qa_ar_db_remove_email($email);
     //then create the user as normal using the base function
     return qa_create_new_user_base($email, $password, $handle, $level, $confirmed);
