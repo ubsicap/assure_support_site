@@ -322,8 +322,22 @@ function generate_reclaim_content($request, $qa_content)
                             // Un-muting this displays some MySQL error about escaped strings...
                             $usernameError = @qa_handle_email_filter($newUsername, $emailHandle);
 
-                            if (!empty($usernameError)) {
+                            if (isset($usernameError['handle'])) {
                                 $errors['new_0'] = $usernameError['handle'];
+
+                                // If the error is that we are trying to use the same anonymous username that is already set,
+                                //      just ignore it. After all, you can change your username to itself!
+                                if ($usernameError['handle'] == qa_lang('users/handle_exists')) {
+                                    $requestedUser = qa_db_single_select(array(
+                                        'columns' => array('^users.userid'),
+                                        'source' => '^users WHERE ^users.handle=$',
+                                        'arguments' => array($newUsername),
+                                        'single' => true,
+                                    ));
+                                    if (isset($requestedUser['userid']) && $requestedUser['userid'] == $userId) {
+                                        unset($errors['new_0']);
+                                    }
+                                }
                             }
 
                             if (!empty($passwordError)) {
@@ -346,7 +360,7 @@ function generate_reclaim_content($request, $qa_content)
                     $fields['new_0'] = array(
                         'label' => qa_lang_html('qa-ar/reclaim_enter_new_username'),
                         'tags' => 'name="newusername" id="newusername"',
-                        'value' => isset($userInfo['handle']) ? $userInfo['handle'] : '',
+                        'value' => isset($newUsername) ? $newUsername : (isset($userInfo['handle']) ? $userInfo['handle'] : ''),
                         'error' => qa_html(isset($errors['new_0']) ? $errors['new_0'] : null),
                     );
 
