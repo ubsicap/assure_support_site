@@ -21,11 +21,11 @@ class qa_ar_filter
         //check if email belongs to an archived account
         if(qa_ar_db_is_archived_email($email))
         {
+            debug_to_console(qa_ar_db_get_email_flag($email));
             if(true) //not a recent login attempt
             {
-                //user exists, warn the user and update the flag
-                
-                return qa_lang('qa-ar/archived_warning');
+                qa_ar_db_update_email_flag($email); //update the flag
+                return qa_lang('qa-ar/archived_warning'); //warn the user
             }
             //otherwise a recent login attempt, let the user register.
         }
