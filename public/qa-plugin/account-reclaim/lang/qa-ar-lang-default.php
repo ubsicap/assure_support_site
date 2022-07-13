@@ -24,6 +24,6 @@ return array(
     'recover_subject' => '^site_title - Recover Existing Account', 
     'reclaim_page_title' => 'Finish Reclaiming Your Account',
     
-    'archived_warning' => "Email belongs to an archived account see the \"Reclaim your account\" page!
-    \n\nIf you click \"Register\" again you will abandon your archived account and create a new one (Not recommended).",
+    'archived_warning' => "Email belongs to an archived account, see the \"Reclaim your account\" page! 
+    If you click \"Register\" again you will abandon your archived account to create a new one (Not recommended).",
 );
