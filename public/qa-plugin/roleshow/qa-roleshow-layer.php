@@ -20,19 +20,19 @@ class qa_html_theme_layer extends qa_html_theme_base
 
         switch ($level) {
             case QA_USER_LEVEL_SUPER:
-        $post['who']['data'] = '[Super Administrator] ' . @$post['who']['data'];
+        $post['who']['data'] = '<b>[Super Administrator]</b> ' . @$post['who']['data'];
                 break;
             case QA_USER_LEVEL_ADMIN:
-        $post['who']['data'] = '[Administrator] ' . @$post['who']['data'];
+        $post['who']['data'] = '<b>[Administrator]</b> ' . @$post['who']['data'];
                 break;
             case QA_USER_LEVEL_MODERATOR:
-        $post['who']['data'] = '[Moderator] ' . @$post['who']['data'];
+        $post['who']['data'] = '<b>[Moderator]</b> ' . @$post['who']['data'];
                 break;
             case QA_USER_LEVEL_EDITOR:
-        $post['who']['data'] = '[Editor] ' . @$post['who']['data'];
+        $post['who']['data'] = '<b>[Editor]</b> ' . @$post['who']['data'];
                 break;
             case QA_USER_LEVEL_EXPERT:
-        $post['who']['data'] = '[Expert] ' . @$post['who']['data'];
+        $post['who']['data'] = '<b>[Expert]</b> ' . @$post['who']['data'];
                 break;
             case QA_USER_LEVEL_APPROVED:
                 break;
