@@ -12,7 +12,7 @@ class qa_marker_admin
 
         switch ($option) {
             case 'marker_plugin_who_text':
-                return '&diams;';
+                return '&#x2020';
             case 'marker_plugin_css_2':
                 return '
 .qa-q-item-avatar,.qa-q-view-avatar,.qa-a-item-avatar,.qa-c-item-avatar {
