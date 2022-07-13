@@ -39,14 +39,12 @@ function qa_ar_db_is_archived_email($email)
 {
     $returnVal = qa_db_read_one_value(qa_db_query_sub(
 		'SELECT COUNT(*) FROM ^accountreclaim WHERE email=$', $email
-	), true); //allow empty
+	));
     return $returnVal;
-    
-    return ($returnVal==null); //if value is not null account exists
 }
 
 /**
- * Return the flag value of the lastcreate of the given email, assumes the email is in the list
+ * Return the flag value of the lastreclaim of the given email, WARNING: Assumes the email is in the list
  *
  * @param $email
  * @return array
@@ -54,8 +52,22 @@ function qa_ar_db_is_archived_email($email)
 function qa_ar_db_get_email_flag($email)
 {
     return qa_db_read_one_value(qa_db_query_sub(
-		'SELECT lastcreate FROM ^accountreclaim WHERE email=$', $email
+		'SELECT lastreclaim FROM ^accountreclaim WHERE email=$', $email
 	));
+}
+
+/**
+ * Return the flag value of the lastreclaim of the given email, WARNING: Assumes the email is in the list
+ *
+ * @param $email
+ * @return array
+ */
+function qa_ar_db_update_email_flag($email)
+{
+    $time = new DateTime(); //current time
+    return qa_db_query_sub(
+		'UPDATE ^accountreclaim SET lastreclaim=NOW() WHERE email=$', $email
+	);
 }
 
 /**
@@ -67,7 +79,7 @@ function qa_ar_db_get_email_flag($email)
 function qa_ar_db_remove_email($email)
 {
     qa_db_query_sub(
-		'DELETE FROM ^accountreclaim WHERE email=#',
+		'DELETE FROM ^accountreclaim WHERE email=$',
 		$email
 	);
 }
