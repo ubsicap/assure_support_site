@@ -47,7 +47,7 @@ function qa_ar_db_is_archived_email($email)
  * Return the flag value of the lastreclaim of the given email, WARNING: Assumes the email is in the list
  *
  * @param $email
- * @return array
+ * @return DateTime
  */
 function qa_ar_db_get_email_flag($email)
 {
