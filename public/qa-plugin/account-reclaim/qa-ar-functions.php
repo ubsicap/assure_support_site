@@ -38,7 +38,7 @@ function qa_ar_db_user_find_by_email($email)
 function qa_ar_db_is_archived_email($email)
 {
     $returnVal = qa_db_read_one_value(qa_db_query_sub(
-		'SELECT COUNT(*) FROM ^accountreclaim WHERE email=#', $email
+		'SELECT COUNT(*) FROM ^accountreclaim WHERE email=$', $email
 	), true); //allow empty
 
     
@@ -54,7 +54,7 @@ function qa_ar_db_is_archived_email($email)
 function qa_ar_db_get_email_flag($email)
 {
     return qa_db_read_one_value(qa_db_query_sub(
-		'SELECT lastcreate FROM ^accountreclaim WHERE email=#', $email
+		'SELECT lastcreate FROM ^accountreclaim WHERE email=$', $email
 	));
 }
 

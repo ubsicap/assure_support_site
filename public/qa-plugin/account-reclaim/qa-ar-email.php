@@ -20,6 +20,7 @@ class qa_ar_filter
 
         //check if email belongs to an archived account
         debug_to_console($email);
+        debug_to_console(qa_ar_db_user_find_by_email($email));
         debug_to_console(qa_ar_db_is_archived_email($email));
         if(qa_ar_db_is_archived_email($email))
         {
