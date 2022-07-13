@@ -51,9 +51,14 @@ function qa_ar_db_is_archived_email($email)
  */
 function qa_ar_db_get_email_flag($email)
 {
-    return qa_db_read_one_value(qa_db_query_sub(
+    $dateTime = qa_db_read_one_value(qa_db_query_sub(
 		'SELECT lastreclaim FROM ^accountreclaim WHERE email=$', $email
 	));
+
+    if($dateTime == null) //null, return earliest time
+        return new DateTime('0');
+    else //return as a DateTime object
+        return new DateTime($dateTime);
 }
 
 /**

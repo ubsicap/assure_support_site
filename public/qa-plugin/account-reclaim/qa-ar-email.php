@@ -21,16 +21,14 @@ class qa_ar_filter
         //check if email belongs to an archived account
         if(qa_ar_db_is_archived_email($email))
         {
-            $timeSinceLogin = 10000; //in minutes since the last login attempt, start with arbitrary high value
             $lastAttemptTime = qa_ar_db_get_email_flag($email); //null or last register time attempt
-            if($lastAttemptTime != null)
-            {
-                $currTime = new DateTime();
-                $timeSinceLogin = date_diff($currTime, $lastAttemptTime); //difference
-                debug_to_console($currTime);
-                debug_to_console($lastAttemptTime);
-                debug_to_console($currTime - $lastAttemptTime);
-            }
+
+            $currTime = new DateTime();
+            $timeSinceLogin = date_diff($currTime, $lastAttemptTime); //difference
+            debug_to_console($currTime);
+            debug_to_console($lastAttemptTime);
+            debug_to_console($currTime - $lastAttemptTime);
+            
             debug_to_console($timeSinceLogin);
             if(true) //not a recent login attempt
             {
