@@ -1,31 +1,53 @@
 <?php
 /*
-        File: qa-plugin/account-reclaim/qa-ar-email.php
-        Description: Warns users if they register with an archived account
+    File: qa-plugin/account-reclaim/qa-ar-email.php
+    Description: Warns users if they register with an archived account
 */
 
-//needs access to database to read from 
+//database reading/setting functions
+require_once QA_PLUGIN_DIR . 'account-reclaim/qa-ar-functions.php';
 
 class qa_ar_filter
-{
-    static $callCount = 0; //how many times the function has been called
-
+    {
     /**
-     * Check 
+     * Check if an email matches an archived account
      * 
      * @param $email the email entered by the user
      * @return error Message if email belongs to an archived user, otherwise nothing is returned
-     */
+    */
     public function filter_email(&$email, $olduser)
-	{
-        //check if email belongs to an archived account
-        //if so check the last login attempt
-        //return nothing otherwise
+    {
 
-        self::$callCount++;
-        return strval(self::$callCount);
-        //return qa_lang('qa-ar/archived_warning'); //user exists
-	}
+        //check if email belongs to an archived account
+        debug_to_console($email);
+        debug_to_console(qa_ar_db_user_find_by_email($email));
+        debug_to_console(qa_ar_db_is_archived_email($email));
+        if(qa_ar_db_is_archived_email($email))
+        {
+            //if so check the last login attempt time, if it was recent (< 10 minutes)
+            return qa_lang('qa-ar/archived_warning'); //user exists
+        }
+        //otherwise user is valid, override qa_create_new_user to remove the email from the archived list
+    }
 }
 
+/**
+ * Simple helper to debug to the console
+ *
+ * @param $data object, array, string $data
+ * @param $context string  Optional a description.
+ *
+ * @return string
+ */
+function debug_to_console($data, $context = 'Debug in Console') {
+
+    // Buffering to solve problems frameworks, like header() in this and not a solid return.
+    ob_start();
+
+    $output  = 'console.info(\'' . $context . ':\');';
+    $output .= 'console.log(' . json_encode($data) . ');';
+    $output  = sprintf('<script>%s</script>', $output);
+
+    echo $output;
+}
 
