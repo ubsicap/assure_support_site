@@ -1,18 +1,20 @@
 <?php
-	class qa_marker_admin {
-		
-		function allow_template($template)
-		{
-			return ($template!='admin');
-		}
+class qa_marker_admin
+{
 
-		function option_default($option) {
+    function allow_template($template)
+    {
+        return ($template != 'admin');
+    }
 
-			switch($option) {
-				case 'marker_plugin_who_text':
-					return '&diams;';
-				case 'marker_plugin_css_2':
-					return '
+    function option_default($option)
+    {
+
+        switch ($option) {
+            case 'marker_plugin_who_text':
+                return '&#x271D;';
+            case 'marker_plugin_css_2':
+                return '
 .qa-q-item-avatar,.qa-q-view-avatar,.qa-a-item-avatar,.qa-c-item-avatar {
 	position:relative;
 }
@@ -27,47 +29,48 @@
 	color: #4D90FE;
 }				
 .qa-who-marker-editor {
-	color: #CB9114;
+	color: #2ccb14;
 }				
 .qa-who-marker-moderator {
-	color: #CDCDCD;
+	color: #db0707;
 }				
 .qa-who-marker-admin {
-	color: #EEDD0F;
+	color: #a8a822;
 }				
 .qa-avatar-marker {
 	right:0;
 	bottom:0;
 	position:absolute;
 }';
-				default:
-					return null;
-			}
-			
-		}
+            default:
+                return null;
+        }
+    }
 
-		function admin_form(&$qa_content)
-		{
+    function admin_form(&$qa_content)
+    {
 
-		//	Process form input
+        //	Process form input
 
-			$ok = null;
-			if (qa_clicked('marker_save_button')) {
-				qa_opt('marker_plugin_css_2',qa_post_text('marker_plugin_css_2'));
-				qa_opt('marker_plugin_who_text',qa_post_text('marker_plugin_who_text'));
+        $ok = null;
+        if (qa_clicked('marker_save_button')) {
+            qa_opt('marker_plugin_css_2', qa_post_text('marker_plugin_css_2'));
+            qa_opt('marker_plugin_who_text', qa_post_text('marker_plugin_who_text'));
+            qa_opt('marker_plugin_icons_images', (bool)qa_post_text('marker_plugin_icons_images'));
+            qa_opt('marker_plugin_role_names', (bool)qa_post_text('marker_plugin_role_names'));
 
 
-				qa_opt('marker_plugin_a_qv',(bool)qa_post_text('marker_plugin_a_qv'));
-				qa_opt('marker_plugin_a_qi',(bool)qa_post_text('marker_plugin_a_qi'));
-				qa_opt('marker_plugin_a_a',(bool)qa_post_text('marker_plugin_a_a'));
-				qa_opt('marker_plugin_a_c',(bool)qa_post_text('marker_plugin_a_c'));
+            qa_opt('marker_plugin_a_qv', (bool)qa_post_text('marker_plugin_a_qv'));
+            qa_opt('marker_plugin_a_qi', (bool)qa_post_text('marker_plugin_a_qi'));
+            qa_opt('marker_plugin_a_a', (bool)qa_post_text('marker_plugin_a_a'));
+            qa_opt('marker_plugin_a_c', (bool)qa_post_text('marker_plugin_a_c'));
 
-				qa_opt('marker_plugin_w_users',(bool)qa_post_text('marker_plugin_w_users'));
-				qa_opt('marker_plugin_w_qv',(bool)qa_post_text('marker_plugin_w_qv'));
-				qa_opt('marker_plugin_w_qi',(bool)qa_post_text('marker_plugin_w_qi'));
-				qa_opt('marker_plugin_w_a',(bool)qa_post_text('marker_plugin_w_a'));
-				qa_opt('marker_plugin_w_c',(bool)qa_post_text('marker_plugin_w_c'));
-/*
+            qa_opt('marker_plugin_w_users', (bool)qa_post_text('marker_plugin_w_users'));
+            qa_opt('marker_plugin_w_qv', (bool)qa_post_text('marker_plugin_w_qv'));
+            qa_opt('marker_plugin_w_qi', (bool)qa_post_text('marker_plugin_w_qi'));
+            qa_opt('marker_plugin_w_a', (bool)qa_post_text('marker_plugin_w_a'));
+            qa_opt('marker_plugin_w_c', (bool)qa_post_text('marker_plugin_w_c'));
+            /*
 				
 				qa_opt('share_plugin_facebook_weight',(int)qa_post_text('share_plugin_facebook_weight'));
 				qa_opt('share_plugin_twitter_weight',(int)qa_post_text('share_plugin_twitter_weight'));
@@ -80,99 +83,110 @@
 				
 				qa_opt('share_plugin_suggest',(int)qa_post_text('share_plugin_suggest'));
 				qa_opt('share_plugin_suggest_text',qa_post_text('share_plugin_suggest_text'));
-*/				
-				$ok = qa_lang('admin/options_saved');
-			}
-			else if (qa_clicked('marker_reset_button')) {
-				foreach($_POST as $i => $v) {
-					$def = $this->option_default($i);
-					if($def !== null) qa_opt($i,$def);
-				}
-				$ok = qa_lang('admin/options_reset');
-			}			
-		//	Create the form for display
-			
-		
-			$fields = array();
+*/
+            $ok = qa_lang('admin/options_saved');
+        } else if (qa_clicked('marker_reset_button')) {
+            foreach ($_POST as $i => $v) {
+                $def = $this->option_default($i);
+                if ($def !== null) qa_opt($i, $def);
+            }
+            $ok = qa_lang('admin/options_reset');
+        }
+        //	Create the form for display
 
-			$fields[] = array(
-				'label' => 'Marker custom css',
-				'tags' => 'NAME="marker_plugin_css_2"',
-				'value' => qa_opt('marker_plugin_css_2'),
-				'type' => 'textarea',
-				'rows' => 20
-			);
-			$fields[] = array(
-				'type' => 'blank',
-			);			
-			$fields[] = array(
-				'label' => 'Show avatar markers in questions on pages',
-				'tags' => 'NAME="marker_plugin_a_qv"',
-				'value' => qa_opt('marker_plugin_a_qv'),
-				'type' => 'checkbox',
-			);
-			$fields[] = array(
-				'label' => 'Show avatar markers in questions in lists',
-				'tags' => 'NAME="marker_plugin_a_qi"',
-				'value' => qa_opt('marker_plugin_a_qi'),
-				'type' => 'checkbox',
-			);
-			
-			$fields[] = array(
-				'label' => 'Show avatar markers in answers',
-				'tags' => 'NAME="marker_plugin_a_a"',
-				'value' => qa_opt('marker_plugin_a_a'),
-				'type' => 'checkbox',
-			);
-			
-			$fields[] = array(
-				'label' => 'Show avatar markers in comments',
-				'tags' => 'NAME="marker_plugin_a_c"',
-				'value' => qa_opt('marker_plugin_a_c'),
-				'type' => 'checkbox',
-			);
-			$fields[] = array(
-				'type' => 'blank',
-			);			
-			$fields[] = array(
-				'label' => 'Marker text to show before names',
-				'tags' => 'NAME="marker_plugin_who_text"',
-				'value' => qa_opt('marker_plugin_who_text'),
-			);
-			$fields[] = array(
-				'label' => 'Show markers before names in questions on pages',
-				'tags' => 'NAME="marker_plugin_w_qv"',
-				'value' => qa_opt('marker_plugin_w_qv'),
-				'type' => 'checkbox',
-			);
-			$fields[] = array(
-				'label' => 'Show markers before names in questions in lists',
-				'tags' => 'NAME="marker_plugin_w_qi"',
-				'value' => qa_opt('marker_plugin_w_qi'),
-				'type' => 'checkbox',
-			);
-			
-			$fields[] = array(
-				'label' => 'Show markers before names in answers',
-				'tags' => 'NAME="marker_plugin_w_a"',
-				'value' => qa_opt('marker_plugin_w_a'),
-				'type' => 'checkbox',
-			);
-			
-			$fields[] = array(
-				'label' => 'Show markers before names in comments',
-				'tags' => 'NAME="marker_plugin_w_c"',
-				'value' => qa_opt('marker_plugin_w_c'),
-				'type' => 'checkbox',
-			);
-			$fields[] = array(
-				'label' => 'Show markers before names in users list',
-				'tags' => 'NAME="marker_plugin_w_users"',
-				'value' => qa_opt('marker_plugin_w_users'),
-				'type' => 'checkbox',
-			);
-			
-/*
+
+        $fields = array();
+
+        $fields[] = array(
+            'label' => 'Marker custom css',
+            'tags' => 'NAME="marker_plugin_css_2"',
+            'value' => qa_opt('marker_plugin_css_2'),
+            'type' => 'textarea',
+            'rows' => 20
+        );
+        $fields[] = array(
+            'type' => 'blank',
+        );
+        $fields[] = array(
+            'label' => 'Show avatar markers in questions on pages',
+            'tags' => 'NAME="marker_plugin_a_qv"',
+            'value' => qa_opt('marker_plugin_a_qv'),
+            'type' => 'checkbox',
+        );
+        $fields[] = array(
+            'label' => 'Show avatar markers in questions in lists',
+            'tags' => 'NAME="marker_plugin_a_qi"',
+            'value' => qa_opt('marker_plugin_a_qi'),
+            'type' => 'checkbox',
+        );
+
+        $fields[] = array(
+            'label' => 'Show avatar markers in answers',
+            'tags' => 'NAME="marker_plugin_a_a"',
+            'value' => qa_opt('marker_plugin_a_a'),
+            'type' => 'checkbox',
+        );
+
+        $fields[] = array(
+            'label' => 'Show avatar markers in comments',
+            'tags' => 'NAME="marker_plugin_a_c"',
+            'value' => qa_opt('marker_plugin_a_c'),
+            'type' => 'checkbox',
+        );
+        $fields[] = array(
+            'type' => 'blank',
+        );
+        $fields[] = array(
+            'label' => 'Marker text to show before names',
+            'tags' => 'NAME="marker_plugin_who_text"',
+            'value' => qa_opt('marker_plugin_who_text'),
+        );
+        $fields[] = array(
+            'label' => 'Show markers before names in questions on pages',
+            'tags' => 'NAME="marker_plugin_w_qv"',
+            'value' => qa_opt('marker_plugin_w_qv'),
+            'type' => 'checkbox',
+        );
+        $fields[] = array(
+            'label' => 'Show markers before names in questions in lists',
+            'tags' => 'NAME="marker_plugin_w_qi"',
+            'value' => qa_opt('marker_plugin_w_qi'),
+            'type' => 'checkbox',
+        );
+
+        $fields[] = array(
+            'label' => 'Show markers before names in answers',
+            'tags' => 'NAME="marker_plugin_w_a"',
+            'value' => qa_opt('marker_plugin_w_a'),
+            'type' => 'checkbox',
+        );
+
+        $fields[] = array(
+            'label' => 'Show markers before names in comments',
+            'tags' => 'NAME="marker_plugin_w_c"',
+            'value' => qa_opt('marker_plugin_w_c'),
+            'type' => 'checkbox',
+        );
+        $fields[] = array(
+            'label' => 'Show markers before names in users list',
+            'tags' => 'NAME="marker_plugin_w_users"',
+            'value' => qa_opt('marker_plugin_w_users'),
+            'type' => 'checkbox',
+        );
+        $fields[] = array(
+            'label' => 'Show images instead of icons',
+            'tags' => 'NAME="marker_plugin_icons_images"',
+            'value' => qa_opt('marker_plugin_icons_images'),
+            'type' => 'checkbox',
+        );
+        $fields[] = array(
+            'label' => 'Show role names',
+            'tags' => 'NAME="marker_plugin_role_names"',
+            'value' => qa_opt('marker_plugin_role_names'),
+            'type' => 'checkbox',
+        );
+
+        /*
 			$fields[] = array(
 				'label' => 'Show Twitter button',
 				'tags' => 'NAME="share_plugin_twitter"',
@@ -282,22 +296,22 @@
 			$fields[] = array(
 				'type' => 'blank',
 			);			
-*/						
-			return array(
-				'ok' => ($ok && !isset($error)) ? $ok : null,
-				
-				'fields' => $fields,
-				
-				'buttons' => array(
-					array(
-					'label' => qa_lang_html('main/save_button'),
-					'tags' => 'NAME="marker_save_button"',
-					),
-					array(
-					'label' => qa_lang_html('admin/reset_options_button'),
-					'tags' => 'NAME="marker_reset_button"',
-					),
-				),
-			);
-		}
-	}
+*/
+        return array(
+            'ok' => ($ok && !isset($error)) ? $ok : null,
+
+            'fields' => $fields,
+
+            'buttons' => array(
+                array(
+                    'label' => qa_lang_html('main/save_button'),
+                    'tags' => 'NAME="marker_save_button"',
+                ),
+                array(
+                    'label' => qa_lang_html('admin/reset_options_button'),
+                    'tags' => 'NAME="marker_reset_button"',
+                ),
+            ),
+        );
+    }
+}
