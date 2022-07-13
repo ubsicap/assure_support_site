@@ -298,11 +298,13 @@ function generate_reclaim_content($request, $qa_content)
                     // User input a valid code so no need to ask for it but pass it to the next step
                     unset($fields['code']);
                     $hidden['code'] = $code;
+                    unset($fields['email_handle']);
+                    $hidden['email_handle'] = $emailHandle;
 
                     $buttons = array(
                         'change' => array(
                             'tags' => 'name="dochangepassword"',
-                            'label' => qa_lang_html('users/change_password'),
+                            'label' => qa_lang_html('qa-ar/reclaim_finish'),
                         ),
                     );
 
@@ -311,11 +313,19 @@ function generate_reclaim_content($request, $qa_content)
                     if (qa_clicked('dochangepassword')) {
                         $newPassword = qa_post_text('newpassword1');
                         $repeatPassword = qa_post_text('newpassword2');
+                        $newUsername = qa_post_text('newusername');
 
                         if (!qa_check_form_security_code('reclaim', qa_post_text('formcode'))) {
                             $errors['page'] = qa_lang_html('misc/form_security_again');
                         } else {
                             $passwordError = qa_password_validate($newPassword, $userInfo);
+                            // Un-muting this displays some MySQL error about escaped strings...
+                            $usernameError = @qa_handle_email_filter($newUsername, $emailHandle);
+
+                            if (!empty($usernameError)) {
+                                $errors['new_0'] = $usernameError['handle'];
+                            }
+
                             if (!empty($passwordError)) {
                                 $errors['new_1'] = $passwordError['password'];
                             }
@@ -326,13 +336,27 @@ function generate_reclaim_content($request, $qa_content)
 
                             if (empty($errors)) {
                                 // Update password, login user, fire events and redirect to account page
-                                $newUsername = strtok($emailHandle, '@');
                                 qa_finish_reset_user($userId, $newPassword, $emailHandle, $newUsername);
                                 qa_redirect('account');
                             }
                         }
                     }
 
+                    // Prompt the user to enter a new username, autofilled with their current username
+                    $fields['new_0'] = array(
+                        'label' => qa_lang_html('qa-ar/reclaim_enter_new_username'),
+                        'tags' => 'name="newusername" id="newusername"',
+                        'value' => isset($userInfo['handle']) ? $userInfo['handle'] : '',
+                        'error' => qa_html(isset($errors['new_0']) ? $errors['new_0'] : null),
+                    );
+
+                    // Display text regarding new password minimum length
+                    $fields['some_text'] = array(
+                        'type' => 'static',
+                        'label' => '<hr>' . qa_lang('qa-ar/reclaim_set_new_pass') . ' ' . qa_lang_sub('users/password_min', max(QA_MIN_PASSWORD_LEN, 1)),
+                    );
+
+                    // Field for entering new password
                     $fields['new_1'] = array(
                         'label' => qa_lang_html('users/new_password_1'),
                         'tags' => 'name="newpassword1" id="newpassword1"',
@@ -340,6 +364,7 @@ function generate_reclaim_content($request, $qa_content)
                         'error' => qa_html(isset($errors['new_1']) ? $errors['new_1'] : null),
                     );
 
+                    // Field for retyping new password
                     $fields['new_2'] = array(
                         'label' => qa_lang_html('users/new_password_2'),
                         'tags' => 'name="newpassword2"',
