@@ -29,4 +29,4 @@ Parameters are:
     - Module name
 */
 qa_register_plugin_module('page', 'qa-ar-page.php', 'qa_ar_page', 'Reclaim Account');
-//qa_register_plugin_module('filter', 'qa-ar-email.php', 'qa_ar_filter', 'Archived User Warning');
+qa_register_plugin_module('filter', 'qa-ar-email.php', 'qa_ar_filter', 'Archived User Warning');
