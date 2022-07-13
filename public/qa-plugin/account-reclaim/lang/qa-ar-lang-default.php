@@ -25,10 +25,10 @@ return array(
     'recover_body' => "Please click below to recover your previous support.paratext.org account and migrate it to ^site_title.\n\n^url\n\nAlternatively, enter the code below into the field provided.\n\nCode: ^code\n\nIf you did not ask to reset your password, please ignore this message.\n\nThank you,\n^site_title",
     'recover_subject' => '^site_title - Recover Existing Account',
     'reclaim_page_title' => 'Finish Reclaiming Your Account',
-    'reclaim_enter_new_username' => 'We recommend that you update your username. The current username for your account is provided below. You may choose to keep this username, or create a new one. Please note that this forum is publicly available, so be mindful about choosing a username that contains any identifying information.',
+    'reclaim_enter_new_username' => 'We recommend that you update your username. The current username for your account is provided below. You may choose to keep this username, or create a new one.<br><br>Please note that this forum is publicly available, so be mindful about choosing a username that contains any identifying information.',
     'reclaim_set_new_pass' => 'Set a new password for this account.',
     'reclaim_finish' => 'Update Username and Password',
 
-    'archived_warning' => "Email belongs to an archived account, see the \"Reclaim your account\" page! 
+    'archived_warning' => "Email belongs to an archived account, see the <a href='https://supportsitetest.tk/recover-account' rel='noopener noreferrer'>Reclaim Your Account</a> page! 
     If you click \"Register\" again you will abandon your archived account to create a new one (Not recommended).",
 );
