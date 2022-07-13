@@ -66,7 +66,7 @@ function qa_ar_db_update_email_flag($email)
 {
     $time = new DateTime(); //current time
     return qa_db_query_sub(
-		'UPDATE ^accountreclaim SET lastreclaim=$ WHERE email=$', $time, $email
+		'UPDATE ^accountreclaim SET lastreclaim=# WHERE email=$', $time, $email
 	);
 }
 
