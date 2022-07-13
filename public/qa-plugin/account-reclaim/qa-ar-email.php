@@ -22,15 +22,9 @@ class qa_ar_filter
         if(qa_ar_db_is_archived_email($email))
         {
             $lastAttemptTime = qa_ar_db_get_email_flag($email); //null or last register time attempt
-
-            $currTime = new DateTime();
-            $timeSinceLogin = date_diff($currTime, $lastAttemptTime); //difference
-            debug_to_console($currTime);
-            debug_to_console($lastAttemptTime);
-            debug_to_console($currTime - $lastAttemptTime);
-            
-            debug_to_console($timeSinceLogin);
-            if(true) //not a recent login attempt
+            $minD = ((new DateTime())->getTimestamp() - $lastAttemptTime->getTimestamp())/60; //difference in Minutes (unix compare)            
+            debug_to_console($minD);
+            if($minD >= 3) //not a recent login attempt
             {
                 qa_ar_db_update_email_flag($email); //update the flag
                 return qa_lang('qa-ar/archived_warning'); //warn the user
