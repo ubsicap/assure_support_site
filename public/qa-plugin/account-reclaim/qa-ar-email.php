@@ -17,7 +17,7 @@ class qa_ar_filter
     */
     public function filter_email(&$email, $olduser)
     {
-        return qa_html("<a href=\"https://supportsitetest.tk/recover-account\" rel='noopener noreferrer'>Reclaim Account</a>");
+        return ('test <br> test');
         //check if email belongs to an archived account
         if(qa_ar_db_is_archived_email($email))
         {
