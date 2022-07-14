@@ -1,14 +1,5 @@
 <?php
 
-/*
-	Plugin Name: Account Reclaim
-	Plugin Description: send emails to remind users to reclaim their account
-	Plugin Version: 1.0
-	Plugin Date: 2022-07-13	
-	Licence: Copyright © q2apro.com - All rights reserved
-
-*/
-
 class account_reclaim_admin
 {
 
@@ -109,7 +100,7 @@ class account_reclaim_admin
 				'fromname' => qa_opt('account_reclaim_email_name'),
 				'toemail' => $user['email'],
 				'toname' => '',
-				'subject' => qa_opt('account_relaim_email_subject_line'),
+				'subject' => qa_opt('account_reclaim_email_subject_line'),
 				'body' => trim(qa_opt('account_reclaim_email_body_text')),
 				'html' => false,
 			));
