@@ -14,11 +14,12 @@ class qa_ar_page
     const RECLAIM_PAGE_URL = 'account-reclaim';
 
 
+
     /**
      * Determines if the URL requested matches this page. Used to check whether
      * this page should be delivered.
      * 
-     * @param $request The URL request being checked
+     * @param string $request The URL request being checked
      * @return bool True if the request matches this page
      */
     function match_request($request)
@@ -96,6 +97,7 @@ class qa_ar_page
 }
 
 
+
 /**
  * Assembles content for the Recovery page.
  *
@@ -123,7 +125,7 @@ function generate_recover_content($request, $qa_content)
                 $errors['emailhandle'] = qa_lang('qa-ar/recover_user_not_found');
             }
 
-            if (qa_opt('captcha_on_reset_password')) {
+            if (qa_opt('qa_ar_captcha_on_recover')) {
                 qa_captcha_validate_post($errors);
             }
 
@@ -192,7 +194,7 @@ function generate_recover_content($request, $qa_content)
     );
 
     // Enable CAPTCHA on this page, if applicable
-    if (qa_opt('captcha_on_reset_password')) {
+    if (qa_opt('qa_ar_captcha_on_recover')) {
         qa_set_up_captcha_field($qa_content, $qa_content['form']['fields'], @$errors);
     }
 
@@ -402,8 +404,12 @@ function generate_reclaim_content($request, $qa_content)
         $errors['page'] = qa_lang_html('users/user_not_found');
     }
 
-
-    // Prepare content for theme
+    /***************************************************************************
+     *
+     * Now that we've (possibly) obtained input from the user, we will build the
+     * web page to be displayed.
+     *
+     **************************************************************************/
 
     $qa_content = qa_content_prepare();
 
