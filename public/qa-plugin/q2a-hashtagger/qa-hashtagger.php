@@ -375,14 +375,14 @@ class qa_hashtagger
             $row['content'] = $this->preg_call('%(<a.*?</a>)%i', 'hide_html_links', $row['content']);
         }
 
-        // Convert hashtags
+        // Convert hashtags, orig expression: %#(?P<word>[\w\-]+)%u
         if ($convert_hashtags) {
-            $row['content'] = $this->preg_call('%#(?P<word>[\w\-]+)%u', 'build_tag_link', $row['content']);
+            $row['content'] = $this->preg_call('%#(?P<word>[\w\-]+)%u%s', 'build_tag_link', $row['content']);
         }
 
-        // Convert usernames
+        // Convert usernames, orig expression: %@(?P<name>[\w\-]+)%u
         if ($convert_usernames) {
-            $row['content'] = $this->preg_call('%@(?P<name>[\w\-]+)%u', 'build_user_link', $row['content']);
+            $row['content'] = $this->preg_call('%%@(?P<name>[\w\-]+)%u%s', 'build_user_link', $row['content']);
         }
 
         // Unhide links
