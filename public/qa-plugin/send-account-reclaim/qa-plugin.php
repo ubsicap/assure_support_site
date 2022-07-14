@@ -1,14 +1,5 @@
 <?php
 
-/*
-	Plugin Name: Send Email For Account Reclaim
-	Plugin Description: add ^accountreclaim users to mailing in admin
-	Plugin Version: 1.0
-	Plugin Date: 2022-07-13	
-	Licence: Copyright © q2apro.com - All rights reserved
-
-*/
-
 	if (!defined('QA_VERSION')) { // don't allow this page to be requested directly from browser
 		header('Location: ../../');
 		exit;

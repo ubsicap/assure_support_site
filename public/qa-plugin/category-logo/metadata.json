@@ -1,0 +1,14 @@
+{
+    "name": "Category Logo",
+    "uri": "https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/category-logo",
+    "description": "Adds icons to categories",
+    "version": "1.0",
+    "date": "2022-06-27",
+    "author": "Paratext",
+    "author_uri": "https://github.com/ubsicap/assure_support_site/",
+    "license": "GPLv2",
+    "update_uri": "https://raw.githubusercontent.com/ubsicap/assure_support_site/master/public/qa-plugin/category-logo/metadata.json",
+    "min_q2a": "1.8.6",
+    "min_php": "7.4",
+    "load_order": "after_db_init"
+}
