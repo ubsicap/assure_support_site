@@ -192,7 +192,7 @@ function generate_recover_content($request, $qa_content)
     );
 
     // Enable CAPTCHA on this page, if applicable
-    if (qa_opt('qa_ar_captcha_on_recovery')) {
+    if (qa_opt('qa_ar_captcha_on_recover')) {
         qa_set_up_captcha_field($qa_content, $qa_content['form']['fields'], @$errors);
     }
 
