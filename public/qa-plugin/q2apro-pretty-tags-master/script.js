@@ -90,7 +90,7 @@ $ (document).ready (function () {
 });
 
 function makeLiTag(tag) {
-  if(allTags.indexOf(tag) === -1 && tag != '') {
+  if(allTags.indexOf(tag) === -1 && tag != '' && $('.tagbox ul li').length-1 < 5) {
     var newTag = $('<li><span class="tag">'+tag+'</span>'+'<span class="delete">&#215;</span></li>');
     $(newTag).insertBefore('.tagbox li.new');
     tagNumber += 1;
