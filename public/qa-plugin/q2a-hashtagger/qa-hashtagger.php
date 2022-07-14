@@ -31,8 +31,8 @@ class qa_hashtagger
         'plugin_hashtagger/filter_answers',
         'plugin_hashtagger/convert_hashtags',
         'plugin_hashtagger/keep_hash_symbol',
-        'plugin_hashtagger/convert_usernames',
-        'plugin_hashtagger/notify_users'
+        // 'plugin_hashtagger/convert_usernames', // Uncomment these if you're not using Dynamic Mentions
+        // 'plugin_hashtagger/notify_users'
     );
 
     /**
