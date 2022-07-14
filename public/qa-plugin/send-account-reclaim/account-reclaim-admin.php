@@ -33,9 +33,19 @@ class account_reclaim_admin
 			qa_opt('account_reclaim_email_address', qa_post_text('account_reclaim_email_address'));
 			qa_opt('account_reclaim_email_subject_line', qa_post_text('account_reclaim_email_subject_line'));
 			qa_opt('account_reclaim_email_body_text', qa_post_text('account_reclaim_email_body_text'));
-			$this->send_account_reclaim_email();
-
-			$ok = 'sent successfully';
+			
+			$ok = $this->send_account_reclaim_email();
+			if (!strcmp($ok, 'None being sent.')) {
+				echo '<script type="text/JavaScript"> 
+					window.addEventListener("load", (event) => {
+						var grandparent = document.getElementsByClassName("qa-part-form-plugin-options")[0];
+						var target = grandparent.querySelector("form .qa-form-table-boxed .qa-form-tall-table tbody tr td");
+						target.classList.remove("qa-form-tall-ok");
+						target.className = "qa-form-tall-error";
+					});
+     				</script>';
+			}
+				
 		}
 
 		return array(
@@ -48,28 +58,24 @@ class account_reclaim_admin
 					'value' => qa_opt('account_reclaim_enabled'),
 				),
 				array(
-					// 'id' => 'category_logo_url_display_' .$category_backpath['backpath']. '',
 					'label' => 'From name:',
 					'type' => 'text',
 					'value' => qa_opt('account_reclaim_email_name'),
 					'tags' => 'name="account_reclaim_email_name"',
 				),
 				array(
-					// 'id' => 'category_logo_url_display_' .$category_backpath['backpath']. '',
 					'label' => 'From email address:',
 					'type' => 'text',
 					'value' => qa_opt('account_reclaim_email_address'),
 					'tags' => 'name="account_reclaim_email_address"',
 				),
 				array(
-					// 'id' => 'category_logo_url_display_' .$category_backpath['backpath']. '',
 					'label' => 'Subject line:',
 					'type' => 'text',
 					'value' => qa_opt('account_reclaim_email_subject_line'),
 					'tags' => 'name="account_reclaim_email_subject_line"',
 				),
 				array(
-					// 'id' => 'category_logo_url_display_' .$category_backpath['backpath']. '',
 					'label' => 'Body text:',
 					'type' => 'textarea',
 					'rows' => 6,
@@ -96,25 +102,27 @@ class account_reclaim_admin
 		$users = qa_db_query_raw( 
 			'SELECT email FROM qa_accountreclaim'
 		);
+		$unsent = 0;
 		foreach ($users as $user) {
-					echo '<script type="text/JavaScript"> 
-		console.log("'.$user['email'].'");
-		</script>';
 			$send_status = qa_send_email(array(
 				'fromemail' => qa_opt('account_reclaim_email_address'),
 				'fromname' => qa_opt('account_reclaim_email_name'),
 				'toemail' => $user['email'],
-				'toname' => 'Ling',
+				'toname' => '',
 				'subject' => qa_opt('account_relaim_email_subject_line'),
 				'body' => trim(qa_opt('account_reclaim_email_body_text')),
 				'html' => false,
 			));
 			if (!$send_status) {
-				echo '<script type="text/JavaScript"> 
-     alert("not sent successfully");
-     </script>';
+				$unsent += 1;
 			}
 		}
+		$amount= qa_db_read_one_value(qa_db_query_sub(
+			'SELECT COUNT(*) FROM qa_accountreclaim'
+		));
+		$sent = $amount - $unsent;
+		$log = $sent > 0 ? 'Sent '.$sent.'/'.$amount.' successfully.': 'None being sent.';
+		return $log;
 	}
 }
 

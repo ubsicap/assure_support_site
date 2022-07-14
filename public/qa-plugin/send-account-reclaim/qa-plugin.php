@@ -1,7 +1,7 @@
 <?php
 
 /*
-	Plugin Name: Send Email of Account Reclaim
+	Plugin Name: Send Email For Account Reclaim
 	Plugin Description: add ^accountreclaim users to mailing in admin
 	Plugin Version: 1.0
 	Plugin Date: 2022-07-13	
