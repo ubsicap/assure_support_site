@@ -1,12 +1,12 @@
 <?php
 class qa_ar_admin
 {
-
-    function allow_template($template)
-    {
-        return ($template != 'admin');
-    }
-
+    /**
+     * Returns the default value for the provided option.
+     * 
+     * @param string $option The option being fetched.
+     * @return string The default value for the option.
+     */
     function option_default($option)
     {
 
@@ -20,6 +20,14 @@ class qa_ar_admin
         }
     }
 
+
+
+    /**
+     * Construct the HTML of the admin form for this plugin.
+     * 
+     * @param mixed $qa_content HTML content of the page.
+     * @return mixed HTML content for the admin form.
+     */
     function admin_form(&$qa_content)
     {
 
@@ -27,7 +35,7 @@ class qa_ar_admin
 
         $ok = null;
         if (qa_clicked('qa_ar_save_button')) {
-            
+
             // Create an option for the redirect page after account reclaim
             qa_opt('qa_ar_redirect_page', qa_post_text('qa_ar_redirect_page'));
 
@@ -43,9 +51,9 @@ class qa_ar_admin
             }
             $ok = qa_lang('admin/options_reset');
         }
+
+
         //	Create the form for display
-
-
         $fields = array();
 
         // Create a text area for setting the redirect page

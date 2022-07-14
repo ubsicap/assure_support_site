@@ -14,11 +14,12 @@ class qa_ar_page
     const RECLAIM_PAGE_URL = 'account-reclaim';
 
 
+
     /**
      * Determines if the URL requested matches this page. Used to check whether
      * this page should be delivered.
      * 
-     * @param $request The URL request being checked
+     * @param string $request The URL request being checked
      * @return bool True if the request matches this page
      */
     function match_request($request)
@@ -94,6 +95,7 @@ class qa_ar_page
         return $qa_content;
     }
 }
+
 
 
 /**
@@ -402,8 +404,12 @@ function generate_reclaim_content($request, $qa_content)
         $errors['page'] = qa_lang_html('users/user_not_found');
     }
 
-
-    // Prepare content for theme
+    /***************************************************************************
+     *
+     * Now that we've (possibly) obtained input from the user, we will build the
+     * web page to be displayed.
+     *
+     **************************************************************************/
 
     $qa_content = qa_content_prepare();
 
