@@ -71,7 +71,8 @@ class account_reclaim_admin
 				array(
 					// 'id' => 'category_logo_url_display_' .$category_backpath['backpath']. '',
 					'label' => 'Body text:',
-					'type' => 'text',
+					'type' => 'textarea',
+					'rows' => 6,
 					'value' => qa_opt('account_reclaim_email_body_text'),
 					'tags' => 'name="account_reclaim_email_body_text"',
 				)
@@ -95,9 +96,6 @@ class account_reclaim_admin
 		$users = qa_db_query_raw( 
 			'SELECT email FROM qa_accountreclaim'
 		);
-		// echo '<script type="text/JavaScript"> 
-		// console.log("'.$users.'");
-		// </script>';
 		foreach ($users as $user) {
 					echo '<script type="text/JavaScript"> 
 		console.log("'.$user['email'].'");
@@ -113,7 +111,7 @@ class account_reclaim_admin
 			));
 			if (!$send_status) {
 				echo '<script type="text/JavaScript"> 
-     alert("not okay");
+     alert("not sent successfully");
      </script>';
 			}
 		}
