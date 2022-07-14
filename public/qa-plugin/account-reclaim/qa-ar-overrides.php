@@ -103,6 +103,10 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
         $sql = 'DELETE FROM ^accountreclaim WHERE ^accountreclaim.userid=$';
         qa_db_query_sub($sql, $userId);
 
+        // Remove the 'This is an archived user' blurb from their profile
+        $sql = 'UPDATE ^userprofile SET ^userprofile.content=\'This user reclaimed their account!\' WHERE ^userprofile.userid=$ AND ^userprofile.title=$';
+        qa_db_query_sub($sql, $userid, 'about');
+
         $userInfo = qa_db_select_with_pending(qa_db_user_account_selectspec($userId, true));
 
         qa_set_logged_in_user($userId, $userInfo['handle'], false, $userInfo['sessionsource']); // reinstate this specific session
@@ -138,7 +142,7 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
 function qa_create_new_user($email, $password, $handle, $level = QA_USER_LEVEL_BASIC, $confirmed = false)
 {
     //remove if an archived account exists with that email
-    if($email!=null && qa_ar_db_is_archived_email($email))
+    if ($email != null && qa_ar_db_is_archived_email($email))
         qa_ar_db_remove_email($email);
     //then create the user as normal using the base function
     return qa_create_new_user_base($email, $password, $handle, $level, $confirmed);
