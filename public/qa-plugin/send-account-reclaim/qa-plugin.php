@@ -17,9 +17,6 @@
 	// language file
 	qa_register_plugin_phrases('account-reclaim-lang-*.php', 'account_reclaim_lang');
 
-	// layer
-	qa_register_plugin_layer('account-reclaim-layer.php', 'Account Reclaim Layer');
-
 	// admin
 	qa_register_plugin_module('module', 'account-reclaim-admin.php', 'account_reclaim_admin', 'Account Reclaim');
         
