@@ -22,6 +22,7 @@ return array(
     'reclaim_enter_new_username' => 'We recommend that you update your username. The current username for your account is provided below. You may choose to keep this username, or create a new one.<br><br>Please note that this forum is publicly available, so be mindful about choosing a username that contains any identifying information.',
     'reclaim_set_new_pass' => 'Set a new password for this account.',
     'reclaim_finish' => 'Update Username and Password',
+    'admin_redirect_page' => 'Location to redirect users after account reclaim. Leave blank to redirect to homepage.',
 
     'archived_warning' => "Email belongs to an archived account, see the \"Reclaim your account\" page! 
     If you click \"Register\" again you will permanently abandon your archived account to create a new one (Not recommended).",

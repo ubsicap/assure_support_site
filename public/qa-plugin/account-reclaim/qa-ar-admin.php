@@ -12,7 +12,9 @@ class qa_ar_admin
 
         switch ($option) {
             case 'qa_ar_redirect_page':
-                return '';
+                return 'account';
+            case 'qa_ar_captcha_on_recover':
+                return 'true';
             default:
                 return null;
         }
@@ -25,23 +27,16 @@ class qa_ar_admin
 
         $ok = null;
         if (qa_clicked('qa_ar_save_button')) {
+            
+            // Create an option for the redirect page after account reclaim
             qa_opt('qa_ar_redirect_page', qa_post_text('qa_ar_redirect_page'));
 
+            // Toggle whether to use CAPTCHA on account recovery
+            qa_opt('qa_ar_captcha_on_recover', (bool)qa_post_text('qa_ar_captcha_on_recover'));
 
-            /*
-            qa_opt('marker_plugin_a_qv', (bool)qa_post_text('marker_plugin_a_qv'));
-            qa_opt('marker_plugin_a_qi', (bool)qa_post_text('marker_plugin_a_qi'));
-            qa_opt('marker_plugin_a_a', (bool)qa_post_text('marker_plugin_a_a'));
-            qa_opt('marker_plugin_a_c', (bool)qa_post_text('marker_plugin_a_c'));
-
-            qa_opt('marker_plugin_w_users', (bool)qa_post_text('marker_plugin_w_users'));
-            qa_opt('marker_plugin_w_qv', (bool)qa_post_text('marker_plugin_w_qv'));
-            qa_opt('marker_plugin_w_qi', (bool)qa_post_text('marker_plugin_w_qi'));
-            qa_opt('marker_plugin_w_a', (bool)qa_post_text('marker_plugin_w_a'));
-            qa_opt('marker_plugin_w_c', (bool)qa_post_text('marker_plugin_w_c'));
-*/
             $ok = qa_lang('admin/options_saved');
         } else if (qa_clicked('qa_ar_reset_button')) {
+            // If the user has clicked the reset button, reset all options
             foreach ($_POST as $i => $v) {
                 $def = $this->option_default($i);
                 if ($def !== null) qa_opt($i, $def);
@@ -53,11 +48,19 @@ class qa_ar_admin
 
         $fields = array();
 
+        // Create a text area for setting the redirect page
         $fields[] = array(
-            'label' => 'Location to redirect users after account reclaim',
+            'label' => qa_lang('qa-ar/admin_redirect_page'),
             'tags' => 'NAME="qa_ar_redirect_page"',
             'value' => qa_opt('qa_ar_redirect_page'),
-            'type' => 'textarea'
+            'type' => 'textarea',
+            'rows' => '1'
+        );
+        $fields[] = array(
+            'label' => 'Use CAPTCHA on account recovery',
+            'tags' => 'NAME="qa_ar_captcha_on_recover"',
+            'value' => qa_opt('qa_ar_captcha_on_recover'),
+            'type' => 'checkbox',
         );
 
         return array(

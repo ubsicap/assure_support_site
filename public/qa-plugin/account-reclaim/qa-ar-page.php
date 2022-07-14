@@ -123,7 +123,7 @@ function generate_recover_content($request, $qa_content)
                 $errors['emailhandle'] = qa_lang('qa-ar/recover_user_not_found');
             }
 
-            if (qa_opt('captcha_on_reset_password')) {
+            if (qa_opt('qa_ar_captcha_on_recover')) {
                 qa_captcha_validate_post($errors);
             }
 
