@@ -1,5 +1,5 @@
 <?php
-class qa_marker_admin
+class qa_ar_admin
 {
 
     function allow_template($template)
