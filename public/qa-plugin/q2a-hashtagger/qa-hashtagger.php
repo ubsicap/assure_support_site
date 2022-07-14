@@ -377,12 +377,12 @@ class qa_hashtagger
 
         // Convert hashtags, orig expression: %#(?P<word>[\w\-]+)%u
         if ($convert_hashtags) {
-            $row['content'] = $this->preg_call('%([^<]*<[^>]*)\K#(?P<word>[\w\-]+)%us', 'build_tag_link', $row['content']);
+            $row['content'] = $this->preg_call('%[^([^<]*<[^>]*)]\K#(?P<word>[\w\-]+)%us', 'build_tag_link', $row['content']);
         }
 
         // Convert usernames, orig expression: %@(?P<name>[\w\-]+)%u
         if ($convert_usernames) {
-            $row['content'] = $this->preg_call('%([^<]*<[^>]*)\K@(?P<name>[\w\-]+)%us', 'build_user_link', $row['content']);
+            $row['content'] = $this->preg_call('%[^([^<]*<[^>]*)]\K@(?P<name>[\w\-]+)%us', 'build_user_link', $row['content']);
         }
 
         // Unhide links
