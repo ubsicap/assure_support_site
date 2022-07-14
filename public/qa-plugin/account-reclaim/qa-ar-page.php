@@ -351,7 +351,7 @@ function generate_reclaim_content($request, $qa_content)
                             if (empty($errors)) {
                                 // Update password, login user, fire events and redirect to account page
                                 qa_finish_reset_user($userId, $newPassword, $emailHandle, $newUsername);
-                                qa_redirect('account');
+                                qa_redirect(qa_opt('qa_ar_redirect_page'));
                             }
                         }
                     }
