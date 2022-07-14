@@ -23,12 +23,18 @@ qa_register_plugin_phrases('lang/qa-ar-lang-*.php', 'qa-ar');
 qa_register_plugin_overrides('qa-ar-overrides.php');
 
 /*
-Register the plugin's "Reclaim Account" pages
+Register the plugin's many modules
 Parameters are:
     - Plugin module type
     - Location of the module's class declaration
     - Name of the class declaration
     - Module name
 */
+// Account Recovery and Reclaim pages
 qa_register_plugin_module('page', 'qa-ar-page.php', 'qa_ar_page', 'Reclaim Account');
+
+// Warn users if they attempt to register with an archived account
 qa_register_plugin_module('filter', 'qa-ar-email.php', 'qa_ar_filter', 'Archived User Warning');
+
+// Admin page for this plugin
+qa_register_plugin_module('module', 'qa-marker-admin.php', 'qa_marker_admin', 'Role Markers');
