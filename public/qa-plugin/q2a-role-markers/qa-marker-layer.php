@@ -91,6 +91,8 @@ class qa_html_theme_layer extends qa_html_theme_base
         }
 
         $rolemarker = '';
+        if (isset($img))
+            $img = 'shield';
 
         if (qa_opt('marker_plugin_role_names')) {
             $rolemarker .= '<span class="qa-who-marker-' . $img . '" title="' . qa_html($level) . '">&nbsp;<b>[' . $this->getrolename($uid) . ']</b>  </span>';
