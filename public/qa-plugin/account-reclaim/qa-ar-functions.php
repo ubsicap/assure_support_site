@@ -98,15 +98,19 @@ function qa_ar_db_remove_email($email)
  */
 function qa_ar_db_swap_name($oldName, $newName)
 {
+    $newName = str_replace(' ', '+', $newName); //simplify the new name to just one word (no space)
+    
     //any post with a title/content with the old name gets swapped with the new name
     //this relies on that the only time the old name is obscure enough that any match actually refers to the username
     qa_db_query_sub(
-		"UPDATE ^posts SET content=REGEXP_REPLACE(content, $oldName, $newName), title=REGEXP_REPLACE(title, $oldName, $newName)
+		"UPDATE ^posts SET content=REGEXP_REPLACE(content, '$oldName', '$newName'), 
+        title=REGEXP_REPLACE(title, '$oldName', '$newName')
         WHERE content like '%$oldName%' or title like '%$oldName%'"
 	);
+
     //now that the posts have changed we have to modify the wordid in the words table
     qa_db_query_sub(
-        "UPDATE ^words SET word=REGEXP_REPLACE(word, $oldName, $newName)$ WHERE word like '%$oldName%'"
+        "UPDATE ^words SET word=REGEXP_REPLACE(word, '$oldName', '$newName') WHERE word like '%$oldName%'"
     );
 }
 
@@ -116,10 +120,10 @@ function qa_ar_db_swap_name($oldName, $newName)
  * @param $userid
  * @return string (the handle of the anon name, e.g. anon123456)
  */
-function qa_ar_db_get_anon($userid)
+function qa_ar_db_get_anon($userId)
 {
     return qa_db_read_one_value(qa_db_query_sub(
-		'SELECT handle FROM ^users WHERE userid=$', $userid
+		'SELECT handle FROM ^users WHERE userid=$', $userId
 	));
 }
 
@@ -154,4 +158,26 @@ function qa_ar_db_user_set($userid, $fields, $value = null)
     $params[] = $userid;
 
     qa_db_query_sub_params($sql, $params);
+}
+
+
+/**
+ * Simple helper to debug to the console
+ *
+ * @param $data object, array, string $data
+ * @param $context string  Optional a description.
+ *
+ * @return string
+ */
+function debug_to_console($data, $context = 'Debug in Console') 
+{
+
+    // Buffering to solve problems frameworks, like header() in this and not a solid return.
+    ob_start();
+
+    $output  = 'console.info(\'' . $context . ':\');';
+    $output .= 'console.log(' . json_encode($data) . ');';
+    $output  = sprintf('<script>%s</script>', $output);
+
+    echo $output;
 }

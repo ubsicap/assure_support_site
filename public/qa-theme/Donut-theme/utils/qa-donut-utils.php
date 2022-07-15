@@ -141,24 +141,8 @@
         if (strlen($handle) == 0) {
             return null;
         }
-
-        $avatarSource = qa_get_user_avatar_source($flags, $email, $blobId);
-
-        switch ($avatarSource) {
-            case 'gravatar':
-                $html = qa_get_gravatar_html($email, $size);
-                break;
-            case 'local-user':
-                $html = qa_get_avatar_blob_html($blobId, $width, $height, $size, $padding);
-                break;
-            case 'local-default':
-                $html = qa_get_avatar_blob_html(qa_opt('avatar_default_blobid'), qa_opt('avatar_default_width'), qa_opt('avatar_default_height'), $size, $padding);
-                break;
-            default:
-                return null;
-        }
-
-        return $html;
+        $html_string = qa_get_user_avatar_html($flags, $email, $handle, $blobId, $width, $height, $size, $padding);
+        return preg_replace('%(<a[^<>]*>|</a>)%', '', $html_string); //we just want the link between the html elements <a ...>link<>
     }
 
     function donut_get_user_avatar( $userid, $size = 40 )

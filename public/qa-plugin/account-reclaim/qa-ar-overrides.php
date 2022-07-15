@@ -89,6 +89,9 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
         // For qa_set_logged_in_user()
         require_once QA_INCLUDE_DIR . 'app/users.php';
 
+        // For qa_complete_confirm
+        require_once QA_INCLUDE_DIR . 'app/users-edit.php';
+
         //swap all the instances of the old username to the new one
         qa_ar_db_swap_name(qa_ar_db_get_anon($userId), $newUsername);
 
@@ -96,19 +99,15 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
         qa_db_user_set_password($userId, $newPassword);
 
         // Set the fields of the account to the newly provided values
+        // Note these updates must happen here because the credentials are needed to log in below
         qa_db_user_set($userId, array(
             'email' => $newEmail,       // Update the email address so the account is valid
             'handle' => $newUsername,   // Update the username to no longer be `anon######`
             'emailcode' => '',          // Prevent re-use of the code, if it exists
         ));
 
-        // Delete this user's entry in the account reclaim table
-        $sql = 'DELETE FROM ^accountreclaim WHERE ^accountreclaim.userid=$';
-        qa_db_query_sub($sql, $userId);
-
-        // Remove the 'This is an archived user' blurb from their profile
-        $sql = 'UPDATE ^userprofile SET ^userprofile.content=\'This user reclaimed their account!\' WHERE ^userprofile.userid=$ AND ^userprofile.title=$';
-        qa_db_query_sub($sql, $userid, 'about');
+        // This user has now confirmed their email
+        qa_complete_confirm(strval($userId), $newEmail, $newUsername);
 
         $userInfo = qa_db_select_with_pending(qa_db_user_account_selectspec($userId, true));
 
@@ -121,32 +120,4 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
     } else {
         qa_finish_reset_user_base($userId, $newPassword);
     }
-}
-
-
-
-
-/**
- * This is an OVERRIDE. The original function is:
- * qa-include/app/users-edit.php:qa_create_new_user(...) 
- * 
- * The only edit is removing the user from the accountreclaim table if it exists
- * 
- * Create a new user (application level) with $email, $password, $handle and $level.
- * Set $confirmed to true if the email address has been confirmed elsewhere.
- * Handles user points, notification and optional email confirmation.
- * @param $email
- * @param $password
- * @param $handle
- * @param int $level
- * @param bool $confirmed
- * @return mixed
- */
-function qa_create_new_user($email, $password, $handle, $level = QA_USER_LEVEL_BASIC, $confirmed = false)
-{
-    //remove if an archived account exists with that email
-    if ($email != null && qa_ar_db_is_archived_email($email))
-        qa_ar_db_remove_email($email);
-    //then create the user as normal using the base function
-    return qa_create_new_user_base($email, $password, $handle, $level, $confirmed);
 }
