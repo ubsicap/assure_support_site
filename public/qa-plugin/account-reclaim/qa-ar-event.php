@@ -35,7 +35,10 @@ class qa_ar_archive_cleanup
                     self::notify_archived_user($params['email'], $handle);
                     break;
 
-                    // When a user successfully confirms their email address, given in $params['email'].
+                case 'u_confirmed':
+                    // When a user successfully confirms their email address, given in $params['email']
+                    // Using fallthrough because this case only executes when a new account
+                    //  is created with an archived email and that email gets confirmed.
                 case 'u_reclaim':
                     // When a user has finished reclaiming an archived account and is now logged in. The email is in $params['email']
                     self::delete_archived_entry($params['email']);
