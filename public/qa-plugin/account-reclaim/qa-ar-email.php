@@ -30,6 +30,5 @@ class qa_ar_filter
             //otherwise a recent login attempt, let the user register.
         }
         //otherwise user is valid
-        //override qa_create_new_user to remove the email from the archived list
     }
 }
