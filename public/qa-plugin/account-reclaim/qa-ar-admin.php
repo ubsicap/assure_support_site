@@ -72,9 +72,8 @@ class qa_ar_admin
         $fields[] = array(
             'label' => qa_lang('qa-ar/admin_register_archived_timeout'),
             'tags' => 'NAME="qa_ar_register_archived_timeout"',
-            'value' => qa_opt('qa_ar_register_archived_timeout'),
-            'type' => 'textarea',
-            'rows' => '1'
+            'value' => (int) qa_opt('qa_ar_register_archived_timeout'),
+            'type' => 'number'
         );
         $fields[] = array(
             'label' => qa_opt('qa-ar/admin_captcha_on_recovery'),
