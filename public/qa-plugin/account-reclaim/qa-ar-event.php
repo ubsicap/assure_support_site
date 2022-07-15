@@ -14,7 +14,7 @@ require_once QA_PLUGIN_DIR . 'account-reclaim/qa-ar-functions.php';
 class qa_ar_archive_cleanup
 {
     /**
-     * Handles events for registration, confirmation, and reclaimation of archived accounts.
+     * Handles events for registration and reclaimation of archived accounts.
      * 
      * See the following page for more details on event types and parameters:
      *      https://docs.question2answer.org/plugins/modules-event/
@@ -34,10 +34,8 @@ class qa_ar_archive_cleanup
                     // When a new user registers. The email is in $params['email'] and the privilege level in $params['level'].
                     self::notify_archived_user($params['email'], $handle);
                     break;
-                case 'u_confirmed':
+
                     // When a user successfully confirms their email address, given in $params['email'].
-                    self::delete_archived_entry($params['email']);
-                    break;
                 case 'u_reclaim':
                     // When a user has finished reclaiming an archived account and is now logged in. The email is in $params['email']
                     self::delete_archived_entry($params['email']);
