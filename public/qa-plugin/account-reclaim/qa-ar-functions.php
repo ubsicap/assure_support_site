@@ -89,6 +89,40 @@ function qa_ar_db_remove_email($email)
 	);
 }
 
+/**
+ * Swap the old username to the new username when an account is migrated
+ * 
+ * @param $oldName (i.e. anon123456)
+ * @param $newName (i.e. danielM)
+ * @return none
+ */
+function qa_ar_db_swap_name($oldName, $newName)
+{
+    //any post with a title/content with the old name gets swapped with the new name
+    //this relies on that the only time the old name is obscure enough that any match actually refers to the username
+    qa_db_query_sub(
+		"UPDATE ^posts SET content=REGEXP_REPLACE(content, $oldName, $newName), title=REGEXP_REPLACE(title, $oldName, $newName)
+        WHERE content like '%$oldName%' or title like '%$oldName%'"
+	);
+    //now that the posts have changed we have to modify the wordid in the words table
+    qa_db_query_sub(
+        "UPDATE ^words SET word=REGEXP_REPLACE(word, $oldName, $newName)$ WHERE word like '%$oldName%'"
+    );
+}
+
+/**
+ * Get the handle of the anonymous user with this userid
+ * 
+ * @param $userid
+ * @return string (the handle of the anon name, e.g. anon123456)
+ */
+function qa_ar_db_get_anon($userid)
+{
+    return qa_db_read_one_value(qa_db_query_sub(
+		'SELECT handle FROM ^users WHERE userid=$', $userid
+	));
+}
+
 
 
 /**
