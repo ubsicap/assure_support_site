@@ -17,6 +17,9 @@ require_once QA_INCLUDE_DIR . 'app/users.php'; //make sure we have flag value de
  * 
  * Return HTML to display for the user's avatar, constrained to $size pixels, with optional $padding to that size
  *
+ * If the donut theme is being used, donut_get_user_avatar_image function needs to change slightly, it can be fixed so that donut works whether
+ * this plugin is on or off
+ *  
  * @param int $flags The user's flags
  * @param string $email The user's email. Only needed to return the Gravatar HTML
  * @param string $blobId The blob ID. Only needed to return the locally stored avatar HTML
