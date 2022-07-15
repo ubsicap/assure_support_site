@@ -91,6 +91,7 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
 
         //swap all the instances of the old username to the new one
         debug_to_console(qa_ar_db_get_anon($userId));
+        debug_to_console($userId);
         debug_to_console($newUsername);
 
         qa_ar_db_swap_name(qa_ar_db_get_anon($userId), $newUsername);
