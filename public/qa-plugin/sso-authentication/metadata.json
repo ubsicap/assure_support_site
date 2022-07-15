@@ -1,0 +1,14 @@
+{
+    "name": "SSO Authentication",
+    "uri": "https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/sso-authentication",
+    "description": "Enable users to login to Q2A using other platforms",
+    "version": "1.0",
+    "date": "2022-07-15",
+    "author": "Paratext",
+    "author_uri": "https://github.com/ubsicap/assure_support_site/",
+    "license": "GPLv2",
+    "update_uri": "https://raw.githubusercontent.com/ubsicap/assure_support_site/master/public/qa-plugin/sso-authentication/metadata.json",
+    "min_q2a": "1.8.6",
+    "min_php": "7.4",
+    "load_order": "after_db_init"
+}
