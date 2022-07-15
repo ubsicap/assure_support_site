@@ -23,7 +23,8 @@ return array(
     'reclaim_set_new_pass' => 'Set a new password for this account.',
     'reclaim_finish' => 'Update Username and Password',
     'admin_redirect_page' => 'Location to redirect users after account reclaim. Leave blank to redirect to homepage.',
-
+    'admin_register_archived_timeout' => 'When a user attempts to register with an archived email, how many minutes should elapse before warning them again?',
+    'admin_captcha_on_recovery' => 'Use CAPTCHA on account recovery',
     'archived_warning' => "Email belongs to an archived account, see the \"Reclaim your account\" page! 
-    If you click \"Register\" again you will permanently abandon your archived account to create a new one (Not recommended).",
+    If you click \"Register\" again you will permanently abandon your archived account to create a new one (Not recommended)."
 );
