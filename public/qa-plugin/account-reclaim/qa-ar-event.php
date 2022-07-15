@@ -109,8 +109,8 @@ class qa_ar_archive_cleanup
     function delete_alt_accounts($userid, $email)
     {
         // Do not delete the correct account!
-        $sql = 'DELETE FROM ^users WHERE ^users.email=$ AND ^users.userid<>$';
-        qa_db_query_sub($sql, $email, $userid);
+        $sql = 'DELETE FROM ^users WHERE userid!=$ AND email=$';
+        qa_db_query_sub($sql, $userid, $email);
     }
 
 
