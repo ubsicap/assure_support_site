@@ -15,8 +15,11 @@ class qa_marker_admin
                 return '&#x271D;';
             case 'marker_plugin_css_2':
                 return '
+.qa-avatar-marker {
+	position: relative;
+}
 .qa-q-item-avatar,.qa-q-view-avatar,.qa-a-item-avatar,.qa-c-item-avatar {
-	position:relative;
+	position: relative;
 }
 .qa-who-marker {
 	cursor: pointer;
@@ -36,11 +39,6 @@ class qa_marker_admin
 }				
 .qa-who-marker-admin {
 	color: #a8a822;
-}				
-.qa-avatar-marker {
-	right:0;
-	bottom:0;
-	position:absolute;
 }';
             default:
                 return null;
