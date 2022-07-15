@@ -96,19 +96,12 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
         qa_db_user_set_password($userId, $newPassword);
 
         // Set the fields of the account to the newly provided values
+        // Note these updates must happen here because the credentials are needed to log in below
         qa_db_user_set($userId, array(
             'email' => $newEmail,       // Update the email address so the account is valid
             'handle' => $newUsername,   // Update the username to no longer be `anon######`
             'emailcode' => '',          // Prevent re-use of the code, if it exists
         ));
-
-        // Delete this user's entry in the account reclaim table
-        $sql = 'DELETE FROM ^accountreclaim WHERE ^accountreclaim.userid=$';
-        qa_db_query_sub($sql, $userId);
-
-        // Remove the 'This is an archived user' blurb from their profile
-        $sql = 'UPDATE ^userprofile SET ^userprofile.content=\'This user reclaimed their account!\' WHERE ^userprofile.userid=$ AND ^userprofile.title=$';
-        qa_db_query_sub($sql, $userid, 'about');
 
         $userInfo = qa_db_select_with_pending(qa_db_user_account_selectspec($userId, true));
 
@@ -142,6 +135,7 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
  * @param bool $confirmed
  * @return mixed
  */
+/*
 function qa_create_new_user($email, $password, $handle, $level = QA_USER_LEVEL_BASIC, $confirmed = false)
 {
     //remove if an archived account exists with that email
@@ -150,3 +144,4 @@ function qa_create_new_user($email, $password, $handle, $level = QA_USER_LEVEL_B
     //then create the user as normal using the base function
     return qa_create_new_user_base($email, $password, $handle, $level, $confirmed);
 }
+*/
