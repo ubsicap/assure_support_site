@@ -24,7 +24,7 @@ return array(
     'reclaim_finish' => 'Update Username and Password',
     'admin_redirect_page' => 'Location to redirect users after account reclaim. Leave blank to redirect to homepage.',
     'admin_register_archived_timeout' => "Number of minutes that a user has to register with an archived email before they are warned again.",
-    'admin_captcha_on_recovery' => 'Use CAPTCHA on account recovery',
+    'admin_captcha_on_recover' => 'Use CAPTCHA on account recovery',
     'archived_warning' => "Email belongs to an archived account, see the \"Reclaim your account\" page! 
     If you click \"Register\" again you will permanently abandon your archived account to create a new one (Not recommended)."
 );

@@ -76,7 +76,7 @@ class qa_ar_admin
             'type' => 'number'
         );
         $fields[] = array(
-            'label' => qa_opt('qa-ar/admin_captcha_on_recovery'),
+            'label' => qa_lang('qa-ar/admin_captcha_on_recover'),
             'tags' => 'NAME="qa_ar_captcha_on_recover"',
             'value' => qa_opt('qa_ar_captcha_on_recover'),
             'type' => 'checkbox',
