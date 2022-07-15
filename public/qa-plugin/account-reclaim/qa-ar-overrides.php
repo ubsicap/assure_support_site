@@ -104,8 +104,7 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
         ));
 
         // This user has now confirmed their email
-        qa_db_user_set_flag($userid, QA_USER_FLAGS_EMAIL_CONFIRMED, true);
-        qa_db_user_set_flag($userid, QA_USER_FLAGS_MUST_CONFIRM, false);
+        qa_complete_confirm($userid, $newEmail, $newUsername);
 
         $userInfo = qa_db_select_with_pending(qa_db_user_account_selectspec($userId, true));
 
