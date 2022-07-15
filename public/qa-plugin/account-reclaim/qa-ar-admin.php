@@ -1,4 +1,12 @@
 <?php
+
+/*
+    File: qa-plugin/account-reclaim/qa-ar-admin.php
+    Description: Admin page for the Account Reclaim plugin
+*/
+
+
+
 class qa_ar_admin
 {
     /**

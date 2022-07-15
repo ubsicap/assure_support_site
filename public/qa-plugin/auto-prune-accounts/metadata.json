@@ -1,0 +1,14 @@
+{
+    "name": "Auto-Prune Accounts",
+    "uri": "https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/auto-prune-accounts",
+    "description": "Automatically remove accounts that have not confirmed their email after a set amount of time",
+    "version": "1.0",
+    "date": "2022-07-13",
+    "author": "Lingxin Chen, Danny Hammer, Daniel March",
+    "author_uri": "https://github.com/ubsicap/assure_support_site/",
+    "license": "GPLv2",
+    "update_uri": "https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/auto-prune-accounts/metadata.json",
+    "min_q2a": "1.8.6",
+    "min_php": "7.4",
+    "load_order": "after_db_init"
+}
