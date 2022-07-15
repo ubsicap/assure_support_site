@@ -98,8 +98,7 @@ function qa_ar_db_remove_email($email)
  */
 function qa_ar_db_swap_name($oldName, $newName)
 {
-    debug_to_console("UPDATE ^posts SET content=REGEXP_REPLACE(content, $oldName, $newName), title=REGEXP_REPLACE(title, $oldName, $newName)
-    WHERE content like '%$oldName%' or title like '%$oldName%'");
+    debug_to_console("UPDATE ^posts SET content=REGEXP_REPLACE(content, $oldName, $newName)");
     //any post with a title/content with the old name gets swapped with the new name
     //this relies on that the only time the old name is obscure enough that any match actually refers to the username
     qa_db_query_sub(
