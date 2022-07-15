@@ -22,7 +22,7 @@ class qa_ar_filter
         {
             $lastAttemptTime = qa_ar_db_get_email_flag($email); //null or last register time attempt
             $minD = ((new DateTime())->getTimestamp() - $lastAttemptTime->getTimestamp())/60; //difference in Minutes (unix compare)            
-            if($minD >= 3) //not a recent login attempt
+            if($minD >= qa_opt('qa_ar_register_archived_timeout')) //not a recent login attempt
             {
                 qa_ar_db_update_email_flag($email); //update the flag
                 return qa_lang('qa-ar/archived_warning'); //warn the user
