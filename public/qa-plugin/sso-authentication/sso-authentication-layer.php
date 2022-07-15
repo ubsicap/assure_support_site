@@ -1,6 +1,6 @@
 <?php
 //require_once QA_PLUGIN_DIR .'/sso-authentication/sso-authentication-layer.php';
-require_once QA_BASE_DIR .'vendor/autoload.php';
+// require_once QA_BASE_DIR .'vendor/autoload.php';
 
 class qa_html_theme_layer extends qa_html_theme_base
 {
@@ -8,14 +8,14 @@ class qa_html_theme_layer extends qa_html_theme_base
     function head_script()
     {   
         parent::head_script();
-        $authurl = $this->get_url();
-        if (qa_opt('sso_authentication_enabled')) {
-            $this->output('<script type="text/javascript">
-                    window.onload=()=>{
-					    document.getElementById("google-signin").href = "'.$authurl.'";
-                    };
-				</script>');
-        }   
+        // $authurl = $this->get_url();
+        // if (qa_opt('sso_authentication_enabled')) {
+        //     $this->output('<script type="text/javascript">
+        //             window.onload=()=>{
+		// 			    document.getElementById("google-signin").href = "'.$authurl.'";
+        //             };
+		// 		</script>');
+        // }   
     }
 
     function body_header() // adds login bar, user navigation and search at top of page in place of custom header content
