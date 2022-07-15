@@ -29,5 +29,5 @@ return array(
     If you click \"Register\" again you will permanently abandon your archived account to create a new one (Not recommended).",
     'archive_notify_name' => 'Paratext Support Forum User',
     'archive_notify_subject' => '^site_title - An account has been registered with your email',
-    'archive_notify_body' => "An account has been registered at ^url using this email address. Details are listed below.\n\n\temail: ^email\n\t\tusername: ^handle\n\ttimestamp: ^timestamp.\n\nIf this was your doing, please disregard this message.\n\nIf you did not authorize this, do not worry. All unverified accounts are deleted after ^interval hours.",
+    'archive_notify_body' => "An account has been registered at ^site_url using this email address. Details are listed below.\n\n\tEmail: ^email\n\tUsername: ^username\n\tTimestamp: ^timestamp (UTC)\n\nIf this was your doing, please disregard this message.\n\nIf you did not authorize this, do not worry. All unverified accounts are deleted after ^interval hours.",
 );

@@ -74,16 +74,6 @@ class qa_ar_archive_cleanup
         ))) {
             qa_fatal_error('Could not send Archive Registration Notification email');
         }
-
-        /*
-        // Send an email to the user.
-        if (!qa_send_notification($userid, $userinfo['email'], qa_lang('qa-ar/recover_name'), qa_lang('qa-ar/recover_subject'), qa_lang('qa-ar/recover_body'), array(
-            '^code' => $userinfo['reclaimcode'],
-            '^url' => qa_path_absolute('account-reclaim', array('c' => $userinfo['reclaimcode'], 'e' => $userinfo['email'])),
-        ))) {
-            qa_fatal_error('Could not send Account Recovery email');
-        }
-        */
     }
 
 

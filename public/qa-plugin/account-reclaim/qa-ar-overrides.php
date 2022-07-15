@@ -115,33 +115,3 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
         qa_finish_reset_user_base($userId, $newPassword);
     }
 }
-
-
-
-
-/**
- * This is an OVERRIDE. The original function is:
- * qa-include/app/users-edit.php:qa_create_new_user(...) 
- * 
- * The only edit is removing the user from the accountreclaim table if it exists
- * 
- * Create a new user (application level) with $email, $password, $handle and $level.
- * Set $confirmed to true if the email address has been confirmed elsewhere.
- * Handles user points, notification and optional email confirmation.
- * @param $email
- * @param $password
- * @param $handle
- * @param int $level
- * @param bool $confirmed
- * @return mixed
- */
-/*
-function qa_create_new_user($email, $password, $handle, $level = QA_USER_LEVEL_BASIC, $confirmed = false)
-{
-    //remove if an archived account exists with that email
-    if ($email != null && qa_ar_db_is_archived_email($email))
-        qa_ar_db_remove_email($email);
-    //then create the user as normal using the base function
-    return qa_create_new_user_base($email, $password, $handle, $level, $confirmed);
-}
-*/
