@@ -111,9 +111,7 @@ class qa_html_theme_layer extends qa_html_theme_base
     function get_url()
     {
         // init configuration
-        $clientID = '467698189986-20e0f8cf27m3uvdjsjpglndlg3kl4int.apps.googleusercontent.com';
-        $clientSecret = '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';
-        $redirectUri = 'http://localhost/index.php';
+
            
         // create Client Request to access Google API
         $client = new Google_Client();
