@@ -7,7 +7,7 @@
 
 
 
-require_once QA_PLUGIN_DIR . 'account-reclaim/qa-ar-functions.php';
+require_once QA_PLUGIN_DIR . 'random-avatar/qa-ra-functions.php';
 require_once QA_INCLUDE_DIR . 'app/users.php'; //make sure we have flag value definitions
 
 
