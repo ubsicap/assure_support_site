@@ -142,7 +142,10 @@
             return null;
         }
         $html_string = qa_get_user_avatar_html($flags, $email, $handle, $blobId, $width, $height, $size, $padding);
-        return preg_replace('%<[^<>]*>%', '', $html_string); //we just want the link between the html elements <a ...>link<>
+        preg_match('%<[^<>]*>%', $html_string, $matches); //we just want the link between the html elements <a ...>link</a>
+        if(!empty($matches))
+            return $match[0]; //first 
+        return null;
     }
 
     function donut_get_user_avatar( $userid, $size = 40 )
