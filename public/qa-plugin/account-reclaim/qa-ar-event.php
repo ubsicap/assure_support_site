@@ -41,6 +41,7 @@ class qa_ar_archive_cleanup
                 case 'u_reclaim':
                     // When a user has finished reclaiming an archived account and is now logged in. The email is in $params['email']
                     self::delete_archived_entry($params['email']);
+                    self::delete_alt_accounts($userid, $params['email']);
                     self::update_reclaimed_profile($userid, $handle, $params['email']);
                     break;
                 default:
@@ -69,8 +70,9 @@ class qa_ar_archive_cleanup
 
         // Send an email to the archived user's address
         if (!qa_send_notification($userinfo['userid'], $email, qa_lang('qa-ar/archive_notify_name'), qa_lang('qa-ar/archive_notify_subject'), qa_lang('qa-ar/archive_notify_body'), array(
-            '^interval' => '8', // TODO: Replace this with a qa_opt() of the interval for how often unconfirmed accounts are deleted.
+            '^username' => $handle,
             '^timestamp' => date("h:i:sa"),
+            '^interval' => '8', // TODO: Replace this with a qa_opt() of the interval for how often unconfirmed accounts are deleted.
         ))) {
             qa_fatal_error('Could not send Archive Registration Notification email');
         }
@@ -88,6 +90,27 @@ class qa_ar_archive_cleanup
         // Delete this user's entry in the account reclaim table
         $sql = 'DELETE FROM ^accountreclaim WHERE ^accountreclaim.email=$';
         qa_db_query_sub($sql, $email);
+    }
+
+
+
+    /**
+     * Deletes any falsely created accounts that use the same email as the
+     *  reclaimed account.
+     * 
+     * Currently, it is possible for someone to create an account using an email
+     *  that is associated with an archived account, even if they cannot confirm
+     *  that email. So, if an archived user reclaims their account, we need to
+     *  delete any accounts that have been created with that email address.
+     * 
+     * @param string $userid UserID of the (correct) reclaimed account.
+     * @param string $email Email address of the reclaimed account.
+     */
+    function delete_alt_accounts($userid, $email)
+    {
+        // Do not delete the correct account!
+        $sql = 'DELETE FROM ^users WHERE ^users.email=$ AND ^users.userid<>$';
+        qa_db_query_sub($sql, $email, $userid);
     }
 
 

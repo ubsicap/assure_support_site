@@ -103,6 +103,10 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
             'emailcode' => '',          // Prevent re-use of the code, if it exists
         ));
 
+        // This user has now confirmed their email
+        qa_db_user_set_flag($userid, QA_USER_FLAGS_EMAIL_CONFIRMED, true);
+        qa_db_user_set_flag($userid, QA_USER_FLAGS_MUST_CONFIRM, false);
+
         $userInfo = qa_db_select_with_pending(qa_db_user_account_selectspec($userId, true));
 
         qa_set_logged_in_user($userId, $userInfo['handle'], false, $userInfo['sessionsource']); // reinstate this specific session
