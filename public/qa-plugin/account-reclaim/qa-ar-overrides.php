@@ -89,6 +89,9 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
         // For qa_set_logged_in_user()
         require_once QA_INCLUDE_DIR . 'app/users.php';
 
+        // For qa_complete_confirm
+        require_once QA_INCLUDE_DIR . 'app/users-edit.php';
+
         //swap all the instances of the old username to the new one
         qa_ar_db_swap_name(qa_ar_db_get_anon($userId), $newUsername);
 
