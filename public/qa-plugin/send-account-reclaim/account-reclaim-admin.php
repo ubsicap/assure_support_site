@@ -24,6 +24,7 @@ class account_reclaim_admin
 			qa_opt('account_reclaim_email_address', qa_post_text('account_reclaim_email_address'));
 			qa_opt('account_reclaim_email_subject_line', qa_post_text('account_reclaim_email_subject_line'));
 			qa_opt('account_reclaim_email_body_text', qa_post_text('account_reclaim_email_body_text'));
+			qa_opt('html_enabled', (bool) qa_post_text('html_enabled')); //enable html or not
 
 			$ok = $this->send_account_reclaim_email();
 			if (!strpos($ok, 'successfully')) {
@@ -71,7 +72,13 @@ class account_reclaim_admin
 					'rows' => 6,
 					'value' => qa_opt('account_reclaim_email_body_text'),
 					'tags' => 'name="account_reclaim_email_body_text"',
-				)
+				),
+				array(
+					'type' => 'checkbox',
+					'label' => 'Enable html?',
+					'tags' => 'name="html_enabled"',
+					'value' => qa_opt('html_enabled'),
+				),
 			),
 			'buttons' => array(
 				array(
@@ -88,6 +95,7 @@ class account_reclaim_admin
 		$fromname = qa_opt('account_reclaim_email_name');
 		$subject = qa_opt('account_reclaim_email_subject_line');
 		$body = trim(qa_opt('account_reclaim_email_body_text'));
+		//make sure input is valid
 		if(!($fromname && $fromemail && $subject && $body)) return 'Please make sure all fields are filled.';
 		require_once QA_INCLUDE_DIR . 'db/users.php';
 		require_once QA_INCLUDE_DIR . 'app/users.php';
@@ -107,7 +115,7 @@ class account_reclaim_admin
 				'toname' => '',
 				'subject' => $subject,
 				'body' => $body,
-				'html' => false,
+				'html' => qa_opt('html_enabled'),
 			));
 
 			if (!$send_status && !qa_email_validate($email)) {
