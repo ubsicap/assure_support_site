@@ -15,6 +15,8 @@ class qa_ar_admin
                 return 'account';
             case 'qa_ar_captcha_on_recover':
                 return true;
+            case 'qa_ar_register_archived_timeout':
+                return '3';
             default:
                 return null;
         }
