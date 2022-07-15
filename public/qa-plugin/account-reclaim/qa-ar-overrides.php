@@ -96,9 +96,9 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
         $oldName = qa_ar_db_get_anon($userId);
         $newName = $newUsername;
 
-        debug_to_console("UPDATE ^posts SET content=REGEXP_REPLACE(content, $oldName, $newName), title=REGEXP_REPLACE(title, $oldName, $newName)
+        debug_to_console("UPDATE ^posts SET content=REGEXP_REPLACE(content, '$oldName', '$newName'), title=REGEXP_REPLACE(title, '$oldName', '$newName')
             WHERE content like '%$oldName%' or title like '%$oldName%'");
-        debug_to_console("UPDATE ^words SET word=REGEXP_REPLACE(word, $oldName, $newName)$ WHERE word like '%$oldName%'");
+        debug_to_console("UPDATE ^words SET word=REGEXP_REPLACE(word, '$oldName', '$newName')$ WHERE word like '%$oldName%'");
 
         qa_ar_db_swap_name(qa_ar_db_get_anon($userId), $newUsername);
 
