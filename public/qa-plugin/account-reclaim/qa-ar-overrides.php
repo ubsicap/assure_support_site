@@ -90,6 +90,9 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
         require_once QA_INCLUDE_DIR . 'app/users.php';
 
         //swap all the instances of the old username to the new one
+        debug_to_console(qa_ar_db_get_anon($userId));
+        debug_to_console($newUsername);
+
         qa_ar_db_swap_name(qa_ar_db_get_anon($userId), $newUsername);
 
         // Setting the password is a different process than setting other fields
