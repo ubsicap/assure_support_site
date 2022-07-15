@@ -98,8 +98,6 @@ function qa_ar_db_remove_email($email)
  */
 function qa_ar_db_swap_name($oldName, $newName)
 {
-    debug_to_console("UPDATE ^posts SET content=REGEXP_REPLACE(content, $oldName, $newName), title=REGEXP_REPLACE(title, $oldName, $newName)
-    WHERE content like '%$oldName%' or title like '%$oldName%'");
     //any post with a title/content with the old name gets swapped with the new name
     //this relies on that the only time the old name is obscure enough that any match actually refers to the username
     qa_db_query_sub(
@@ -108,10 +106,9 @@ function qa_ar_db_swap_name($oldName, $newName)
         WHERE content like '%$oldName%' or title like '%$oldName%'"
 	);
 
-    debug_to_console("UPDATE ^words SET word=REGEXP_REPLACE(word, $oldName, $newName)$ WHERE word like '%$oldName%'");
     //now that the posts have changed we have to modify the wordid in the words table
     qa_db_query_sub(
-        "UPDATE ^words SET word=REGEXP_REPLACE(word, '$oldName', '$newName')$ WHERE word like '%$oldName%'"
+        "UPDATE ^words SET word=REGEXP_REPLACE(word, '$oldName', '$newName') WHERE word like '%$oldName%'"
     );
 }
 
