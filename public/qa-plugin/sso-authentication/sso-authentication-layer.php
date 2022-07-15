@@ -112,12 +112,12 @@ class qa_html_theme_layer extends qa_html_theme_base
     {
         // init configuration
 
-           
+        $clientID = qa_opt('sso_authentication_client_id');
+        $clientSecret = qa_opt('sso_authentication_client_secret');
         // create Client Request to access Google API
         $client = new Google_Client();
         $client->setClientId($clientID);
         $client->setClientSecret($clientSecret);
-        $client->setRedirectUri($redirectUri);
         $client->addScope("email");
         $client->addScope("profile");
         return $client->createAuthUrl();
