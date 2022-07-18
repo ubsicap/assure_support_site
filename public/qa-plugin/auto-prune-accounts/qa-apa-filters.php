@@ -53,7 +53,7 @@ class qa_apa_filters
                 // No error has occurred, so we don't need to return anything
             } else {
                 // Otherwise, the existing account can still be verified, so return an error
-                return qa_lang_sub('qa-apa/unconfirmed_email_exists', qa_opt('qa_apa_timeout_minutes'));
+                return qa_lang_sub('qa-apa/unconfirmed_email_exists', intval(qa_opt('qa_apa_timeout_minutes')) - intval($difference_minutes));
             }
         }
     }
