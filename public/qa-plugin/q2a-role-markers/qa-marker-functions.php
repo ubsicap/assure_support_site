@@ -13,5 +13,5 @@ function qa_get_badge_svg($baseDir, $id)
     $svgFile = fopen($filePath, "r");
     $text = fread($svgFile,filesize($filePath));
     fclose($svgFile);
-    return str_replace('id="svg"', 'id="' . $id . '"', $text);
+    return str_replace('class="svg"', 'class="' . $id . '"', $text);
 }
