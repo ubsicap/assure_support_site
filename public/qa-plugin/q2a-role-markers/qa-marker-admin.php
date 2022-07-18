@@ -17,9 +17,15 @@ class qa_marker_admin
                 return '
 .qa-avatar-marker {
 	position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    paddingg-right: 3px;
 }
 .qa-q-item-avatar,.qa-q-view-avatar,.qa-a-item-avatar,.qa-c-item-avatar {
 	position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    paddingg-right: 3px;
 }
 .qa-who-marker {
 	cursor: pointer;
