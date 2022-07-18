@@ -8,8 +8,14 @@
                 if ( !empty( $this->content['navigation']['user'] ) ) {
 
                     $this->output( '<li class="open-login-buttons">' );
-                    $this->output( '<a id="google-signin" href="">Google</a>' );
+
+                    //google button
+                    $this->output( '<a id="google-signin" href="">' . qa_lang('sso-auth/google_login') . '</a>' );
                     
+                    //facebook button
+                    $this->output( '<a id="facebook-signin" href="">' . qa_lang('sso-auth/facebook_login') . '</a>' );
+
+                    //paratext button
                     $this->output( 
                         //'<a id="paratext-signin" href="">Paratext</a>'
                         '<a id="partext-signin" href="" type="button" style="background-color: rgb(138, 171, 104);">
