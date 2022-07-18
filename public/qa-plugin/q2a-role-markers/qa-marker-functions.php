@@ -5,7 +5,7 @@
  *
  * @return string
  */
-function qa_get_badge_svg($baseDir)
+function qa_get_badge_svg()
 {
     $filePath = QA_HTML_THEME_LAYER_URLTOROOT . 'qa-shield-gen.svg';
     $svgFile = fopen($filePath, "r");
