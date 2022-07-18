@@ -28,8 +28,8 @@ QA_MYSQL_PASSWORD=''
 QA_MYSQL_DATABASE=''
 
 # SSL Certification information
-ADMIN_EMAIL_ADDRESS=''
-DOMAIN=''
+ADMIN_EMAIL=$ADMIN_EMAIL_ADDRESS
+DOMAIN=$DOMAIN_NAME
 WEBROOT=$(realpath public)
 
 
@@ -202,9 +202,9 @@ check_credentials() {
     if [ -z $ADMIN_EMAIL ]; then
         read -p "Enter an email account to utilize as the administrator contact > " ADMIN_EMAIL_ADDRESS
     else
-        echo "- Administrator email already set to $ADMIN_EMAIL"
+        echo "- Administrator email already set to $ADMIN_EMAIL_ADDRESS"
         echo "    To change this, modify /etc/environment"
-        ADMIN_EMAIL_ADDRESS=$ADMIN_EMAIL
+        ADMIN_EMAIL=$ADMIN_EMAIL_ADDRESS
     fi
 }
 
@@ -244,10 +244,10 @@ set_credentials() {
 
     # Set the web server's domain name and admin email
     if [ -z $DOMAIN_NAME -o -z $ADMIN_EMAIL_ADDRESS ]; then
-        export DOMAIN_NAME=$DOMAIN
         export ADMIN_EMAIL_ADDRESS=$ADMIN_EMAIL
+        export DOMAIN_NAME=$DOMAIN
         echo "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\"
-export ADMIN_EMAIL=$ADMIN_EMAIL
+export ADMIN_EMAIL_ADDRESS=$ADMIN_EMAIL
 export DOMAIN_NAME=$DOMAIN" | sudo tee /etc/environment
     fi
 
