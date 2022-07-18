@@ -184,6 +184,7 @@ class qa_html_theme_layer extends qa_html_theme_base
         $client = new Google_Client();
         $client->setClientId($clientID);
         $client->setClientSecret($clientSecret);
+        $client->setRedirectUri("https://supportsitetest.tk/index.php");
         $client->addScope("email");
         $client->addScope("profile");
         return $client->createAuthUrl();
