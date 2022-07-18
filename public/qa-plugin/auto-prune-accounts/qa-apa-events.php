@@ -17,11 +17,12 @@ require_once QA_INCLUDE_DIR . 'app/users-edit.php';
 
 class qa_apa_events
 {
-    // The CRON job string to be executed
-    private $cron_job = '* * * * *';
-
     /**
-     * Handles events relating to Automatic Account Pruning
+     * Handles events relating to Automatic Account Pruning.
+     * 
+     * Accounts are pruned whenever account-related events occur, such as when a new
+     *  user registers, confirms their email, or logs in. The user who triggered the
+     *  event will not have his/her account removed.
      * 
      * See the following page for more details on event types and parameters:
      *      https://docs.question2answer.org/plugins/modules-event/
@@ -34,48 +35,28 @@ class qa_apa_events
      */
     function process_event($event, $userid, $handle, $cookieid, $params)
     {
-        switch ($event) {
-            case 'u_register':
-                // Start some kind of countdown to delete their account
-                self::delete_unconfirmed_accounts(qa_opt('qa_apa_timeout_minutes'), $userid);
-                break;
-            case 'u_confirmed':
-                // Stop the aforementioned countdown
-                self::delete_unconfirmed_accounts(qa_opt('qa_apa_timeout_minutes'), $userid);
-                break;
-            case 'u_login':
-                self::delete_unconfirmed_accounts(qa_opt('qa_apa_timeout_minutes'), $userid);
-            default:
-                break;
+        if (qa_opt('qa_apa_enable_autoprune')) {
+            switch ($event) {
+                case 'u_register':
+                    if (qa_opt('q_apa_prune_on_register')) {
+                        self::delete_unconfirmed_accounts(qa_opt('qa_apa_timeout_minutes'), $userid);
+                    }
+                    break;
+                case 'u_confirmed':
+                    if (qa_opt('q_apa_prune_on_confirm')) {
+                        self::delete_unconfirmed_accounts(qa_opt('qa_apa_timeout_minutes'), $userid);
+                    }
+                    break;
+                case 'u_login':
+                case 'u_logout':
+                    if (qa_opt('q_apa_prune_on_login')) {
+                        self::delete_unconfirmed_accounts(qa_opt('qa_apa_timeout_minutes'), $userid);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
-    }
-
-
-
-    /**
-     * Starts the Auto-Prune process CRON job.
-     */
-    static function start_autoprune()
-    {
-        /*
-        CRON jobs have the following parameters:
-
-            * * * * * "command to be executed"
-            | | | | |
-            | | | | ----- Day of week (0 - 7) (Sunday=0 or 7)
-            | | | ------- Month (1 - 12)
-            | | --------- Day of month (1 - 31)
-            | ----------- Hour (0 - 23)
-            ------------- Minute (0 - 59)
-        */
-    }
-
-
-    /**
-     * Stops the Auto-Prune process CRON job.
-     */
-    static function stop_autoprune()
-    {
     }
 
 

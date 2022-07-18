@@ -1,8 +1,9 @@
 <?php
 
 /*
-    Provides a process of automatically deleting accounts that have not confirmed
-        their email after a configurable amount of time.
+    Provides a process of automatically marking accounts for deletion if they have
+        not verified their account after a configurable amount of time and removing
+        them based off of certain event triggers.
 */
 
 
@@ -14,9 +15,6 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 
 // Register all language files
 qa_register_plugin_phrases('lang/qa-apa-lang-*.php', 'qa-apa');
-
-// Register all function overrides
-qa_register_plugin_overrides('qa-apa-overrides.php');
 
 /*
 Register the plugin's many modules

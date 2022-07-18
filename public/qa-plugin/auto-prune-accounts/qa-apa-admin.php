@@ -27,6 +27,10 @@ class qa_apa_admin
                 return true;
             case 'qa_apa_timeout_minutes':
                 return '30';
+            case 'qa_apa_prune_on_register':
+            case 'qa_apa_prune_on_confirm':
+            case 'qa_apa_prune_on_login':
+                return true;
             default:
                 return null;
         }
@@ -42,7 +46,6 @@ class qa_apa_admin
      */
     function admin_form(&$qa_content)
     {
-
         //	Process form input
         $ok = null;
         if (qa_clicked('qa_apa_save_button')) {
@@ -53,11 +56,10 @@ class qa_apa_admin
             // Time between auto removal checks
             qa_opt('qa_apa_timeout_minutes', qa_post_text('qa_apa_timeout_minutes'));
 
-            if (qa_opt('qa_apa_enable_autoprune')) {
-                qa_apa_events::start_autoprune();
-            } else {
-                qa_apa_events::stop_autoprune();
-            }
+            // Toggle the triggers for automatically pruning accounts
+            qa_opt('qa_apa_prune_on_register', (bool)qa_post_text('qa_apa_prune_on_register'));
+            qa_opt('qa_apa_prune_on_confirm', (bool)qa_post_text('qa_apa_prune_on_confirm'));
+            qa_opt('qa_apa_prune_on_login', (bool)qa_post_text('qa_apa_prune_on_login'));
 
             $ok = qa_lang('admin/options_saved');
         } else if (qa_clicked('qa_apa_reset_button')) {
@@ -86,6 +88,25 @@ class qa_apa_admin
             'tags' => 'NAME="qa_apa_timeout_minutes"',
             'value' => qa_opt('qa_apa_timeout_minutes'),
             'type' => 'number',
+        );
+        // Checkboxes for toggling autoprune triggers
+        $fields[] = array(
+            'label' => qa_lang('qa-apa/admin_prune_on_register'),
+            'tags' => 'NAME="qa_apa_prune_on_register"',
+            'value' => qa_opt('qa_apa_prune_on_register'),
+            'type' => 'checkbox',
+        );
+        $fields[] = array(
+            'label' => qa_lang('qa-apa/admin_prune_on_confirm'),
+            'tags' => 'NAME="qa_apa_prune_on_confirm"',
+            'value' => qa_opt('qa_apa_prune_on_confirm'),
+            'type' => 'checkbox',
+        );
+        $fields[] = array(
+            'label' => qa_lang('qa-apa/admin_prune_on_login'),
+            'tags' => 'NAME="qa_apa_prune_on_login"',
+            'value' => qa_opt('qa_apa_prune_on_login'),
+            'type' => 'checkbox',
         );
 
 

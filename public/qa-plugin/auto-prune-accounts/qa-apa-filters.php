@@ -29,7 +29,7 @@ class qa_apa_filters
     public function filter_email(&$email, $olduser)
     {
         // This filter doesn't apply to users changing their email, so quickly exit that case
-        if (!empty($olduser)) {
+        if (!empty($olduser) || !qa_opt('qa_apa_enable_autoprune')) {
             return;
         }
 
