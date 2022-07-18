@@ -8,7 +8,7 @@
  */
 function qa_get_badge_svg($id)
 {
-    $filePath = './qa-plugin/q2a-role-markers/qa-shield-gen1.svg';
+    $filePath = './qa-plugin/q2a-role-markers/qa-shield-gen.svg';
     $svgFile = fopen($filePath, "r");
     $text = fread($svgFile,filesize($filePath));
     fclose($svgFile);
