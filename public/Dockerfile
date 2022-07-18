@@ -9,7 +9,12 @@ RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 RUN docker-php-ext-install calendar
 
 # General updates to ensure smooth runtime
-RUN apt-get update && apt-get upgrade -y && apt-get install -y libpng-dev
+RUN apt-get update && apt-get upgrade -y && apt-get install -y libpng-dev git zip
+
+#Install Composer for downloading Google API client with PHP
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /bin/composer
+RUN composer require google/apiclient:^2.0
 
 # Install GD library for dynamic image creation
 RUN apt-get install -y libjpeg-dev libfreetype6-dev
@@ -21,9 +26,6 @@ WORKDIR /var/www/html
 
 # Holds config files not served by the website
 RUN mkdir -p /var/www/config
-
-# Install dev dependencies (These can be removed in production)
-# RUN apt-get install -y sendmail vim
 
 # Enable SSL modules
 RUN a2enmod rewrite && a2enmod ssl && a2enmod socache_shmcb
