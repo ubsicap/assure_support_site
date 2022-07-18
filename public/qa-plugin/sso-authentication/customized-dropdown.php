@@ -8,7 +8,15 @@
                 if ( !empty( $this->content['navigation']['user'] ) ) {
                     $this->output( '<li class="open-login-buttons">' );
                     $this->output( '<a id="google-signin" href="">Google</a>' );
-                    $this->output( '<a id="paratext-signin" href="">Paratext</a>' );
+                    
+                    $this->output( 
+                        //'<a id="paratext-signin" href="">Paratext</a>'
+                        '<a type="button" style="background-color: rgb(138, 171, 104);">
+                            <div style="background-image: url("https://registry.paratext.org/static/logo-pt9.png");"></div>
+                            <div>Log in with paratext</div>
+                        </a>'
+                    );
+
                     $this->output( '</li>' );
                 }
             ?>
