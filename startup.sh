@@ -191,6 +191,9 @@ check_credentials() {
 
     # Reload the environment variables
     . /etc/environment
+
+    # If the environment variables are not set, get values for them (but don't set yet)
+    # Otherwise, just fetch their values for local usage
     if [ -z $DOMAIN_NAME ]; then
         read -p "Enter the domain name of the site to be hosted > " DOMAIN
     else
@@ -242,10 +245,11 @@ set_credentials() {
     # Set the database's name
     sed -i "s/$RDS_DB_NAME/$QA_MYSQL_DATABASE/" $CONFIG_PATH
 
-    # Set the web server's domain name and admin email
-    if [ -z $DOMAIN_NAME -o -z $ADMIN_EMAIL_ADDRESS ]; then
+    # Set the web server's domain name and admin email environment variables
+    if [ -z $DOMAIN_NAME ] || [ -z $ADMIN_EMAIL_ADDRESS ]; then
         export ADMIN_EMAIL_ADDRESS=$ADMIN_EMAIL
         export DOMAIN_NAME=$DOMAIN
+
         echo "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\"
 export ADMIN_EMAIL_ADDRESS=$ADMIN_EMAIL
 export DOMAIN_NAME=$DOMAIN" | sudo tee /etc/environment
