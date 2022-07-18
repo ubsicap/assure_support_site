@@ -98,7 +98,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 
         if (qa_opt('marker_plugin_icons_images')) {
             require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
-            $svgFile = qa_get_badge_svg(QA_HTML_THEME_LAYER_URLTOROOT);
+            $svgFile = qa_get_badge_svg(QA_HTML_THEME_LAYER_URLTOROOT, "qa-marker-svg-" . $img);
 
             $rolemarker .= '<div class="qa-avatar-marker">'. $svgFile .'</div>';
         } else {
