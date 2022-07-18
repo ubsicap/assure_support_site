@@ -3,13 +3,12 @@
 /**
  * Return the svg data of the badge icon, used for dynamic coloring
  *
- * @param $baseDir = QA_HTML_THEME_LAYER_URLTOROOT
  * @param $id the id the svg tag should be given
  * @return string
  */
-function qa_get_badge_svg($baseDir, $id)
+function qa_get_badge_svg($id)
 {
-    $filePath = $baseDir . 'qa-shield-gen1.svg';
+    $filePath = './qa-plugin/q2a-role-markers/qa-shield-gen1.svg';
     $svgFile = fopen($filePath, "r");
     $text = fread($svgFile,filesize($filePath));
     fclose($svgFile);
