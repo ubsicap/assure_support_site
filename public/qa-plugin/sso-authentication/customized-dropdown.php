@@ -14,7 +14,7 @@
                         //'<a id="paratext-signin" href="">Paratext</a>'
                         '<a id="partext-signin" href="" type="button" style="background-color: rgb(138, 171, 104);">
                             <div id="paratext-logo" style="background-image: url("https://registry.paratext.org/static/logo-pt9.png");"></div>
-                            <div>' . qa_lang('sso/paratext_login') . '</div>
+                            <div>' . qa_lang('sso-auth/paratext_login') . '</div>
                         </a>'
                     );
 
