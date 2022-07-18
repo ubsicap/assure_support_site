@@ -191,7 +191,7 @@ check_credentials() {
 
     # Reload the environment variables
     . /etc/environment
-    if [ -z $DOMAIN ]; then
+    if [ -z $DOMAIN_NAME ]; then
         read -p "Enter the domain name of the site to be hosted > " DOMAIN
     else
         echo "- Domain name already set to $DOMAIN_NAME"
@@ -199,8 +199,8 @@ check_credentials() {
         DOMAIN=$DOMAIN_NAME
     fi
 
-    if [ -z $ADMIN_EMAIL ]; then
-        read -p "Enter an email account to utilize as the administrator contact > " ADMIN_EMAIL_ADDRESS
+    if [ -z $ADMIN_EMAIL_ADDRESS ]; then
+        read -p "Enter an email account to utilize as the administrator contact > " ADMIN_EMAIL
     else
         echo "- Administrator email already set to $ADMIN_EMAIL_ADDRESS"
         echo "    To change this, modify /etc/environment"
