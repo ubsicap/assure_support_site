@@ -30,7 +30,7 @@ Parameters are:
 qa_register_plugin_module('module', 'qa-apa-admin.php', 'qa_apa_admin', 'Admin page for Auto-Prune plugin');
 
 // Filter module
-//qa_register_plugin_module('filter', 'qa-apa-filter.php', 'qa_apa_filter', 'Create a countdown timer upon new user registration');
+qa_register_plugin_module('filter', 'qa-apa-filters.php', 'qa_apa_filters', 'Delete unconfirmed accounts when attempting to register new ones');
 
-// Event module 
-//qa_register_plugin_module('event', 'qa-apa-event.php', 'qa_apa_archive_cleanup', '');
+// Event module
+qa_register_plugin_module('event', 'qa-apa-event.php', 'qa_apa_events', 'Delete unconfirmed accounts on events such as login and register');

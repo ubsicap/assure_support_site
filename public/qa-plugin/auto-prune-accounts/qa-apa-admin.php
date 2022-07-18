@@ -7,7 +7,7 @@
 
 
 
-require_once QA_PLUGIN_DIR . 'auto-prune-accounts/qa-apa-functions.php';
+require_once QA_PLUGIN_DIR . 'auto-prune-accounts/qa-apa-events.php';
 
 
 
@@ -25,12 +25,8 @@ class qa_apa_admin
         switch ($option) {
             case 'qa_apa_enable_autoprune':
                 return true;
-            case 'qa_apa_timeout_value':
+            case 'qa_apa_timeout_minutes':
                 return '30';
-                /*
-            case 'qa_apa_timeout_units':
-                return 'minutes';
-            */
             default:
                 return null;
         }
@@ -55,16 +51,12 @@ class qa_apa_admin
             qa_opt('qa_apa_enable_autoprune', qa_post_text('qa_apa_enable_autoprune'));
 
             // Time between auto removal checks
-            qa_opt('qa_apa_timeout_value', qa_post_text('qa_apa_timeout_value'));
-
-            // Time unit for the timeout value
-            //qa_opt('qa_apa_timeout_units', qa_post_text('qa_apa_timeout_units'));
-
+            qa_opt('qa_apa_timeout_minutes', qa_post_text('qa_apa_timeout_minutes'));
 
             if (qa_opt('qa_apa_enable_autoprune')) {
-                start_autoprune();
+                qa_apa_events::start_autoprune();
             } else {
-                stop_autoprune();
+                qa_apa_events::stop_autoprune();
             }
 
             $ok = qa_lang('admin/options_saved');
@@ -90,21 +82,11 @@ class qa_apa_admin
         );
         // Create a text area for setting the timeout value
         $fields[] = array(
-            'label' => qa_lang('qa-apa/admin_timeout_value'),
-            'tags' => 'NAME="qa_apa_timeout_value"',
-            'value' => qa_opt('qa_apa_timeout_value'),
+            'label' => qa_lang('qa-apa/admin_timeout_minutes'),
+            'tags' => 'NAME="qa_apa_timeout_minutes"',
+            'value' => qa_opt('qa_apa_timeout_minutes'),
             'type' => 'number',
         );
-        /*
-        //  Set the timeout units (minutes, hours, etc.)
-        $fields[] = array(
-            'label' => qa_lang('qa-apa/admin_timeout_units'),
-            'tags' => 'NAME="qa_apa_timeout_units"',
-            'value' => qa_opt('qa_apa_timeout_units'),
-            'type' => 'textarea',
-            'rows' => '1'
-        );
-        */
 
 
         return array(
