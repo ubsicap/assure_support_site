@@ -10,10 +10,16 @@
                     $this->output( '<li class="open-login-buttons">' );
 
                     //google button
-                    $this->output( '<a id="google-signin" href="">' . qa_lang('sso-auth/google_login') . '</a>' );
+                    $this->output( '<a id="google-signin" href="">
+                    <span class="google-signin-icon"></span>
+                  <span class="signin-text">'. qa_lang('sso-auth/google_login') . '</span>
+              </a>');
                     
                     //facebook button
-                    $this->output( '<a id="facebook-signin" href="">' . qa_lang('sso-auth/facebook_login') . '</a>' );
+                    $this->output( '<a id="facebook-signin" href="">
+                    <span class="facebook-signin-icon"></span>
+                  <span class="signin-text">'. qa_lang('sso-auth/facebook_login') . '</span>
+              </a>');
 
                     //paratext button
                     $this->output( 

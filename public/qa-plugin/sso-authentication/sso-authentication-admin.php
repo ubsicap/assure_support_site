@@ -7,7 +7,7 @@ class sso_authentication_admin
 	function option_default($option)
 	{
 		switch ($option) {
-			case 'sso_authentication_enabled':
+			case 'google_authentication_enabled':
 				return true;
 			default:
 		}
@@ -18,10 +18,13 @@ class sso_authentication_admin
 
 		// process the admin form if admin hit Save-Changes-button
 		$ok = null;
-		if (qa_clicked('sso_authentication_start')) {
-			qa_opt('sso_authentication_enabled', (bool)qa_post_text('sso_authentication_enabled')); // empty or 1
-			qa_opt('sso_authentication_client_id', qa_post_text('sso_authentication_client_id'));
-			qa_opt('sso_authentication_client_secret', qa_post_text('sso_authentication_client_secret'));
+		if (qa_clicked('sso_authentication_enabled')) {
+			qa_opt('google_authentication_enabled', (bool)qa_post_text('google_authentication_enabled')); // empty or 1
+			qa_opt('google_authentication_client_id', qa_post_text('google_authentication_client_id'));
+			qa_opt('google_authentication_client_secret', qa_post_text('google_authentication_client_secret'));
+			qa_opt('facebook_authentication_enabled', (bool)qa_post_text('facebookauthentication_enabled')); // empty or 1
+			qa_opt('facebook_authentication_client_id', qa_post_text('facebook_authentication_client_id'));
+			qa_opt('facebook_authentication_client_secret', qa_post_text('facebook_authentication_client_secret'));
 			$ok = 'Options saved';
 			// $ok = $this->send_sso_authentication_email();
 			// if (!strpos($ok, 'successfully')) {
@@ -41,27 +44,45 @@ class sso_authentication_admin
 			'fields' => array(
 				array(
 					'type' => 'checkbox',
-					'label' => 'Enable plugin',
-					'tags' => 'name="sso_authentication_enabled"',
-					'value' => qa_opt('sso_authentication_enabled'),
+					'label' => qa_lang('sso-auth/google_login_enabled'),
+					'tags' => 'name="google_authentication_enabled"',
+					'value' => qa_opt('google_authentication_enabled'),
 				),
 				array(
-					'label' => 'Client id:',
+					'label' => qa_lang('sso-auth/client_id'),
 					'type' => 'text',
-					'value' => qa_opt('sso_authentication_client_id'),
-					'tags' => 'name="sso_authentication_client_id"',
+					'value' => qa_opt('google_authentication_client_id'),
+					'tags' => 'name="google_authentication_client_id"',
 				),
 				array(
-					'label' => 'Client secret:',
+					'label' => qa_lang('sso-auth/client_secret'),
 					'type' => 'text',
-					'value' => qa_opt('sso_authentication_client_secret'),
-					'tags' => 'name="sso_authentication_client_secret"',
+					'value' => qa_opt('google_authentication_client_secret'),
+					'tags' => 'name="google_authentication_client_secret"',
+				),
+				array(
+					'type' => 'checkbox',
+					'label' => qa_lang('sso-auth/facebook_login_enabled'),
+					'tags' => 'name="facebook_authentication_enabled"',
+					'value' => qa_opt('facebook_authentication_enabled'),
+				),
+				array(
+					'label' => qa_lang('sso-auth/client_id'),
+					'type' => 'text',
+					'value' => qa_opt('facebook_authentication_client_id'),
+					'tags' => 'name="facebook_authentication_client_id"',
+				),
+				array(
+					'label' => qa_lang('sso-auth/client_secret'),
+					'type' => 'text',
+					'value' => qa_opt('facebook_authentication_client_secret'),
+					'tags' => 'name="facebook_authentication_client_secret"',
 				)
 			),
 			'buttons' => array(
 				array(
 					'label' => 'Save options',
-					'tags' => 'name="sso_authentication_start"',
+					'tags' => 'name="sso_authentication_enabled"',
 				)
 			),
 		);
@@ -69,8 +90,8 @@ class sso_authentication_admin
 
 	// function send_sso_authentication_email()
 	// {
-	// 	$fromemail = qa_opt('sso_authentication_client_secret');
-	// 	$fromname = qa_opt('sso_authentication_client_id');
+	// 	$fromemail = qa_opt('google_authentication_client_secret');
+	// 	$fromname = qa_opt('google_authentication_client_id');
 	// 	$subject = qa_opt('sso_authentication_email_subject_line');
 	// 	$body = trim(qa_opt('sso_authentication_email_body_text'));
 	// 	//make sure input is valid
