@@ -13,6 +13,7 @@ Repository and information for the Assure Support Site
 1. [Database Management](#database-management)
 1. [Container Management](#container-management)
 1. [Migrating Database Content](#migrating-database-content)
+1. [Custom Plugins](#custom-plugins)
 
 ## Structure
 
@@ -20,18 +21,22 @@ Notable Repository Contents:
 
 ```sh
 ./
-├── config/                   # Secure config info
-│   └── qa-config-secure.php  # Contains MySQL credentials*
-├── public/                   # Question2Answer website source code
-│   ├── assets/               # Images, audio/video files, etc.
-│   ├── qa-plugin/            # External plugins; new feature develoment
-│   ├── qa-theme/             # Custom UI themes
-│   ├── Dockerfile            # Constructs an image of the website
-│   ├── index.php             # Initial file served by site
-│   └── qa-config.php         # Sets up MySQL database
-├── docker-compose.yml        # Launches all web service containers
-├── ec2_user_data.sh          # User Data for the EC2 launch
-└── startup.sh                # Startup script for launching in AWS
+├── config/                     # Secure config info
+│   └── qa-config-secure.php    # Contains MySQL credentials*
+├── public/                     # Question2Answer website source code
+│   ├── assets/                 # Images, audio/video files, etc.
+│   ├── qa-custom-pages/        # HTML for custom pages
+│   ├── qa-plugin/              # External plugins; new feature develoment
+│   |   ├── account-reclaim     # For migrating Discourse accounts to Q2A
+│   |   └── auto-prune-accounts # For automatically removing unverified accounts
+│   ├── qa-theme/               # Custom UI themes
+│   ├── Dockerfile              # Constructs an image of the website
+│   ├── DockerfileNoSSL         # Basic website image with no SSL certification
+│   ├── index.php               # Initial file served by site
+│   └── qa-config.php           # Sets up MySQL database
+├── docker-compose.yml          # Launches all web service containers
+├── ec2_user_data.sh            # User Data for the EC2 launch
+└── startup.sh                  # Startup script for launching in AWS
 ```
 
 `*` Removed from `public/` and referenced by `public/qa-config.php` for [security](https://docs.question2answer.org/install/security/).
@@ -40,20 +45,20 @@ Notable Repository Contents:
 
 Make sure the following credentials are set:
 
-- In `./config/qa-config-secure.php`
-  - `QA_MYSQL_HOSTNAME`
-    - Must be set to the name of the DB container defined in `docker-compose.yml`
-  - `QA_MYSQL_USERNAME`
-    - Matches the `MYSQL_USER` environment variable below
-  - `QA_MYSQL_PASSWORD`
-    - Matches the `MYSQL_PASSWORD` environment variable below
-  - `QA_MYSQL_DATABASE`
-    - Matches the `MYSQL_DATABASE` environment variable below
-- In `./docker-compose.yml`
-  - `MYSQL_ROOT_PASSWORD`
-  - `MYSQL_DATABASE`
-  - `MYSQL_USER`
-  - `MYSQL_PASSWORD`
+-   In `./config/qa-config-secure.php`
+    -   `QA_MYSQL_HOSTNAME`
+        -   Must be set to the name of the DB container defined in `docker-compose.yml`
+    -   `QA_MYSQL_USERNAME`
+        -   Matches the `MYSQL_USER` environment variable below
+    -   `QA_MYSQL_PASSWORD`
+        -   Matches the `MYSQL_PASSWORD` environment variable below
+    -   `QA_MYSQL_DATABASE`
+        -   Matches the `MYSQL_DATABASE` environment variable below
+-   In `./docker-compose.yml`
+    -   `MYSQL_ROOT_PASSWORD`
+    -   `MYSQL_DATABASE`
+    -   `MYSQL_USER`
+    -   `MYSQL_PASSWORD`
 
 Then run:
 
@@ -68,25 +73,25 @@ Finally, navigate to `http://localhost` in your web browser
 1. Create a new EC2 instance.
 1. Select Ubuntu 20.04 as the image.
 1. Select/create a key pair for `ssh` access.
-   - Make sure you save the `.pem` key file
+    - Make sure you save the `.pem` key file
 1. Select/create a network security group with the following rules:
-   - **Type**: `HTTP`, **Protocol**: `TCP`, **Port Range**: `80`, **Source**: `0.0.0.0/0`
-   - **Type**: `HTTPS`, **Protocol**: `TCP`, **Port Range**: `443`, **Source**: `0.0.0.0/0`
-   - **Type**: `ssh`, **Protocol**: `TCP`, **Port Range**: `22`, **Source**: `<Your IP>`
-   - **Type**: `MYSQL/Aurora`, **Protocol**: `TCP`, **Port Range**: `3306`, **Source**: `<Your IP>`
+    - **Type**: `HTTP`, **Protocol**: `TCP`, **Port Range**: `80`, **Source**: `0.0.0.0/0`
+    - **Type**: `HTTPS`, **Protocol**: `TCP`, **Port Range**: `443`, **Source**: `0.0.0.0/0`
+    - **Type**: `ssh`, **Protocol**: `TCP`, **Port Range**: `22`, **Source**: `<Your IP>`
+    - **Type**: `MYSQL/Aurora`, **Protocol**: `TCP`, **Port Range**: `3306`, **Source**: `<Your IP>`
 1. Expand the `Advanced details` section.
 1. Scroll down until you see a field marked `User data`.
 1. Paste the contents of `ec2_user_data.sh` into this field.
 1. Click `Launch Instance`
 1. While waiting for the instance to boot (it may take up to 3 minutes), click on it and copy its public IPv4 address
 1. Connect to your instance with the following command (note you may need to `sudo`, depending on file permissions):
-   - `ssh -i <your .pem key> <user>@<instance public IPv4>`
-   - `<username>` should be `ubuntu` if you chose an Ubuntu AMI.
+    - `ssh -i <your .pem key> <username>@<instance public IPv4>`
+    - `<username>` should be `ubuntu` if you chose an Ubuntu AMI.
 1. Once connected, run the following commands:
-   - `cd app`
-   - `sh startup.sh`
-1. You will be prompted to create a MySQL root password, account username, account password, and database name.
-1. Once you have created credentials, the `docker-compose.yml` file will be ran and the Docker containers will start.
+    - `cd app`
+    - `sh startup.sh`
+1. You may be prompted to provide information such as the website's domain name.
+1. Once you have provided credentials, the `docker-compose.yml` file will be ran and the Docker containers will start.
 1. Open your web browser to `http://<instance public IP>`
 1. You will be prompted to create an administrator account for the website.
 1. Once created, you will be brought to the site's homepage.
@@ -97,43 +102,28 @@ Configuration will be dependent on your preferences and needs, this section will
 
 In AWS create an RDS instance with the following settings:
 
-- Create Database (Standard)
-- MySql 8.0.28 (default)
+-   Create Database (Standard)
+-   MySql 8.0.28 (default)
 
-- Burstable classes: db.t3.micro
-- General Purpose SSD
-- 20 GiB allocated
-- Enable storage autoscaling
-- 100 GiB maximum
-- Default VPC (make sure id matches the existing EC2 instance)
-- Public Access: No
-- VPC security groups: MySQL Access (if that isn't a group, just use default)
-- Password authentication
-- Additional Configuration > Initial database name: q2adb
+-   Burstable classes: db.t3.micro
+-   General Purpose SSD
+-   20 GiB allocated
+-   Enable storage autoscaling
+-   100 GiB maximum
+-   Default VPC (make sure id matches the existing EC2 instance)
+-   Public Access: No
+-   VPC security groups: MySQL Access (if that isn't a group, just use default)
+-   Password authentication
+-   Additional Configuration > Initial database name: q2adb
 
-- Make sure to note down the database password and username (admin by default).
+-   Make sure to note down the database password and username (admin by default).
 
-## Configuring security:
+### Configuring security:
 
-- To protect the site data, the database should have been configured so that only instances on the same VPC (i.e. the EC2 instance) can access it.
-- The EC2 instance should only have ports open for ssh (22), http (80), ssl (443), MySql (3306).
-- For the RDS instance, the only inbound port permitted should be MySql(3306). The source ip of the inbound rule should be the private ip of the EC2 instance.
-- This can be configured in the security groups of the EC2 and RDS instance.
-
-## Accessing data in the RDS instance:
-
-If you would like to view the database from MySql Workbench, this can be done by configuring a connection through ssh. This is necessary as only the EC2 instance is allowed to access the database.
-
-Use the following settings under the connection in MySql Workbench:
-
-- Connection Method: Standard TCP/IP over SSH
-- SSH Hostname: The hostname of the EC2 instance (i.e. ec2...amazonaw.com)
-- SSH Username: Username of account on EC2 instance (i.e. ubuntu)
-- SSH Key File: The key file path of the credentials needed to log into the EC2 instance
-- MySQL Hostname: The hostname of the RDS instance (i.e. q2a...rds.amazon.com)
-- MySQL Server port: 3306
-- Username: admin
-- Password: Whatever you configured as the RDS password
+-   To protect the site data, the database should have been configured so that only instances on the same VPC (i.e. the EC2 instance) can access it.
+-   The EC2 instance should only have ports open for ssh (22), http (80), ssl (443), MySql (3306).
+-   For the RDS instance, the only inbound port permitted should be MySql(3306). The source ip of the inbound rule should be the private ip of the EC2 instance.
+-   This can be configured in the security groups of the EC2 and RDS instance.
 
 ## Custom Domain Name
 
@@ -143,9 +133,9 @@ Setting up a custom domain is split into multiple parts, listed below:
 
 1. From the [AWS EC2 Console](https://console.aws.amazon.com/ec2/v2/home?#), search for "Elastic IP"
 1. Click "Allocate Elastic IP Address"
-   - Note there is a charge for this if the address does not get associated with an EC2 instance
+    - Note there is a charge for this if the address does not get associated with an EC2 instance
 1. Select the IPv4 address pool option desired
-   - For development, we used "Amazon's pool of IPv4 addresses"
+    - For development, we used "Amazon's pool of IPv4 addresses"
 1. Allocate the address
 1. After the IP was generated, click "Actions" and then "Associate"
 1. Associate the Elastic IP with the EC2 instance running the server
@@ -155,9 +145,9 @@ More info can be found [here](https://docs.aws.amazon.com/AWSEC2/latest/UserGuid
 ### Register Domain Name
 
 1. Register a domain name through your service of choice
-   - [freenom](https://my.freenom.com/domains.php) was used for development
-   - Dev domain name is `supportsitetest.tk`
-   - Used "freenom DNS" instead of custom name server
+    - [freenom](https://my.freenom.com/domains.php) was used for development
+    - Dev domain name is `supportsitetest.tk`
+    - Used "freenom DNS" instead of custom name server
 1. Create the following DNS records:
    | NAME | TYPE | TTL | TARGET |
    |---------------|------|------|--------------|
@@ -182,26 +172,26 @@ Before attempting this, please ensure that HTTPS traffic is not yet allowed by n
 1. Connect to the EC2 instance (`ssh -i <your_key.pem> <user>@<domain name>`, just like above)
 1. Once connected, run the following two commands:
 
-   ```sh
-   # Install certbot & apache plugin (if needed)
-   apt-get install -y certbot
+    ```sh
+    # Install certbot & apache plugin (if needed)
+    apt-get install -y certbot
 
-   # Run certbot interactively
-   certbot --dry-run --webroot
-   ```
+    # Run certbot interactively
+    certbot --dry-run --webroot
+    ```
 
 1. Follow the prompts
 1. Alternative, running certbot can be run in "non-interactive" mode:
-   ```sh
-   certbot certonly --dry-run \  # Just generate the cert files
-        --non-interactive \
-        --agree-tos \            # Automatically agree to the ToS
-        --expand \               # Append new domains
-        -m $ADMIN_EMAIL \        # Email to contact about renewal
-        --webroot -w $WEBROOT \  # Root dir of the website
-        -d $DOMAIN_NAME \        # Each domain you want to certify
-        -d www.$DOMAIN_NAME
-   ```
+    ```sh
+    certbot certonly --dry-run \  # Just generate the cert files
+         --non-interactive \
+         --agree-tos \            # Automatically agree to the ToS
+         --expand \               # Append new domains
+         -m $ADMIN_EMAIL \        # Email to contact about renewal
+         --webroot -w $WEBROOT \  # Root dir of the website
+         -d $DOMAIN_NAME \        # Each domain you want to certify
+         -d www.$DOMAIN_NAME
+    ```
 1. If successful, you will see a message stating that the site is now certified
 1. Navigate to `https://<Domain Name>` and verify that HTTPS traffic is allowed
 
@@ -213,19 +203,24 @@ More information can be found [here](https://www.digitalocean.com/community/tuto
 
 ## Database Management
 
-The database can be accessed through two methods:
+The database can be accessed through [MySQL Workbench](https://www.mysql.com/products/workbench/) (or another MySQL access tool) through SSH with the following settings:
 
-- ~~[phpMyAdmin](https://www.phpmyadmin.net/), which is running in a container alongside the database, on port [`3306`](https://blog.zotorn.de/phpmyadmin-docker-image-with-ssl-tls/)~~
-  - Currently deprecated
-- [MySQL Workbench](https://www.mysql.com/products/workbench/) (or another MySQL access tool) on port [`9906`](https://www.digitalocean.com/community/tutorials/how-to-connect-to-a-mysql-server-remotely-with-mysql-workbench)
+-   **Connection Method**: `Standard TCP/IP over SSH`
+-   **SSH Hostname**: The hostname of the EC2 instance (i.e. `ec2...amazonaw.com`)
+-   **SSH Username**: Username of account on EC2 instance (i.e. `ubuntu`)
+-   **SSH Key File**: The key file path of the credentials needed to log into the EC2 instance (i.e. `/path/to/dev/key.pem`)
+-   **MySQL Hostname**: The hostname of the RDS instance (i.e. `q2a...rds.amazon.com`)
+-   **MySQL Server port**: `3306`
+-   **Username**: `admin`
+-   **Password**: Whatever you configured as the RDS password
 
-I don't know which method is preferred for production. Both are password protected using the credentials entered at first launch.
+More information can be found [here](https://www.digitalocean.com/community/tutorials/how-to-connect-to-a-mysql-server-remotely-with-mysql-workbench).
 
 ## Container Management
 
 This installation is configured to work with [Portainer](https://www.portainer.io/), a web-based container management GUI. It's like Docker Desktop, but in a web browser.
 
-The service is launched automatically alongside the rest of the containers. To access, navigate to `https://<Domain Name>:9443`
+The service is launched automatically alongside the rest of the web server container. To access, navigate to `https://<Domain Name>:9443`
 
 ## Migrating Database Content
 
@@ -233,20 +228,20 @@ The service is launched automatically alongside the rest of the containers. To a
 
 There are two distinct ways to host the database:
 
-- Presently, a Docker container is running MySQL and its data is stored using a Docker volume
-- [AWS RDS](https://aws.amazon.com/rds/) is a cloud-based database solution
+-   Presently, a Docker container is running MySQL and its data is stored using a Docker volume
+-   [AWS RDS](https://aws.amazon.com/rds/) is a cloud-based database solution
 
 Migrating data to the server depends on which database is implemented.
 
 ### Docker Volumes
 
 1. On the host of the source of the database, archive the `_data` folder located in `/var/lib/docker/volumes/<db container volume>/`
-   1. `<db container volume>` is either `app_q2a_db_volume` or `assure_support_site_q2a_db_volume`
+    1. `<db container volume>` is either `app_q2a_db_volume` or `assure_support_site_q2a_db_volume`
 1. Ensure the destination machine has enough storage capacity for the new database. If not, [increase its disk space](https://linuxhint.com/increase-disk-space-ec2/).
 1. Transfer the archive to the destination machine ([`gdown`](https://pypi.org/project/gdown/) for downloading from Google Drive)
 1. Stop all running containers.
 1. Create a backup of `/var/lib/docker/volumes/app_q2a_db_volume/_data` on the destination machine.
-   1. `sudo mv /var/lib/docker/volumes/app_q2a_db_volume/_data ./_data_db_backup`
+    1. `sudo mv /var/lib/docker/volumes/app_q2a_db_volume/_data ./_data_db_backup`
 1. Unzip the archive so that the new `_data` volume is located in place of the folder you just backed up.
 1. Re-start containers and ensure that all data was transported successfully.
 
@@ -254,29 +249,38 @@ Migrating data to the server depends on which database is implemented.
 
 1. Getting a dump of the desired data from your local machine.
 
-   1. View your database from MySql Workbench.
-   1. Go to Server > Data Export
-   1. Select the schema with the desired tables (if you don’t want to overwrite the tables storing site configuration do not select `qa_options` and `qa_pages`).
-   1. Choose Export to Self-Contained File
-   1. Start Export
+    1. View your database from MySql Workbench.
+    1. Go to Server > Data Export
+    1. Select the schema with the desired tables (if you don’t want to overwrite the tables storing site configuration do not select `qa_options` and `qa_pages`).
+    1. Choose Export to Self-Contained File
+    1. Start Export
 
 1. Moving the dump to the EC2 instance.
 
-   1. Before you do this make sure you can SSH (secure shell) into the EC2 instance.
-   1. Use `scp` to send the dump file to the EC2 instance
-      - `scp -i <your .pem key> <local dump file> <user>@<Elastic IP>:<destination of dump file>`
-      - Example: `scp -i q2a_intern_key Dump20220701.sql ubuntu@supportsitetest.tk:~/dumps/Dump20220701.sql`
+    1. Before you do this make sure you can SSH (secure shell) into the EC2 instance.
+    1. Use `scp` to send the dump file to the EC2 instance
+        - `scp -i <your .pem key> <local dump file> <user>@<Elastic IP>:<destination of dump file>`
+        - Example: `scp -i q2a_intern_key Dump20220701.sql ubuntu@supportsitetest.tk:~/dumps/Dump20220701.sql`
 
 1. Importing the data to the RDS instance.
-   1. Now that the dump is on the EC2 instance we can import the data to RDS.
-   1. Connect to the EC2 instance via ssh.
-      - `ssh -i <your .pem key> ubuntu@<Elastic IP>`
-   1. Make sure mysql is installed
-      - `sudo apt install -y mysql-client-core-8.0`
-   1. (Optional) Verify your connection to the database works, for example:
-      - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p`
-      - You can run `\q` to exit the MySQL connection
-   1. Import the file into RDS, for example:
-      - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p q2adb < Dump20220701.sql`
+    1. Now that the dump is on the EC2 instance we can import the data to RDS.
+    1. Connect to the EC2 instance via ssh.
+        - `ssh -i <your .pem key> ubuntu@<Elastic IP>`
+    1. Make sure mysql is installed
+        - `sudo apt install -y mysql-client-core-8.0`
+    1. (Optional) Verify your connection to the database works, for example:
+        - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p`
+        - You can run `\q` to exit the MySQL connection
+    1. Import the file into RDS, for example:
+        - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p q2adb < Dump20220701.sql`
 
 Congratulations, you’re done. You can verify by either checking the site or the data through MySQL Workbench.
+
+## Custom Plugins
+
+There are two custom plugins included in this repository:
+
+-   [`public/qa-plugin/account-reclaim`](https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/account-reclaim)
+-   [`public/qa-plugin/auto-prune-accounts`](https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/auto-prune-accounts)
+
+Additional information for each plugin can be found in their `README.md` files linked above. In summary: `account-reclaim` provides the functionality for sending recovery emails and allowing users to "reclaim" archived Discourse accounts. `auto-prune-accounts` automatically marks unverified accounts for deletion after a specified amount of time and bulk-deletes them once triggered.
