@@ -51,7 +51,7 @@ class qa_apa_admin
         if (qa_clicked('qa_apa_save_button')) {
 
             // Enable/disable plugin
-            qa_opt('qa_apa_enable_autoprune', qa_post_text('qa_apa_enable_autoprune'));
+            qa_opt('qa_apa_enable_autoprune', (bool)qa_post_text('qa_apa_enable_autoprune'));
 
             // Time between auto removal checks
             qa_opt('qa_apa_timeout_minutes', qa_post_text('qa_apa_timeout_minutes'));

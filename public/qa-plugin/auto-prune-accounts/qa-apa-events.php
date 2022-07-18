@@ -36,21 +36,22 @@ class qa_apa_events
     function process_event($event, $userid, $handle, $cookieid, $params)
     {
         if (qa_opt('qa_apa_enable_autoprune')) {
+            $timeout = qa_opt('qa_apa_timeout_minutes');
             switch ($event) {
                 case 'u_register':
                     if (qa_opt('q_apa_prune_on_register')) {
-                        self::delete_unconfirmed_accounts(qa_opt('qa_apa_timeout_minutes'), $userid);
+                        self::delete_unconfirmed_accounts($timeout, $userid);
                     }
                     break;
                 case 'u_confirmed':
                     if (qa_opt('q_apa_prune_on_confirm')) {
-                        self::delete_unconfirmed_accounts(qa_opt('qa_apa_timeout_minutes'), $userid);
+                        self::delete_unconfirmed_accounts($timeout, $userid);
                     }
                     break;
                 case 'u_login':
                 case 'u_logout':
                     if (qa_opt('q_apa_prune_on_login')) {
-                        self::delete_unconfirmed_accounts(qa_opt('qa_apa_timeout_minutes'), $userid);
+                        self::delete_unconfirmed_accounts($timeout, $userid);
                     }
                     break;
                 default:
