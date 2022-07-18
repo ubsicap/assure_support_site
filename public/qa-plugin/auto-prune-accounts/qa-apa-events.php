@@ -39,18 +39,18 @@ class qa_apa_events
             $timeout = qa_opt('qa_apa_timeout_minutes');
             switch ($event) {
                 case 'u_register':
-                    if (qa_opt('q_apa_prune_on_register')) {
+                    if (qa_opt('qa_apa_prune_on_register')) {
                         self::delete_unconfirmed_accounts($timeout, $userid);
                     }
                     break;
                 case 'u_confirmed':
-                    if (qa_opt('q_apa_prune_on_confirm')) {
+                    if (qa_opt('qa_apa_prune_on_confirm')) {
                         self::delete_unconfirmed_accounts($timeout, $userid);
                     }
                     break;
                 case 'u_login':
                 case 'u_logout':
-                    if (qa_opt('q_apa_prune_on_login')) {
+                    if (qa_opt('qa_apa_prune_on_login')) {
                         self::delete_unconfirmed_accounts($timeout, $userid);
                     }
                     break;
@@ -75,9 +75,6 @@ class qa_apa_events
         // More on DATE_SUB(): https://www.w3schools.com/sql/func_mysql_date_sub.asp
         $sql = 'SELECT * FROM ^users WHERE level = 0 AND DATE_SUB(now(), INTERVAL $ MINUTE) > created AND flags & $ AND userid!=$';
         $unconfirmed_users = qa_db_read_all_assoc(qa_db_query_sub($sql, $timeout, QA_USER_FLAGS_MUST_CONFIRM, $userid));
-
-        // $sql = 'SELECT userid, email FROM ^accountreclaim';
-        // $archived_users = qa_db_read_all_assoc(qa_db_query_sub($sql));
 
         // Delete everyone; Recall that the query only returned accounts who are older than the timeout
         foreach ($unconfirmed_users as $user) {
