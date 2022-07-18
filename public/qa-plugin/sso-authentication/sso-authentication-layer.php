@@ -7,82 +7,82 @@ class qa_html_theme_layer extends qa_html_theme_base
     function head_script()
     {   
         parent::head_script();
-        // $authurl = $this->get_google_url();
-        // if (qa_opt('google_authentication_enabled')) {
-        //     $this->output('<script type="text/javascript">
-        //             window.onload=()=>{
-		// 			    document.getElementById("google-signin").href = "'.$authurl.'";
-        //             };
-		// 		</script>');
-        //     $this->output('
-        //     <style type="text/css">
-        //     #google-signin {
-        //         width: auto;
-        //         background: #DD4B39;
-        //         border: 1px solid #31708f;
-        //         padding: 0;
-        //         display: inline-block;
-        //         border-radius: 1px;
-        //         box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
-        //         white-space: nowrap;
-        //         opacity: 1 !important;
-        //     }
-        //     .google-signin-icon {
-        //         background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png");
-        //         background-size: 18px;
-        //         background-repeat: no-repeat;
-        //         background-position: 11px;
-        //         width: 40px;
-        //         height: 40px;
-        //         background-color: #fff;
-        //         display: inline-block;
-        //         vertical-align: middle;
-        //     }
-        //     .signin-text {
-        //         display: inline-block;
-        //         vertical-align: middle;
-        //         padding: 0px;
-        //         font-size: 14px;
-        //         font-weight: bold;
-        //         font-family: "Roboto", sans-serif;
-        //         color: #fff;
-        //         margin-left: 13px;
-        //         margin-right: 8px;
-        //     }
-        //     #facebook-signin {
-        //         width: auto;
-        //         background: #4C69BA;
-        //         border: 1px solid #31708f;
-        //         padding: 0;
-        //         display: inline-block;
-        //         border-radius: 1px;
-        //         box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
-        //         white-space: nowrap;
-        //         opacity: 1 !important;
-        //     }
-        //     .facebook-signin-icon {
-        //         background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/150px-Facebook_f_logo_%282021%29.svg.png");
-        //         background-size: 18px;
-        //         background-repeat: no-repeat;
-        //         background-position: 11px;
-        //         width: 40px;
-        //         height: 40px;
-        //         background-color: #fff;
-        //         display: inline-block;
-        //         vertical-align: middle;
-        //     }
-        //     #facebook-signin:hover,
-        //     #facebook-signin:focus {
-        //       background-color: #4C69BA !important;
-        //       background-image: linear-gradient(#4C69BA, #13328a) !important;
-        //     }
-        //     #google-signin:hover,
-        //     #google-signin:focus {
-        //       background: #DD4B39 !important;
-        //       background-image: linear-gradient(#DD4B39, #9b2e20) !important;
-        //     }
-        //     </style>');
-        // }   
+        $authurl = $this->get_google_url();
+        if (qa_opt('google_authentication_enabled')) {
+            $this->output('<script type="text/javascript">
+                    window.onload=()=>{
+					    document.getElementById("google-signin").href = "'.$authurl.'";
+                    };
+				</script>');
+            $this->output('
+            <style type="text/css">
+            #google-signin {
+                width: auto;
+                background: #DD4B39;
+                border: 1px solid #31708f;
+                padding: 0;
+                display: inline-block;
+                border-radius: 1px;
+                box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+                white-space: nowrap;
+                opacity: 1 !important;
+            }
+            .google-signin-icon {
+                background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png");
+                background-size: 18px;
+                background-repeat: no-repeat;
+                background-position: 11px;
+                width: 40px;
+                height: 40px;
+                background-color: #fff;
+                display: inline-block;
+                vertical-align: middle;
+            }
+            .signin-text {
+                display: inline-block;
+                vertical-align: middle;
+                padding: 0px;
+                font-size: 14px;
+                font-weight: bold;
+                font-family: "Roboto", sans-serif;
+                color: #fff;
+                margin-left: 13px;
+                margin-right: 8px;
+            }
+            #facebook-signin {
+                width: auto;
+                background: #4C69BA;
+                border: 1px solid #31708f;
+                padding: 0;
+                display: inline-block;
+                border-radius: 1px;
+                box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+                white-space: nowrap;
+                opacity: 1 !important;
+            }
+            .facebook-signin-icon {
+                background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/150px-Facebook_f_logo_%282021%29.svg.png");
+                background-size: 18px;
+                background-repeat: no-repeat;
+                background-position: 11px;
+                width: 40px;
+                height: 40px;
+                background-color: #fff;
+                display: inline-block;
+                vertical-align: middle;
+            }
+            #facebook-signin:hover,
+            #facebook-signin:focus {
+              background-color: #4C69BA !important;
+              background-image: linear-gradient(#4C69BA, #13328a) !important;
+            }
+            #google-signin:hover,
+            #google-signin:focus {
+              background: #DD4B39 !important;
+              background-image: linear-gradient(#DD4B39, #9b2e20) !important;
+            }
+            </style>');
+        }   
     }
 
     function body_header() // adds login bar, user navigation and search at top of page in place of custom header content
