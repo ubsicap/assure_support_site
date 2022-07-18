@@ -9,7 +9,7 @@
  */
 function qa_get_badge_svg($baseDir, $id)
 {
-    $filePath = $baseDir . 'qa-shield-gen.svg';
+    $filePath = $baseDir . 'qa-shield-gen1.svg';
     $svgFile = fopen($filePath, "r");
     $text = fread($svgFile,filesize($filePath));
     fclose($svgFile);
