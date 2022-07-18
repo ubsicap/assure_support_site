@@ -243,10 +243,10 @@ set_credentials() {
     sed -i "s/$RDS_DB_NAME/$QA_MYSQL_DATABASE/" $CONFIG_PATH
 
     # Set the web server's domain name
-    if [ ! -z $DOMAIN ]; then
-        export DOMAIN_NAME=$DOMAIN
+    if [ ! -z $DOMAIN_NAME ]; then
+        export DOMAIN=$DOMAIN_NAME
         echo "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\"
-export DOMAIN_NAME=$DOMAIN" | sudo tee /etc/environment
+export DOMAIN_NAME=$DOMAIN_NAME" | sudo tee /etc/environment
     fi
 
     # Set the web server's admin email
