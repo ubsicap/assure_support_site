@@ -12,7 +12,7 @@
 // For qa_delete_user()
 require_once QA_INCLUDE_DIR . 'app/users-edit.php';
 // For qa_db_single_select()
-require_once QA_INCLUDE_DIR . 'db/delects.php';
+require_once QA_INCLUDE_DIR . 'db/selects.php';
 
 
 

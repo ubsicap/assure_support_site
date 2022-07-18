@@ -33,4 +33,4 @@ qa_register_plugin_module('module', 'qa-apa-admin.php', 'qa_apa_admin', 'Admin p
 qa_register_plugin_module('filter', 'qa-apa-filters.php', 'qa_apa_filters', 'Delete unconfirmed accounts when attempting to register new ones');
 
 // Event module
-qa_register_plugin_module('event', 'qa-apa-event.php', 'qa_apa_events', 'Delete unconfirmed accounts on events such as login and register');
+qa_register_plugin_module('event', 'qa-apa-events.php', 'qa_apa_events', 'Delete unconfirmed accounts on events such as login and register');

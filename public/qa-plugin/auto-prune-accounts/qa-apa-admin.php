@@ -1,7 +1,7 @@
 <?php
 
 /*
-    File: qa-plugin/auto-prune-accounts/qa-apa-event.php
+    File: qa-plugin/auto-prune-accounts/qa-apa-admin.php
     Description: Admin form for plugin
 */
 
