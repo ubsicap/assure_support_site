@@ -191,7 +191,7 @@ check_credentials() {
 
     # Reload the environment variables
     . /etc/environment
-    if [ -z $DOMAIN_NAME ]; then
+    if [ -z $DOMAIN ]; then
         read -p "Enter the domain name of the site to be hosted > " DOMAIN
     else
         echo "- Domain name already set to $DOMAIN_NAME"
