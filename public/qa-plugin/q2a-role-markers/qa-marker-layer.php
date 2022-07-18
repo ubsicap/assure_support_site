@@ -97,7 +97,10 @@ class qa_html_theme_layer extends qa_html_theme_base
         }
 
         if (qa_opt('marker_plugin_icons_images')) {
-            $rolemarker .= '<div class="qa-avatar-marker"><img class="qa-who-image-' . $img . '" title="' . qa_html($level) . '" width="17" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'qa-shield-gen.svg"/></div>';
+            require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
+            $svgFile = qa_get_badge_svg(QA_HTML_THEME_LAYER_URLTOROOT);
+
+            $rolemarker .= '<div class="qa-avatar-marker">'. $svgFile .'</div>';
         } else {
             $rolemarker .= '<span class="qa-who-marker qa-who-marker-' . $img . '" title="' . qa_html($level) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
         }
