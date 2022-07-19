@@ -19,17 +19,19 @@ class qa_html_theme_layer extends qa_html_theme_base
             
             #google-signin {
                 background: #DD4B39;
-                opacity: .8;
             }
             #facebook-signin {
                 background: #4C69BA;
-                opacity: .8;
             }
             #paratext-signin {
                 background: #8AAB68;
+            }
+            #google-signin, #facebook-signin, #paratext-signin {
                 opacity: .8;
             }
-            .google-signin .facebook-signin .paratext-signin-icon {
+
+
+            .google-signin, .facebook-signin, .paratext-signin-icon {
                 width: 100%;
                 border: 1px solid #31708f;
                 padding: 0;
@@ -37,6 +39,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                 border-radius: 1px;
                 box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
                 white-space: nowrap;
+                transition: 0.3s;
             }
 
             .google-signin-icon {
@@ -85,20 +88,9 @@ class qa_html_theme_layer extends qa_html_theme_base
                 margin-right: 8px;
             }
 
-            #facebook-signin:hover,
-            #facebook-signin:focus {
-              background-color: #4C69BA !important;
-              background-image: linear-gradient(#4C69BA, #13328a) !important;
-            }
-            #google-signin:hover,
-            #google-signin:focus {
-              background: #DD4B39 !important;
-              background-image: linear-gradient(#DD4B39, #9b2e20) !important;
-            }
-            #paratext-signin:hover,
-            #paratext-signin:focus {
-              background: #8AAB68 !important;
-              background-image: linear-gradient(#8AAB68, #607749) !important;
+            #facebook-signin:hover, #facebook-signin:focus, #google-signin:hover, #google-signin:focus, #paratext-signin:hover, #paratext-signin:focus  
+            {
+              opacity: 1;
             }
 
             </style>');
