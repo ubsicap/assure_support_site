@@ -127,7 +127,6 @@ class qa_html_theme_layer extends qa_html_theme_base
             width: 100%;
             border-radius: 3px;
             box-sizing: border-box;
-            overflow: hidden;
             margin-bottom: 3px;
             display: inline-block;
             box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
@@ -139,8 +138,6 @@ class qa_html_theme_layer extends qa_html_theme_base
         .google-signin-icon, .facebook-signin-icon, .paratext-signin-icon {
             box-sizing: content-box;
             position: absolute;
-            left: 0;
-            top: 0;
             width: 38px;
             height: 38px;
             border-radius: 3px 0px 0px 3px;
