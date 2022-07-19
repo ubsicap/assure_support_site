@@ -18,6 +18,9 @@
 			header('Location: ../../');
 			exit;
 	}
+
+        //register the phrases for the plugin
+        qa_register_plugin_phrases('lang/qa-marker-lang-*.php', 'qa-marker');
 	
 	qa_register_plugin_layer('qa-marker-layer.php', 'Marker Layer');	
 	

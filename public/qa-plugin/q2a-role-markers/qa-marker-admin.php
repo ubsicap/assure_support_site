@@ -36,15 +36,30 @@ class qa_marker_admin
 }
 .qa-who-marker-expert {
 	color: #4D90FE;
-}				
+}
+.qa-marker-svg-expert {
+	fill: #4D90FE;
+}
+		
 .qa-who-marker-editor {
 	color: #2ccb14;
-}				
+}
+.qa-marker-svg-editor{
+	fill: #2ccb14;
+}
+				
 .qa-who-marker-moderator {
 	color: #db0707;
-}				
+}
+.qa-marker-svg-moderator {
+	fill: #db0707;
+}
+				
 .qa-who-marker-admin {
 	color: #a8a822;
+}
+.qa-marker-svg-admin {
+	fill: #a8a822;
 }';
             default:
                 return null;
@@ -54,15 +69,19 @@ class qa_marker_admin
     function admin_form(&$qa_content)
     {
 
+        //functions for reading/writing from database
+        require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
+        
         //	Process form input
-
         $ok = null;
         if (qa_clicked('marker_save_button')) {
+
+            qa_create_user_title_table(); //create the table if it doesn't exist already
+
             qa_opt('marker_plugin_css_2', qa_post_text('marker_plugin_css_2'));
             qa_opt('marker_plugin_who_text', qa_post_text('marker_plugin_who_text'));
             qa_opt('marker_plugin_icons_images', (bool)qa_post_text('marker_plugin_icons_images'));
             qa_opt('marker_plugin_role_names', (bool)qa_post_text('marker_plugin_role_names'));
-
 
             qa_opt('marker_plugin_a_qv', (bool)qa_post_text('marker_plugin_a_qv'));
             qa_opt('marker_plugin_a_qi', (bool)qa_post_text('marker_plugin_a_qi'));
@@ -95,6 +114,10 @@ class qa_marker_admin
                 if ($def !== null) qa_opt($i, $def);
             }
             $ok = qa_lang('admin/options_reset');
+        } else if(qa_clicked('marker_reset_custom_titles_button'))
+        {
+            qa_delete_user_title_table(); //clear the table completely
+            qa_create_user_title_table(); //create the table
         }
         //	Create the form for display
 
@@ -314,6 +337,10 @@ class qa_marker_admin
                 array(
                     'label' => qa_lang_html('admin/reset_options_button'),
                     'tags' => 'NAME="marker_reset_button"',
+                ),
+                array(
+                    'label' => qa_lang_html('qa-marker/reset_custom_titles'),
+                    'tags' => 'NAME="marker_reset_custom_titles_button"',
                 ),
             ),
         );

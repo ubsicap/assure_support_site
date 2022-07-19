@@ -105,13 +105,13 @@
 				
 				// upvoteds
 				$urlToPage = substr($this->urltoroot,2); // remove ./ from beginning of URL
-				$receivedUpvotes = number_format(@$userpointsData['upvoteds']) . ' <img style=\'vertical-align:bottom;\' src=\''.qa_opt('site_url').$urlToPage.'thumbup.png\' />';
+				$receivedUpvotes = number_format(@$userpointsData['upvoteds']) . ' <img style=\'display: inline-block;\' src=\''.qa_opt('site_url').$urlToPage.'thumbup.png\' />';
 
 				// downvoteds
 				$receivedDownvotes = '';
 				if(qa_opt('q2apro_userinfo_show_downvotes')) {
 					$urlToPage = substr($this->urltoroot,2); // remove ./ from beginning of URL
-					$receivedDownvotes = ' | '.number_format(@$userpointsData['downvoteds']) . ' <img style=\'vertical-align:bottom;transform:rotate(180deg);\' src=\''.qa_opt('site_url').$urlToPage.'thumbup.png\' />';
+					$receivedDownvotes = ' | '.number_format(@$userpointsData['downvoteds']) . ' <img style=\'display: inline-block;transform:rotate(180deg);\' src=\''.qa_opt('site_url').$urlToPage.'thumbup.png\' />';
 				}
 
 				// return ajax
