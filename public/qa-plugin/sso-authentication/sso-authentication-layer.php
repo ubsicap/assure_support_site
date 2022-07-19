@@ -1,6 +1,8 @@
 <?php
 require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
-require_once dirname(dirname(__FILE__)) . '/vendor/google/auth/src/OAuth2.php';
+require_once dirname(dirname(__FILE__)) . '/vendor/google/auth/src/Oauth2.php';
+require_once QA_PLUGIN_DIR . 'account-reclaim/qa-ar-functions.php';
+
 class qa_html_theme_layer extends qa_html_theme_base
 {
 
@@ -19,19 +21,80 @@ class qa_html_theme_layer extends qa_html_theme_base
             if (isset($_GET['code'])) {
                 try {
                     // Get the access token 
-                    $data = $this->getAccessToken(qa_opt('google_authentication_client_id'), qa_opt('site_url') . 'index.php',qa_opt('google_authentication_client_secret'), $_GET['code']);
-            
+                    $data = $this->getAccessToken(qa_opt('google_authentication_client_id'), qa_opt('site_url') . 'index.php', qa_opt('google_authentication_client_secret'), $_GET['code']);
+
                     // Access Token
                     $access_token = $data['access_token'];
-                    
+
                     // Get user information
                     $user_info = $this->getUserProfileInfo($access_token);
-                }
-                catch(Exception $e) {
+
+                    // Check if the user is archived
+                    $matchingUsers = qa_ar_db_user_find_by_email($user_info['email']);
+
+                    // Make sure there is only one match
+                    if (count($matchingUsers) == 1) {
+                        // For qa_db_select_with_pending()
+                        require_once QA_INCLUDE_DIR . 'db/selects.php';
+                        // For qa_db_user_set_password(), qa_db_user_set()
+                        require_once QA_INCLUDE_DIR . 'db/users.php';
+                        // For qa_complete_confirm()
+                        require_once QA_INCLUDE_DIR . 'app/users-edit.php';
+
+                        // This is the userid of the archived user
+                        $userId = $matchingUsers[0];
+
+                        // Swap all the instances of the old username to the new one
+                        qa_ar_db_swap_name(qa_ar_db_get_anon($userId), $user_info['name']);
+
+                        // Set the fields of the account to the newly provided values
+                        // Note these updates must happen here because the credentials are needed to log in below
+                        qa_db_user_set($userId, array(
+                            'email' => $user_info['email'],       // Update the email address so the account is valid
+                            'handle' => $user_info['name'],   // Update the username to no longer be `anon######`
+                        ));
+
+                        // This user has now confirmed their email
+                        qa_complete_confirm(strval($userId), $user_info['email'], $user_info['name']);
+
+                        // Report that a 'user reclaim' event has occurred (for event modules)
+                        qa_report_event(
+                            'u_reclaim',
+                            $userId,
+                            $user_info['name'],
+                            array(
+                                'email' => $userInfo['email'],
+                            )
+                        );
+
+                        // Now log the user in
+                        qa_log_in_external_user('google', $userId, array(
+                            'email' => @$user_info['email'],
+                            'handle' => @$user_info['name'],
+                            'confirmed' => @$user_info['verified_email'],
+                            'name' => @$user_info['name'],
+                            'location' => @$user_info['location']['name'],
+                            'website' => @$user_info['link'],
+                            'about' => @$user_info['bio'],
+                            'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
+                        ));
+                    } else {
+                        // Otherwise, the user is completely new
+                        qa_log_in_external_user('google', $user_info['id'], array(
+                            'email' => @$user_info['email'],
+                            'handle' => @$user_info['name'],
+                            'confirmed' => @$user_info['verified_email'],
+                            'name' => @$user_info['name'],
+                            'location' => @$user_info['location']['name'],
+                            'website' => @$user_info['link'],
+                            'about' => @$user_info['bio'],
+                            'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
+                        ));
+                    }
+                } catch (Exception $e) {
                     echo $e->getMessage();
                     exit();
                 }
-               
             } else {
                 $authurl = $client->createAuthUrl();
                 $this->output('<script type="text/javascript">
@@ -219,7 +282,7 @@ class qa_html_theme_layer extends qa_html_theme_base
     // $access_token is the access token you got earlier
     function getUserProfileInfo($access_token)
     {
-        $url = 'https://www.googleapis.com/oauth2/v2/userinfo?fields=name,email,gender,id,picture,verified_email';
+        $url = 'https://www.googleapis.com/oauth2/v2/userinfo?fields=name,email,gender,id,picture,verified_email,link';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -234,21 +297,22 @@ class qa_html_theme_layer extends qa_html_theme_base
         return $data;
     }
 
-    function getAccessToken($client_id, $redirect_uri, $client_secret, $code) {	
-        $url = 'https://www.googleapis.com/oauth2/v4/token';			
-    
-        $curlPost = 'client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&client_secret=' . $client_secret . '&code='. $code . '&grant_type=authorization_code';
-        $ch = curl_init();		
-        curl_setopt($ch, CURLOPT_URL, $url);		
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);		
-        curl_setopt($ch, CURLOPT_POST, 1);		
+    function getAccessToken($client_id, $redirect_uri, $client_secret, $code)
+    {
+        $url = 'https://www.googleapis.com/oauth2/v4/token';
+
+        $curlPost = 'client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&client_secret=' . $client_secret . '&code=' . $code . '&grant_type=authorization_code';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $curlPost);	
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $curlPost);
         $data = json_decode(curl_exec($ch), true);
-        $http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);		
-        if($http_code != 200) 
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($http_code != 200)
             throw new Exception('Error : Failed to receieve access token');
-        
+
         return $data;
     }
 }
