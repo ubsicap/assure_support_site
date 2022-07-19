@@ -141,8 +141,8 @@ class qa_html_theme_layer extends qa_html_theme_base
             position: absolute;
             left: 0;
             top: 0;
-            width = 38px;
-            height = 38px;
+            width: 38px;
+            height: 38px;
             border-radius: 3px 0px 0px 3px;
         }
 
