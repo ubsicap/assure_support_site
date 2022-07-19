@@ -1,6 +1,6 @@
 <?php
 require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
-require_once dirname(dirname(__FILE__)) . '/vendor/google/auth/src/Oauth2.php';
+require_once dirname(dirname(__FILE__)) . '/vendor/google/auth/src/OAuth2.php';
 class qa_html_theme_layer extends qa_html_theme_base
 {
 
