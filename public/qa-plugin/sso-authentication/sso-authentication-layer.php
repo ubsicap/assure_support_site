@@ -105,6 +105,12 @@ class qa_html_theme_layer extends qa_html_theme_base
               background: #DD4B39 !important;
               background-image: linear-gradient(#DD4B39, #9b2e20) !important;
             }
+            #paratext-signin:hover,
+            #paratext-signin:focus {
+              background: #8AAB68 !important;
+              background-image: linear-gradient(#8AAB68, #607749) !important;
+            }
+
             </style>');
         }   
     }
