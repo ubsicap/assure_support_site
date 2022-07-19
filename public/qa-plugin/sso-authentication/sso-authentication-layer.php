@@ -150,29 +150,26 @@ class qa_html_theme_layer extends qa_html_theme_base
         }
         .google-signin-icon {
             background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png");
-            background-color: #fff;
-            border: 2px #4285f4;
+            background-color: #ffffff;
         }
         .facebook-signin-icon {
             background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/150px-Facebook_f_logo_%282021%29.svg.png");
-            background-color: #fff;
-            border: 2px #3b5998;
+            background-color: #293e6a;
         }
         .paratext-signin-icon {
             background-image: url("https://registry.paratext.org/static/logo-pt9.png");
-            background-color: #fff;
-            border: 2px #8aab68;
+            background-color: #607749;
         }
         
         .signin-text {
             display: inline-block;
             vertical-align: middle;
             padding: 0px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
             font-family: "Roboto", sans-serif;
             color: #fff;
-            margin: 9px 8px 7px 53px;
+            margin: 11px 8px 7px 53px;
         }
 
         </style>');
