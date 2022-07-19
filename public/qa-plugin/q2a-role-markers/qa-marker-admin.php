@@ -83,7 +83,6 @@ class qa_marker_admin
             qa_opt('marker_plugin_icons_images', (bool)qa_post_text('marker_plugin_icons_images'));
             qa_opt('marker_plugin_role_names', (bool)qa_post_text('marker_plugin_role_names'));
 
-
             qa_opt('marker_plugin_a_qv', (bool)qa_post_text('marker_plugin_a_qv'));
             qa_opt('marker_plugin_a_qi', (bool)qa_post_text('marker_plugin_a_qi'));
             qa_opt('marker_plugin_a_a', (bool)qa_post_text('marker_plugin_a_a'));

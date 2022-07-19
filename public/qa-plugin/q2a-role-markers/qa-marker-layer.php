@@ -158,4 +158,17 @@ class qa_html_theme_layer extends qa_html_theme_base
         //return $switch ? '<b>[' . $rolename . ']</b> ' : '';
         return $rolename;
     }
+
+    //display a field on the user page
+    function main_parts($content)
+    {
+        if ($this->template == 'user' && isset($content['raw']['userid'])) { 
+            //on the user page of a valid user
+            $userid = $content['raw']['userid']; //id of the user
+            //only display text box if logged in as an admin
+            $content['form-badges-list'] = "<h1>hi</h1>";
+        }
+        qa_html_theme_base::main_parts($content); //go back to the main_parts base function
+    }
+
 }
