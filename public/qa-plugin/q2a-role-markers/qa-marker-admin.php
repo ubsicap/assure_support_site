@@ -70,7 +70,7 @@ class qa_marker_admin
     {
 
         //functions for reading/writing from database
-        require_once QA_PLUGIN_DIR . 'account-reclaim/qa-ar-functions.php';
+        require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
         
         //	Process form input
         $ok = null;
