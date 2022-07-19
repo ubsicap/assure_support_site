@@ -27,11 +27,6 @@ class qa_html_theme_layer extends qa_html_theme_base
                 background: #62794a;
             }
             #google-signin, #facebook-signin, #paratext-signin {
-                opacity: .8;
-            }
-
-
-            .google-signin, .facebook-signin, .paratext-signin-icon {
                 width: 100%;
                 border: 1px solid #31708f;
                 border-radius: 3px;
@@ -41,6 +36,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                 box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
                 white-space: nowrap;
                 transition: 0.3s;
+                opacity: .9;
             }
 
             .google-signin-icon {
