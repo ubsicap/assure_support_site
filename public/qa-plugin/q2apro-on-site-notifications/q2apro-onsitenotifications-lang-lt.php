@@ -23,34 +23,34 @@
 
 */
 
-	return array(
-		// default
-		'enable_plugin' => 'Įjungti įskiepį',
-		'minimum_level' => 'Teisės šiam puslapiui ir įrašų redagavimui:',
-		'plugin_disabled' => 'Įskiepis išjungtas.',
-		'access_forbidden' => 'Priejimas draudžiamas.',
-		'plugin_page_url' => 'Puslapio nuoroda:',
-		'contact' => 'Jei turite klausimų, susisiekite ^1q2apro.com^2',
-		'no_notifications_label' => 'Jei nėra naujų pranešimų, pranešimu langelyje bus rodoma tai:', // Label for notify bubble on top, next to user name
-		'admin_maxeventsshow' => 'Maksimalus pranešimų, rodomu langelyje skaičius:', // extra
-		'admin_newwindow' => 'Atidaryti pranešimų nuorodas naujame naršyklės lange', // extra
-		'admin_rtl' => 'Right to Left (RTL) language.', // extra (EN)
+return array(
+    // default
+    'enable_plugin' => 'Įjungti įskiepį',
+    'minimum_level' => 'Teisės šiam puslapiui ir įrašų redagavimui:',
+    'plugin_disabled' => 'Įskiepis išjungtas.',
+    'access_forbidden' => 'Priejimas draudžiamas.',
+    'plugin_page_url' => 'Puslapio nuoroda:',
+    'contact' => 'Jei turite klausimų, susisiekite ^1q2apro.com^2',
+    'no_notifications_label' => 'Jei nėra naujų pranešimų, pranešimu langelyje bus rodoma tai:', // Label for notify bubble on top, next to user name
+    'admin_maxeventsshow' => 'Maksimalus pranešimų, rodomu langelyje skaičius:', // extra
+    'admin_newwindow' => 'Atidaryti pranešimų nuorodas naujame naršyklės lange', // extra
+    'admin_rtl' => 'Right to Left (RTL) language.', // extra (EN)
 
-		// plugin
-		'my_notifications' => 'Mano pranešimai',
-		'show_notifications' => 'Rodyti pranešimus',
-		'one_notification' => 'Gavote naują pranešimą (1)',
-		'x_notifications' => 'nauji pranešimai',
-		'close' => 'uždaryti',
-		'in_answer' => 'Naujas atsakymas klausimui',
-		'in_comment' => 'Atsakymas komentarui',
-		'in_bestanswer' => 'Klausimas išrinktas kaip geriausias',
-		'in_upvote' => 'Papildomas taškas už',
-		'in_downvote' => 'Minus taškas už',
-		'you_received' => 'Gavai',
-		'message_from' => 'Privati žinutė',
-		'wallpost_from' => 'Įrašas tavo sienoje nuo',
-	);
+    // plugin
+    'my_notifications' => 'Mano pranešimai',
+    'show_notifications' => 'Rodyti pranešimus',
+    'one_notification' => 'Gavote naują pranešimą (1)',
+    'x_notifications' => 'nauji pranešimai',
+    'close' => 'uždaryti',
+    'in_answer' => 'Naujas atsakymas klausimui',
+    'in_comment' => 'Atsakymas komentarui',
+    'in_bestanswer' => 'Klausimas išrinktas kaip geriausias',
+    'in_upvote' => 'Papildomas taškas už',
+    'in_downvote' => 'Minus taškas už',
+    'you_received' => 'Gavai',
+    'message_from' => 'Privati žinutė',
+    'wallpost_from' => 'Įrašas tavo sienoje nuo',
+);
 
 
 /*

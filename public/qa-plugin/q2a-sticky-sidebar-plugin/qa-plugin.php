@@ -14,19 +14,19 @@
 /*
 	Thanks to https://abouolia.github.io/sticky-sidebar/
 */
-if (!defined('QA_VERSION')) { 
-	header('Location: ../../');
-	exit;
+if (!defined('QA_VERSION')) {
+    header('Location: ../../');
+    exit;
 }
 
 qa_register_plugin_layer(
-	'sticky-sidebar-layer.php',
-	'Sticky Sidebar Layer'
+    'sticky-sidebar-layer.php',
+    'Sticky Sidebar Layer'
 );
 
 qa_register_plugin_module(
-	'module',
-	'sticky-sidebar-module.php',
-	'sticky_sidebar_module',
-	'Sticky Sidebar Options'
+    'module',
+    'sticky-sidebar-module.php',
+    'sticky_sidebar_module',
+    'Sticky Sidebar Options'
 );
