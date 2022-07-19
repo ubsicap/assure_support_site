@@ -128,3 +128,38 @@ function qa_simplify_user_title($title)
     $simpleTitle = str_replace(' ', '_', strtolower($title));
     return preg_replace("/[^0-9_a-z\-]/", '', $simpleTitle); //lastly remove any non a-z, 0-9, underscore, or hyphen characters
 }
+
+
+
+/**
+ * Return formatted response for custom title display on user page
+ * 
+ * 
+ * @param int userid
+ * @param array reponse
+ */
+function qa_get_user_content($userid)
+{
+    $tags = 'id="marker-form" action="'.qa_self_html().'#signature_text" method="POST"';
+
+    $fields[] = array(
+        'label' => qa_lang('qa-marker/user_title'),
+        'type' => 'text',
+        'tags' => 'NAME="marker_custom_title"',
+        'value' => 'hi',
+    );
+                        
+    $buttons[] = array(
+        'label' => qa_lang_html('qa-marker/set_custom_title'),
+        'tags' => 'NAME="marker_update_title_button"',
+    );
+
+    return array(				
+        'ok' => true,
+        'style' => 'wide',
+        'tags' => $tags,
+        'title' => qa_lang('qa-marker/user_field'),
+        'fields'=>$fields,
+        'buttons'=>$buttons,
+    );
+}

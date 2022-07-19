@@ -7,5 +7,7 @@
 
 return array(
     'reset_custom_titles' => 'Reset Custom User Titles',
+    'set_custom_title' => 'Apply Custom Title',
     'user_title' => 'User Title',
+    'user_field' => 'Custom User Title',
 );
