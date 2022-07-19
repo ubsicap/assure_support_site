@@ -51,6 +51,15 @@ class qa_html_theme_layer extends qa_html_theme_base
         #paratext-signin {
             background: #8aab68;
         }
+        #google-signin:hover, #google-signin:focus {
+            background: #3367d6;
+        }
+        #facebook-signin:hover, #facebook-signin:focus {  
+            background: #293e6a;
+        }
+        #paratext-signin:hover, #paratext-signin:focus {
+            background: #62794a;
+        }
         #google-signin, #facebook-signin, #paratext-signin {
             width: 100%;
             border-radius: 3px;
@@ -64,38 +73,27 @@ class qa_html_theme_layer extends qa_html_theme_base
             opacity: 1;
         }
         
+        .google-signin-icon, .facebook-signin-icon, .paratext-signin-icon {
+            box-sizing: content-box;
+            position: absolute
+            left: 0
+            top: 0
+            border-radius: 3px 0px 0px 3px;
+            width= 38px;
+            height= 38px;
+        }
+
         .google-signin-icon {
             background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png");
-            background-size: 18px;
-            background-repeat: no-repeat;
-            background-position: 11px;
-            width: 40px;
-            height: 40px;
             background-color: #fff;
-            display: inline-block;
-            vertical-align: middle;
         }
         .facebook-signin-icon {
             background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/150px-Facebook_f_logo_%282021%29.svg.png");
-            background-size: 18px;
-            background-repeat: no-repeat;
-            background-position: 11px;
-            width: 40px;
-            height: 40px;
             background-color: #fff;
-            display: inline-block;
-            vertical-align: middle;
         }
         .paratext-signin-icon {
             background-image: url("https://registry.paratext.org/static/logo-pt9.png");
-            background-size: 18px;
-            background-repeat: no-repeat;
-            background-position: 11px;
-            width: 40px;
-            height: 40px;
             background-color: #fff;
-            display: inline-block;
-            vertical-align: middle;
         }
         
         .signin-text {
@@ -109,18 +107,6 @@ class qa_html_theme_layer extends qa_html_theme_base
             margin-left: 13px;
             margin-right: 8px;
         }
-        
-        #google-signin:hover, #google-signin:focus {
-            background: #3367d6;
-        }
-        #facebook-signin:hover, #facebook-signin:focus {  
-            background: #293e6a;
-        }
-        #paratext-signin:hover, #paratext-signin:focus {
-            background: #62794a;
-        }
-
-
 
         </style>');
             }
