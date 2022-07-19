@@ -24,13 +24,10 @@ class sticky_sidebar_module
                 return 0;
                 break;
             case 'sticky_sidebar_top_spacing':
-                return 2;
+                return 100;
                 break;
             case 'sticky_sidebar_screen_width':
                 return 980;
-                break;
-            case 'sticky_sidebar_snowflatfix':
-                return true;
                 break;
             case 'sticky_sidebar_status':
                 return true;
@@ -52,7 +49,6 @@ class sticky_sidebar_module
             qa_opt('sticky_sidebar_bottom_spacing', trim(qa_post_text('sticky_sidebar_bottom_spacing_field'), $trimchars));
             qa_opt('sticky_sidebar_top_spacing', trim(qa_post_text('sticky_sidebar_top_spacing_field'), $trimchars));
             qa_opt('sticky_sidebar_screen_width', trim(qa_post_text('sticky_sidebar_screen_width_field'), $trimchars));
-            qa_opt('sticky_sidebar_snowflatfix', (int)qa_post_text('sticky_sidebar_snowflatfix_field'));
             qa_opt('sticky_sidebar_status', (int)qa_post_text('sticky_sidebar_status_field'));
 
             $saved = true;
@@ -95,7 +91,7 @@ class sticky_sidebar_module
                     'label' => 'Top spacing in PX:',
                     'value' => qa_html(qa_opt('sticky_sidebar_top_spacing')),
                     'tags' => 'name="sticky_sidebar_top_spacing_field"',
-                    'note' => 'Default: 2',
+                    'note' => 'Default: 100',
                 ),
                 array(
                     'id' => 'sticky_sidebar_screen_width',
@@ -103,14 +99,6 @@ class sticky_sidebar_module
                     'value' => qa_html(qa_opt('sticky_sidebar_screen_width')),
                     'tags' => 'name="sticky_sidebar_screen_width_field"',
                     'note' => 'Default: 980. This will prevent loading script on mobile devices. Set 0 to load on all screens.',
-                ),
-                array(
-                    'id' => 'sticky_sidebar_snowflatfix',
-                    'label' => (int)qa_opt('sticky_sidebar_snowflatfix') ? 'SnowFlat fix: Enabled' : 'SnowFlat fix: Disabled',
-                    'type' => 'checkbox',
-                    'value' => (int)qa_opt('sticky_sidebar_snowflatfix'),
-                    'tags' => 'name="sticky_sidebar_snowflatfix_field"',
-                    'note' => 'Default: checked. This is CSS fix for SnowFlat theme for mobile view. If you are not using SnowFlat and something is not working correctly, you may uncheck this.<hr>',
                 ),
                 array(
                     'id' => 'sticky_sidebar_status',
