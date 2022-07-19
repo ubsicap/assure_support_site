@@ -16,9 +16,29 @@ class qa_html_theme_layer extends qa_html_theme_base
 				</script>');
             $this->output('
             <style type="text/css">
+            
             #google-signin {
                 background: #DD4B39;
             }
+            #facebook-signin {
+                background: #4C69BA;
+            }
+            #paratext-signin {
+                background: #8AAB68;
+            }
+            #google-signin #facebook-signin #paratext-signin {
+                opacity: .8;
+            }
+            .google-signin .facebook-signin .paratext-signin-icon {
+                width: 100%;
+                border: 1px solid #31708f;
+                padding: 0;
+                display: inline-block;
+                border-radius: 1px;
+                box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+                white-space: nowrap;
+            }
+
             .google-signin-icon {
                 background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png");
                 background-size: 18px;
@@ -30,20 +50,6 @@ class qa_html_theme_layer extends qa_html_theme_base
                 display: inline-block;
                 vertical-align: middle;
             }
-            .signin-text {
-                display: inline-block;
-                vertical-align: middle;
-                padding: 0px;
-                font-size: 14px;
-                font-weight: bold;
-                font-family: "Roboto", sans-serif;
-                color: #fff;
-                margin-left: 13px;
-                margin-right: 8px;
-            }
-            #facebook-signin {
-                background: #4C69BA;
-            }
             .facebook-signin-icon {
                 background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/150px-Facebook_f_logo_%282021%29.svg.png");
                 background-size: 18px;
@@ -54,9 +60,6 @@ class qa_html_theme_layer extends qa_html_theme_base
                 background-color: #fff;
                 display: inline-block;
                 vertical-align: middle;
-            }
-            #paratext-signin {
-                background: #8AAB68;
             }
             .paratext-signin-icon {
                 background-image: url("https://registry.paratext.org/static/logo-pt9.png");
@@ -70,18 +73,17 @@ class qa_html_theme_layer extends qa_html_theme_base
                 vertical-align: middle;
             }
 
-            .google-signin. facebook-signin .paratext-signin-icon
-            {
-                opacity: 1 !important;
-                width: 100%;
-                border: 1px solid #31708f;
-                padding: 0;
+            .signin-text {
                 display: inline-block;
-                border-radius: 1px;
-                box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
-                white-space: nowrap;
+                vertical-align: middle;
+                padding: 0px;
+                font-size: 14px;
+                font-weight: bold;
+                font-family: "Roboto", sans-serif;
+                color: #fff;
+                margin-left: 13px;
+                margin-right: 8px;
             }
-
 
             #facebook-signin:hover,
             #facebook-signin:focus {
