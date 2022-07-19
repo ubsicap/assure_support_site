@@ -56,6 +56,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             border: 1px solid #31708f;
             border-radius: 25px;
             perspective: 1px;
+            overflow: hidden;
             margin-bottom: 8px;
             display: inline-block;
             border-radius: 1px;
