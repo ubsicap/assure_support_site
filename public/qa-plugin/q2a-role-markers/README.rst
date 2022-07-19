@@ -40,6 +40,9 @@ Disclaimer
 ----------
 This is **alpha** code.  It may not work exactly as expected.  Refunds will not be given.  If it breaks, you get to keep both parts.
 
+Also this code has been modified by SIL for some minor modifications as well as allowing custom user roles, note that when adding a role
+you can configure it with the css on the admin page.
+
 -------
 Release
 -------
