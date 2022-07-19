@@ -53,20 +53,23 @@ class qa_html_theme_layer extends qa_html_theme_base
 
     function get_role_marker($uid)
     {
-        if (QA_FINAL_EXTERNAL_USERS) {
+        //functions for reading/writing from database
+        require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
+
+        if(qa_has_user_title($uid)) //user has custom title
+        {
+            $title = qa_get_user_title($uid);
+        }
+        elseif (QA_FINAL_EXTERNAL_USERS) {
             $user = get_userdata($uid);
             if (isset($user->wp_capabilities['administrator']) || isset($user->caps['administrator']) || isset($user->allcaps['administrator'])) {
-                $level = qa_lang('users/level_admin');
-                $img = 'admin';
+                $title = 'admin';
             } elseif (isset($user->wp_capabilities['moderator']) || isset($user->caps['moderator'])) {
-                $level = qa_lang('users/level_moderator');
-                $img = 'moderator';
+                $title = 'moderator';
             } elseif (isset($user->wp_capabilities['editor']) || isset($user->caps['editor'])) {
-                $level = qa_lang('users/level_editor');
-                $img = 'editor';
+                $title = 'editor';
             } elseif (isset($user->wp_capabilities['contributor']) || isset($user->caps['contributor'])) {
-                $level = qa_lang('users/level_expert');
-                $img = 'expert';
+                $title = 'expert';
             } else
                 return;
         } else {
@@ -79,30 +82,29 @@ class qa_html_theme_layer extends qa_html_theme_base
             );
             $level = qa_user_level_string($levelno);
             if ($level == qa_lang('users/level_admin') || $level == qa_lang('users/level_super'))
-                $img = 'admin';
+                $title = 'admin';
             elseif ($level == qa_lang('users/level_moderator'))
-                $img = 'moderator';
+                $title = 'moderator';
             elseif ($level == qa_lang('users/level_editor'))
-                $img = 'editor';
+                $title = 'editor';
             elseif ($level == qa_lang('users/level_expert'))
-                $img = 'expert';
+                $title = 'expert';
             else
                 return;
         }
+        $titleSimple = qa_simplify_user_title($title);
 
         $rolemarker = '';
 
         if (qa_opt('marker_plugin_role_names')) {
-            $rolemarker .= '<span class="qa-who-marker-' . $img . '" title="' . qa_html($level) . '">&nbsp;<b>[' . $this->getrolename($uid) . ']</b>  </span>';
+            $rolemarker .= '<span class="qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">&nbsp;<b>[' . $this->getrolename($uid) . ']</b>  </span>';
         }
 
         if (qa_opt('marker_plugin_icons_images')) {
-            require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
-            $svgFile = qa_get_badge_svg("qa-marker-svg-" . $img);
-
+            $svgFile = qa_get_badge_svg("qa-marker-svg-" . $titleSimple);
             $rolemarker .= '<div class="qa-avatar-marker">'. $svgFile .'</div>';
         } else {
-            $rolemarker .= '<span class="qa-who-marker qa-who-marker-' . $img . '" title="' . qa_html($level) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
+            $rolemarker .= '<span class="qa-who-marker qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
         }
 
         return $rolemarker;
@@ -128,6 +130,11 @@ class qa_html_theme_layer extends qa_html_theme_base
     }
     function getrolename($uid)
     {
+        require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
+
+        if(qa_has_user_title($uid)) //check for custom title
+            return qa_get_user_title($uid);
+
         $rolename = '';
         $levelno = qa_db_read_one_value(
             qa_db_query_sub(
