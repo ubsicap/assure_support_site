@@ -26,6 +26,8 @@
 #-- you could also establish a mysql connection in here, of course:
 // mysql_connect(":/var/run/mysqld/mysqld.sock", "user", "pw")
 // and mysql_query("USE mydatabase");
+mysql_connect(QA_MYSQL_HOSTNAME, QA_MYSQL_USERNAME, QA_MYSQL_PASSWORD);         
+mysql_query("USE " . QA_MYSQL_DATABASE); 
 
 
 		#-------------------------------------------------------- config ---
