@@ -29,8 +29,8 @@
                     $this->output( 
                         //'<a id="paratext-signin" href="">Paratext</a>'
                         '<a id="paratext-signin" href=""">
-                            <span class="paratext-signin-icon");"></span>
-                            <span>' . qa_lang('sso-auth/paratext_login') . '</span>
+                            <div class="paratext-signin-icon");"></div>
+                            <div class="signin-text">' . qa_lang('sso-auth/paratext_login') . '</div>
                         </a>'
                     );
 
