@@ -132,6 +132,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
             white-space: nowrap;
             transition: background 0.3s ease;
+            padding: 0px !important;
             opacity: 1;
         }
         
@@ -164,8 +165,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             font-weight: bold;
             font-family: "Roboto", sans-serif;
             color: #fff;
-            margin-left: 13px;
-            margin-right: 8px;
+            margin: 7px 8px 7px 13px;
         }
 
         </style>');
