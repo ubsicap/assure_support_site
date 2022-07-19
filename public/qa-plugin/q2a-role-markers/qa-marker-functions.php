@@ -160,6 +160,7 @@ function qa_get_user_content($userid)
     );
 
     return array(
+        'style' => 'wide',
         'tags' => $tags,
         'title' => qa_lang('qa-marker/user_field'),
         'fields'=>$fields,
