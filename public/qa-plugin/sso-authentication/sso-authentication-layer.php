@@ -57,7 +57,6 @@ class qa_html_theme_layer extends qa_html_theme_base
             }
             #paratext-signin {
                 background: #8AAB68;
-                opacity: 1 !important;
             }
             .paratext-signin-icon {
                 background-image: url("https://registry.paratext.org/static/logo-pt9.png");
@@ -73,6 +72,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 
             .google-signin. facebook-signin .paratext-signin-icon
             {
+                opacity: 1 !important;
                 width: 100%;
                 border: 1px solid #31708f;
                 padding: 0;
