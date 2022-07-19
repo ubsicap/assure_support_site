@@ -1277,12 +1277,13 @@ class qa_html_theme extends qa_html_theme_base
     }
 
     /**
+     * Determines which templates the sidebar should be hidden on.
      * @return array
      */
     private function donut_hide_sidebar_for_template()
     {
         return array(
-            'users',
+            'users', 'ask',
             /*'tags', 'categories' ,*/
             'admin', 'user', 'account',
             'favorites', 'user-wall', 'messages',
