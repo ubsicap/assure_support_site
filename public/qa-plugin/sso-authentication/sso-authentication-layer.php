@@ -125,7 +125,7 @@ class qa_html_theme_layer extends qa_html_theme_base
         }
         #google-signin, #facebook-signin, #paratext-signin {
             width: 100%;
-            height: 40px;
+            height: 44px;
             border-radius: 3px;
             box-sizing: border-box;
             margin-bottom: 3px;
@@ -143,6 +143,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             width: 40px;
             height: 40px;
             border-radius: 3px 0px 0px 3px;
+            margin: 2px 2px 2px 2px;
             background-size: 32px;
             background-position: 4px 4px;
             background-repeat: no-repeat;
@@ -171,7 +172,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             font-weight: bold;
             font-family: "Roboto", sans-serif;
             color: #fff;
-            margin: 7px 8px 7px 13px;
+            margin: 9px 8px 7px 53px;
         }
 
         </style>');
