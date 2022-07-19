@@ -43,6 +43,16 @@ class qa_html_theme_layer extends qa_html_theme_base
                 // $email =  $google_account_info->email;
                 // $name =  $google_account_info->name;
 
+            .google-signin, .facebook-signin, .paratext-signin-icon {
+                width: 100%;
+                border: 1px solid #31708f;
+                border-radius: 3px;
+                padding: 3px 0px 3px 0px;
+                display: inline-block;
+                border-radius: 1px;
+                box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+                white-space: nowrap;
+                transition: 0.3s;
                 // now you can use this profile info to create account in your website and make user logged in.
             } else {
                 $authurl = $client->createAuthUrl();
