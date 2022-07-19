@@ -19,14 +19,14 @@ class qa_html_theme_layer extends qa_html_theme_base
             
             #google-signin {
                 background: #DD4B39;
+                opacity: .8;
             }
             #facebook-signin {
                 background: #4C69BA;
+                opacity: .8;
             }
             #paratext-signin {
                 background: #8AAB68;
-            }
-            #google-signin #facebook-signin #paratext-signin {
                 opacity: .8;
             }
             .google-signin .facebook-signin .paratext-signin-icon {
