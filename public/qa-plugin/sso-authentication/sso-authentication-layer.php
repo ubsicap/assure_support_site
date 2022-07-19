@@ -125,7 +125,7 @@ class qa_html_theme_layer extends qa_html_theme_base
         }
         #google-signin, #facebook-signin, #paratext-signin {
             width: 100%;
-            height: 44px;
+            height: 40px;
             border-radius: 3px;
             box-sizing: border-box;
             margin-bottom: 3px;
@@ -140,11 +140,11 @@ class qa_html_theme_layer extends qa_html_theme_base
         .google-signin-icon, .facebook-signin-icon, .paratext-signin-icon {
             box-sizing: content-box;
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 3px 0px 0px 3px;
             margin: 2px 2px 2px 2px;
-            background-size: 32px;
+            background-size: 28px;
             background-position: 4px 4px;
             background-repeat: no-repeat;
         }
@@ -165,11 +165,11 @@ class qa_html_theme_layer extends qa_html_theme_base
             display: inline-block;
             vertical-align: middle;
             padding: 0px;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: bold;
             font-family: "Roboto", sans-serif;
             color: #fff;
-            margin: 11px 8px 7px 53px;
+            margin: 10px 8px 10px 53px;
         }
 
         </style>');
