@@ -13,4 +13,5 @@ return array(
     'facebook_login' => 'Log in with Facebook',
     'facebook_login_enabled' => 'Enable facebook login',
     'paratext_login' => 'Log in with Paratext',
+    'paratext_login_enabled' => 'Enable Paratext login',
 );
