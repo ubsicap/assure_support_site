@@ -169,7 +169,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             font-weight: bold;
             font-family: "Roboto", sans-serif;
             color: #fff;
-            margin: 10px 8px 10px 53px;
+            margin: 11px 8px 11px 53px;
         }
 
         </style>');
