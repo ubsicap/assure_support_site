@@ -143,8 +143,10 @@ class qa_html_theme_layer extends qa_html_theme_base
             width: 40px;
             height: 40px;
             border-radius: 3px 0px 0px 3px;
+            background-size: 32px;
+            background-position: 4px 4px;
+            background-repeat: no-repeat;
         }
-
         .google-signin-icon {
             background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png");
             background-color: #fff;
