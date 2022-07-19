@@ -54,8 +54,8 @@ class qa_html_theme_layer extends qa_html_theme_base
         #google-signin, #facebook-signin, #paratext-signin {
             width: 100%;
             border: 1px solid #31708f;
-            border-radius: 25px;
-            perspective: 1px;
+            border-radius: 8px;
+            box-sizing: border-box;
             overflow: hidden;
             margin-bottom: 8px;
             display: inline-block;
