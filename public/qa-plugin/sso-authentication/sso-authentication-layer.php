@@ -138,12 +138,12 @@ class qa_html_theme_layer extends qa_html_theme_base
         
         .google-signin-icon, .facebook-signin-icon, .paratext-signin-icon {
             box-sizing: content-box;
-            position: absolute
-            left: 0
-            top: 0
+            position: absolute;
+            left: 0;
+            top: 0;
             border-radius: 3px 0px 0px 3px;
-            width= 38px;
-            height= 38px;
+            width = 38px;
+            height = 38px;
         }
 
         .google-signin-icon {
