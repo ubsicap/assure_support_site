@@ -23,34 +23,34 @@
 
 */
 
-	return array(
-		// default
-		'enable_plugin' => 'Povolit Plugin',
-		'minimum_level' => 'Úroveň k přístupu na tuto stránku upravovat své příspěvky:',
-		'plugin_disabled' => 'Plugin byl zakázán.',
-		'access_forbidden' => 'Přístup zakázán.',
-		'plugin_page_url' => 'Otevřít strana na fóru:',
-		'contact' => 'Máte-li dotazy, prosím navštivte ^1q2apro.com^2',
-		'no_notifications_label' => 'Pokud nejsou k dispozici žádné upozornění, zobrazí se na oznamovací bublině:', // Label for notify bubble on top, next to user name
-		'admin_maxeventsshow' => 'Maximální počet akcí poli oznámení:', // extra
-		'admin_newwindow' => 'Otevřít odkazy z oznamovacím poli v nové záložce prohlížeče.', // extra
-		'admin_rtl' => 'Zprava doleva (RTL) jazyce ( pro Araby ).', // extra (EN)
+return array(
+    // default
+    'enable_plugin' => 'Povolit Plugin',
+    'minimum_level' => 'Úroveň k přístupu na tuto stránku upravovat své příspěvky:',
+    'plugin_disabled' => 'Plugin byl zakázán.',
+    'access_forbidden' => 'Přístup zakázán.',
+    'plugin_page_url' => 'Otevřít strana na fóru:',
+    'contact' => 'Máte-li dotazy, prosím navštivte ^1q2apro.com^2',
+    'no_notifications_label' => 'Pokud nejsou k dispozici žádné upozornění, zobrazí se na oznamovací bublině:', // Label for notify bubble on top, next to user name
+    'admin_maxeventsshow' => 'Maximální počet akcí poli oznámení:', // extra
+    'admin_newwindow' => 'Otevřít odkazy z oznamovacím poli v nové záložce prohlížeče.', // extra
+    'admin_rtl' => 'Zprava doleva (RTL) jazyce ( pro Araby ).', // extra (EN)
 
-		// plugin
-		'my_notifications' => 'Moje oznámení',
-		'show_notifications' => 'Zobrazit oznámení',
-		'one_notification' => '1 Nové oznámení',
-		'x_notifications' => 'Nové oznámení',
-		'close' => 'Zavřít',
-		'in_answer' => 'Odpověď na',
-		'in_comment' => ' Nový komentář k',
-		'in_bestanswer' => 'Nejlepší odpověď na',
-		'in_upvote' => '+1 Kladné hlasování ',
-		'in_downvote' => '-1 Záporného hlasování ',
-		'you_received' => 'Obdrželi jste',
-		'message_from' => 'soukromou zprávu od',
-		'wallpost_from' => 'Nový vzkaz na zdi',
-	);
+    // plugin
+    'my_notifications' => 'Moje oznámení',
+    'show_notifications' => 'Zobrazit oznámení',
+    'one_notification' => '1 Nové oznámení',
+    'x_notifications' => 'Nové oznámení',
+    'close' => 'Zavřít',
+    'in_answer' => 'Odpověď na',
+    'in_comment' => ' Nový komentář k',
+    'in_bestanswer' => 'Nejlepší odpověď na',
+    'in_upvote' => '+1 Kladné hlasování ',
+    'in_downvote' => '-1 Záporného hlasování ',
+    'you_received' => 'Obdrželi jste',
+    'message_from' => 'soukromou zprávu od',
+    'wallpost_from' => 'Nový vzkaz na zdi',
+);
 
 
 /*

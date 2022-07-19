@@ -24,8 +24,8 @@
 */
 
 if (!defined('QA_VERSION')) { // don't allow this page to be requested directly from browser
-	header('Location: ../../');
-	exit;
+    header('Location: ../../');
+    exit;
 }
 
 // language file
@@ -47,29 +47,31 @@ qa_register_plugin_module('event', 'q2apro-onsitenotifications-event.php', 'q2ap
 // cache function for notification count +1
 function q2apro_notifycount_increase($userid)
 {
-	if(!empty($userid))
-	{
-		// central qa_notifycount table
-		qa_db_query_sub('
+    if (!empty($userid)) {
+        // central qa_notifycount table
+        qa_db_query_sub(
+            '
 			INSERT INTO ^notifycount (userid, notifycount) VALUES(#, 1) 
 			ON DUPLICATE KEY UPDATE userid = #, notifycount = (notifycount+1)
 			',
-			$userid, $userid
-		);
-	}
+            $userid,
+            $userid
+        );
+    }
 }
 
 // cache function to nill the notification count
 function q2apro_notifycount_nill($userid)
 {
-	if(!empty($userid))
-	{
-		// central qa_notifycount table
-		qa_db_query_sub('
+    if (!empty($userid)) {
+        // central qa_notifycount table
+        qa_db_query_sub(
+            '
 			INSERT INTO ^notifycount (userid, notifycount) VALUES(#, 0) 
 			ON DUPLICATE KEY UPDATE userid = #, notifycount = 0
 			',
-			$userid, $userid
-		);
-	}
+            $userid,
+            $userid
+        );
+    }
 }

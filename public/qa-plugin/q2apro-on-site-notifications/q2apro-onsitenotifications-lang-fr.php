@@ -23,34 +23,34 @@
 
 */
 
-	return array(
-		// default
-		'enable_plugin' => 'Activer le plugin', // Enable Plugin (checkbox)
-		'minimum_level' => 'Niveau pour accéder à cette page et à la fonction de modification des posts :', // Level to access this page and edit posts:
-		'plugin_disabled' => 'Le plugin a été désactivé.', // Plugin has been disabled.
-		'access_forbidden' => 'Accès interdit.', // Access forbidden.
-		'plugin_page_url' => 'Ouvrir la page plugin dans le forum:', // Open page in forum:
-		'contact' => 'Si vous avez des questions, visitez  ^1q2apro.com^2.', // For questions please visit ^1q2apro.com^2
-		'no_notifications_label' => 'S\'il n\'y a pas de notifications, ce sera affiché sur la bulle notifier:', // Label for notify bubble on top, next to user name
-		'admin_maxeventsshow' => 'Nombre maximal d\'événements à afficher dans la boîte de notification:', // extra
-		'admin_newwindow' => 'Open links from notification box in a new browser tab.', // extra (EN)
-		'admin_rtl' => 'Right to Left (RTL) language.', // extra (EN)
+return array(
+    // default
+    'enable_plugin' => 'Activer le plugin', // Enable Plugin (checkbox)
+    'minimum_level' => 'Niveau pour accéder à cette page et à la fonction de modification des posts :', // Level to access this page and edit posts:
+    'plugin_disabled' => 'Le plugin a été désactivé.', // Plugin has been disabled.
+    'access_forbidden' => 'Accès interdit.', // Access forbidden.
+    'plugin_page_url' => 'Ouvrir la page plugin dans le forum:', // Open page in forum:
+    'contact' => 'Si vous avez des questions, visitez  ^1q2apro.com^2.', // For questions please visit ^1q2apro.com^2
+    'no_notifications_label' => 'S\'il n\'y a pas de notifications, ce sera affiché sur la bulle notifier:', // Label for notify bubble on top, next to user name
+    'admin_maxeventsshow' => 'Nombre maximal d\'événements à afficher dans la boîte de notification:', // extra
+    'admin_newwindow' => 'Open links from notification box in a new browser tab.', // extra (EN)
+    'admin_rtl' => 'Right to Left (RTL) language.', // extra (EN)
 
-		// plugin
-		'my_notifications' => 'Mes notifications',
-		'show_notifications' => 'Afficher les notifications',
-		'one_notification' => '1 nouvelle notification',
-		'x_notifications' => 'nouvelles notifications',
-		'close' => 'fermer',
-		'in_answer' => 'Répondre à',
-		'in_comment' => 'Commentaire à',
-		'in_bestanswer' => 'Meilleure réponse à',
-		'in_upvote' => 'Upvote pour',
-		'in_downvote' => 'Downvote pour',
-		'you_received' => 'You received a',
-		'message_from' => 'private message from',
-		'wallpost_from' => 'wall post from',
-	);
+    // plugin
+    'my_notifications' => 'Mes notifications',
+    'show_notifications' => 'Afficher les notifications',
+    'one_notification' => '1 nouvelle notification',
+    'x_notifications' => 'nouvelles notifications',
+    'close' => 'fermer',
+    'in_answer' => 'Répondre à',
+    'in_comment' => 'Commentaire à',
+    'in_bestanswer' => 'Meilleure réponse à',
+    'in_upvote' => 'Upvote pour',
+    'in_downvote' => 'Downvote pour',
+    'you_received' => 'You received a',
+    'message_from' => 'private message from',
+    'wallpost_from' => 'wall post from',
+);
 
 
 /*

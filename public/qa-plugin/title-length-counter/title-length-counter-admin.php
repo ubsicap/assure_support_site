@@ -1,10 +1,12 @@
 <?php
-class title_length_counter_admin {
+class title_length_counter_admin
+{
 
-	function option_default($option) {
+    function option_default($option)
+    {
 
-		switch($option) {
-			case 'title_length_counter_css':
+        switch ($option) {
+            case 'title_length_counter_css':
                 return '#title-length-count {
     margin-top: 5px;
 }
@@ -23,59 +25,57 @@ class title_length_counter_admin {
 /* .qa-question-list-count {
     float: left;
 } */';
-			default:
-				return null;				
-		}
+            default:
+                return null;
+        }
+    }
 
-	}	   
+    function admin_form(&$qa_content)
+    {
 
-	function admin_form(&$qa_content)
-	{					   
+        // Process form input
 
-		// Process form input
+        $ok = null;
 
-		$ok = null;
+        if (qa_clicked('title_length_counter_save')) {
+            foreach ($_POST as $i => $v) {
 
-		if (qa_clicked('title_length_counter_save')) {
-			foreach($_POST as $i => $v) {
+                qa_opt($i, $v);
+            }
 
-				qa_opt($i,$v);
-			}
+            $ok = qa_lang('admin/options_saved');
+        } else if (qa_clicked('title_length_counter_reset')) {
+            foreach ($_POST as $i => $v) {
+                $def = $this->option_default($i);
+                if ($def !== null) qa_opt($i, $def);
+            }
+            $ok = qa_lang('admin/options_reset');
+        }
 
-			$ok = qa_lang('admin/options_saved');
-		}
-		else if (qa_clicked('title_length_counter_reset')) {
-			foreach($_POST as $i => $v) {
-				$def = $this->option_default($i);
-				if($def !== null) qa_opt($i,$def);
-			}
-			$ok = qa_lang('admin/options_reset');
-		}
+        $fields = array();
 
-		$fields = array();
+        $fields[] = array(
+            'rows' => 8,
+            'label' => 'Title Length Counter CSS',
+            'type' => 'textarea',
+            'value' => qa_opt('title_length_counter_css'),
+            'tags' => 'NAME="title_length_counter_css"',
+        );
 
-		$fields[] = array(
-				'rows' => 8,
-				'label' => 'Title Length Counter CSS',
-				'type' => 'textarea',
-				'value' => qa_opt('title_length_counter_css'),
-				'tags' => 'NAME="title_length_counter_css"',
-                );		   
-                
-		return array(		   
-				'ok' => ($ok && !isset($error)) ? $ok : null,
+        return array(
+            'ok' => ($ok && !isset($error)) ? $ok : null,
 
-				'fields' => $fields,
-				'buttons' => array(
-					array(
-						'label' => qa_lang_html('main/save_button'),
-						'tags' => 'NAME="title_length_counter_save"',
-					     ),
-					array(
-						'label' => qa_lang_html('admin/reset_options_button'),
-						'tags' => 'NAME="title_length_counter_reset"',
-					     ),
-					)
-			    );
-	}
+            'fields' => $fields,
+            'buttons' => array(
+                array(
+                    'label' => qa_lang_html('main/save_button'),
+                    'tags' => 'NAME="title_length_counter_save"',
+                ),
+                array(
+                    'label' => qa_lang_html('admin/reset_options_button'),
+                    'tags' => 'NAME="title_length_counter_reset"',
+                ),
+            )
+        );
+    }
 }
