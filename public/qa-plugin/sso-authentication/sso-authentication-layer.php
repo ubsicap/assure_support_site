@@ -17,15 +17,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             $this->output('
             <style type="text/css">
             #google-signin {
-                width: auto;
                 background: #DD4B39;
-                border: 1px solid #31708f;
-                padding: 0;
-                display: inline-block;
-                border-radius: 1px;
-                box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
-                white-space: nowrap;
-                opacity: 1 !important;
             }
             .google-signin-icon {
                 background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png");
@@ -50,15 +42,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                 margin-right: 8px;
             }
             #facebook-signin {
-                width: auto;
                 background: #4C69BA;
-                border: 1px solid #31708f;
-                padding: 0;
-                display: inline-block;
-                border-radius: 1px;
-                box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
-                white-space: nowrap;
-                opacity: 1 !important;
             }
             .facebook-signin-icon {
                 background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/150px-Facebook_f_logo_%282021%29.svg.png");
@@ -72,14 +56,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                 vertical-align: middle;
             }
             #paratext-signin {
-                width: auto;
                 background: #8AAB68;
-                border: 1px solid #31708f;
-                padding: 0;
-                display: inline-block;
-                border-radius: 1px;
-                box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
-                white-space: nowrap;
                 opacity: 1 !important;
             }
             .paratext-signin-icon {
@@ -92,6 +69,17 @@ class qa_html_theme_layer extends qa_html_theme_base
                 background-color: #fff;
                 display: inline-block;
                 vertical-align: middle;
+            }
+
+            .google-signin. facebook-signin .paratext-signin-icon
+            {
+                width: 100%;
+                border: 1px solid #31708f;
+                padding: 0;
+                display: inline-block;
+                border-radius: 1px;
+                box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+                white-space: nowrap;
             }
 
 
