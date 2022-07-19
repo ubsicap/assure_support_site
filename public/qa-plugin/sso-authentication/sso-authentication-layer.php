@@ -71,6 +71,30 @@ class qa_html_theme_layer extends qa_html_theme_base
                 display: inline-block;
                 vertical-align: middle;
             }
+            #paratext-signin {
+                width: auto;
+                background: #8AAB68;
+                border: 1px solid #31708f;
+                padding: 0;
+                display: inline-block;
+                border-radius: 1px;
+                box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+                white-space: nowrap;
+                opacity: 1 !important;
+            }
+            .paratext-signin-icon {
+                background-image: url("https://registry.paratext.org/static/logo-pt9.png");
+                background-size: 18px;
+                background-repeat: no-repeat;
+                background-position: 11px;
+                width: 40px;
+                height: 40px;
+                background-color: #fff;
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+
             #facebook-signin:hover,
             #facebook-signin:focus {
               background-color: #4C69BA !important;

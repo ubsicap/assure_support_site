@@ -10,23 +10,27 @@
                     $this->output( '<li class="open-login-buttons">' );
 
                     //google button
-                    $this->output( '<a id="google-signin" href="">
-                    <span class="google-signin-icon"></span>
-                  <span class="signin-text">'. qa_lang('sso-auth/google_login') . '</span>
-              </a>');
+                    $this->output( 
+                        '<a id="google-signin" href="">
+                            <span class="google-signin-icon"></span>
+                            <span class="signin-text">'. qa_lang('sso-auth/google_login') . '</span>
+                        </a>'
+                    );
                     
                     //facebook button
-                    $this->output( '<a id="facebook-signin" href="">
-                    <span class="facebook-signin-icon"></span>
-                  <span class="signin-text">'. qa_lang('sso-auth/facebook_login') . '</span>
-              </a>');
+                    $this->output( '
+                        <a id="facebook-signin" href="">
+                            <span class="facebook-signin-icon"></span>
+                            <span class="signin-text">'. qa_lang('sso-auth/facebook_login') . '</span>
+                        </a>'
+                    );
 
                     //paratext button
                     $this->output( 
                         //'<a id="paratext-signin" href="">Paratext</a>'
-                        '<a id="partext-signin" href="" type="button" style="background-color: rgb(138, 171, 104);">
-                            <div id="paratext-signin-logo" style="background-image: url("https://registry.paratext.org/static/logo-pt9.png");"></div>
-                            <div>' . qa_lang('sso-auth/paratext_login') . '</div>
+                        '<a id="partext-signin" href=""">
+                            <span class="paratext-signin-icon");"></span>
+                            <span>' . qa_lang('sso-auth/paratext_login') . '</span>
                         </a>'
                     );
 
