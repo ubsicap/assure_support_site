@@ -162,12 +162,17 @@ class qa_html_theme_layer extends qa_html_theme_base
     //display a field on the user page
     function main_parts($content)
     {
-        if ($this->template == 'user' && isset($content['raw']['userid'])) { 
+        if ($this->template == 'user' && isset($content['raw']['userid'])) {
             //on the user page of a valid user
-            $userid = $content['raw']['userid']; //id of the user
-            require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
-            //only display text box if logged in as an admin
-            $content['form-badges-list'] = qa_get_user_content($userid);
+            $userid = $content['raw']['userid']; //id of the user of the profile page
+            
+            $myLevel = qa_get_logged_in_level(); //null or level of the user logged in
+            if(isset($myLevel) && $myLevel >= QA_USER_LEVEL_ADMIN) //we're logged in as an admin or higher
+            {
+                require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
+                //only display text box if logged in as an admin
+                $content['form-custom-title'] = qa_get_user_content($userid);
+            }
         }
         qa_html_theme_base::main_parts($content); //go back to the main_parts base function
     }

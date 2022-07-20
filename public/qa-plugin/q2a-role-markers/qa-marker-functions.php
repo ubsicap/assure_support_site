@@ -129,41 +129,66 @@ function qa_simplify_user_title($title)
     return preg_replace("/[^0-9_a-z\-]/", '', $simpleTitle); //lastly remove any non a-z, 0-9, underscore, or hyphen characters
 }
 
-
-
 /**
  * Return formatted response for custom title display on user page
  * 
  * 
- * @param int userid
+ * @param int userid of the profile page we're on
  * @param array reponse
  */
 function qa_get_user_content($userid)
 {
-    $tags = 'id="marker-form" action="'.qa_self_html().'#signature_text" method="POST"';
+    $tags = 'id="marker-form" action="'.qa_self_html().'#custom_title_text" method="POST"';
+    $ok = false;
 
+    //default text in textbox
     $textDefault = '';
     if(qa_has_user_title($userid))
         $textDefault = qa_get_user_title($userid);
-
+    
+    $errors = array();
+    if(qa_clicked('marker_update_title_button')) //update button was clicked
+    {
+        $customTitle = qa_post_text('marker_custom_title'); //the entered custom title text
+        
+        if($customTitle != '' && qa_simplify_user_title($customTitle) == '') //custom title is invalid (but not blank), it is blank
+        {
+            $ok = null; //invalid
+            $errors['custom_title'] = qa_lang('qa-marker/updated_title_failure');
+        }
+        elseif($customTitle == '') //custom title is blank remove the title
+        {
+            $textDefault = $customTitle; //keep text box as current text
+            $ok = qa_lang('qa-marker/removed_title');
+            if(qa_has_user_title($userid))
+                qa_remove_user_title($userid); //remove if the user has one
+        }    
+        else //valid update the user title
+        {
+            $textDefault = $customTitle; //keep text box as current text
+            $ok = qa_lang('qa-marker/updated_title_success'); //valid     
+            qa_set_user_title($userid, $customTitle);
+        }
+    }
 
     $fields[] = array(
         'label' => qa_lang('qa-marker/user_title'),
         'type' => 'text',
         'tags' => 'NAME="marker_custom_title"',
         'value' => $textDefault,
-    );
-                        
+    );             
     $buttons[] = array(
         'label' => qa_lang_html('qa-marker/set_custom_title'),
         'tags' => 'NAME="marker_update_title_button"',
     );
 
     return array(
-        'style' => 'wide',
-        'tags' => $tags,
-        'title' => qa_lang('qa-marker/user_field'),
-        'fields'=>$fields,
-        'buttons'=>$buttons,
+        'ok'      => $ok,
+        'style'   => 'wide',
+        'tags'    => $tags,
+        'title'   => qa_lang('qa-marker/user_field'),
+        'fields'  => $fields,
+        'buttons' => $buttons,
+        'errors'  => $errors,
     );
 }
