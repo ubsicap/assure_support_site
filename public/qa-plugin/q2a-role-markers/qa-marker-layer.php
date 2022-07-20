@@ -171,7 +171,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             {
                 require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
                 //only display text box if logged in as an admin
-                $content['form-badges-list'] = qa_get_user_content($userid);
+                $content['form-custom-title'] = qa_get_user_content($userid);
             }
         }
         qa_html_theme_base::main_parts($content); //go back to the main_parts base function
