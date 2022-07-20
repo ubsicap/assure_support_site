@@ -29,7 +29,7 @@ class sso_authentication_login
 					require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php';
 					$client->revokeToken();
 				} else {
-					
+
 					$this->loginWithGoogle();
 				}
 				break;
@@ -104,91 +104,14 @@ HTML;
 				// Get user information
 				$user_info = $this->getUserProfileInfo($access_token);
 
-				// Check if the user already has an account on the site
-				require_once QA_INCLUDE_DIR . 'db/users.php';
-				$existingAccountIds = qa_db_user_find_by_email($user_info['email']);
-
-				// No account exists; create a new one
-				if (empty($existingAccountIds)) {
-					// Check if the user is archived
-					$matchingUsers = qa_ar_db_user_find_by_email($user_info['email']);
-
-					// Make sure there is only one match
-					if (count($matchingUsers) == 1) {
-						// For qa_db_select_with_pending()
-						require_once QA_INCLUDE_DIR . 'db/selects.php';
-
-						// For qa_complete_confirm()
-						require_once QA_INCLUDE_DIR . 'app/users-edit.php';
-
-						// This is the userid of the archived user
-						$userId = $matchingUsers[0];
-
-						// Swap all the instances of the old username to the new one
-						qa_ar_db_swap_name(qa_ar_db_get_anon($userId), $user_info['name']);
-
-						// Set the fields of the account to the newly provided values
-						// Note these updates must happen here because the credentials are needed to log in below
-						qa_db_user_set($userId, array(
-							'email' => $user_info['email'],       // Update the email address so the account is valid
-							'handle' => $user_info['name'],   // Update the username to no longer be `anon######`
-						));
-
-						// The user is logging in with Google, so update their login source
-						qa_db_query_sub('UPDATE ^userlogins SET source=$ WHERE userid=$', 'google', $userId);
-
-						// This user has now confirmed their email
-						qa_complete_confirm(strval($userId), $user_info['email'], $user_info['name']);
-
-						// Report that a 'user reclaim' event has occurred (for event modules)
-						qa_report_event(
-							'u_reclaim',
-							$userId,
-							$user_info['name'],
-							array(
-								'email' => $user_info['email'],
-							)
-						);
-
-						// Now log the user in
-						qa_log_in_external_user('google', $userId, array(
-							'email' => @$user_info['email'],
-							'handle' => @$user_info['name'],
-							'confirmed' => @$user_info['verified_email'],
-							'name' => @$user_info['name'],
-							'location' => @$user_info['location']['name'],
-							'website' => @$user_info['link'],
-							'about' => @$user_info['bio'],
-							'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
-						));
-					} else {
-						// Otherwise, the user is completely new
-						qa_log_in_external_user('google', $user_info['id'], array(
-							'email' => @$user_info['email'],
-							'handle' => @$user_info['name'],
-							'confirmed' => @$user_info['verified_email'],
-							'name' => @$user_info['name'],
-							'location' => @$user_info['location']['name'],
-							'website' => @$user_info['link'],
-							'about' => @$user_info['bio'],
-							'avatar' =>  isset($user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
-						));
-					}
-				} else {
-					// The user already has an account on the site; log them in with Google
-					$users = array_values(qa_db_user_get_userid_handles($existingAccountIds));
-					qa_set_logged_in_user($existingAccountIds[0], $users[0], false, 'google');
-				}
-				// $this->content['navigation']['user']['logout']['url'] = './index.php?qa=logout';
+				$this->registerUser($user_info, 'google');
+				
 			} catch (Exception $e) {
 				echo $e->getMessage();
 				exit();
 			}
 		} else {
 			require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php';
-			echo '<script type="text/JavaScript"> 
-     console.log("g");
-     </script>';
 			echo '<script type="text/javascript">
 				var oldonload = window.onload;
 				var func = function() {
@@ -213,8 +136,20 @@ HTML;
 
 	function loginWithFacebook()
 	{
-		require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php';
-		echo '<script type="text/javascript">
+		if (isset($_GET['code'])) {
+			try {
+				require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php';
+				$accessToken = $helper->getAccessToken();
+				$response = $fb->get('/me?fields=id,name', $accessToken);
+				$user_info = $response->getGraphUser();
+				$this->registerUser($user_info, 'facebook');
+			} catch (Exception $e) {
+				echo $e->getMessage();
+				exit();
+			}
+		} else {
+			require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php';
+			echo '<script type="text/javascript">
 			var oldonload = window.onload;
 			var func = function() {
 				var facebookSignins = document.getElementsByClassName("facebook-signin fa");
@@ -233,6 +168,7 @@ HTML;
 					}; 
 				} 
 			</script>';
+		}
 	}
 
 	// $access_token is the access token you got earlier
@@ -270,6 +206,84 @@ HTML;
 			throw new Exception('Error : Failed to receieve access token');
 
 		return $data;
+	}
+
+	function registerUser($user_info, $provider) {
+		// Check if the user already has an account on the site
+		require_once QA_INCLUDE_DIR . 'db/users.php';
+		$existingAccountIds = qa_db_user_find_by_email($user_info['email']);
+
+		// No account exists; create a new one
+		if (empty($existingAccountIds)) {
+			// Check if the user is archived
+			$matchingUsers = qa_ar_db_user_find_by_email($user_info['email']);
+
+			// Make sure there is only one match
+			if (count($matchingUsers) == 1) {
+				// For qa_db_select_with_pending()
+				require_once QA_INCLUDE_DIR . 'db/selects.php';
+
+				// For qa_complete_confirm()
+				require_once QA_INCLUDE_DIR . 'app/users-edit.php';
+
+				// This is the userid of the archived user
+				$userId = $matchingUsers[0];
+
+				// Swap all the instances of the old username to the new one
+				qa_ar_db_swap_name(qa_ar_db_get_anon($userId), $user_info['name']);
+
+				// Set the fields of the account to the newly provided values
+				// Note these updates must happen here because the credentials are needed to log in below
+				qa_db_user_set($userId, array(
+					'email' => $user_info['email'],       // Update the email address so the account is valid
+					'handle' => $user_info['name'],   // Update the username to no longer be `anon######`
+				));
+
+				// The user is logging in with provider, so update their login source
+				qa_db_query_sub('UPDATE ^userlogins SET source=$ WHERE userid=$', $provider, $userId);
+
+				// This user has now confirmed their email
+				qa_complete_confirm(strval($userId), $user_info['email'], $user_info['name']);
+
+				// Report that a 'user reclaim' event has occurred (for event modules)
+				qa_report_event(
+					'u_reclaim',
+					$userId,
+					$user_info['name'],
+					array(
+						'email' => $user_info['email'],
+					)
+				);
+
+				// Now log the user in
+				qa_log_in_external_user($provider, $userId, array(
+					'email' => @$user_info['email'],
+					'handle' => @$user_info['name'],
+					'confirmed' => isset($user_info['verified_email']) ? : @$user_info['is_verified'],
+					'name' => @$user_info['name'],
+					'location' => @$user_info['location'],
+					'website' => @$user_info['link'],
+					'about' => isset($user_info['bio']) ? : '',
+					'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
+				));
+			} else {
+				// Otherwise, the user is completely new
+				qa_log_in_external_user($provider, $user_info['id'], array(
+					'email' => @$user_info['email'],
+					'handle' => @$user_info['name'],
+					'confirmed' => @$user_info['verified_email'],
+					'name' => @$user_info['name'],
+					'location' => @$user_info['location'],
+					'website' => @$user_info['link'],
+					'about' => @$user_info['bio'],
+					'avatar' =>  isset($user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
+				));
+			}
+		} else {
+			// The user already has an account on the site; log them in with provider
+			$users = array_values(qa_db_user_get_userid_handles($existingAccountIds));
+			qa_set_logged_in_user($existingAccountIds[0], $users[0], false, $provider);
+		}
 	}
 
 	function admin_form(&$qa_content)
