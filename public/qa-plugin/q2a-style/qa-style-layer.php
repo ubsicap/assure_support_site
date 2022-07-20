@@ -5,8 +5,9 @@ class qa_html_theme_layer extends qa_html_theme_base
     {
         qa_html_theme_base::head_css();
 
-        //if we're on the questions page hide the page-title
-        if($this->template == "questions")
+        //if we're on the questions, unanswered, or users page hide the page-title
+        //we do this since the title is self evidenct since there are tabs on these pages
+        if($this->template == "questions" || $this->template == "unanswered" || $this->template == "users")
         {
             $this->output('
                 <style>
