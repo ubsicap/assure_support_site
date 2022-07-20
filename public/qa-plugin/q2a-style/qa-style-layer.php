@@ -50,7 +50,10 @@ class qa_html_theme_layer extends qa_html_theme_base
                         font-size: 15px;
                     }
                     a.navbar-login-button {
-                        padding: 8px 10px !important
+                        padding: 8px 10px !important /* not sure how to avoid using important here */
+                    }
+                    .nav.navbar-nav.navbar-right.login-nav {
+                        padding: 20px 0;
                     }
                 </style>'
             );
