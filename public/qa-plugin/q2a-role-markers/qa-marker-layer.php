@@ -162,7 +162,7 @@ class qa_html_theme_layer extends qa_html_theme_base
     //display a field on the user page
     function main_parts($content)
     {
-        if ($this->template == 'user' && isset($content['raw']['userid'])) { 
+        if ($this->template == 'user' && isset($content['raw']['userid'])) {
             //on the user page of a valid user
             $userid = $content['raw']['userid']; //id of the user of the profile page
             
