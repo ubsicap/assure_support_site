@@ -141,8 +141,8 @@ HTML;
 	function logout_html($tourl)
 	{
 		echo '<script type="text/JavaScript"> 
-		document.getElementsByClassName("fa fa-sign-out")[0].innerHTML = " Log out";
-     document.getElementsByClassName("fa fa-sign-out")[0].parentElement.href="'.$tourl.'";
+		document.getElementsByClassName("fa fa-sign-out")[0].parentElement.href="'.$tourl.'";
+		document.getElementsByClassName("fa fa-sign-out")[0].parentElement.innerHTML = "<span class=\"fa fa-sign-out\"></span> Log out ";
      </script>';
 		require_once QA_PLUGIN_DIR . 'sso-authentication/config.php';
 		$client->revokeToken();
