@@ -143,13 +143,14 @@ function qa_get_user_content($userid)
     $tags = 'id="marker-form" action="'.qa_self_html().'#signature_text" method="POST"';
 
 
-    if(qa_clicked('marker_update_title_button')) {
-        $ok = "updated";
-    }
-
+    
     $textDefault = '';
     if(qa_has_user_title($userid))
-        $textDefault = qa_get_user_title($userid);
+    $textDefault = qa_get_user_title($userid);
+    
+    if(qa_clicked('marker_update_title_button')) {
+        $textDefault = "updated";
+    }
 
     $fields[] = array(
         'label' => qa_lang('qa-marker/user_title'),
