@@ -39,6 +39,13 @@ class qa_html_theme_layer extends qa_html_theme_base
             );
         } else {
             //not on login screen, add "Log in" text to the button
+            $this->output('
+                <style>
+                    .fa-sign-in:after {
+                        content: "Test";
+                    }
+                </style>'
+            );
         }
     }
 }
