@@ -7,7 +7,6 @@ require_once QA_PLUGIN_DIR . 'account-reclaim/qa-ar-functions.php';
 
 class sso_authentication_login
 {
-
 	var $directory;
 	var $urltoroot;
 	var $provider;
@@ -25,15 +24,23 @@ class sso_authentication_login
 	{
 		switch ($this->provider) {
 			case "google":
-				// Event 2: User clicked LOGOUT link
+				//when User clicked LOGOUT link
 				if (isset($_GET['logout'])) {
-					require_once QA_PLUGIN_DIR . 'sso-authentication/config.php';
+					require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php';
 					$client->revokeToken();
 				} else {
+					
 					$this->loginWithGoogle();
 				}
 				break;
 			case "facebook":
+				//when User clicked LOGOUT link
+				if (isset($_GET['logout'])) {
+					require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php';
+					$client->revokeToken();
+				} else {
+					$this->loginWithFacebook();
+				}
 				break;
 			default:
 				break;
@@ -71,7 +78,6 @@ HTML;
 			default:
 				break;
 		}
-		
 	}
 
 
@@ -81,10 +87,11 @@ HTML;
 		document.getElementsByClassName("fa fa-sign-out")[0].parentElement.href="' . $tourl . '";
 		document.getElementsByClassName("fa fa-sign-out")[0].parentElement.innerHTML = "<span class=\"fa fa-sign-out\"></span> Log out ";
      </script>';
-	 }
-		
+	}
 
-	function loginWithGoogle() {
+
+	function loginWithGoogle()
+	{
 		if (isset($_GET['code'])) {
 			// $qa_content = qa_content_prepare();
 			try {
@@ -178,16 +185,54 @@ HTML;
 				exit();
 			}
 		} else {
-			require_once QA_PLUGIN_DIR . 'sso-authentication/config.php';
+			require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php';
+			echo '<script type="text/JavaScript"> 
+     console.log("g");
+     </script>';
 			echo '<script type="text/javascript">
-				window.onload = function() {
-					var googleSignins = document.getElementsByClassName("google-signin");
-					for (var i = 0; i < googleSignins.length; i++) {
-						googleSignins.item(i).href = "' . $authurl . '";
-					}
-				  };
+				var oldonload = window.onload;
+				var func = function() {
+					var googleSignins = document.getElementsByClassName("google-signin fa");
+						for (var i = 0; i < googleSignins.length; i++) {
+							googleSignins.item(i).href = "' . $authurl . '";
+						}
+				  }; 
+				if (typeof window.onload != "function") { 
+					window.onload = func; 
+				} else { 
+					window.onload = function() { 
+						if (oldonload) { 
+							oldonload(); 
+						} 
+						 func();
+					} 
+				} 
 				  </script>';
 		}
+	}
+
+	function loginWithFacebook()
+	{
+		require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php';
+		echo '<script type="text/javascript">
+			var oldonload = window.onload;
+			var func = function() {
+				var facebookSignins = document.getElementsByClassName("facebook-signin fa");
+						for (var i = 0; i < facebookSignins.length; i++) {
+							facebookSignins.item(i).href = "' . $loginUrl . '";
+						}
+			  };
+				if (typeof window.onload != "function") { 
+					window.onload = func; 
+				} else { 
+					window.onload = function() { 
+						if (oldonload) { 
+							oldonload(); 
+						} 
+						func();
+					}; 
+				} 
+			</script>';
 	}
 
 	// $access_token is the access token you got earlier
