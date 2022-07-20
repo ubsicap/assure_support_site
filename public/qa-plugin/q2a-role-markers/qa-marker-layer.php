@@ -97,14 +97,14 @@ class qa_html_theme_layer extends qa_html_theme_base
         $rolemarker = '';
 
         if (qa_opt('marker_plugin_role_names')) {
-            $rolemarker .= '<span class="qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">&nbsp;<b>[' . $this->getrolename($uid) . ']</b>  </span>';
+            $rolemarker .= '<span class="qa-who-marker-' . $titleSimple . '" title="' . qa_html($title) . '">&nbsp;<b>[' . $this->getrolename($uid) . ']</b>  </span>';
         }
 
         if (qa_opt('marker_plugin_icons_images')) {
             $svgFile = qa_get_badge_svg("qa-marker-svg-" . $titleSimple);
             $rolemarker .= '<div class="qa-avatar-marker">'. $svgFile .'</div>';
         } else {
-            $rolemarker .= '<span class="qa-who-marker qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
+            $rolemarker .= '<span class="qa-who-marker-' . $titleSimple . '" title="' . qa_html($title) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
         }
 
         return $rolemarker;
