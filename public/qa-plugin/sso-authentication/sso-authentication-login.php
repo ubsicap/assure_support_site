@@ -1,7 +1,7 @@
 <?php
 
 require_once dirname(QA_PLUGIN_DIR) . '/vendor/autoload.php';
-require_once dirname(QA_PLUGIN_DIR) . '/vendor/google/auth/src/Oauth2.php';
+require_once dirname(QA_PLUGIN_DIR) . '/vendor/google/auth/src/OAuth2.php';
 require_once QA_PLUGIN_DIR . 'account-reclaim/qa-ar-functions.php';
 
 class sso_authentication_login
