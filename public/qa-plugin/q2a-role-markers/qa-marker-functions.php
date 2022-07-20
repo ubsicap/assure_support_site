@@ -148,7 +148,7 @@ function qa_get_user_content($userid)
     
     if(qa_clicked('marker_update_title_button')) //update button was clicked
     {
-        $customTitle = qa_post_text('marker_update_title_button');
+        $customTitle = qa_post_text('marker_custom_title');
         
         if($customTitle != '' && qa_simplify_user_title($customTitle) != '') //custom title is invalid (but not blank), it is blank
         {
