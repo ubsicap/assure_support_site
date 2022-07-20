@@ -37,10 +37,10 @@ class sso_authentication_login
 
                     // Check if the user already has an account on the site
                     require_once QA_INCLUDE_DIR . 'db/users.php';
-                    $existingAccount = qa_db_user_find_by_email($user_info['email']);
+                    $existingAccountIds = qa_db_user_find_by_email($user_info['email']);
 
                     // No account exists; create a new one
-                    if (empty($existingAccount)) {
+                    if (empty($existingAccountIds)) {
                         // Check if the user is archived
                         $matchingUsers = qa_ar_db_user_find_by_email($user_info['email']);
 
@@ -104,7 +104,8 @@ class sso_authentication_login
                         }
                     } else {
                         // The user already has an account on the site; log them in with Google
-                        qa_log_in_external_user('google', $existingAccount['userid'], array());
+                        $users = array_values(qa_db_user_get_userid_handles($existingAccountIds));
+                        qa_set_logged_in_user($existingAccountIds[0], $users[0], false, 'google');
                     }
                     // $this->content['navigation']['user']['logout']['url'] = './index.php?qa=logout';
                 } catch (Exception $e) {
