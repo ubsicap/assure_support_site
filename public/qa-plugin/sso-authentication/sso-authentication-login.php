@@ -127,7 +127,7 @@ for (var i = 0; i < googleSignins.length; i++) {
 }
 				  };
 				  </script>'
-            }
+            
         } catch (Exception $e) {
             echo $e->getMessage();
             exit();
