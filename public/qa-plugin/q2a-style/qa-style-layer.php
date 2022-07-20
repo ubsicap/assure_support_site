@@ -26,5 +26,19 @@ class qa_html_theme_layer extends qa_html_theme_base
                 }
             </style>'
         );
+
+        //remove login top right button when on log in screen
+        if($this->template == "login")
+        {
+            $this->output('
+                <style>
+                    .login-dropdown {
+                        display: none;
+                    }
+                </style>'
+            );
+        } else {
+            //not on login screen, add "Log in" text to the button
+        }
     }
 }
