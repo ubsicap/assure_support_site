@@ -152,6 +152,8 @@ if ($emailConfirmationSent) {
 			)
 		);
 	}
+    // This line will get deleted once Q2A is updated; that's O.K.
+    qa_redirect(''); // Redirect users to the homepage after they've confirmed
 } elseif (isset($loggedInUserId)) { // if logged in, allow sending a fresh link
 	require_once QA_INCLUDE_DIR . 'util/string.php';
 
