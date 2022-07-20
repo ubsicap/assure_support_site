@@ -140,8 +140,6 @@ function qa_simplify_user_title($title)
  */
 function qa_get_user_content($userid)
 {
-    $myuserid = qa_get_logged_in_userid();
-
     $tags = 'id="marker-form" action="'.qa_self_html().'#signature_text" method="POST"';
 
     $textDefault = '';
@@ -153,7 +151,7 @@ function qa_get_user_content($userid)
         'label' => qa_lang('qa-marker/user_title'),
         'type' => 'text',
         'tags' => 'NAME="marker_custom_title"',
-        'value' => $myuserid,
+        'value' => $textDefault,
     );
                         
     $buttons[] = array(
