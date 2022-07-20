@@ -146,13 +146,15 @@ function qa_get_user_content($userid)
     if(qa_has_user_title($userid))
         $textDefault = qa_get_user_title($userid);
     
+    $errors = array();
     if(qa_clicked('marker_update_title_button')) //update button was clicked
     {
-        $customTitle = qa_post_text('marker_custom_title');
+        $customTitle = qa_post_text('marker_custom_title'); //the entered custom title text
         
-        if($customTitle != '' && qa_simplify_user_title($customTitle) != '') //custom title is invalid (but not blank), it is blank
+        if($customTitle != '' && qa_simplify_user_title($customTitle) == '') //custom title is invalid (but not blank), it is blank
         {
             $ok = null; //invalid
+            $errors['custom_title'] = qa_lang('qa-marker/updated_title_failure');
         }
         elseif($customTitle == '') //custom title is blank remove the title
         {
@@ -174,19 +176,19 @@ function qa_get_user_content($userid)
         'type' => 'text',
         'tags' => 'NAME="marker_custom_title"',
         'value' => $textDefault,
-    );
-                        
+    );             
     $buttons[] = array(
         'label' => qa_lang_html('qa-marker/set_custom_title'),
         'tags' => 'NAME="marker_update_title_button"',
     );
 
     return array(
-        'ok' => $ok,
-        'style' => 'wide',
-        'tags' => $tags,
-        'title' => qa_lang('qa-marker/user_field'),
-        'fields'=>$fields,
-        'buttons'=>$buttons,
+        'ok'      => $ok,
+        'style'   => 'wide',
+        'tags'    => $tags,
+        'title'   => qa_lang('qa-marker/user_field'),
+        'fields'  => $fields,
+        'buttons' => $buttons,
+        'errors'  => $errors,
     );
 }
