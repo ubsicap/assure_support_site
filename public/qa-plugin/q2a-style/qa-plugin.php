@@ -15,7 +15,7 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
         exit;
 }
 
-qa_register_plugin_layer('qa-style-layer.php', 'Marker Layer');	
+qa_register_plugin_layer('qa-style-layer.php', 'CSS Override Layer');	
 
 /*
 	Omit PHP closing tag to help avoid accidental output
