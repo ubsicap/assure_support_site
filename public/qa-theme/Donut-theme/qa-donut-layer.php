@@ -1283,7 +1283,7 @@ class qa_html_theme extends qa_html_theme_base
     private function donut_hide_sidebar_for_template()
     {
         return array(
-            'users', 'ask',
+            'users', 'ask', 'login', 'register',
             /*'tags', 'categories' ,*/
             'admin', 'user', 'account',
             'favorites', 'user-wall', 'messages',

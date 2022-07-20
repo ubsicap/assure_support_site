@@ -132,7 +132,7 @@ if (qa_clicked('doregister')) {
 				if (isset($topath))
 					qa_redirect_raw(qa_path_to_root() . $topath); // path already provided as URL fragment
 				else
-					qa_redirect('');
+					qa_redirect('confirm');
 			}
 		}
 
