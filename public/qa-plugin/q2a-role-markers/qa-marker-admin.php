@@ -341,7 +341,6 @@ class qa_marker_admin
                 array(
                     'label' => qa_lang_html('qa-marker/reset_custom_titles'),
                     'tags' => 'NAME="marker_reset_custom_titles_button"',
-                    'note' => '<br>' . qa_lang_html('qa-marker/custom_title_note'),
                 ),
             ),
         );

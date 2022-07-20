@@ -26,9 +26,6 @@
 	
 	qa_register_plugin_module('module', 'qa-marker-admin.php', 'qa_marker_admin', 'Role Markers');
 
-        // Register all function overrides
-        qa_register_plugin_overrides('qa-marker-overrides.php');
-
 /*
 	Omit PHP closing tag to help avoid accidental output
 */

@@ -22,7 +22,7 @@ class sso_authentication_login
     function check_login()
     {
 
-        try {
+ 
             if (isset($_GET['code'])) {
                 $qa_content = qa_content_prepare();
                 try {
@@ -65,6 +65,9 @@ class sso_authentication_login
                                 'handle' => $user_info['name'],   // Update the username to no longer be `anon######`
                             ));
 
+                            // The user is logging in with Google, so update their login source
+                            qa_db_query_sub('UPDATE ^userlogins SET source=$ WHERE userid=$', 'google', $userId);
+
                             // This user has now confirmed their email
                             qa_complete_confirm(strval($userId), $user_info['email'], $user_info['name']);
 
@@ -74,7 +77,7 @@ class sso_authentication_login
                                 $userId,
                                 $user_info['name'],
                                 array(
-                                    'email' => $userInfo['email'],
+                                    'email' => $user_info['email'],
                                 )
                             );
 
@@ -115,20 +118,18 @@ class sso_authentication_login
             } else {
                 require_once dirname(__FILE__) . '/config.php';
 
-                echo '<script type="text/javascript">
-			window.onload=()=>{
-				document.getElementsByClassName("google-signin")[0].href = "' . $authurl . '";
-			};
-			</script>';
-            }
-        } catch (Exception $e) {
-            echo $e->getMessage();
-            exit();
-        }
-
-        return false;
+				require_once QA_PLUGIN_DIR . 'sso-authentication/config.php';
+				echo '<script type="text/javascript">
+				window.onload = function() {
+					var googleSignins = document.getElementsByClassName("google-signin");
+for (var i = 0; i < googleSignins.length; i++) {
+	googleSignins.item(i).href = "' . $authurl . '";
+}
+				  };
+				  </script>';
+	
     }
-
+	}
 
 
     function match_source($source)
