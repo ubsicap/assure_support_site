@@ -65,8 +65,8 @@ class sso_authentication_login
                                 'handle' => $user_info['name'],   // Update the username to no longer be `anon######`
                             ));
 
-                            // The user is logging in with Google, so update their login source
-                            qa_db_query_sub('UPDATE ^userlogins SET source=$ WHERE userid=$', 'google', $userId);
+                            // The user is logging in with Google, so log the their login source
+                            qa_db_user_login_add($userId, 'google', $userId);
 
                             // This user has now confirmed their email
                             qa_complete_confirm(strval($userId), $user_info['email'], $user_info['name']);
@@ -90,7 +90,7 @@ class sso_authentication_login
                                 'location' => @$user_info['location']['name'],
                                 'website' => @$user_info['link'],
                                 'about' => @$user_info['bio'],
-                                'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
+                                'avatar' => empty(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
                             ));
                         } else {
                             // Otherwise, the user is completely new
