@@ -11,10 +11,11 @@ RUN docker-php-ext-install calendar
 # General updates to ensure smooth runtime
 RUN apt-get update && apt-get upgrade -y && apt-get install -y libpng-dev git zip
 
-#Install Composer for downloading Google API client with PHP
+#Install Composer for downloading Google API and Facebook client with PHP
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /bin/composer
 RUN composer require google/apiclient:^2.0
+RUN composer require facebook/graph-sdk:~5.0
 
 # Install GD library for dynamic image creation
 RUN apt-get install -y libjpeg-dev libfreetype6-dev

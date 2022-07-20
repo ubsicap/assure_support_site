@@ -6,7 +6,7 @@ services:
     container_name: q2a-apache              # Custom name for the q2a Apache server
     build:                                  # Build a new image
       context: ./public                     # Source of the container
-      dockerfile: DockerfileNoSSL                # Dockerfile to build from
+      dockerfile: Dockerfile                # Dockerfile to build from
       args:                                 # Arguments passed into the image upon build
         DOMAIN: ${DOMAIN_NAME}              # Specify the domain name of the website
     image: q2a-php-apache                   # Name of the image of the Apache server being created
