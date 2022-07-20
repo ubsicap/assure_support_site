@@ -22,7 +22,7 @@ class sso_authentication_login
     function check_login()
     {
 
-        try {
+ 
             if (isset($_GET['code'])) {
                 $qa_content = qa_content_prepare();
                 try {
@@ -126,16 +126,10 @@ for (var i = 0; i < googleSignins.length; i++) {
 	googleSignins.item(i).href = "' . $authurl . '";
 }
 				  };
-				  </script>'
-            
-        } catch (Exception $e) {
-            echo $e->getMessage();
-            exit();
-        }
-
-        return false;
+				  </script>';
+	
     }
-
+	}
 
 
     function match_source($source)
