@@ -44,7 +44,13 @@ class qa_html_theme_layer extends qa_html_theme_base
                     .fa-sign-in:after {
                         content: "  ' . qa_lang_html('users/login_title') . '";
                         font-family: sans-serif;
-                        font-size: 16px;
+                        font-size: 15px;
+                    }
+                    .fa-sign-in:before {
+                        font-size: 15px;
+                    }
+                    a.navbar-login-button {
+                        padding: 8px 10px !important
                     }
                 </style>'
             );
