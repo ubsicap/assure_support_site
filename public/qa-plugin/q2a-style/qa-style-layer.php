@@ -17,5 +17,14 @@ class qa_html_theme_layer extends qa_html_theme_base
                 </style>'
             );
         }
+        //css for the selected page on the tob bar
+        $this->output('
+            <style>
+                .navbar-nav > li.active > a {
+                    opacity: 1;
+                    color: #337ab7;
+                }
+            </style>'
+        );
     }
 }
