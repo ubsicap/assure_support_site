@@ -32,7 +32,7 @@ class qa_html_theme_layer extends qa_html_theme_base
         {
             $this->output('
                 <style>
-                    .navbar-login-button {
+                    .navbar-nav > li > a.navbar-login-button {
                         display: none;
                     }
                 </style>'
