@@ -42,7 +42,9 @@ class qa_html_theme_layer extends qa_html_theme_base
             $this->output('
                 <style>
                     .fa-sign-in:after {
-                        content: "Test";
+                        content: "  ' . qa_lang_html('users/login_title') . '";
+                        font-family: sans-serif;
+                        font-size: 16px;
                     }
                 </style>'
             );
