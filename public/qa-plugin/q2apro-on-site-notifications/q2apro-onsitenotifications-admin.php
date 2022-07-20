@@ -111,7 +111,7 @@ class q2apro_onsitenotifications_admin
             case 'q2apro_onsitenotifications_enabled':
                 return 1; // true
             case 'q2apro_onsitenotifications_nill':
-                return 'N'; // days
+                return '0'; // days
             case 'q2apro_onsitenotifications_maxage':
                 return 365; // days
             case 'q2apro_onsitenotifications_maxevshow':

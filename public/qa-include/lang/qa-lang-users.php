@@ -109,7 +109,7 @@ return array(
 	'register_button' => 'Register',
 	'register_limit' => 'Too many registrations - please try again in an hour',
 	'register_suspended' => 'Registration of new users has been temporarily suspended. Please try again soon.',
-	'register_title' => 'Register as a new user',
+	'register_title' => 'Create an Account',
 	'registered_label' => 'Registered:',
 	'registered_user' => 'Registered user',
 	'remember' => 'Remember',
