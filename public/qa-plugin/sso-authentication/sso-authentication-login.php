@@ -65,6 +65,9 @@ class sso_authentication_login
                                 'handle' => $user_info['name'],   // Update the username to no longer be `anon######`
                             ));
 
+                            // The user is logging in with Google, so update their login source
+                            qa_db_query_sub('UPDATE ^userlogins SET source=$ WHERE userid=$', 'google', $userId);
+
                             // This user has now confirmed their email
                             qa_complete_confirm(strval($userId), $user_info['email'], $user_info['name']);
 
@@ -74,7 +77,7 @@ class sso_authentication_login
                                 $userId,
                                 $user_info['name'],
                                 array(
-                                    'email' => $userInfo['email'],
+                                    'email' => $user_info['email'],
                                 )
                             );
 
