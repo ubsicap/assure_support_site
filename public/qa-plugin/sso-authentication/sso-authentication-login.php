@@ -10,7 +10,6 @@ class sso_authentication_login
 	var $directory;
 	var $urltoroot;
 	var $provider;
-
 	function load_module($directory, $urltoroot, $type, $provider)
 	{
 		$this->directory = $directory;
@@ -102,13 +101,15 @@ class sso_authentication_login
 					exit();
 				}
 			} else {
-				require_once dirname(__FILE__) . '/config.php';
-
+				require_once QA_PLUGIN_DIR . 'sso-authentication/config.php';
 				echo '<script type="text/javascript">
-			window.onload=()=>{
-				document.getElementsByClassName("google-signin")[0].href = "' . $authurl . '";
-			};
-			</script>';
+				window.onload = function() {
+					var googleSignins = document.getElementsByClassName("google-signin");
+for (var i = 0; i < googleSignins.length; i++) {
+	googleSignins.item(i).href = "' . $authurl . '";
+}
+				  };
+	</script>';
 			}
 		} catch (Exception $e) {
 			echo $e->getMessage();
@@ -141,7 +142,7 @@ HTML;
 	function logout_html($tourl)
 	{
 		echo '<script type="text/JavaScript"> 
-		document.getElementsByClassName("fa fa-sign-out")[0].parentElement.href="'.$tourl.'";
+		document.getElementsByClassName("fa fa-sign-out")[0].parentElement.href="' . $tourl . '";
 		document.getElementsByClassName("fa fa-sign-out")[0].parentElement.innerHTML = "<span class=\"fa fa-sign-out\"></span> Log out ";
      </script>';
 		require_once QA_PLUGIN_DIR . 'sso-authentication/config.php';
@@ -265,8 +266,6 @@ HTML;
 			),
 		);
 	}
-
-
 }
 
 /*
