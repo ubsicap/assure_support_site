@@ -23,9 +23,9 @@ class sso_authentication_login
 	function check_login()
 	{
 		if (isset($_GET['logout'])) {
-		} else if (isset($_GET['code']) && isset($_Get['hd'])) {
+		} else if (isset($_GET['code']) && isset($_GET['hd'])) {
 			$this->loginWithGoogle();
-		} else if (isset($_GET['code']) && isset($_Get['state'])) {
+		} else if (isset($_GET['code']) && isset($_GET['state'])) {
 			$this->loginWithFacebook();
 		}
 		// switch ($this->provider) {
