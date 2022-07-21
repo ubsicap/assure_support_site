@@ -124,17 +124,33 @@ class sso_authentication_login
 	{
 		if (isset($_GET['code'])) {
 			try {
-				$url = "https://graph.facebook.com/v14.0/oauth/access_token?";
-				$data = $this->getAccessToken($url, qa_opt('facebook_authentication_client_id'), qa_opt('site_url'), qa_opt('facebook_authentication_client_secret'), $_GET['code']);
 				require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php'; //for get_fb_data();
 				$fb = get_fb_data();
+				// $url = "https://graph.facebook.com/v14.0/oauth/access_token";
+				// $data = $this->getAccessToken($url, qa_opt('facebook_authentication_client_id'), qa_opt('site_url'), qa_opt('facebook_authentication_client_secret'), $_GET['code']);
+				if (isset($_GET['error']) && !$_GET['error']) {
+					die('Facebook login error. Please, go back to the main site.');
+				}
+				$token = file_get_contents('https://graph.facebook.com/v14.0/oauth/access_token?client_id=' . qa_opt('facebook_authentication_client_id') . '&redirect_uri=' . qa_opt('site_url') . '&client_secret=' . qa_opt('facebook_authentication_client_secret') . '&code=' . $_GET['code']);
+				$token = json_decode($token, true);
+		
+				if (!isset($token) && !$token) {
+					die('Error token');
+				}
+		
+				$data = file_get_contents('https://graph.facebook.com/v14.0/me?client_id=' . qa_opt('facebook_authentication_client_id') . '&redirect_uri=' . qa_opt('site_url') . '&client_secret=' . qa_opt('facebook_authentication_client_secret') . '&code=' . $_GET['code'] . '&access_token=' . $token['access_token'] . '&fields=id,name,email');
+				$data = json_decode($data, true);
+		
+				if (!isset($token) && !$data) {
+					die('Error data');
+				}
 				// $helper = $fb->getRedirectLoginHelper();
 				// $accessToken = $helper->getAccessToken();
 				// Access Token
-				$access_token = $data['access_token'];
-				$response = $fb->get('/me?fields=id,name', $access_token);
-				$user_info = $response->getGraphUser();
-				$this->registerUser($user_info, 'facebook');
+				// $access_token = $data['access_token'];
+				// $response = $fb->get('/me?fields=id,name', $access_token);
+				// $user_info = $response->getGraphUser();
+				$this->registerUser($data, 'facebook');
 			} catch (Exception $e) {
 				echo $e->getMessage();
 				exit();
@@ -162,15 +178,21 @@ class sso_authentication_login
 
 	function getAccessToken($url, $client_id, $redirect_uri, $client_secret, $code)
 	{
-		$curlPost = 'client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&client_secret=' . $client_secret . '&code=' . $code ;
+		$curlPost = 'client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&client_secret=' . $client_secret . '&code=' . $code .'&grant_type=authorization_code';
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $curlPost);
+// 		// Set the result output to be a string.
+// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$data = json_decode(curl_exec($ch), true);
+		
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		echo '<script type="text/JavaScript"> 
+     console.log("'.$http_code.'");
+     </script>';
 		if ($http_code != 200)
 			throw new Exception('Error : Failed to receieve access token');
 
