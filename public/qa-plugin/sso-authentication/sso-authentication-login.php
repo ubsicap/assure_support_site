@@ -29,7 +29,7 @@ echo '<script type="text/JavaScript">
 console.log("check1");
 </script>';
 			$this->loginWithGoogle();
-		} else if (isset($_GET['code']) && isset($_GET['state'])) {
+		} else if (isset($_GET['code'])) {
 			$this->loginWithFacebook();
 		}
 		// switch ($this->provider) {
