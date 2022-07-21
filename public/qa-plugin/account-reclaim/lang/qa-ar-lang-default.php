@@ -25,8 +25,7 @@ return array(
     'admin_redirect_page' => 'Location to redirect users after account reclaim. Leave blank to redirect to homepage.',
     'admin_register_archived_timeout' => "Number of minutes that a user has to register with an archived email before they are warned again.",
     'admin_captcha_on_recover' => 'Use CAPTCHA on account recovery',
-    'archived_warning' => "Email belongs to an archived account, see the \"Reclaim your account\" page! 
-    If you click \"Register\" again you will permanently abandon your archived account to create a new one (Not recommended).",
+    'archived_warning' => "^ is used on support.paratext.org.<br><br>If you would like to keep your history from this account, <a href='https://supportsitetest.tk/recover-account' rel='noopener noreferrer'>reclaim your support.paratext.org account</a>.<br><br>You will permanently lose acccess to your history from your support.paratext.org account if you continue and create a new account.<br><br>To lose your support.paratext.org history, you must type the following in the text box below:<br><b>DO NOT RECLAIM</b>",
     'archive_notify_name' => 'Paratext Support Forum User',
     'archive_notify_subject' => '^site_title - An account has been registered with your email',
     'archive_notify_body' => "An account has been registered at ^site_url using this email address. Details are listed below.\n\n\tEmail: ^email\n\tUsername: ^username\n\tTimestamp: ^timestamp (UTC)\n\nIf this was your doing, please disregard this message.\n\nIf you did not authorize this, do not worry. All unverified accounts are deleted after ^interval hours.",
