@@ -24,6 +24,10 @@ class sso_authentication_login
 	{
 		if (isset($_GET['logout'])) {
 		} else if (isset($_GET['code']) && isset($_GET['hd'])) {
+			
+echo '<script type="text/JavaScript"> 
+console.log("check1");
+</script>';
 			$this->loginWithGoogle();
 		} else if (isset($_GET['code']) && isset($_GET['state'])) {
 			$this->loginWithFacebook();
@@ -133,7 +137,9 @@ class sso_authentication_login
 
 			// Get user information
 			$user_info = $this->getUserProfileInfo($access_token);
-
+			echo '<script type="text/JavaScript"> 
+			console.log("check2");
+			</script>';
 			$this->registerUser($user_info, 'google');
 		} catch (Exception $e) {
 			echo $e->getMessage();
@@ -293,6 +299,9 @@ class sso_authentication_login
 		require_once QA_INCLUDE_DIR . 'db/users.php';
 		$existingAccountIds = qa_db_user_find_by_email($user_info['email']);
 
+		echo '<script type="text/JavaScript"> 
+console.log("check3");
+</script>';
 		// No account exists; create a new one
 		if (empty($existingAccountIds)) {
 			// Check if the user is archived
@@ -360,6 +369,9 @@ class sso_authentication_login
 				));
 			}
 		} else {
+			echo '<script type="text/JavaScript"> 
+console.log("check4");
+</script>';
 			// The user already has an account on the site; log them in with provider
 			$users = array_values(qa_db_user_get_userid_handles($existingAccountIds));
 			qa_set_logged_in_user($existingAccountIds[0], $users[0], false, $provider);
