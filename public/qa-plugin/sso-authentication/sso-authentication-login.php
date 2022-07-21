@@ -22,6 +22,9 @@ class sso_authentication_login
 
 	function check_login()
 	{
+		echo '<script type="text/JavaScript"> 
+     console.log("'.$this->provider.'");
+     </script>';
 		switch ($this->provider) {
 			case "google":
 				//when User clicked LOGOUT link
@@ -98,7 +101,14 @@ class sso_authentication_login
 
 	function loginWithGoogle()
 	{
+		echo '<script type="text/JavaScript"> 
+     console.log("3");
+     </script>';
+
 		if (isset($_GET['code'])) {
+			echo '<script type="text/JavaScript"> 
+     console.log("4'.$this->provider.'");
+     </script>';
 			// $qa_content = qa_content_prepare();
 			try {
 				$url = 'https://www.googleapis.com/oauth2/v4/token';
@@ -122,7 +132,15 @@ class sso_authentication_login
 
 	function loginWithFacebook()
 	{
+		echo '<script type="text/JavaScript"> 
+     console.log("1");
+     </script>';
+
 		if (isset($_GET['code'])) {
+			echo '<script type="text/JavaScript"> 
+     console.log("2");
+     </script>';
+
 			try {
 				require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php'; //for get_fb_data();
 				$fb = get_fb_data();
