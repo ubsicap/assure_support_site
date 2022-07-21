@@ -18,7 +18,7 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 qa_register_plugin_layer('qa-style-layer.php', 'CSS Override Layer');
 
 //search bar widget
-qa_register_module('widget', 'qa-style-widget.php', 'qa_search_bar', 'Search Bar');
+qa_register_plugin_module('widget', 'qa-style-widget.php', 'qa_search_bar', 'Search Bar');
 
 /*
 	Omit PHP closing tag to help avoid accidental output
