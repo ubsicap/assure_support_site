@@ -18,7 +18,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             // Output sticky-sidebar.js and script initialization in footer
             $this->output(
                 "<script type='text/javascript' src='" . QA_HTML_THEME_LAYER_URLTOROOT . "sticky-sidebar.js'></script>",
-                "<script type='text/javascript'>if ($(window).width() > " . $screen_width . ") {var sidebar = new StickySidebar('" . $sidebar_selector . "', {containerSelector: '" . $parent_selector . "',innerWrapperSelector: '" . $inner_selector . "',topSpacing: " . $top_spacing . ",bottomSpacing: " . $bottom_spacing . "});}</script>"
+                "<script type='text/javascript'>if ($(window).width() > Number(" . $screen_width . ")) {var sidebar = new StickySidebar('" . $sidebar_selector . "', {containerSelector: '" . $parent_selector . "',innerWrapperSelector: '" . $inner_selector . "',topSpacing: " . $top_spacing . ",bottomSpacing: " . $bottom_spacing . "});}</script>"
             );
         }
         qa_html_theme_base::footer();
