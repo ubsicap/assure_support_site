@@ -11,6 +11,8 @@ class sso_authentication_login
 	var $urltoroot;
 	var $provider;
 
+	var $redirectTo; //where on q2a we should redirect
+
 	function load_module($directory, $urltoroot, $type, $provider)
 	{
 		$this->directory = $directory;
@@ -57,6 +59,7 @@ class sso_authentication_login
 
 	function login_html($tourl, $context)
 	{
+		$this->redirectTo = $tourl;
 		switch ($this->provider) {
 			case "google":
 				require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php'; //for the $authUrl
@@ -103,7 +106,7 @@ class sso_authentication_login
 			// $qa_content = qa_content_prepare();
 			try {
 				// Get the access token 
-				$data = $this->getAccessToken(qa_opt('google_authentication_client_id'), qa_opt('site_url') . 'index.php', qa_opt('google_authentication_client_secret'), $_GET['code']);
+				$data = $this->getAccessToken(qa_opt('google_authentication_client_id'), $this->redirectTo, qa_opt('google_authentication_client_secret'), $_GET['code']);
 
 				// Access Token
 				$access_token = $data['access_token'];
