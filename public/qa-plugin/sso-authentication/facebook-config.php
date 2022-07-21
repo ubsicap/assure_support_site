@@ -10,7 +10,7 @@ function get_fb_url()
             'default_graph_version' => 'v2.10',
         ]);
         $helper = $fb->getRedirectLoginHelper();
-        $permissions = ['email']; // Optional permissions
+        $permissions = ['email', 'name', 'link', 'is_verified', 'location']; // Optional permissions
         return $helper->getLoginUrl(qa_opt('site_url') . 'index.php', $permissions); //the url
     }
     return ''; //empty url
