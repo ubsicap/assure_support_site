@@ -37,8 +37,7 @@ class sso_authentication_login
 			case "facebook":
 				//when User clicked LOGOUT link
 				if (isset($_GET['logout'])) {
-					require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php';
-					$client->revokeToken();
+					//added later
 				} else {
 					$this->loginWithFacebook();
 				}
@@ -101,8 +100,9 @@ HTML;
 		if (isset($_GET['code'])) {
 			// $qa_content = qa_content_prepare();
 			try {
+				$url = 'https://www.googleapis.com/oauth2/v4/token';
 				// Get the access token 
-				$data = $this->getAccessToken(qa_opt('google_authentication_client_id'), qa_opt('site_url') . 'index.php', qa_opt('google_authentication_client_secret'), $_GET['code']);
+				$data = $this->getAccessToken($url, qa_opt('google_authentication_client_id'), qa_opt('site_url') . 'index.php', qa_opt('google_authentication_client_secret'), $_GET['code']);
 
 				// Access Token
 				$access_token = $data['access_token'];
@@ -124,7 +124,9 @@ HTML;
 		if (isset($_GET['code'])) {
 			try {
 				require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php';
-				$accessToken = $helper->getAccessToken();
+				$url = "https://graph.facebook.com/v14.0/oauth/access_token?";
+				$data = $this->getAccessToken($url, qa_opt('facebook_authentication_client_id'), qa_opt('site_url') . 'index.php', qa_opt('facebook_authentication_client_secret'), $_GET['code']);
+				$accessToken = $data['access_token'];
 				$response = $fb->get('/me?fields=id,name', $accessToken);
 				$user_info = $response->getGraphUser();
 				$this->registerUser($user_info, 'facebook');
@@ -174,9 +176,9 @@ HTML;
 		return $data;
 	}
 
-	function getAccessToken($client_id, $redirect_uri, $client_secret, $code)
+	function getAccessToken($url, $client_id, $redirect_uri, $client_secret, $code)
 	{
-		$url = 'https://www.googleapis.com/oauth2/v4/token';
+		
 
 		$curlPost = 'client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&client_secret=' . $client_secret . '&code=' . $code . '&grant_type=authorization_code';
 		$ch = curl_init();
