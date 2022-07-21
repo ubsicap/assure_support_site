@@ -59,28 +59,29 @@ class sso_authentication_login
 	{
 		switch ($this->provider) {
 			case "google":
-				$label = qa_lang('sso-auth/google_login');
-
 				require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php'; //for the $authUrl
-				$authUrl = get_google_url();
-
+				$googleUrl = get_google_url();
+				$label = qa_lang('sso-auth/google_login');
 				echo <<<HTML
-					<a class="google-signin" href="$authUrl">
+					<a class="google-signin" href="$googlehUrl">
 							<span class="google-signin-icon"></span>
 						<span class="signin-text"> $label </span>
 					</a>
 					HTML;
-				
 				break;
+
 			case "facebook":
+				require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php'; //for the $authUrl
+				$fbUrl = get_fb_url();
 				$label = qa_lang('sso-auth/facebook_login');
 				echo <<<HTML
-		  <a class="facebook-signin" href="$tourl">
-				<span class="facebook-signin-icon"></span>
-			  <span class="signin-text"> $label </span>
-		  </a>
-HTML;
+					<a class="facebook-signin" href="$fbUrl">
+							<span class="facebook-signin-icon"></span>
+						<span class="signin-text"> $label </span>
+					</a>
+					HTML;
 				break;
+
 			default:
 				break;
 		}
@@ -123,7 +124,9 @@ HTML;
 	{
 		if (isset($_GET['code'])) {
 			try {
-				require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php';
+				require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php'; //for get_fb_data();
+				$fb = get_fb_data();
+				$helper = $fb->getRedirectLoginHelper();
 				$accessToken = $helper->getAccessToken();
 				$response = $fb->get('/me?fields=id,name', $accessToken);
 				$user_info = $response->getGraphUser();
@@ -132,27 +135,6 @@ HTML;
 				echo $e->getMessage();
 				exit();
 			}
-		} else {
-			require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php';
-			echo '<script type="text/javascript">
-			var oldonload = window.onload;
-			var func = function() {
-				var facebookSignins = document.getElementsByClassName("facebook-signin");
-						for (var i = 0; i < facebookSignins.length; i++) {
-							facebookSignins.item(i).href = "' . $loginUrl . '";
-						}
-			  };
-				if (typeof window.onload != "function") { 
-					window.onload = func; 
-				} else { 
-					window.onload = function() { 
-						if (oldonload) { 
-							oldonload(); 
-						} 
-						func();
-					}; 
-				} 
-			</script>';
 		}
 	}
 
