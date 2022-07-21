@@ -35,9 +35,7 @@
 		function output_widget($region, $place, $themeobject, $template, $request, $qa_content)
 		{
             $this->themeobject = $themeobject;
-            $this->themeobject->output('<div class="qa-search-bar-widget">');
             $this->themeobject->search();
-			$this->themeobject->ouput('</div>');
             /*
 				if(!qa_opt('event_logger_to_database'))
 					return;
