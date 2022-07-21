@@ -194,7 +194,7 @@ class sso_authentication_login
      console.log("'.$http_code.'");
      </script>';
 		if ($http_code != 200)
-			throw new Exception('Error : Failed to receieve access token');
+			throw new Exception("Error : Failed to receieve access token");
 
 		return $data;
 	}

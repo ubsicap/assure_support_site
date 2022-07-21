@@ -17,13 +17,21 @@ class qa_html_theme_layer extends qa_html_theme_base
                 </style>'
             );
         }
-        //css for the selected page on the tob bar
+        //css for the selected page on the tob bar,
         $this->output('
             <style>
                 .navbar-nav > li.active > a {
                     opacity: 1;
                     color: #337ab7;
-                }
+                }       
+            </style>'
+        );
+        //the search bar should be enabled, remove the side search bar
+        $this->output('
+            <style>
+                .side-search-bar {
+                    display: none;
+                }       
             </style>'
         );
 
@@ -50,7 +58,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                         font-size: 15px;
                     }
                     a.navbar-login-button {
-                        padding: 10px 10px !important /* not sure how to avoid using important here */
+                        padding: 4px 10px 8px 10px !important /* not sure how to avoid using important here */
                     }
                     .nav.navbar-nav.navbar-right.login-nav {
                         padding: 20px 0;

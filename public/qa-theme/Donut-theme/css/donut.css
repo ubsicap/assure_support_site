@@ -137,9 +137,11 @@ table .table {
 .qa-form-wide-error,
 .qa-form-tall-table > tbody > tr > td.qa-form-tall-error,
 .qa-form-wide-table > tbody > tr > td.qa-form-wide-error {
+  border: 1px solid #ebccd1;
+  background-color: #f2dede;
   color: #a94442;
+  margin-bottom: 10px;
   margin-top: 10px;
-  display: block;
 }
 a.qa-form-tall-error:hover,
 a.qa-form-wide-error:hover,
@@ -2651,6 +2653,7 @@ header#nav-header {
 }
 .qa-a-count-zero {
   border: 1px solid #ebccd1;
+  background-color: #f2dede;
   color: #a94442;
 }
 .qa-a-count-selected {

@@ -25,7 +25,7 @@ class qa_ar_filter
             if($minD >= qa_opt('qa_ar_register_archived_timeout')) //not a recent login attempt
             {
                 qa_ar_db_update_email_flag($email); //update the flag
-                return qa_lang('qa-ar/archived_warning'); //warn the user
+                return qa_lang_sub('qa-ar/archived_warning', $email); //warn the user
             }
             //otherwise a recent login attempt, let the user register.
         }
