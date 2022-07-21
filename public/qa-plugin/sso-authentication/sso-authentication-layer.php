@@ -18,8 +18,22 @@ class qa_html_theme_layer extends qa_html_theme_base
             .paratext-signin.fa, .paratext-signin {
                 background: #8aab68;
             }
-            .google-signin.fa, .facebook-signin.fa, .paratext-signin.fa, .google-signin, .facebook-signin, .paratext-signin {
+            .google-signin.fa, .facebook-signin.fa, .paratext-signin.fa {
                 width: 100%;
+                border-radius: 3px;
+                box-sizing: border-box;
+                overflow: hidden;
+                margin-bottom: 3px;
+                display: inline-block;
+                box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+                white-space: nowrap;
+                transition: background 0.3s ease;
+                opacity: 1;
+            }
+
+            .google-signin, .facebook-signin, .paratext-signin {
+                width: 30%;
+                height: 40px;
                 border-radius: 3px;
                 box-sizing: border-box;
                 overflow: hidden;
