@@ -103,7 +103,7 @@ class sso_authentication_login
 			try {
 				$url = 'https://www.googleapis.com/oauth2/v4/token';
 				// Get the access token 
-				$data = $this->getAccessToken($url, qa_opt('google_authentication_client_id'), qa_opt('site_url'), qa_opt('google_authentication_client_secret'), $_GET['code']);
+				$data = $this->getAccessToken($url, qa_opt('google_authentication_client_id'), qa_opt('site_url') . "help", qa_opt('google_authentication_client_secret'), $_GET['code']);
 
 				// Access Token
 				$access_token = $data['access_token'];
