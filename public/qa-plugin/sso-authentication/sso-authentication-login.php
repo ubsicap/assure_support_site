@@ -71,7 +71,7 @@ class sso_authentication_login
 				break;
 
 			case "facebook":
-				require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php'; //for the $authUrl
+				require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php'; //for the $authUrl
 				$fbUrl = get_fb_url();
 				$label = qa_lang('sso-auth/facebook_login');
 				echo <<<HTML
