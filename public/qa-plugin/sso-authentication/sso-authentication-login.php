@@ -172,7 +172,7 @@ class sso_authentication_login
 		$data = json_decode(curl_exec($ch), true);
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		if ($http_code != 200)
-			throw new Exception('Error : Failed to receieve access token');
+			throw new Exception("Error : Failed to receieve access token, $redirect_uri");
 
 		return $data;
 	}
