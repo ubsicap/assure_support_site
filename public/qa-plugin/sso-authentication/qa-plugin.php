@@ -7,8 +7,8 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 //layer
 qa_register_plugin_layer('sso-authentication-layer.php', 'SSO Authentication');
 
-qa_register_plugin_module('login', 'google-authentication-login.php', 'google_authentication_login', 'google');
-qa_register_plugin_module('login', 'facebook-authentication-login.php', 'facebook_authentication_login', 'facebook');
+// qa_register_plugin_module('login', 'google-authentication-login.php', 'google_authentication_login', 'google');
+qa_register_plugin_module('login', 'sso-authentication-login.php', 'sso_authentication_login', 'facebook');
 // qa_register_plugin_module('login', 'sso-authentication-login.php', 'sso_authentication_login', 'Paratext');
 // Register all language files
 
