@@ -1,6 +1,8 @@
 <?php
 require_once dirname(QA_PLUGIN_DIR) . '/vendor/autoload.php';
 
+$authUrl = "redirect"; //for testing
+
 if (qa_opt('google_authentication_enabled')) {
     $client = new Google_Client();
     $client->setClientId(qa_opt('google_authentication_client_id'));

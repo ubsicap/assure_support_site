@@ -59,9 +59,7 @@ class sso_authentication_login
 		switch ($this->provider) {
 			case "google":
 				$label = qa_lang('sso-auth/google_login');
-				
-				require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php';
-
+				require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php'; //for the $authUrl
 				echo <<<HTML
 		  <a class="google-signin" href="$authUrl">
 				<span class="google-signin-icon"></span>
@@ -113,6 +111,30 @@ HTML;
 				echo $e->getMessage();
 				exit();
 			}
+		} else {
+			/*
+			// header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
+			require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php';
+			echo '<script type="text/javascript">
+				var oldonload = window.onload;
+				var func = function() {
+					var googleSignins = document.getElementsByClassName("google-signin");
+						for (var i = 0; i < googleSignins.length; i++) {
+							googleSignins.item(i).href = "' . $authurl . '";
+						}
+				  }; 
+				if (typeof window.onload != "function") { 
+					window.onload = func; 
+				} else { 
+					window.onload = function() { 
+						if (oldonload) { 
+							oldonload(); 
+						} 
+						 func();
+					} 
+				} 
+				  </script>';
+			removing for testing */
 		}
 	}
 
