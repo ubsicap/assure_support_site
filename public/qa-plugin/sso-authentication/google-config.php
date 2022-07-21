@@ -7,7 +7,7 @@ function get_google_url()
         $client = new Google_Client();
         $client->setClientId(qa_opt('google_authentication_client_id'));
         $client->setClientSecret(qa_opt('google_authentication_client_secret'));
-        $client->setRedirectUri(qa_opt('site_url') . 'index.php');
+        $client->setRedirectUri(qa_opt('site_url'));
         $client->addScope("email");
         $client->addScope("profile");
         return $client->createAuthUrl();
