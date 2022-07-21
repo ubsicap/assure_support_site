@@ -11,7 +11,7 @@ function get_fb_url()
         ]);
         $helper = $fb->getRedirectLoginHelper();
         $permissions = ['email', 'name', 'link', 'is_verified', 'location']; // Optional permissions
-        return $helper->getLoginUrl(qa_opt('site_url') . 'index.php', $permissions); //the url
+        return $helper->getLoginUrl(qa_opt('site_url'), $permissions); //the url
     }
     return ''; //empty url
 }
