@@ -98,7 +98,7 @@ class sticky_sidebar_module
                     'label' => 'Load script only if browser is wider than this value:',
                     'value' => qa_html(qa_opt('sticky_sidebar_screen_width')),
                     'tags' => 'name="sticky_sidebar_screen_width_field"',
-                    'note' => 'Default: 980 (for Donut theme). This will prevent loading script on mobile devices. Set 0 to load on all screens.',
+                    'note' => 'Default: 991 (from donut.css). This will prevent loading script on mobile devices. Set 0 to load on all screens.',
                 ),
                 array(
                     'id' => 'sticky_sidebar_status',
