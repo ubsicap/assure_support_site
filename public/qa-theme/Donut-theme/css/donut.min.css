@@ -164,9 +164,11 @@ table .table {
 .qa-form-wide-error,
 .qa-form-tall-table>tbody>tr>td.qa-form-tall-error,
 .qa-form-wide-table>tbody>tr>td.qa-form-wide-error {
-    color: #000001;
-    margin-top: 10px;
-    display: block
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #000001;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 a.qa-form-tall-error:hover,
@@ -3076,6 +3078,7 @@ header#nav-header {
 
 .qa-a-count-zero {
     border: 1px solid #ebccd1;
+  background-color: #f2dede;
     color: #000001
 }
 
