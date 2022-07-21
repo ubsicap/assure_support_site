@@ -19,7 +19,7 @@ require_once QA_INCLUDE_DIR . 'db/selects.php';
 class qa_apa_filters
 {
     /**
-     * Checks to see if the email being used to register an account belongs to an existing account.
+     * Checks to see if the email being used to create an account belongs to an existing account.
      *  If it does, it deletes the existing account if it is unverified and old.
      * 
      * @param string $email Email entered by the user during registration

@@ -39,7 +39,7 @@ After the process completes, `^users` is updated to reflect their new username, 
 Likewise, their entry in `^accountreclaim` is deleted, so they cannot repeat this process.
 
 In addition to this process, this plugin also provides a layer over the standard registration process.
-If a user attempts to register an account with an email address that is located in `^accountreclaim`, they are prompted to reclaim that account instead.
+If a user attempts to create an account with an email address that is located in `^accountreclaim`, they are prompted to reclaim that account instead.
 Users have the choice to abandon their old account and create a new one.
 If they choose to do so, their archived account remains permanently inaccessible.
 
