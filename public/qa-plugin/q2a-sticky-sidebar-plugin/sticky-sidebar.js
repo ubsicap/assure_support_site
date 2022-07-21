@@ -430,7 +430,7 @@ var stickySidebar = createCommonjsModule(function (module, exports) {
                 left: dims.sidebarLeft - dims.viewportLeft + 15, width: dims.sidebarWidth };
               break;
             case 'VIEWPORT-BOTTOM':
-              style.inner = { position: 'fixed', top: 'auto', left: dims.sidebarLeft,
+              style.inner = { position: 'fixed', top: 'auto', left: dims.sidebarLeft + 15,
                 bottom: dims.bottomSpacing, width: dims.sidebarWidth };
               break;
             case 'CONTAINER-BOTTOM':
