@@ -9,16 +9,16 @@ class qa_html_theme_layer extends qa_html_theme_base
         $this->output('
             <style type="text/css">
             
-            .google-signin {
+            .google-signin.fa, .google-signin {
                 background: #4285f4;
             }
-            .facebook-signin {
+            .facebook-signin.fa, .facebook-signin {
                 background: #3b5998;
             }
-            .paratext-signin {
+            .paratext-signin.fa, .paratext-signin {
                 background: #8aab68;
             }
-            .google-signin, .facebook-signin, .paratext-signin {
+            .google-signin.fa, .facebook-signin.fa, .paratext-signin.fa, .google-signin, .facebook-signin, .paratext-signin {
                 width: 100%;
                 border-radius: 3px;
                 box-sizing: border-box;
@@ -77,13 +77,13 @@ class qa_html_theme_layer extends qa_html_theme_base
                 margin-right: 8px;
             }
             
-            .google-signin:hover, .google-signin:focus {
+            .google-signin.fa:hover, .google-signin.fa:focus, .google-signin:hover, .google-signin:focus {
                 background: #3367d6;
             }
-            .facebook-signin:hover, .facebook-signin:focus {  
+            .facebook-signin.fa:hover, .facebook-signin.fa:focus, .facebook-signin:hover, .facebook-signin:focus {  
                 background: #293e6a;
             }
-            .paratext-signin:hover, .paratext-signin:focus {
+            .paratext-signin.fa:hover, .paratext-signin.fa:focus, .paratext-signin:hover, .paratext-signin:focus {
                 background: #62794a;
             }
             </style>');
