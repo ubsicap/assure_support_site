@@ -22,6 +22,9 @@ qa_register_plugin_phrases('lang/qa-ar-lang-*.php', 'qa-ar');
 // Register all function overrides
 qa_register_plugin_overrides('qa-ar-overrides.php');
 
+// Register layer for registration page
+qa_register_plugin_layer('qa-ar-layer.php', 'Registration Page Layer');
+
 /*
 Register the plugin's many modules
 Parameters are:
