@@ -31,7 +31,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                 opacity: 1;
             }
 
-            .google-signin, .facebook-signin, .paratext-signin {
+            div.qa-part-custom > .google-signin, div.qa-part-custom > .facebook-signin, div.qa-part-custom > .paratext-signin {
                 margin-left: 35%;
                 width: 30%;
                 height: 40px;
