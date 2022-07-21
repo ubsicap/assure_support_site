@@ -29,6 +29,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                 white-space: nowrap;
                 transition: background 0.3s ease;
                 opacity: 1;
+                padding: 0px !important;
             }
 
             div.qa-part-custom > .google-signin, div.qa-part-custom > .facebook-signin, div.qa-part-custom > .paratext-signin {
