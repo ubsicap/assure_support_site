@@ -27,6 +27,7 @@ class sso_authentication_login
 				//when User clicked LOGOUT link
 				if (isset($_GET['logout'])) {
 					require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php';
+					$client = get_google_client();
 					$client->revokeToken();
 				} else {
 
@@ -60,7 +61,6 @@ class sso_authentication_login
 			case "google":
 				$label = qa_lang('sso-auth/google_login');
 
-				$authUrl="help";
 				require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php'; //for the $authUrl
 				$authUrl = get_google_url();
 
@@ -116,30 +116,6 @@ HTML;
 				echo $e->getMessage();
 				exit();
 			}
-		} else {
-			/*
-			// header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
-			require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php';
-			echo '<script type="text/javascript">
-				var oldonload = window.onload;
-				var func = function() {
-					var googleSignins = document.getElementsByClassName("google-signin");
-						for (var i = 0; i < googleSignins.length; i++) {
-							googleSignins.item(i).href = "' . $authurl . '";
-						}
-				  }; 
-				if (typeof window.onload != "function") { 
-					window.onload = func; 
-				} else { 
-					window.onload = function() { 
-						if (oldonload) { 
-							oldonload(); 
-						} 
-						 func();
-					} 
-				} 
-				  </script>';
-			removing for testing */
 		}
 	}
 
