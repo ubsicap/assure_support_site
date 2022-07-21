@@ -60,18 +60,17 @@ class sso_authentication_login
 			case "google":
 				$label = qa_lang('sso-auth/google_login');
 
-
+				$authUrl="help";
 				require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php'; //for the $authUrl
 				
+				echo <<<HTML
+					<a class="google-signin" href="$authUrl">
+							<span class="google-signin-icon"></span>
+						<span class="signin-text"> $label </span>
+					</a>
+					HTML;
 				
-				echo "
-					<a class=\"google-signin\" href=\"$authUrl\">
-						<span class=\"google-signin-icon\"></span>
-						<span class=\"signin-text\"> $label </span>
-					</a>";
-
 				break;
-				
 			case "facebook":
 				$label = qa_lang('sso-auth/facebook_login');
 				echo <<<HTML
