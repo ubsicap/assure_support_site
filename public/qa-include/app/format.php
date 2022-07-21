@@ -1197,12 +1197,12 @@ function qa_insert_login_links($htmlmessage, $topage = null, $params = null)
 		$htmlmessage,
 
 		array(
-			'^1' => empty($userlinks['login']) ? '' : '<a href="' . qa_html($userlinks['login']) . '">',
-			'^2' => empty($userlinks['login']) ? '' : '</a>',
-			'^3' => empty($userlinks['register']) ? '' : '<a href="' . qa_html($userlinks['register']) . '">',
-			'^4' => empty($userlinks['register']) ? '' : '</a>',
-			'^5' => empty($userlinks['confirm']) ? '' : '<a href="' . qa_html($userlinks['confirm']) . '">',
-			'^6' => empty($userlinks['confirm']) ? '' : '</a>',
+			'^1' => empty($userlinks['login']) ? '' : '<b><a href="' . qa_html($userlinks['login']) . '">',
+			'^2' => empty($userlinks['login']) ? '' : '</a></b>',
+			'^3' => empty($userlinks['register']) ? '' : '<b><a href="' . qa_html($userlinks['register']) . '">',
+			'^4' => empty($userlinks['register']) ? '' : '</a></b>',
+			'^5' => empty($userlinks['confirm']) ? '' : '<b><a href="' . qa_html($userlinks['confirm']) . '">',
+			'^6' => empty($userlinks['confirm']) ? '' : '</a></b>',
 		)
 	);
 }
