@@ -167,7 +167,7 @@ table .table {
   border: 1px solid #ebccd1;
   background-color: #f2dede;
   border-color: #ebccd1;
-  color: #000001;
+  color: #a94442;
   margin-bottom: 10px;
   margin-top: 10px;
 }
@@ -3080,7 +3080,7 @@ header#nav-header {
 .qa-a-count-zero {
     border: 1px solid #ebccd1;
   background-color: #f2dede;
-    color: #000001
+    color: #a94442
 }
 
 .qa-a-count-selected {
@@ -3198,7 +3198,7 @@ header#nav-header {
 .qa-error {
     background-color: #f2dede;
     border-color: #ebccd1;
-    color: #000001;
+    color: #a94442;
     margin-bottom: 10px;
     margin-top: 10px
 }
@@ -3634,7 +3634,7 @@ header#nav-header {
 }
 
 .qa-q-item-flags {
-    color: #000001;
+    color: #a94442;
     font-weight: bold;
     padding-left: 4px
 }
@@ -3965,7 +3965,7 @@ a.qa-browse-cat-link:visited {
 .qa-q-view-flags {
     display: inline-block;
     padding: 2px 4px;
-    color: #000001;
+    color: #a94442;
     background-color: #f2dede;
     border: 1px solid #ebccd1;
     border-radius: 3px
@@ -4031,7 +4031,7 @@ a.qa-browse-cat-link:visited {
     border-radius: 4px;
     background-color: #f2dede;
     border-color: #ebccd1;
-    color: #000001
+    color: #a94442
 }
 
 .qa-part-a-form .qa-a-form h2:last-child hr {
@@ -4126,7 +4126,7 @@ a.qa-browse-cat-link:visited {
     border-radius: 4px;
     background-color: #f2dede;
     border-color: #ebccd1;
-    color: #000001
+    color: #a94442
 }
 
 .qa-c-form h2:last-child hr {
@@ -4183,7 +4183,7 @@ a.qa-browse-cat-link:visited {
 .qa-a-item-flags {
     display: inline-block;
     padding: 2px 4px;
-    color: #000001;
+    color: #a94442;
     background-color: #f2dede;
     border: 1px solid #ebccd1;
     border-radius: 3px
@@ -4311,7 +4311,7 @@ a.qa-browse-cat-link:visited {
 .qa-c-item-flags {
     display: inline-block;
     padding: 2px 4px;
-    color: #000001;
+    color: #a94442;
     background-color: #f2dede;
     border: .5px solid #ebccd1;
     border-radius: 3px
