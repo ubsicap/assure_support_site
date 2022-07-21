@@ -22,6 +22,9 @@ class sso_authentication_login
 
 	function check_login()
 	{
+		echo '<script type="text/JavaScript"> 
+console.log("check6");
+</script>';
 		if (isset($_GET['logout'])) {
 		} else if (isset($_GET['code']) && isset($_GET['hd'])) {
 			
@@ -29,7 +32,10 @@ echo '<script type="text/JavaScript">
 console.log("check1");
 </script>';
 			$this->loginWithGoogle();
-		} else if (isset($_GET['code'])) {
+		} else if (isset($_GET['code']) && isset($_GET['state'])) {
+			echo '<script type="text/JavaScript"> 
+console.log("check5");
+</script>';
 			$this->loginWithFacebook();
 		}
 		// switch ($this->provider) {
