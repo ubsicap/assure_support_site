@@ -111,11 +111,12 @@ HTML;
 				exit();
 			}
 		} else {
+			// header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
 			require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php';
 			echo '<script type="text/javascript">
 				var oldonload = window.onload;
 				var func = function() {
-					var googleSignins = document.getElementsByClassName("google-signin fa");
+					var googleSignins = document.getElementsByClassName("google-signin");
 						for (var i = 0; i < googleSignins.length; i++) {
 							googleSignins.item(i).href = "' . $authurl . '";
 						}
@@ -152,7 +153,7 @@ HTML;
 			echo '<script type="text/javascript">
 			var oldonload = window.onload;
 			var func = function() {
-				var facebookSignins = document.getElementsByClassName("facebook-signin fa");
+				var facebookSignins = document.getElementsByClassName("facebook-signin");
 						for (var i = 0; i < facebookSignins.length; i++) {
 							facebookSignins.item(i).href = "' . $loginUrl . '";
 						}
