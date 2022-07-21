@@ -27,7 +27,7 @@ class sticky_sidebar_module
                 return 100;
                 break;
             case 'sticky_sidebar_screen_width':
-                return 991;
+                return 980;
                 break;
             case 'sticky_sidebar_status':
                 return true;

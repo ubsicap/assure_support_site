@@ -58,28 +58,29 @@ class sso_authentication_login
 	{
 		switch ($this->provider) {
 			case "google":
-				$label = qa_lang('sso-auth/google_login');
-
 				require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php'; //for the $authUrl
-				$authUrl = get_google_url();
-
+				$googleUrl = get_google_url();
+				$label = qa_lang('sso-auth/google_login');
 				echo <<<HTML
-					<a class="google-signin" href="$authUrl">
+					<a class="google-signin" href="$googleUrl">
 							<span class="google-signin-icon"></span>
 						<span class="signin-text"> $label </span>
 					</a>
 					HTML;
-				
 				break;
+
 			case "facebook":
+				require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php'; //for the $authUrl
+				$fbUrl = get_fb_url();
 				$label = qa_lang('sso-auth/facebook_login');
 				echo <<<HTML
-		  <a class="facebook-signin" href="$tourl">
-				<span class="facebook-signin-icon"></span>
-			  <span class="signin-text"> $label </span>
-		  </a>
-HTML;
+					<a class="facebook-signin" href="$fbUrl">
+							<span class="facebook-signin-icon"></span>
+						<span class="signin-text"> $label </span>
+					</a>
+					HTML;
 				break;
+
 			default:
 				break;
 		}
@@ -102,7 +103,7 @@ HTML;
 			try {
 				$url = 'https://www.googleapis.com/oauth2/v4/token';
 				// Get the access token 
-				$data = $this->getAccessToken($url, qa_opt('google_authentication_client_id'), qa_opt('site_url') . 'index.php', qa_opt('google_authentication_client_secret'), $_GET['code']);
+				$data = $this->getAccessToken($url, qa_opt('google_authentication_client_id'), qa_opt('site_url'), qa_opt('google_authentication_client_secret'), $_GET['code']);
 
 				// Access Token
 				$access_token = $data['access_token'];
@@ -123,38 +124,21 @@ HTML;
 	{
 		if (isset($_GET['code'])) {
 			try {
-				require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php';
 				$url = "https://graph.facebook.com/v14.0/oauth/access_token?";
-				$data = $this->getAccessToken($url, qa_opt('facebook_authentication_client_id'), qa_opt('site_url') . 'index.php', qa_opt('facebook_authentication_client_secret'), $_GET['code']);
-				$accessToken = $data['access_token'];
-				$response = $fb->get('/me?fields=id,name', $accessToken);
+				$data = $this->getAccessToken($url, qa_opt('facebook_authentication_client_id'), qa_opt('site_url'), qa_opt('facebook_authentication_client_secret'), $_GET['code']);
+				require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php'; //for get_fb_data();
+				$fb = get_fb_data();
+				// $helper = $fb->getRedirectLoginHelper();
+				// $accessToken = $helper->getAccessToken();
+				// Access Token
+				$access_token = $data['access_token'];
+				$response = $fb->get('/me?fields=id,name', $access_token);
 				$user_info = $response->getGraphUser();
 				$this->registerUser($user_info, 'facebook');
 			} catch (Exception $e) {
 				echo $e->getMessage();
 				exit();
 			}
-		} else {
-			require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php';
-			echo '<script type="text/javascript">
-			var oldonload = window.onload;
-			var func = function() {
-				var facebookSignins = document.getElementsByClassName("facebook-signin");
-						for (var i = 0; i < facebookSignins.length; i++) {
-							facebookSignins.item(i).href = "' . $loginUrl . '";
-						}
-			  };
-				if (typeof window.onload != "function") { 
-					window.onload = func; 
-				} else { 
-					window.onload = function() { 
-						if (oldonload) { 
-							oldonload(); 
-						} 
-						func();
-					}; 
-				} 
-			</script>';
 		}
 	}
 
@@ -178,8 +162,6 @@ HTML;
 
 	function getAccessToken($url, $client_id, $redirect_uri, $client_secret, $code)
 	{
-		
-
 		$curlPost = 'client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&client_secret=' . $client_secret . '&code=' . $code . '&grant_type=authorization_code';
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
