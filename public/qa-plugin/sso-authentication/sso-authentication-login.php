@@ -162,7 +162,7 @@ class sso_authentication_login
 
 	function getAccessToken($url, $client_id, $redirect_uri, $client_secret, $code)
 	{
-		$curlPost = 'client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&client_secret=' . $client_secret . '&code=' . $code . '&grant_type=authorization_code';
+		$curlPost = 'client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&client_secret=' . $client_secret . '&code=' . $code ;
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -228,12 +228,12 @@ class sso_authentication_login
 				qa_log_in_external_user($provider, $userId, array(
 					'email' => @$user_info['email'],
 					'handle' => @$user_info['name'],
-					'confirmed' => isset($user_info['verified_email']) ? : @$user_info['is_verified'],
+					'confirmed' => isset($user_info['verified_email']) ? : '',
 					'name' => @$user_info['name'],
-					'location' => @$user_info['location'],
-					'website' => @$user_info['link'],
+					'location' => isset($user_info['location']) ? : '',
+					'website' => isset($user_info['link']) ? : '',
 					'about' => isset($user_info['bio']) ? : '',
-					'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
+					// 'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
 				));
 			} else {
 				// Otherwise, the user is completely new
@@ -245,7 +245,7 @@ class sso_authentication_login
 					'location' => @$user_info['location'],
 					'website' => @$user_info['link'],
 					'about' => isset($user_info['bio']) ? : '',
-					'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
+					// 'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
 				));
 			}
 		} else {
