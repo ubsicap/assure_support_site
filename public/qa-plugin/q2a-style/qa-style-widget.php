@@ -36,6 +36,14 @@
 		{
             $this->themeobject = $themeobject;
             $this->themeobject->search();
+            //css for the search bar
+            $this->themeobject->output('
+                <style>
+                    .qa-widgets-full.qa-widgets-full-top.col-xs-12 {
+                        padding: 15px 0px;
+                    }
+                </style>'
+            );
             /*
 				if(!qa_opt('event_logger_to_database'))
 					return;
