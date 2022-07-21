@@ -5,7 +5,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 
     function head_css()
     {
-        parent::head_css();
+        qa_html_theme_base::head_css();
         $this->output('
             <style type="text/css">
             
