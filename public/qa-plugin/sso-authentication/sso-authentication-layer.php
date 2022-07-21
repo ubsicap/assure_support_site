@@ -32,6 +32,7 @@ class qa_html_theme_layer extends qa_html_theme_base
             }
 
             .google-signin, .facebook-signin, .paratext-signin {
+                left: 30%
                 width: 30%;
                 height: 40px;
                 border-radius: 3px;
