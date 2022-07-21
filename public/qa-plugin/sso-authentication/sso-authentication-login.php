@@ -228,12 +228,12 @@ class sso_authentication_login
 				qa_log_in_external_user($provider, $userId, array(
 					'email' => @$user_info['email'],
 					'handle' => @$user_info['name'],
-					'confirmed' => isset($user_info['verified_email']) ? : @$user_info['is_verified'],
+					'confirmed' => isset($user_info['verified_email']) ? : '',
 					'name' => @$user_info['name'],
-					'location' => @$user_info['location'],
-					'website' => @$user_info['link'],
+					'location' => isset($user_info['location']) ? : '',
+					'website' => isset($user_info['link']) ? : '',
 					'about' => isset($user_info['bio']) ? : '',
-					'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
+					// 'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
 				));
 			} else {
 				// Otherwise, the user is completely new
@@ -245,7 +245,7 @@ class sso_authentication_login
 					'location' => @$user_info['location'],
 					'website' => @$user_info['link'],
 					'about' => isset($user_info['bio']) ? : '',
-					'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
+					// 'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
 				));
 			}
 		} else {
