@@ -20,11 +20,12 @@ class qa_html_theme_layer extends qa_html_theme_base
                         p.id = "title-length-count";
                         title.insertAdjacentElement("afterend", p);
                         p2 = document.getElementById("title-length-count");
+                        p2.className = title.value.length < ' . qa_opt('min_len_q_title') . ' ? "below" : "matched";
                         title.onkeyup = function () {
                             if (title.value.length >= ' . qa_opt('max_len_q_title') . ') {
                                 p2.className = "exceed";
                                 title.value = title.value.slice(0, ' . qa_opt('max_len_q_title') . ');
-                            } else if (title.value.length <= ' . qa_opt('min_len_q_title') . ') {
+                            } else if (title.value.length < ' . qa_opt('min_len_q_title') . ') {
                                 p2.className = "below";
                             } else {
                                 p2.className = "matched";
