@@ -32,7 +32,7 @@ class sso_authentication_login
 		$googleUrl = get_google_url();
 		$label = qa_lang('sso-auth/google_login');
 		echo <<<HTML
-					<a class="google-signin" href="$googleUrl">
+					<a class="google-signin" href="$googleUrl" id="testing">
 							<span class="google-signin-icon"></span>
 						<span class="signin-text"> $label </span>
 					</a>
