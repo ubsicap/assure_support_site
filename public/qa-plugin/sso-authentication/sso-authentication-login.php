@@ -25,14 +25,16 @@ class sso_authentication_login
 		echo '<script type="text/JavaScript"> 
 console.log("check6");
 </script>';
+print_r($_GET);
 		if (isset($_GET['logout'])) {
+			
 		} else if (isset($_GET['code']) && isset($_GET['hd'])) {
 			
 echo '<script type="text/JavaScript"> 
 console.log("check1");
 </script>';
 			$this->loginWithGoogle();
-		} else if (isset($_GET['code']) && isset($_GET['state'])) {
+		} else if (isset($_GET['code'])) {
 			echo '<script type="text/JavaScript"> 
 console.log("check5");
 </script>';
@@ -354,24 +356,24 @@ console.log("check3");
 				qa_log_in_external_user($provider, $userId, array(
 					'email' => @$user_info['email'],
 					'handle' => @$user_info['name'],
-					'confirmed' => isset($user_info['verified_email']) ?: '',
+					'confirmed' => isset($user_info['verified_email']) ?: '' . isset($user_info['is_guest_user']) ? : '',
 					'name' => @$user_info['name'],
 					'location' => isset($user_info['location']) ?: '',
 					'website' => isset($user_info['link']) ?: '',
 					'about' => isset($user_info['bio']) ?: '',
-					// 'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
+					'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
 				));
 			} else {
 				// Otherwise, the user is completely new
 				qa_log_in_external_user($provider, $user_info['id'], array(
 					'email' => @$user_info['email'],
 					'handle' => @$user_info['name'],
-					'confirmed' => isset($user_info['verified_email']) ?: @$user_info['is_verified'],
+					'confirmed' => isset($user_info['verified_email']) ?: '' . isset($user_info['is_guest_user']) ? : '',
 					'name' => @$user_info['name'],
-					'location' => @$user_info['location'],
-					'website' => @$user_info['link'],
+					'location' => isset($user_info['location']) ?: '',
+					'website' => isset($user_info['link']) ?: '',
 					'about' => isset($user_info['bio']) ?: '',
-					// 'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
+					'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
 				));
 			}
 		} else {
