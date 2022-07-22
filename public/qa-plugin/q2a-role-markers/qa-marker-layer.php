@@ -56,9 +56,11 @@ class qa_html_theme_layer extends qa_html_theme_base
         //functions for reading/writing from database
         require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
 
+        $custom = false;
         if(qa_has_user_title($uid)) //user has custom title
         {
             $title = qa_get_user_title($uid);
+            $custom = true;
         }
         elseif (QA_FINAL_EXTERNAL_USERS) {
             $user = get_userdata($uid);
@@ -99,12 +101,14 @@ class qa_html_theme_layer extends qa_html_theme_base
         if (qa_opt('marker_plugin_role_names')) {
             $rolemarker .= '<span class="qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">&nbsp;<b>[' . $this->getrolename($uid) . ']</b>  </span>';
         }
-
-        if (qa_opt('marker_plugin_icons_images')) {
-            $svgFile = qa_get_badge_svg("qa-marker-svg-" . $titleSimple);
-            $rolemarker .= '<div class="qa-avatar-marker">'. $svgFile .'</div>';
-        } else {
-            $rolemarker .= '<span class="qa-who-marker qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
+        if(!$custom) //don't add icon/char if role is custom
+        {
+            if (qa_opt('marker_plugin_icons_images')) {
+                $svgFile = qa_get_badge_svg("qa-marker-svg-" . $titleSimple);
+                $rolemarker .= '<div class="qa-avatar-marker">'. $svgFile .'</div>';
+            } else {
+                $rolemarker .= '<span class="qa-who-marker qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
+            }
         }
 
         return $rolemarker;
