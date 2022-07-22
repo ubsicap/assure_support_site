@@ -10,12 +10,22 @@ class title_length_counter_admin
                 return '#title-length-count {
     margin-top: 5px;
 }
-#title-length-count.exceed {
-    color: var(--error);
-}
+
+/* Color when the title is an acceptable length */
 #title-length-count.matched {
-    color: var(--selected);
+    color: inherit;
 }
+
+/* Color when the title is too long */
+#title-length-count.exceed {
+    color: red;
+}
+
+/* Color when the title is too short */
+#title-length-count.below {
+    color: red;
+}
+
 /* Style for Title Length Counter Plugin LTR */
 #title-length-count {
 	float: right;
