@@ -14,6 +14,7 @@ class title_length_counter_admin
     color: red;
 }
 #title-length-count.matched {
+    color: yellow;
 }
 /* Style for Title Length Counter Plugin LTR */
 #title-length-count {
