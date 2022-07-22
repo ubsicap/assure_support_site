@@ -42,6 +42,9 @@
                     .qa-widgets-full.qa-widgets-full-top.col-xs-12 {
                         padding: 15px 0px;
                     }
+					button.btn.qa-search-button {
+						height: 42px;
+					}
                 </style>'
             );
             /*
