@@ -4,6 +4,9 @@ qa-cache/*/
 # Ignore backed up SSL certs
 local_certs
 
+# This is a premium plugin; it is not public code, so don't track it
+pupi-dm
+
 # Other files
 .DS_Store
 .DS_Store?
