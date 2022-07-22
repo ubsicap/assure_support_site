@@ -29,9 +29,9 @@ class qa_html_theme_layer extends qa_html_theme_base
         //the search bar should be enabled, remove the side search bar
         $this->output('
             <style>
-                .side-search-bar {
+                .side-search-bar, .top-search-bar {
                     display: none;
-                }       
+                }   
             </style>'
         );
 
