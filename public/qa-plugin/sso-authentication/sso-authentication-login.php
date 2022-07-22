@@ -179,24 +179,14 @@ class sso_authentication_login
 				qa_log_in_external_user($provider, $userId, array(
 					'email' => @$user_info['email'],
 					'handle' => @$user_info['name'],
-					'confirmed' => isset($user_info['verified_email']) ?: '' . isset($user_info['is_guest_user']) ? : '',
 					'name' => @$user_info['name'],
-					'location' => isset($user_info['location']) ?: '',
-					'website' => isset($user_info['link']) ?: '',
-					'about' => isset($user_info['bio']) ?: '',
-					'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
 				));
 			} else {
 				// Otherwise, the user is completely new
 				qa_log_in_external_user($provider, $user_info['id'], array(
 					'email' => @$user_info['email'],
 					'handle' => @$user_info['name'],
-					'confirmed' => isset($user_info['verified_email']) ?: '' . isset($user_info['is_guest_user']) ? : '',
 					'name' => @$user_info['name'],
-					'location' => isset($user_info['location']) ?: '',
-					'website' => isset($user_info['link']) ?: '',
-					'about' => isset($user_info['bio']) ?: '',
-					'avatar' => strlen(@$user_info['picture']['data']['url']) ? qa_retrieve_url($user_info['picture']['data']['url']) : null,
 				));
 			}
 		} else {
