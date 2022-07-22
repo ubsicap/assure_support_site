@@ -28,24 +28,24 @@ class sso_authentication_login
 
 	function login_html($tourl, $context)
 	{
-		require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php'; //for the $authUrl
-		$fbUrl = get_fb_url();
-		$label = qa_lang('sso-auth/facebook_login');
-		echo <<<HTML
-					<a class="facebook-signin" href="$fbUrl">
-							<span class="facebook-signin-icon"></span>
-						<span class="signin-text"> $label </span>
-					</a>
-					HTML;
 		require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php'; //for the $authUrl
 		$googleUrl = get_google_url();
 		$label = qa_lang('sso-auth/google_login');
-		echo <<<HTML
-					<a class="google-signin" href="$googleUrl">
-							<span class="google-signin-icon"></span>
-						<span class="signin-text"> $label </span>
-					</a>
-					HTML;
+		$context->output("
+			<a class=\"google-signin\" href=\"$googleUrl\">
+					<span class=\"google-signin-icon\"></span>
+				<span class=\"signin-text\"> $label </span>
+			</a>
+		");
+		require_once QA_PLUGIN_DIR . 'sso-authentication/facebook-config.php'; //for the $authUrl
+		$fbUrl = get_fb_url();
+		$label = qa_lang('sso-auth/facebook_login');
+		$context->output("
+			<a class=\"facebook-signin\" href=\"$fbUrl\">
+				<span class=\"facebook-signin-icon\"></span>
+				<span class=\"signin-text\"> $label </span>
+			</a>
+		");
 	}
 
 
