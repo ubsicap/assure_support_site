@@ -2076,6 +2076,7 @@ header#nav-header {
   border-radius: 10px;
   background-color: #f0ad4e;
   float: right;
+  margin-right: -10px;
 }
 .qa-nav-cat-note {
   color: #000;

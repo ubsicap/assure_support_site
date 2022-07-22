@@ -2404,7 +2404,8 @@ header#nav-header {
     text-align: center;
     border-radius: 10px;
     background-color: #f0ad4e;
-    float: right
+    float: right;
+    margin-right: -10px;
 }
 
 .qa-nav-cat-note {
