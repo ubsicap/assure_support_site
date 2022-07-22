@@ -1,5 +1,8 @@
 <?php
-
+/*
+    File: qa-plugin/account-reclaim/qa-ar-layer.php
+    Description: Creates a confirmation box if users try to register with an archived account
+*/
 
 
 // For qa_ar_db_is_archived_email()
