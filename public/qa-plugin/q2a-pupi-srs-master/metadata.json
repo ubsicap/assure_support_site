@@ -1,0 +1,14 @@
+{
+    "name": "SPAM Registration Stopper",
+    "uri": "https://github.com/pupi1985/q2a-pupi-srs",
+    "description": "Prevents highly probable SPAM registrations based on well-known SPAM checking services and other techniques",
+    "version": "1.4.4",
+    "date": "2022-07-22",
+    "author": "Gabriel Zanetti",
+    "author_uri": "https://question2answer.org/qa/user/pupi1985",
+    "license": "GPLv3",
+    "update_uri": "https://raw.githubusercontent.com/pupi1985/q2a-pupi-srs/master/metadata.json",
+    "min_q2a": "1.8.0",
+    "min_php": "7.0.0",
+    "load_order": "after_db_init"
+}
