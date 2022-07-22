@@ -9,9 +9,10 @@ Allows users to reclaim archived accounts.
 │   └── qa-ar-lang-default.php      // Default (English)
 ├── metadata.json                   // Plugin metadata
 ├── qa-ar-admin.php                 // Admin page configuration
-├── qa-ar-email.php                 // Module for registering with an archived email
 ├── qa-ar-event.php                 // Handles deletion of archived accounts
+├── qa-ar-filter.php                // Registration page confirmation for archived accounts
 ├── qa-ar-functions.php             // Custom helper functions
+├── qa-ar-layer.php                 // Registration page layer for archived accounts
 ├── qa-ar-overrides.php             // Overrides of Q2A builtin functions
 ├── qa-ar-page.php                  // Recovery and Reclaim pages
 └── qa-plugin.php                   // Registers the plugin
@@ -27,7 +28,6 @@ It requires a custom table to be created called `^accountreclaim` with the follo
 1. `userid`: The same value of a user in `^users` that is archived
 1. `email`: Original email of an archived user
 1. `reclaimcode`: Similar to `emailcode` in `^users`, but used for this process
-1. `lastreclaim`: A timestamp representing the last time this user attempted to reclaim
 
 Two pages are created: `recover-account` and `account-reclaim`.
 The recovery page explains the process and prompts the user to enter an email address associated with an archived account.
