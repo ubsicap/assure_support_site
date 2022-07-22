@@ -31,8 +31,10 @@ class sso_authentication_login
 		require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php'; //for the $authUrl
 		$googleUrl = get_google_url();
 		$label = qa_lang('sso-auth/google_login');
+		echo ""; //
+
 		echo <<<HTML
-					<a class="google-signin" class="google-signin" href="$googleUrl">
+					<a class="google-signin" href="$googleUrl">
 							<span class="google-signin-icon"></span>
 						<span class="signin-text"> $label </span>
 					</a>
