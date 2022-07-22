@@ -34,6 +34,7 @@ class sso_authentication_login
 		//echo ""; //test debug
 
 		echo <<<HTML
+					<div class="empty-div"> </div>
 					<a class="google-signin" href="$googleUrl">
 							<span class="google-signin-icon"></span>
 						<span class="signin-text"> $label </span>
