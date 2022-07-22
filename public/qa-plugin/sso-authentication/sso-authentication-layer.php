@@ -9,16 +9,16 @@ class qa_html_theme_layer extends qa_html_theme_base
         $this->output('
             <style type="text/css">
             
-            .google-signin.fa, .google-signin {
+            .google-signin {
                 background: #4285f4;
             }
-            .facebook-signin.fa, .facebook-signin {
+            .facebook-signin {
                 background: #3b5998;
             }
-            .paratext-signin.fa, .paratext-signin {
+            .paratext-signin {
                 background: #8aab68;
             }
-            .google-signin.fa, .facebook-signin.fa, .paratext-signin.fa {
+            li > .google-signin.fa, li > .facebook-signin.fa, li > .paratext-signin.fa {
                 width: 100%;
                 height: 40px;
                 border-radius: 3px;
