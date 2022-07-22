@@ -175,8 +175,7 @@ $qa_content['form'] = array(
 			'tags' => 'name="email" id="email" dir="auto"',
 			'value' => qa_html(@$inemail),
 			'note' => qa_opt('email_privacy'),
-			'error' => @$errors['email'],
-			// 'error' => qa_html(@$errors['email']),
+			'error' => qa_html(@$errors['email']),
 		),
 	),
 
