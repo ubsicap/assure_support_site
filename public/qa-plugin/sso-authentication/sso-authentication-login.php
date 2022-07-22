@@ -14,7 +14,7 @@ class sso_authentication_login
 		// 			$client->revokeToken();
 		} else if (isset($_GET['code'], $_GET['hd'])) {
 			$this->loginWithGoogle();
-		} else if (isset($_GET['code'], $_GET['state'])) {
+		} else if (isset($_GET['code'])) {
 			$this->loginWithFacebook();
 		}
 	}
