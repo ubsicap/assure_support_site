@@ -37,8 +37,8 @@ $conn = mysqli_connect(QA_MYSQL_HOSTNAME, QA_MYSQL_USERNAME, QA_MYSQL_PASSWORD, 
 #	error_reporting(E_ALL^E_NOTICE);
 
 	#-- the position of your ewiki-wrapper script
-	define("EWIKI_SCRIPT", "wiki?id=");		# relative/absolute to docroot
-#	define("EWIKI_SCRIPT_URL", "http://...?id=");		# absolute URL
+	define("EWIKI_SCRIPT", "?page=");		# relative/absolute to docroot
+    define("EWIKI_SCRIPT_URL", "http://supportsitetest.tk/wiki/index.php?id=");		# absolute URL
 
 		#-- change to your needs (site lang)
 	define("EWIKI_NAME", "Wiki");		# Wiki Title
@@ -53,7 +53,7 @@ $conn = mysqli_connect(QA_MYSQL_HOSTNAME, QA_MYSQL_USERNAME, QA_MYSQL_PASSWORD, 
 	#-- default settings are good settings - most often ;)
 		#- look & feel
 	define("EWIKI_PRINT_TITLE", 1);		# <h2>WikiPageName</h2> on top
-	define("EWIKI_SPLIT_TITLE", 0);		# <h2>Wiki Page Name</h2>
+	define("EWIKI_SPLIT_TITLE", 1);		# <h2>Wiki Page Name</h2>
 	define("EWIKI_CONTROL_LINE", 1);	# EditThisPage-link at bottom
 	define("EWIKI_LIST_LIMIT", 20);		# listing limit
 		#- behaviour
