@@ -291,7 +291,7 @@ class qa_hashtagger
      */
     private static function build_tag_link($match)
     {
-        echo "<script>alert(\"$match\")</script>";
+        $this->output("<script>alert(\"$match\")</script>");
 
         $hashtag = mb_strtolower($match['word'], 'UTF-8');
         if (qa_opt('plugin_hashtagger/keep_hash_symbol')) {
