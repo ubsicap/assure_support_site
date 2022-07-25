@@ -26,7 +26,8 @@
 */
 
 #-- you could also establish a mysql connection in here, of course:
-$conn = mysqli_connect(QA_MYSQL_HOSTNAME, QA_MYSQL_USERNAME, QA_MYSQL_PASSWORD);
+global $conn;
+$conn = mysqli_connect(QA_MYSQL_HOSTNAME, QA_MYSQL_USERNAME, QA_MYSQL_PASSWORD, QA_MYSQL_DATABASE);
 
 
 		#-------------------------------------------------------- config ---
@@ -981,7 +982,7 @@ function ewiki_script_url() {
 	if ($_SERVER["SERVER_PORT"] != 80) {
 	  $port = ":" .$_SERVER["SERVER_PORT"];
 	}
-	$url = "http://" . $_SERVER["SERVER_NAME"]. $port . $url; 
+	$url = "https://" . $_SERVER["SERVER_NAME"]. $port . $url; 
 		
 	return($ewiki_config["script_url"] = $url);
 }
@@ -2533,8 +2534,9 @@ function ewiki_link_regex_callback($uu, $force_noimg=0) {
 	#-- convert standard and internal:// URLs
 	$is_url = preg_match('#^('.implode('|', $ewiki_config["idf"]["url"]).')#', $href);
 	$is_internal = 0;
-	//
-	if (!$is_url && ($ewiki_links[$href_i]["flags"] & EWIKI_DB_F_BINARY)) {
+	// 'flags' is an illegal offset...?
+	//if (!$is_url && ($ewiki_links[$href_i]["flags"] & EWIKI_DB_F_BINARY)) {
+	if (!$is_url && ($ewiki_links[$href_i] & EWIKI_DB_F_BINARY)) {
 	  $is_url = 1;
 	  $is_internal = 1;
 	}
@@ -3586,7 +3588,7 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 		 $result = mysqli_query($conn, "SELECT * FROM " . EWIKI_DB_TABLE_NAME
 			. " WHERE (pagename=$id) $version  ORDER BY version DESC  LIMIT 1"
 		 );
-		 if ($result && ($r = mysqli_fetch_array($result, MYSQL_ASSOC))) {
+		 if ($result && ($r = mysqli_fetch_array($result, MYSQLI_ASSOC))) {
 			$r["id"] = $r["pagename"];
 			unset($r["pagename"]);
 		 }
@@ -3637,7 +3639,7 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 			" (" . $sql1 . ") VALUES (" . $sql2 . ")"
 		 );
 
-		 return($result && mysqli_affected_rows() ?1:0);
+		 return($result && mysqli_affected_rows($conn) ?1:0);
 		 break;
 
 
@@ -3679,7 +3681,7 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 		 );
 		 $r = new ewiki_dbquery_result($args);
 		 $drop = "";
-		 while ($result && ($row = mysqli_fetch_array($result, MYSQL_ASSOC))) {
+		 while ($result && ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))) {
 			$i = EWIKI_CASE_INSENSITIVE ? strtolower($row["id"]) : $row["id"];
 			if ($i != $drop) {
 				$drop = $i;
@@ -3708,7 +3710,7 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 		 );
 		 $r = new ewiki_dbquery_result(array("id","version",$field));
 		 $drop = "";
-		 while ($result && ($row = mysqli_fetch_array($result, MYSQL_ASSOC))) {
+		 while ($result && ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))) {
 			$i = EWIKI_CASE_INSENSITIVE ? strtolower($row["id"]) : $row["id"];
 			if ($i != $drop) {
 				$drop = $i;
