@@ -291,8 +291,6 @@ class qa_hashtagger
      */
     private static function build_tag_link($match)
     {
-        $this->output("<script>alert(\"$match\")</script>");
-
         $hashtag = mb_strtolower($match['word'], 'UTF-8');
         if (qa_opt('plugin_hashtagger/keep_hash_symbol')) {
             $hashtag = "#{$hashtag}";
@@ -303,7 +301,7 @@ class qa_hashtagger
         }
 
         $url = qa_path_html("tag/{$hashtag}", $rooturl = qa_opt('site_url'));
-        return "<a href='{$url}'>#{$match['word']}</a>";
+        return "<a href='{$url}'>#{$match}</a>";
     }
 
     /**
