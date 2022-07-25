@@ -2534,8 +2534,9 @@ function ewiki_link_regex_callback($uu, $force_noimg=0) {
 	#-- convert standard and internal:// URLs
 	$is_url = preg_match('#^('.implode('|', $ewiki_config["idf"]["url"]).')#', $href);
 	$is_internal = 0;
-	//
-	if (!$is_url && ($ewiki_links[$href_i]["flags"] & EWIKI_DB_F_BINARY)) {
+	// 'flags' is an illegal offset...?
+	//if (!$is_url && ($ewiki_links[$href_i]["flags"] & EWIKI_DB_F_BINARY)) {
+	if (!$is_url && ($ewiki_links[$href_i] & EWIKI_DB_F_BINARY)) {
 	  $is_url = 1;
 	  $is_internal = 1;
 	}
