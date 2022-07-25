@@ -381,8 +381,7 @@ class qa_hashtagger
             $sections = preg_split('%(<[^>]*>)%', $row['content'], -1,  PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE); //split by html elements
             for($i = 0; $i < count($sections); $i++) //go through every other element
                 if($sections[$i][0] != '<') //not in a tag
-                    $sections[$i] = "S: " . $sections[$i] . " :E";    
-            //$sections[$i] = "S: " . $this->preg_call('%#(?P<word>[\w\-]+)%us', 'build_tag_link', $sections[$i]) . " :E";
+                    $sections[$i] = $this->preg_call('%#(?P<word>[\w\-]+)%us', 'build_tag_link', $sections[$i]);
             $row['content'] = implode($sections); //piece back together the original html
         }
 
