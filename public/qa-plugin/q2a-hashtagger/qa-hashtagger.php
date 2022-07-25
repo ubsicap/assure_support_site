@@ -377,18 +377,12 @@ class qa_hashtagger
 
         // Convert hashtags, orig expression: %#(?P<word>[\w\-]+)%u
         if ($convert_hashtags) {
-            $checkCount = 0;
-            while($checkCount < 8 && preg_match('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K#(?P<word>[\w\-]+)%us', $row['content'])) //keep substituting hashtags till none remain
-            {
-                $checkCount++;
-                $row['content'] = $this->preg_call('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K#(?P<word>[\w\-]+)%us', 'build_tag_link', $row['content']);
-            }
+            $row['content'] = $this->preg_call('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K#(?P<word>[\w\-]+)%us', 'build_tag_link', $row['content']);
         }
 
         // Convert usernames, orig expression: %@(?P<name>[\w\-]+)%u
         if ($convert_usernames) {
-            while($checkCount < 8 && preg_match('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K@(?P<name>[\w\-]+)%us', $row['content'])) //keep substituting mentions till none remain
-                $row['content'] = $this->preg_call('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K@(?P<name>[\w\-]+)%us', 'build_user_link', $row['content']);
+            $row['content'] = $this->preg_call('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K@(?P<name>[\w\-]+)%us', 'build_user_link', $row['content']);
         }
 
         // Unhide links
