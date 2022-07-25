@@ -3638,7 +3638,7 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 			" (" . $sql1 . ") VALUES (" . $sql2 . ")"
 		 );
 
-		 return($result && mysqli_affected_rows() ?1:0);
+		 return($result && mysqli_affected_rows($conn) ?1:0);
 		 break;
 
 
@@ -3680,7 +3680,7 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 		 );
 		 $r = new ewiki_dbquery_result($args);
 		 $drop = "";
-		 while ($result && ($row = mysqli_fetch_array($result, MYSQL_ASSOC))) {
+		 while ($result && ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))) {
 			$i = EWIKI_CASE_INSENSITIVE ? strtolower($row["id"]) : $row["id"];
 			if ($i != $drop) {
 				$drop = $i;
@@ -3709,7 +3709,7 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 		 );
 		 $r = new ewiki_dbquery_result(array("id","version",$field));
 		 $drop = "";
-		 while ($result && ($row = mysqli_fetch_array($result, MYSQL_ASSOC))) {
+		 while ($result && ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))) {
 			$i = EWIKI_CASE_INSENSITIVE ? strtolower($row["id"]) : $row["id"];
 			if ($i != $drop) {
 				$drop = $i;
