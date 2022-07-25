@@ -26,7 +26,8 @@
 */
 
 #-- you could also establish a mysql connection in here, of course:
-$conn = mysqli_connect(QA_MYSQL_HOSTNAME, QA_MYSQL_USERNAME, QA_MYSQL_PASSWORD);
+global $conn;
+$conn = mysqli_connect(QA_MYSQL_HOSTNAME, QA_MYSQL_USERNAME, QA_MYSQL_PASSWORD, QA_MYSQL_DATABASE);
 
 
 		#-------------------------------------------------------- config ---
@@ -3586,7 +3587,7 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 		 $result = mysqli_query($conn, "SELECT * FROM " . EWIKI_DB_TABLE_NAME
 			. " WHERE (pagename=$id) $version  ORDER BY version DESC  LIMIT 1"
 		 );
-		 if ($result && ($r = mysqli_fetch_array($result, MYSQL_ASSOC))) {
+		 if ($result && ($r = mysqli_fetch_array($result, MYSQLI_ASSOC))) {
 			$r["id"] = $r["pagename"];
 			unset($r["pagename"]);
 		 }
