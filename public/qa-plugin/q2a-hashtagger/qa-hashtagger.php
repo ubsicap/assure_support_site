@@ -377,7 +377,7 @@ class qa_hashtagger
 
         // Convert hashtags, orig expression: %#(?P<word>[\w\-]+)%u
         if ($convert_hashtags) {
-            while(preg_match('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K#(?P<name>[\w\-]+)%us', $row['content'])) //keep substituting hashtags till none remain
+            while(preg_match('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K#(?P<word>[\w\-]+)%us', $row['content'])) //keep substituting hashtags till none remain
                 $row['content'] = $this->preg_call('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K#(?P<word>[\w\-]+)%us', 'build_tag_link', $row['content']);
         }
 
