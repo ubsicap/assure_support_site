@@ -982,7 +982,7 @@ function ewiki_script_url() {
 	if ($_SERVER["SERVER_PORT"] != 80) {
 	  $port = ":" .$_SERVER["SERVER_PORT"];
 	}
-	$url = "http://" . $_SERVER["SERVER_NAME"]. $port . $url; 
+	$url = "https://" . $_SERVER["SERVER_NAME"]. $port . $url; 
 		
 	return($ewiki_config["script_url"] = $url);
 }
