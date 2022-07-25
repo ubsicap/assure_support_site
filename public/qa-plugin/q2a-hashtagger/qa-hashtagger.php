@@ -381,13 +381,18 @@ class qa_hashtagger
             $sections = preg_split('%(<[^>]*>)%', $row['content'], -1,  PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE); //split by html elements
             for($i = 0; $i < count($sections); $i++) //go through every other element
                 if($sections[$i][0] != '<') //not in a tag
-                    $sections[$i] = $this->preg_call('%#(?P<word>[\w\-]+)%us', 'build_tag_link', $sections[$i]);
+                    $sections[$i] = $this->preg_call('%#(?P<word>[\w\-]+)%u', 'build_tag_link', $sections[$i]);
             $row['content'] = implode($sections); //piece back together the original html
         }
 
         // Convert usernames, orig expression: %@(?P<name>[\w\-]+)%u
         if ($convert_usernames) {
-            $row['content'] = $this->preg_call('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K@(?P<name>[\w\-]+)%us', 'build_user_link', $row['content']);
+            //every other section should be in an html element (and ignored), i.e. hi,<there>,test,<div a>
+            $sections = preg_split('%(<[^>]*>)%', $row['content'], -1,  PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE); //split by html elements
+            for($i = 0; $i < count($sections); $i++) //go through every other element
+                if($sections[$i][0] != '<') //not in a tag
+                    $sections[$i] = $this->preg_call('%@(?P<name>[\w\-]+)%u', 'build_tag_link', $sections[$i]);
+            $row['content'] = implode($sections); //piece back together the original html
         }
 
         // Unhide links
