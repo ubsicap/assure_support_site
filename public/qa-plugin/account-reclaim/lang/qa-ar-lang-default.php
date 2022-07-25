@@ -25,10 +25,10 @@ return array(
     'admin_redirect_page' => 'Location to redirect users after account reclaim. Leave blank to redirect to homepage.',
     'admin_register_archived_timeout' => "Number of minutes that a user has to register with an archived email before they are warned again.",
     'admin_captcha_on_recover' => 'Use CAPTCHA on account recovery',
-    'archived_warning' => "<b>^</b> is used on support.paratext.org.<br><br>If you would like to keep your history from this account, <b><a href='https://supportsitetest.tk/recover-account' rel='noopener noreferrer'>reclaim your support.paratext.org account</a></b>.<br><br>You will permanently lose acccess to your history from your support.paratext.org account if you continue and create a new account.",
+    'archived_warning' => "This email address is used on support.paratext.org.<br><br>If you would like to keep your history from this account, <b><a style='color:inherit' href='https://supportsitetest.tk/recover-account' rel='noopener noreferrer'>reclaim your support.paratext.org account</a></b>.<br><br>You will permanently lose acccess to your history from your support.paratext.org account if you continue and create a new account. To lose your support.paratext.org history, you must type the following in the box below: <b>^</b>",
     'archive_notify_name' => 'Paratext Support Forum User',
     'archive_notify_subject' => '^site_title - An account has been registered with your email',
     'archive_notify_body' => "An account has been registered at ^site_url using this email address. Details are listed below.\n\n\tEmail: ^email\n\tUsername: ^username\n\tTimestamp: ^timestamp (UTC)\n\nIf this was your doing, please disregard this message.\n\nIf you did not authorize this, do not worry. All unverified accounts are deleted after ^interval hours.",
-    'custom_confirm_box' => 'To lose your support.paratext.org history, you must type the following in the text box below: <b>^</b>',
+    'custom_confirm_box' => 'Confirmation box:',
     'do_not_reclaim' => 'DO NOT RECLAIM',
 );

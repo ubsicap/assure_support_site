@@ -27,12 +27,12 @@ class qa_html_theme_layer extends qa_html_theme_base
             if (qa_ar_db_is_archived_email($inemail)) {
                 // If the confirmation box doesn't match, display the email error
                 if ($inconfirm != qa_lang('qa-ar/do_not_reclaim')) {
-                    $form['fields']['email']['error'] = qa_lang_sub('qa-ar/archived_warning', $inemail);
+                    $form['fields']['email']['error'] = qa_lang_sub('qa-ar/archived_warning', qa_lang('qa-ar/do_not_reclaim'));
                 }
 
                 // Create confirmation box
                 $form['fields']['custom_confirm'] = array(
-                    'label' => qa_lang_sub('qa-ar/custom_confirm_box', qa_lang('qa-ar/do_not_reclaim')),
+                    'label' => qa_lang('qa-ar/custom_confirm_box'),
                     'tags' => 'name="custom_confirm" id="custom_confirm" dir="auto"',
                     // 'value' => qa_html(@$inconfirm), // Textbox contents are whatever the user entered
                     'value' => null, // Textbox contents are reset every time the form is loaded
