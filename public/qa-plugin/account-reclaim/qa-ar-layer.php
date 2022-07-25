@@ -32,7 +32,6 @@ class qa_html_theme_layer extends qa_html_theme_base
 
                 // Create confirmation box
                 $form['fields']['custom_confirm'] = array(
-                    'label' => qa_lang('qa-ar/custom_confirm_box'),
                     'tags' => 'name="custom_confirm" id="custom_confirm" dir="auto"',
                     // 'value' => qa_html(@$inconfirm), // Textbox contents are whatever the user entered
                     'value' => null, // Textbox contents are reset every time the form is loaded

@@ -1,4 +1,6 @@
-<script language="PHP"> @define("EWIKI_VERSION", "R1.01d4");
+<?php
+
+@define("EWIKI_VERSION", "R1.01d4");
 
 /*
 
@@ -24,10 +26,8 @@
 */
 
 #-- you could also establish a mysql connection in here, of course:
-// mysql_connect(":/var/run/mysqld/mysqld.sock", "user", "pw")
-// and mysql_query("USE mydatabase");
-mysql_connect(QA_MYSQL_HOSTNAME, QA_MYSQL_USERNAME, QA_MYSQL_PASSWORD);         
-mysql_query("USE " . QA_MYSQL_DATABASE); 
+global $conn;
+$conn = mysqli_connect(QA_MYSQL_HOSTNAME, QA_MYSQL_USERNAME, QA_MYSQL_PASSWORD, QA_MYSQL_DATABASE);
 
 
 		#-------------------------------------------------------- config ---
@@ -982,7 +982,7 @@ function ewiki_script_url() {
 	if ($_SERVER["SERVER_PORT"] != 80) {
 	  $port = ":" .$_SERVER["SERVER_PORT"];
 	}
-	$url = "http://" . $_SERVER["SERVER_NAME"]. $port . $url; 
+	$url = "https://" . $_SERVER["SERVER_NAME"]. $port . $url; 
 		
 	return($ewiki_config["script_url"] = $url);
 }
@@ -2534,8 +2534,9 @@ function ewiki_link_regex_callback($uu, $force_noimg=0) {
 	#-- convert standard and internal:// URLs
 	$is_url = preg_match('#^('.implode('|', $ewiki_config["idf"]["url"]).')#', $href);
 	$is_internal = 0;
-	//
-	if (!$is_url && ($ewiki_links[$href_i]["flags"] & EWIKI_DB_F_BINARY)) {
+	// 'flags' is an illegal offset...?
+	//if (!$is_url && ($ewiki_links[$href_i]["flags"] & EWIKI_DB_F_BINARY)) {
+	if (!$is_url && ($ewiki_links[$href_i] & EWIKI_DB_F_BINARY)) {
 	  $is_url = 1;
 	  $is_internal = 1;
 	}
@@ -2550,7 +2551,7 @@ function ewiki_link_regex_callback($uu, $force_noimg=0) {
 	  }
 	  #-- URL plugins
 	  if ($pf_a = $ewiki_plugins["link_url"]) foreach ($pf_a as $pf) {
-		 if ($str = $pf($href, $title)) { break 2; }
+		 if ($str = $pf($href, $title)) { break; }
 	  }
 	  $meta = @$ewiki_links[$href];
 	  #-- check for image files
@@ -3486,7 +3487,7 @@ class ewiki_dbquery_result {
 	var $buffer = EWIKI_DBQUERY_BUFFER;
 	var $size = 0;
 
-	function ewiki_dbquery_result($keys) {
+	function __construct($keys) {
 	  $keys = array_merge($keys, array(-50=>"id", "version", "flags"));
 	  $this->keys = array_unique($keys);
 	}
@@ -3566,8 +3567,10 @@ class ewiki_dbquery_result {
 */
 function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 
+    global $conn;
+
 	#-- reconnect to the database (if multiple are used)
-	#<off>#  mysql_ping($GLOBALS["db"]);
+	#<off>#  mysqli_ping($GLOBALS["db"]);
 
 	#-- result array
 	$r = array();
@@ -3580,12 +3583,12 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 		  the $args array.
 	  */
 	  case "GET":
-		 $id = "'" . mysql_escape_string($args["id"]) . "'";
+		 $id = "'" . mysqli_escape_string($conn, $args["id"]) . "'";
 		 ($version = 0 + @$args["version"]) and ($version = "AND (version=$version)") or ($version="");
-		 $result = mysql_query("SELECT * FROM " . EWIKI_DB_TABLE_NAME
+		 $result = mysqli_query($conn, "SELECT * FROM " . EWIKI_DB_TABLE_NAME
 			. " WHERE (pagename=$id) $version  ORDER BY version DESC  LIMIT 1"
 		 );
-		 if ($result && ($r = mysql_fetch_array($result, MYSQL_ASSOC))) {
+		 if ($result && ($r = mysqli_fetch_array($result, MYSQLI_ASSOC))) {
 			$r["id"] = $r["pagename"];
 			unset($r["pagename"]);
 		 }
@@ -3600,7 +3603,7 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 		  with "id" index key.
 	  */
 	  case "HIT":
-		 mysql_query("UPDATE " . EWIKI_DB_TABLE_NAME . " SET hits=(hits+1) WHERE pagename='" . mysql_escape_string($args["id"]) . "'");
+		 mysqli_query($conn, "UPDATE " . EWIKI_DB_TABLE_NAME . " SET hits=(hits+1) WHERE pagename='" . mysqli_escape_string($conn, $args["id"]) . "'");
 		 break;
 
 
@@ -3627,16 +3630,16 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 			}
 			$a = ($sql1 ? ', ' : '');
 			$sql1 .= $a . $index;
-			$sql2 .= $a . "'" . mysql_escape_string($value) . "'";
+			$sql2 .= $a . "'" . mysqli_escape_string($conn, $value) . "'";
 		 }
 
 		 strlen(@$COMMAND) || ($COMMAND = "INSERT");
 
-		 $result = mysql_query("$COMMAND INTO " . EWIKI_DB_TABLE_NAME .
+		 $result = mysqli_query($conn, "$COMMAND INTO " . EWIKI_DB_TABLE_NAME .
 			" (" . $sql1 . ") VALUES (" . $sql2 . ")"
 		 );
 
-		 return($result && mysql_affected_rows() ?1:0);
+		 return($result && mysqli_affected_rows($conn) ?1:0);
 		 break;
 
 
@@ -3652,12 +3655,12 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 		 foreach (array_values($args) as $id) if (strlen($id)) {
 			$r[$id] = 0;
 			$sql .= ($sql ? " OR " : "") .
-					"(pagename='" . mysql_escape_string($id) . "')";
+					"(pagename='" . mysqli_escape_string($conn, $id) . "')";
 		 }
-		 $result = mysql_query($sql = "SELECT pagename AS id, meta, flags FROM " .
+		 $result = mysqli_query($conn, $sql = "SELECT pagename AS id, meta, flags FROM " .
 			EWIKI_DB_TABLE_NAME . " WHERE $sql "
 		 );
-		 while ($result && ($row = mysql_fetch_array($result))) {
+		 while ($result && ($row = mysqli_fetch_array($result))) {
 			$r[$row["id"]] = ($uu = unserialize($row["meta"]))
 				 ? ($uu+array("flags"=>$row["flags"]))
 				 : $row["flags"];
@@ -3671,14 +3674,14 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 		  e.g. array("flags","meta","lastmodified");
 	  */
 	  case "GETALL":
-		 $result = mysql_query("SELECT pagename AS id, ".
+		 $result = mysqli_query($conn, "SELECT pagename AS id, ".
 			implode(", ", $args) .
 			" FROM ". EWIKI_DB_TABLE_NAME .
 			" GROUP BY id, version DESC"
 		 );
 		 $r = new ewiki_dbquery_result($args);
 		 $drop = "";
-		 while ($result && ($row = mysql_fetch_array($result, MYSQL_ASSOC))) {
+		 while ($result && ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))) {
 			$i = EWIKI_CASE_INSENSITIVE ? strtolower($row["id"]) : $row["id"];
 			if ($i != $drop) {
 				$drop = $i;
@@ -3699,15 +3702,15 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 		 $content = strtolower(implode("", $args));
 		 if ($field == "id") { $field = "pagename"; }
 
-		 $result = mysql_query("SELECT pagename AS id, version, flags" .
+		 $result = mysqli_query($conn, "SELECT pagename AS id, version, flags" .
 			(EWIKI_DBQUERY_BUFFER && ($field!="pagename") ? ", $field" : "") .
 			" FROM " . EWIKI_DB_TABLE_NAME .
-			" WHERE LOCATE('" . mysql_escape_string($content) . "', LCASE($field)) " .
+			" WHERE LOCATE('" . mysqli_escape_string($conn, $content) . "', LCASE($field)) " .
 			" GROUP BY id, version DESC"
 		 );
 		 $r = new ewiki_dbquery_result(array("id","version",$field));
 		 $drop = "";
-		 while ($result && ($row = mysql_fetch_array($result, MYSQL_ASSOC))) {
+		 while ($result && ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))) {
 			$i = EWIKI_CASE_INSENSITIVE ? strtolower($row["id"]) : $row["id"];
 			if ($i != $drop) {
 				$drop = $i;
@@ -3719,16 +3722,16 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 
 
 	  case "DELETE":
-		 $id = mysql_escape_string($args["id"]);
+		 $id = mysqli_escape_string($conn, $args["id"]);
 		 $version = $args["version"];
-		 mysql_query("DELETE FROM " . EWIKI_DB_TABLE_NAME ."
+		 mysqli_query($conn, "DELETE FROM " . EWIKI_DB_TABLE_NAME ."
 			WHERE pagename='$id' AND version=$version");
 		 break;
 
 
 
 	  case "INIT":
-		 mysql_query("CREATE TABLE " . EWIKI_DB_TABLE_NAME ."
+		 mysqli_query($conn, "CREATE TABLE " . EWIKI_DB_TABLE_NAME ."
 			(pagename VARCHAR(160) NOT NULL,
 			version INTEGER UNSIGNED NOT NULL DEFAULT 0,
 			flags INTEGER UNSIGNED DEFAULT 0,
@@ -3741,7 +3744,7 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 			hits INTEGER UNSIGNED DEFAULT 0,
 			PRIMARY KEY id (pagename, version) )
 			");
-		 echo mysql_error();
+		 echo mysqli_error($conn);
 		 break;
 
 	  default:
@@ -3749,7 +3752,3 @@ function ewiki_database_mysql($action, &$args, $sw1, $sw2) {
 
 	return($r);
 }
-
-
-
-</script>

@@ -377,7 +377,11 @@ class qa_hashtagger
 
         // Convert hashtags, orig expression: %#(?P<word>[\w\-]+)%u
         if ($convert_hashtags) {
-            $row['content'] = $this->preg_call('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K#(?P<word>[\w\-]+)%us', 'build_tag_link', $row['content']);
+            //every other section should be in an html element (and ignored), i.e. hi,<there>,test,<div a>
+            $sections = preg_split('%<[^>]*>%', $row['content'], -1, PREG_SPLIT_DELIM_CAPTURE); //split by html elements
+            for($i = 0; $i <= count($sections); $i=$i+2) //go through every other element, only even elements
+                $sections = 'S: ' . $this->preg_call('%#(?P<word>[\w\-]+)%us', 'build_tag_link', $sections) . ' :E';
+            $row['content'] = implode($sections); //piece back together the original html
         }
 
         // Convert usernames, orig expression: %@(?P<name>[\w\-]+)%u

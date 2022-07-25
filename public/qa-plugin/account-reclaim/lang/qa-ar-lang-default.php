@@ -29,6 +29,5 @@ return array(
     'archive_notify_name' => 'Paratext Support Forum User',
     'archive_notify_subject' => '^site_title - An account has been registered with your email',
     'archive_notify_body' => "An account has been registered at ^site_url using this email address. Details are listed below.\n\n\tEmail: ^email\n\tUsername: ^username\n\tTimestamp: ^timestamp (UTC)\n\nIf this was your doing, please disregard this message.\n\nIf you did not authorize this, do not worry. All unverified accounts are deleted after ^interval hours.",
-    'custom_confirm_box' => 'Confirmation box:',
     'do_not_reclaim' => 'DO NOT RECLAIM',
 );
