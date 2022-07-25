@@ -301,7 +301,7 @@ class qa_hashtagger
         }
 
         $url = qa_path_html("tag/{$hashtag}", $rooturl = qa_opt('site_url'));
-        return "<a href='{$url}'>#{$match[0]}</a>";
+        return "<a href='{$url}'>#{$match['word']}</a>";
     }
 
     /**
@@ -377,7 +377,7 @@ class qa_hashtagger
 
         // Convert hashtags, orig expression: %#(?P<word>[\w\-]+)%u
         if ($convert_hashtags) {
-            $row['content'] = $this->preg_call('%([^<]*<[^>]*>[^<]*|^[^<>]*)\K#(?P<word>[\w\-]+)%us', 'build_tag_link', $row['content']);
+            $row['content'] = $this->preg_call('%(?P<word>(([^<]*<[^>]*>[^<]*|^[^<>]*)\K#([\w\-]+)))%us', 'build_tag_link', $row['content']);
         }
 
         // Convert usernames, orig expression: %@(?P<name>[\w\-]+)%u
@@ -396,4 +396,3 @@ class qa_hashtagger
         }
     }
 }
-
