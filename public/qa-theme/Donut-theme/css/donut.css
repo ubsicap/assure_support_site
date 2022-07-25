@@ -133,19 +133,23 @@ table .table {
 .qa-form-wide-table > tbody > tr > td.qa-form-wide-ok .alert-link {
   color: #2b542c;
 }
-.qa-form-tall-error,
+.qa-form-tall-error {
+  border: 1px solid #ebccd1;
+  background-color: #f2dede;
+  color: #a94442;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  padding: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
 .qa-form-wide-error,
 .qa-form-tall-table > tbody > tr > td.qa-form-tall-error,
 .qa-form-wide-table > tbody > tr > td.qa-form-wide-error {
   border: 1px solid #ebccd1;
   background-color: #f2dede;
   color: #a94442;
-  margin-top: 10px;
-
-    padding: 15px;
-    margin-bottom: 10px;
-    border: 1px solid transparent;
-    border-radius: 4px
+  margin-bottom: 10px;
 }
 a.qa-form-tall-error:hover,
 a.qa-form-wide-error:hover,
