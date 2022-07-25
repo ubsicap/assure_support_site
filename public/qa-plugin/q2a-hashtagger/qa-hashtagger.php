@@ -301,7 +301,7 @@ class qa_hashtagger
         }
 
         $url = qa_path_html("tag/{$hashtag}", $rooturl = qa_opt('site_url'));
-        return "<a href='{$url}'>#{$match}</a>";
+        return "<a href='{$url}'>#{$match[0]}</a>";
     }
 
     /**
