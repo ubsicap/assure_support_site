@@ -291,7 +291,7 @@ class qa_hashtagger
      */
     private static function build_tag_link($match)
     {
-        debug_to_console($match); //debugging
+        echo "<script>alert(\"$match\")</script>";
 
         $hashtag = mb_strtolower($match['word'], 'UTF-8');
         if (qa_opt('plugin_hashtagger/keep_hash_symbol')) {
@@ -396,27 +396,6 @@ class qa_hashtagger
         if (self::$hashtags || self::$userids) {
             $row['format'] = 'html';
         }
-    }
-
-    /**
-     * Simple helper to debug to the console
-     *
-     * @param $data object, array, string $data
-     * @param $context string  Optional a description.
-     *
-     * @return string
-     */
-    function debug_to_console($data, $context = 'Debug in Console') 
-    {
-    
-        // Buffering to solve problems frameworks, like header() in this and not a solid return.
-        ob_start();
-    
-        $output  = 'console.info(\'' . $context . ':\');';
-        $output .= 'console.log(' . json_encode($data) . ');';
-        $output  = sprintf('<script>%s</script>', $output);
-    
-        echo $output;
     }
 }
 
