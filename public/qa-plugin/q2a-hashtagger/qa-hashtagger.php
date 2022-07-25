@@ -379,7 +379,11 @@ class qa_hashtagger
         if ($convert_hashtags) {
             //every other section should be in an html element (and ignored), i.e. hi,<there>,test,<div a>
             $sections = preg_split('%<[^>]*>%', $row['content'], -1, PREG_SPLIT_DELIM_CAPTURE); //split by html elements
-            for($i = 0; $i <= count($sections); $i=$i+2) //go through every other element, only even elements
+            if(count($sections) !=0 && $sections[0][0] == '<') //first section is an html element
+                $i = 1;
+            else
+                $i = 0;
+            for(; $i <= count($sections); $i=$i+2) //go through every other element
                 $sections[$i] = "S: " . $this->preg_call('%#(?P<word>[\w\-]+)%us', 'build_tag_link', $sections[$i]) . " :E";
             $row['content'] = implode($sections); //piece back together the original html
         }
