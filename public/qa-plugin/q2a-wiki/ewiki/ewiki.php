@@ -26,7 +26,6 @@
 */
 
 #-- you could also establish a mysql connection in here, of course:
-require_once QA_BASE_DIR;
 $conn = mysqli_connect(QA_MYSQL_HOSTNAME, QA_MYSQL_USERNAME, QA_MYSQL_PASSWORD);
 
 
@@ -2550,7 +2549,7 @@ function ewiki_link_regex_callback($uu, $force_noimg=0) {
 	  }
 	  #-- URL plugins
 	  if ($pf_a = $ewiki_plugins["link_url"]) foreach ($pf_a as $pf) {
-		 if ($str = $pf($href, $title)) { break 2; }
+		 if ($str = $pf($href, $title)) { break; }
 	  }
 	  $meta = @$ewiki_links[$href];
 	  #-- check for image files
