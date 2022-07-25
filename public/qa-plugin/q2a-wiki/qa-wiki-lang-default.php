@@ -1,5 +1,5 @@
 <?php
-
+	
 /*
 	Question2Answer (c) Gideon Greenspan
 
@@ -24,24 +24,24 @@
 	More about this license: http://www.question2answer.org/license.php
 */
 
-return array(
-    'a_to_wikified_button' => 'wikified',
-    'a_to_wikified_popup' => 'view wikified answer',
-    'a_to_wiki_button' => 'wikify',
-    'a_to_wiki_popup' => 'create wiki post out of this answer',
-    'a_to_wiki_link' => 'By ^:',
+	return array(
+		'a_to_wikified_button' => 'wikified',
+		'a_to_wikified_popup' => 'view wikified answer',
+		'a_to_wiki_button' => 'wikify',
+		'a_to_wiki_popup' => 'create wiki post out of this answer',
+		'a_to_wiki_link' => 'By ^:',
+		
+		'wiki_edit_allow' => 'Edit wiki posts',
+		'wiki_send_allow' => 'Wikify answers',
 
-    'wiki_edit_allow' => 'Edit wiki posts',
-    'wiki_send_allow' => 'Wikify answers',
+		'badge_wikifier' => 'Wikifier',
+		'badge_wacky_wikifier' => 'Wacky Wikifier',
+		'badge_wicked_wikifier' => 'Wicked Wikifier',
+		'badge_wikifier_desc' => 'Wikified # answers',
+		'badge_wacky_wikifier_desc' => 'Wikified # answers',
+		'badge_wicked_wikifier_desc' => 'Wikified # answers',
 
-    'badge_wikifier' => 'Wikifier',
-    'badge_wacky_wikifier' => 'Wacky Wikifier',
-    'badge_wicked_wikifier' => 'Wicked Wikifier',
-    'badge_wikifier_desc' => 'Wikified # answers',
-    'badge_wacky_wikifier_desc' => 'Wikified # answers',
-    'badge_wicked_wikifier_desc' => 'Wikified # answers',
-
-);
+	);
 	
 
 /*

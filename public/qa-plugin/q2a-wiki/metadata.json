@@ -1,0 +1,13 @@
+{
+  "name": "Wiki Page",
+  "uri": "https://github.com/pupi1985/q2a-wiki",
+  "description": "Wiki plugin page",
+  "version": "0.5.1",
+  "date": "2016-10-31",
+  "author": "NoahY (Extended by pupi1985)",
+  "author_uri": "http://question2answer.org/qa/user/pupi1985",
+  "license": "GPLv3",
+  "update_uri": "https://raw.githubusercontent.com/pupi1985/q2a-wiki/master/metadata.json",
+  "min_q2a": "1.5",
+  "min_php": "5.1.6"
+}
