@@ -13,7 +13,6 @@
                 case "questions":
                 case "search":
                 case "unanswered":
-				case "question":
                     return true;
                 default: //any other page is not permitted
                     return false;
