@@ -378,9 +378,9 @@ class qa_hashtagger
         // Convert hashtags, orig expression: %#(?P<word>[\w\-]+)%u
         if ($convert_hashtags) {
             //every other section should be in an html element (and ignored), i.e. hi,<there>,test,<div a>
-            $sections = preg_split('%<[^>]*>%', $row['content'], -1, PREG_SPLIT_DELIM_CAPTURE); //split by html elements
+            $sections = preg_split('%<[^>]*>%', $row['content'], -1,  PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY); //split by html elements
             for($i = 0; $i <= count($sections); $i++) //go through every other element
-                if(strlen($sections[$i]) != 0 && $sections[$i][0] != '<') //not in a tag
+                if($sections[$i][0] != '<') //not in a tag
                     $sections[$i] = "S: " . $sections[$i] . " :E";    
             //$sections[$i] = "S: " . $this->preg_call('%#(?P<word>[\w\-]+)%us', 'build_tag_link', $sections[$i]) . " :E";
             $row['content'] = implode($sections); //piece back together the original html
