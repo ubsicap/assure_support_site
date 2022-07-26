@@ -49,8 +49,13 @@
 							$handle = $this->id_to_handle($answer['raw']['userid']);
 							qa_redirect('wiki',array('id'=>qa_html('edit/'.qa_post_text('qa_wikify_title')),'qa_wiki_oid'=>$answer['raw']['postid'],'qa_wiki_handle'=>$handle,'qa_wiki_link'=>qa_html(qa_q_path($this->content['q_view']['raw']['postid'],$this->content['q_view']['raw']['title'],true,'A',$answer['raw']['postid']))));
 						}
-						else
-							qa_redirect('wiki',array('id'=>qa_html($this->content['q_view']['raw']['title'])));
+						else //wikipage exists already
+						{
+							//modification, overwrite previous wiki page
+							$handle = $this->id_to_handle($answer['raw']['userid']);
+							qa_redirect('wiki',array('id'=>qa_html('edit/'.qa_post_text('qa_wikify_title')),'qa_wiki_oid'=>$answer['raw']['postid'],'qa_wiki_handle'=>$handle,'qa_wiki_link'=>qa_html(qa_q_path($this->content['q_view']['raw']['postid'],$this->content['q_view']['raw']['title'],true,'A',$answer['raw']['postid']))));
+							//qa_redirect('wiki',array('id'=>qa_html($this->content['q_view']['raw']['title']))); //this was the original line
+						}
 							
 					}
 					if(!in_array($answer['raw']['postid'],$wikified)) {
