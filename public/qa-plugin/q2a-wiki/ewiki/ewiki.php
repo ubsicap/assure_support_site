@@ -1794,7 +1794,7 @@ function ewiki_control_links_list($id, &$data, $action_links, $version = 0)
                     (strpos($action, "://")
                         ? $action    # an injected "action" URL
                         : ewiki_script($action, $id, $version ? array("version" => $version) : NULL)
-                    ) . '">' . ewiki_t($title) . '</a> ';
+                    ) . '">' . preg_replace('/(?<!\ )[A-Z]/', ' $0', ewiki_t($title)) . '</a> ';
             }
         $o .= '</div>';
     }
