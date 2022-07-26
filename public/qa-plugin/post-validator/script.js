@@ -69,6 +69,6 @@ function createWarning (category) {
   var warning =
     '<div class="post-validator-error">Sensitive information detected: ' +
     category +
-    '. Please refer to: <a href = "https://supportsitetest.tk/best-practices">our best practice page.</a></div>';
+    '. Please refer to: <a href="https://supportsitetest.tk/best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
   return warning;
 }
