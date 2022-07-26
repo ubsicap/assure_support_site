@@ -1643,9 +1643,11 @@ function ewiki_page_edit_form(&$id, &$data, &$hidden_postdata)
             $data["content"] = $question;
         } else
             $data["content"] = $data["content"];
-		//$data["content"] = strip_tags($data["content"]); //modification! remove html tags during conversion.
-        $data["content"] .= "\n\n" . $a_link . "\n\n" . $post["content"];
-        $hidden_postdata["qa_wiki_save"] = $id;
+		
+		$data["content"] = strip_tags($data["content"]); //modification! remove html tags from original post content during conversion.
+        $data["content"] .= "\n\n" . $a_link . "\n\n" . strip_tags($post["content"]); //modification! remove html from wikified answer
+        
+		$hidden_postdata["qa_wiki_save"] = $id;
         $hidden_postdata["qa_wiki_new_oid"] = $ewiki_request["qa_wiki_oid"];
     }
 
