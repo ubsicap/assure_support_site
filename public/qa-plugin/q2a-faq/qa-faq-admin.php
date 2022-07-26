@@ -64,33 +64,33 @@ class qa_faq_admin
 	cursor:pointer;
 }';
             case 'faq_section_0_title':
-                return 'What kinds of questions can I ask here? ';
+                return qa_lang('qa-faq/faq_section_0_title');
             case 'faq_section_0':
-                return 'Most importantly, questions should be <strong>relevant to our community</strong>.  Before you ask, please make sure to search for a similar question. You can search for questions by their title or tags.';
+                return qa_lang('qa-faq/faq_section_0');
             case 'faq_section_1_title':
-                return 'What kinds of questions should be avoided? ';
+                return qa_lang('qa-faq/faq_section_1_title');
             case 'faq_section_1':
-                return 'Please avoid asking questions that are not related to our community, too subjective or argumentative.';
+                return qa_lang('qa-faq/faq_section_1');
             case 'faq_section_2_title':
-                return 'What should I avoid in my answers? ';
+                return qa_lang('qa-faq/faq_section_2_title');
             case 'faq_section_2':
-                return '^site_title is a <strong>question and answer</strong> site - it is <strong>not</strong> a discussion group. Please avoid holding debates in your answers as they tend to dilute the quality of  the forum. <br/><br/>For brief discussion, or to thank someone for their answer, please post comments, not answers.';
+                return qa_lang('qa-faq/faq_section_2');
             case 'faq_section_3_title':
-                return 'Who moderates this community? ';
+                return qa_lang('qa-faq/faq_section_3_title');
             case 'faq_section_3':
-                return 'The short answer is: <strong>you.</strong>  This website is moderated by the users.  Points system allows users to earn rights to perform a variety of moderation tasks.';
+                return qa_lang('qa-faq/faq_section_3');
             case 'faq_section_4_title':
-                return 'How does point system work? ';
+                return qa_lang('qa-faq/faq_section_4_title');
             case 'faq_section_4':
-                return 'When a question or answer is voted up, the user who posted it will gain points. These points serve as a rough measure of the community trust in that person. Various moderation tasks are gradually assigned to the users based on those points. <br/><br/>For example, if you ask an interesting question or useful answer, it  will likely be voted up. On the other hand if the question is poorly-worded or the answer is misleading - it will likely be voted down. Each up vote on a question will generate <strong>^qa_opt(points_per_q_voted_up) points</strong>, whereas each vote against will subtract <strong>^qa_opt(points_per_q_voted_down) points</strong>. The following table lists points gained per activity:<br/><br/>^pointstable<br/><br/>The following table lists point requirements for each type of moderation task. <br/><br/>^privilegestable';
+                return qa_lang('qa-faq/faq_section_4');
             case 'faq_section_5_title':
-                return 'How to change my picture (gravatar), and what is gravatar? ';
+                return qa_lang('qa-faq/faq_section_5_title');
             case 'faq_section_5':
-                return 'The picture that appears in user profiles is called a <strong>gravatar</strong>, which means <strong>globally recognized avatar</strong>.<br/><br/>Here is how it works: You upload your picture (or your favorite alter ego image) to the website <a href="http://gravatar.com"><strong>gravatar.com</strong></a> from where we later retrieve your image using a cryptographic key based on your email address.<br/><br/>This way all the websites you trust can show your image next to your posts and your email address remains private.<br/><br/>Please <strong>personalize your account with an image</strong> - just register at <a href="http://gravatar.com"><strong>gravatar.com</strong></a> (just please be sure to use the same email address that you used to register with us). The default gray image is generated automatically.';
+                return qa_lang('qa-faq/faq_section_5');
             case 'faq_section_6_title':
-                return 'Still have questions? ';
+                return qa_lang('qa-faq/faq_section_6_title');
             case 'faq_section_6':
-                return 'Please <a href="^qa_path(ask)">ask your question</a> and help make our community better! ';
+                return qa_lang('qa-faq/faq_section_6');
             default:
                 return null;
         }
@@ -202,7 +202,7 @@ class qa_faq_admin
             'label' => qa_lang('qa-faq/admin_page_post_html'),
             'tags' => 'NAME="faq_post_html"',
             'value' => qa_html(qa_opt('faq_post_html')),
-            'note' => qa_lang('qa-faq/admin_html_note'),
+            'note' => qa_lang('qa-faq/admin_page_html_note'),
         );
 
         $fields[] = array(
