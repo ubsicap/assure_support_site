@@ -95,7 +95,7 @@ class qa_hashtagger
         if (!$errors) {
             $this->set_notification($question, $oldquestion, 'Q');
             $this->init_filter($question, 'questions');
-            $question = $this->set_question_tags($question);
+            //$question = $this->set_question_tags($question); //MODIFY the plugin to not add new tags to the original post
         }
     }
 
@@ -231,6 +231,7 @@ class qa_hashtagger
     private function filter_question_child(&$row, $old_question, $type)
     {
         $this->init_filter($row, $type);
+        return; //MODIFY the plugin to not add new tags to the original post
 
         if (self::$hashtags) {
             $this->load('qa-util-string', 'qa_tagstring_to_tags');
