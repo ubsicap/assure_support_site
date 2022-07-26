@@ -116,7 +116,7 @@ class qa_html_theme_layer extends qa_html_theme_base
         $rolemarker = '';
         if (qa_opt('marker_plugin_role_names')) 
         {
-            if (qa_opt('marker_plugin_icons_images') && $showIcon) //icons enabled
+            if (qa_opt('marker_plugin_icons_images')) //icons enabled
             {
                 $rolemarker .= '<span class="qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">&nbsp;<b>[' . $this->getrolename($uid) . ']</b>  </span>';
                 if($showIcon) //user deserves an icon
