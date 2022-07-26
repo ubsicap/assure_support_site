@@ -1781,6 +1781,7 @@ function ewiki_control_links_list($id, &$data, $action_links, $version = 0)
     global $ewiki_plugins;
 
     $o = '';
+    // Only allow those with editing rights to see the links
     if (qa_permit_check('wiki_edit_allow')) {
 
         $o = '<div class="action-links-buttons">';

@@ -72,10 +72,13 @@
 			$ewiki_request = array_merge($_GET?$_GET:array(),$_POST?$_POST:array());
 			global $ewiki_links, $ewiki_plugins, $ewiki_ring, $ewiki_t, $ewiki_errmsg, $ewiki_data, $ewiki_title, $ewiki_id, $ewiki_action, $ewiki_config;
 			ob_start();
+   /*
+   // The "tools" page is abysmal...
 			if(isset($tools[$request]) && qa_get_logged_in_level()>=QA_USER_LEVEL_ADMIN)
 				include('ewiki/tools/'.$tools[$request]);
 			else
-				include("ewiki/index.php");
+            */
+			include("ewiki/index.php");
 			$contents = ob_get_contents();
 			ob_end_clean();
 		   

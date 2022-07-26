@@ -93,6 +93,8 @@ $ewiki = ewiki_page();
 
     }
 
+    // this is hideous code
+    if (qa_permit_check('wiki_edit_allow')) {
     ?>
 
        <div class="rbr">
@@ -106,6 +108,8 @@ $ewiki = ewiki_page();
        </div>
 
        <?php
+    }
+
          if (function_exists("calendar_exists") && calendar_exists()) {
             echo '<div class="rbr">';
             echo  calendar();
