@@ -99,7 +99,8 @@ $ewiki = ewiki_page();
        <b>internal pages</b><ul>
        <?php
          foreach ($ewiki_plugins["page"] as $id=>$pf) {
-            echo '<li><A HREF="' . ewiki_script("", $id) . '">' . $id . '</A></li>' . "\n";
+            $display = preg_replace('/(?<!\ )[A-Z]/', ' $0', $id);
+            echo '<li><A HREF="' . ewiki_script("", $id) . '">' . $display . '</A></li>' . "\n";
          }
        ?>
        </div>
