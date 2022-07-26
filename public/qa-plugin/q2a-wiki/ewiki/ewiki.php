@@ -170,6 +170,7 @@ $ewiki_plugins["action"]["edit"] = "ewiki_page_edit";
 $ewiki_plugins["action_always"]["links"] = "ewiki_page_links";
 $ewiki_plugins["action"]["info"] = "ewiki_page_info";
 $ewiki_plugins["action"]["view"] = "ewiki_page_view";
+$ewiki_plugins["action"]["delete"] = "ewiki_page_delete";
 
 #-- helper vars ---------------------------------------------------
 $ewiki_config["idf"]["url"] = array("http://", "mailto:", EWIKI_IDF_INTERNAL, "ftp://", "https://", "data:", "irc://", "telnet://", "news://", "chrome://", "file://", "gopher://", "httpz://");
@@ -1646,11 +1647,11 @@ function ewiki_page_edit_form(&$id, &$data, &$hidden_postdata)
             $data["content"] = $question;
         } else
             $data["content"] = $data["content"];
-		
-		$data["content"] = strip_tags($data["content"]); //modification! remove html tags from original post content during conversion.
+
+        $data["content"] = strip_tags($data["content"]); //modification! remove html tags from original post content during conversion.
         $data["content"] .= "\n\n" . $a_link . "\n\n" . strip_tags($post["content"]); //modification! remove html from wikified answer
-        
-		$hidden_postdata["qa_wiki_save"] = $id;
+
+        $hidden_postdata["qa_wiki_save"] = $id;
         $hidden_postdata["qa_wiki_new_oid"] = $ewiki_request["qa_wiki_oid"];
     }
 
@@ -1789,7 +1790,7 @@ function ewiki_control_links_list($id, &$data, $action_links, $version = 0)
 
         $o = '<div class="action-links-buttons">';
 
-        foreach ($action_links as $action => $title)
+        foreach ($action_links as $action => $title) {
             if (!empty($ewiki_plugins["action"][$action]) || !empty($ewiki_plugins["action_always"][$action]) || strpos($action, ":/")) {
                 if (EWIKI_PROTECTED_MODE && EWIKI_PROTECTED_MODE_HIDING && !ewiki_auth($id, $data, $action)) {
                     continue;
@@ -1800,6 +1801,7 @@ function ewiki_control_links_list($id, &$data, $action_links, $version = 0)
                         : ewiki_script($action, $id, $version ? array("version" => $version) : NULL)
                     ) . '">' . preg_replace('/(?<!\ )[A-Z]/', ' $0', ewiki_t($title)) . '</a> ';
             }
+        }
         $o .= '</div>';
     }
 
