@@ -57,22 +57,24 @@ class qa_html_theme_layer extends qa_html_theme_base
         require_once QA_PLUGIN_DIR . 'q2a-role-markers/qa-marker-functions.php';
 
         $custom = false;
+        $showIcon = false; //show a shield icon
         if(qa_has_user_title($uid)) //user has custom title
-        {
-            $title = qa_get_user_title($uid);
             $custom = true;
-        }
-        elseif (QA_FINAL_EXTERNAL_USERS) {
+        if (QA_FINAL_EXTERNAL_USERS) {
             $user = get_userdata($uid);
             if (isset($user->wp_capabilities['administrator']) || isset($user->caps['administrator']) || isset($user->allcaps['administrator'])) {
                 $title = 'admin';
+                $showIcon = true;
             } elseif (isset($user->wp_capabilities['moderator']) || isset($user->caps['moderator'])) {
                 $title = 'moderator';
+                $showIcon = true;
             } elseif (isset($user->wp_capabilities['editor']) || isset($user->caps['editor'])) {
                 $title = 'editor';
+                $showIcon = true;
             } elseif (isset($user->wp_capabilities['contributor']) || isset($user->caps['contributor'])) {
                 $title = 'expert';
-            } else
+                $showIcon = true;
+            } elseif($custom == false) //no special role nor custom role 
                 return;
         } else {
             $levelno = qa_db_read_one_value(
@@ -84,33 +86,43 @@ class qa_html_theme_layer extends qa_html_theme_base
             );
             $level = qa_user_level_string($levelno);
             if ($level == qa_lang('users/level_admin') || $level == qa_lang('users/level_super'))
+            {
                 $title = 'admin';
+                $showIcon = true;
+            }
             elseif ($level == qa_lang('users/level_moderator'))
+            {
                 $title = 'moderator';
+                $showIcon = true;
+            }
             elseif ($level == qa_lang('users/level_editor'))
+            {
                 $title = 'editor';
+                $showIcon = true;
+            }
             elseif ($level == qa_lang('users/level_expert'))
+            {
                 $title = 'expert';
-            else
+                $showIcon = true;
+            }
+            elseif($custom == false) //no special role nor custom role 
                 return;
         }
+
+        if($custom) //override the default role name with the custom
+            $title = qa_get_user_title($uid);
         $titleSimple = qa_simplify_user_title($title);
 
         $rolemarker = '';
-
         if (qa_opt('marker_plugin_role_names')) {
-            $rolemarker .= '<span class="qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">&nbsp;<b>[' . $this->getrolename($uid) . ']</b>  </span>';
-        }
-        if(!$custom) //don't add icon/char if role is custom
-        {
-            if (qa_opt('marker_plugin_icons_images')) {
+            if (qa_opt('marker_plugin_icons_images')) { //enable icons
                 $svgFile = qa_get_badge_svg("qa-marker-svg-" . $titleSimple);
-                $rolemarker .= '<div class="qa-avatar-marker">'. $svgFile .'</div>';
-            } else {
+                $rolemarker .= '<span class="qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">&nbsp;<b>[' . $this->getrolename($uid) . ']</b>  </span>';
+                $rolemarker .= '<div class="qa-avatar-marker">'. $svgFile .'</div>'; //icon portion
+            } else { //no icon
                 $rolemarker .= '<span class="qa-who-marker qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
             }
         }
-
         return $rolemarker;
     }
     function getuserfromhandle($handle)
