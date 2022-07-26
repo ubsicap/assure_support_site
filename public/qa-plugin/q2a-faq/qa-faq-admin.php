@@ -193,13 +193,13 @@ class qa_faq_admin
             'note' => qa_lang('qa-faq/admin_page_slug_note'),
         );
         $fields[] = array(
-            'label' => qa_lang('qa-faq/admin_pre_html'),
+            'label' => qa_lang('qa-faq/admin_page_pre_html'),
             'tags' => 'NAME="faq_pre_html"',
             'value' => qa_html(qa_opt('faq_pre_html')),
-            'note' => qa_lang('qa-faq/admin_html_note'),
+            'note' => qa_lang('qa-faq/admin_page_html_note'),
         );
         $fields[] = array(
-            'label' => qa_lang('qa-faq/admin_post_html'),
+            'label' => qa_lang('qa-faq/admin_page_post_html'),
             'tags' => 'NAME="faq_post_html"',
             'value' => qa_html(qa_opt('faq_post_html')),
             'note' => qa_lang('qa-faq/admin_html_note'),
