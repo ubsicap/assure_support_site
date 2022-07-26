@@ -19,7 +19,7 @@ return array(
     'recover_body' => "Please click below to recover your previous support.paratext.org account and migrate it to ^site_title.\n\n^url\n\nAlternatively, enter the code below into the field provided.\n\nCode: ^code\n\nIf you did not ask to reset your password, please ignore this message.\n\nThank you,\n^site_title",
     'recover_subject' => '^site_title - Recover Existing Account',
     'reclaim_page_title' => 'Finish Reclaiming Your Account',
-    'reclaim_enter_new_username' => 'We recommend that you update your username. The current username for your account is provided below. You may choose to keep this username, or create a new one.<br><br>Please note that this forum is publicly available, so be mindful about choosing a username that contains any identifying information.',
+    'reclaim_enter_new_username' => 'We recommend that you update your username. The current username for your account is provided below. You may choose to keep this username, or create a new one. Any occurrences of the username you see below on this forum will be replaced by the username you choose. This <b>cannot</b> be undone.<br><br>Please note that this forum is publicly available, so be mindful about choosing a username that contains any identifying information.',
     'reclaim_set_new_pass' => 'Set a new password for this account.',
     'reclaim_finish' => 'Update Username and Password',
     'admin_redirect_page' => 'Location to redirect users after account reclaim. Leave blank to redirect to homepage.',
