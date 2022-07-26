@@ -114,12 +114,19 @@ class qa_html_theme_layer extends qa_html_theme_base
         $titleSimple = qa_simplify_user_title($title);
 
         $rolemarker = '';
-        if (qa_opt('marker_plugin_role_names')) {
-            if (qa_opt('marker_plugin_icons_images') && $showIcon) { //icons enabled and user deserves an icon
-                $svgFile = qa_get_badge_svg("qa-marker-svg-" . $titleSimple);
+        if (qa_opt('marker_plugin_role_names')) 
+        {
+            if (qa_opt('marker_plugin_icons_images') && $showIcon) //icons enabled
+            {
                 $rolemarker .= '<span class="qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">&nbsp;<b>[' . $this->getrolename($uid) . ']</b>  </span>';
-                $rolemarker .= '<div class="qa-avatar-marker">'. $svgFile .'</div>'; //icon portion
-            } else { //no icon
+                if($showIcon) //user deserves an icon
+                {
+                    $svgFile = qa_get_badge_svg("qa-marker-svg-" . $titleSimple);
+                    $rolemarker .= '<div class="qa-avatar-marker">'. $svgFile .'</div>'; //icon portion
+                }
+            } 
+            else //icons disabled 
+            {
                 $rolemarker .= '<span class="qa-who-marker qa-who-marker-' . $titleSimple . '" title="' . qa_html($titleSimple) . '">' . qa_opt('marker_plugin_who_text') . '</span>';
             }
         }
