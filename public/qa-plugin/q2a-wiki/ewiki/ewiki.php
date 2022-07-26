@@ -1363,6 +1363,10 @@ function ewiki_chunked_page($action, $id, $dir = -1, $start = 10, $end = 1, $lim
 
 
 
+function ewiki_page_delete($id, $data, $action) {
+    $args = array("id" => $id, "version" => 'version');
+    ewiki_database_mysql('DELETE', $args, null, null);
+}
 
 
 
