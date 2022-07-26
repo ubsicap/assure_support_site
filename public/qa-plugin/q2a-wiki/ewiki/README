@@ -1171,7 +1171,6 @@ The recommended settings are:
          ; is still enabled by some providers, which try to keep their buggy
          ; site running.
          ; As a workaround (SlowSlowSlow, and not WikiWiki!) you can use
-         ; fragments/strip_wonderful_slashes.php
 
   magic_quotes_runtime = off    ; This is even more awful than the above,
                                 ; and if you cannot disable it, then you

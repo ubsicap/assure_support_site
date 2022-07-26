@@ -34,12 +34,6 @@ chdir(dirname(__FILE__));
    # to here, if you wish to change some of them
 
 
- #-- fix broken PHP setup
- /*
- if (!function_exists("get_magic_quotes_gpc") || get_magic_quotes_gpc()) {
-    include("fragments/strip_wonderful_slashes.php");
- }
- */
  if (ini_get("register_globals")) {
     include("fragments/strike_register_globals.php");
  }
