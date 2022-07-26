@@ -19,6 +19,7 @@
 		exit;
 	}
 
+    qa_register_phrases('lang/qa-faq-lang-*.php', 'qa-faq');
 
 	qa_register_plugin_module('page', 'qa-faq-page.php', 'qa_faq_page', 'FAQ Page');
 	qa_register_plugin_layer('qa-faq-layer.php', 'FAQ Layer');
