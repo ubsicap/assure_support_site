@@ -1,6 +1,7 @@
 $ (document).ready (function () {
+  //check sensitive info in title
   $ ('#title').change (function () {
-    console.log("change")
+    console.log ('change');
     var VAL = this.value;
     var email = new RegExp (
       "\\b[A-Za-z\\.0-9!#$%&'*+/=?^_`{|}~-]+@[A-Za-z1-9-]+\\.[A-Za-z0-9-]+\\b"
@@ -15,7 +16,7 @@ $ (document).ready (function () {
     }
   });
 
-  //check for sensitive info in tagbox, either add or remove warning
+  //check sensitive info in tagbox, either add or remove warning
   $ ('.tagbox > ul').bind ('DOMSubtreeModified', function () {
     var listItems = $ ('.tagbox > ul li');
     var notFound = true;
@@ -41,8 +42,29 @@ $ (document).ready (function () {
       $ ('.tagbox').parent ().find ('.post-validator-error').remove ();
     }
   });
-});
 
+  //check sensitive info in comments
+  $ ('.qa-form-light-button-comment').click (function () {
+    if ($ (' .qa-c-form ').css ('display') != 'none') {
+      $("textarea").on('input',function () {
+        var VAL = this.value;
+        var email = new RegExp (
+          "\\b[A-Za-z\\.0-9!#$%&'*+/=?^_`{|}~-]+@[A-Za-z1-9-]+\\.[A-Za-z0-9-]+\\b"
+        );
+        if (email.test (VAL)) {
+          if ($("textarea").parent ().find ('.post-validator-error').length === 0) {
+            var warning = createWarning ('email');
+            $("textarea").parent ().append (warning);
+          }
+        } else {
+          $("textarea").parent ().find ('.post-validator-error').remove ();
+        }
+      });
+    }
+  });
+
+
+});
 function createWarning (category) {
   var warning =
     '<div class="post-validator-error">Sensitive information detected: ' +
