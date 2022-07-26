@@ -21,11 +21,11 @@
 
 
 	qa_register_plugin_module('page', 'qa-wiki-page.php', 'qa_wiki_page', 'Wiki Page');
-	qa_register_plugin_module('module', 'qa-wiki-admin.php', 'qa_wiki_admin', 'Wiki Admin');
+	qa_register_plugin_module('process', 'qa-wiki-admin.php', 'qa_wiki_admin', 'Wiki Admin');
 	qa_register_plugin_layer('qa-wiki-layer.php', 'Wiki Layer');
 
 	qa_register_plugin_phrases('qa-wiki-lang-*.php', 'wiki_page');
-	
+
 	function qa_wiki_plugin_meta($oid) {
 
 		qa_db_query_sub(
@@ -49,7 +49,7 @@
 			UNIQUE (user_id,meta_key)
 			) ENGINE=MyISAM  DEFAULT CHARSET=utf8'
 		);
-		
+
 		qa_db_query_sub(
 			'INSERT INTO ^postmeta (post_id,meta_key,meta_value) VALUES (#,$,$) ON DUPLICATE KEY UPDATE meta_value=$',
 			$oid,'is_wikified','true','true'
@@ -65,7 +65,7 @@
 			),true
 		);
 		if(function_exists('qa_badge_award_check') && qa_opt('badge_active') && qa_opt('badge_custom_badges'))
-			qa_badge_award_check(array('wikifier','wacky_wikifier','wicked_wikifier'), $var, qa_get_logged_in_userid(), NULL, 2); 
+			qa_badge_award_check(array('wikifier','wacky_wikifier','wicked_wikifier'), $var, qa_get_logged_in_userid(), NULL, 2);
 	}
 	qa_register_plugin_overrides('qa-wiki-overrides.php');
 
@@ -76,7 +76,3 @@
 			return !qa_permit_value_error(qa_opt($opt), qa_get_logged_in_userid(), qa_get_logged_in_level(), qa_get_logged_in_flags());
 		}
 	}
-
-/*
-	Omit PHP closing tag to help avoid accidental output
-*/

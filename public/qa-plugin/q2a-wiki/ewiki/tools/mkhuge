@@ -24,7 +24,6 @@ PLUGINS1="
 	page_wordindex.php calendar.php notify.php
 	"
 PLUGINS0="
-	../fragments/strip_wonderful_slashes.php
 	../fragments/strike_register_globals.php
 	imgresize_gd.php markup_css.php patchsaving.php
 	email_protect.php like_pages.php

@@ -14,8 +14,8 @@
 
 
  #-- that's all:
- mysql_connect("localhost", "DBUSER", "DBPASSWORD");
- mysql_query("use DATABASENAME");
+ mysqli_connect("localhost", "DBUSER", "DBPASSWORD");
+ mysqli_query("use DATABASENAME");
 
  include("ewiki.php");
 
