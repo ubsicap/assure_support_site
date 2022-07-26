@@ -183,6 +183,7 @@ $ewiki_config["action_links"]["view"] = array_merge(
         "links" => "BACKLINKS",
         "info" => "PAGEHISTORY",
         "like" => "LIKEPAGES",
+        "delete" => "DELETETHISPAGE",
     ),
     @$ewiki_config["action_links"]["view"] ? $ewiki_config["action_links"]["view"] : array()
 );
@@ -297,6 +298,7 @@ $ewiki_t["C"] = array_merge(@$ewiki_t["C"] ? $ewiki_t["C"] : array(), array(
 ));
 #
 $ewiki_t["en"] = array_merge(@$ewiki_t["en"], array(
+    "DELETETHISPAGE" => "DeleteThisPage",
     "EDITTHISPAGE" => "EditThisPage",
     "APPENDTOPAGE" => "Add to",
     "BACKLINKS" => "BackLinks",
@@ -326,6 +328,7 @@ $ewiki_t["en"] = array_merge(@$ewiki_t["en"], array(
 				to just start writing. With <a href=\"" . EWIKI_SCRIPT . "WikiMarkup\">WikiMarkup</a>
 		you can style your text later.<br>",
     "EDIT_FORM_2" => "",
+    // Why is this comment here...?
     //~ <br>Please do not write things, which may make other
     //~ people angry. And please keep in mind that you are not all that
     //~ anonymous in the internet (find out more about your computers
