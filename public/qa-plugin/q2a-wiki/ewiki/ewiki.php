@@ -1635,6 +1635,7 @@ function ewiki_page_edit_form(&$id, &$data, &$hidden_postdata) {
 		}
 		else
 			$data["content"] = $data["content"];
+		$data = strip_tags($data); //MODIFICATION remove html tags
 		$data["content"] .= "\n\n".$a_link."\n\n".$post["content"];
 		$hidden_postdata["qa_wiki_save"] = $id;
 		$hidden_postdata["qa_wiki_new_oid"] = $ewiki_request["qa_wiki_oid"];
@@ -1658,7 +1659,6 @@ function ewiki_page_edit_form(&$id, &$data, &$hidden_postdata) {
 	foreach ($hidden_postdata as $name => $value) {
 		$o .= '<input type="hidden" name="'.$name.'" value="'.$value.'">'."\n";
 	}
-
 	if (EWIKI_CHARSET=="UTF-8") {
 	  $data["content"] = utf8_encode($data["content"]);
 	}
