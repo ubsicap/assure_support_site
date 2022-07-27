@@ -4,11 +4,8 @@ $ (document).ready (function () {
   $ ('#title').change (function () {
     console.log ('title change');
     var warningMessage = checkField(this.value); //validate the text field
-
     var errorRegion = $('#title').parent(); //area for the warning message
-    errorRegion.find('.post-validator-error').remove(); //remove previous warning if there was one
-    if(warningMessage != null) //there is a warning, add it
-    errorRegion.append(warningMessage);
+    displayWarning(warningMessage, errorRegion);
   });
 
   //check sensitive info in content
@@ -97,4 +94,11 @@ function createWarning (entries) {
     entries +
     '<br>Please refer to: <a href="./best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
   return warning;
+}
+
+function displayWarning(warning, region) //add message to proper place in the html
+{
+  errorRegion.find('.post-validator-error').remove(); //remove previous warning if there was one
+  if(warningMessage != null) //there is a warning, add it
+  errorRegion.append(warningMessage);
 }
