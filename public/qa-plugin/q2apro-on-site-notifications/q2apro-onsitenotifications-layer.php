@@ -50,6 +50,16 @@ class qa_html_theme_layer extends qa_html_theme_base
 					');
             }
 
+            //force notification button to show mobile on smaller resolutions, sadly !important is needed here
+            $this->output('
+                <style type="text/css">
+                    li.notf-bubble.visible-lg 
+                    {
+                        display: inline-flex !important;
+                    }
+                </style>'
+            );
+
             // hack for snow theme (q2a v1.6) to position the notification box more to the right
             if (qa_opt('site_theme') == 'Snow') {
                 $this->output('
