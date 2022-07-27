@@ -4,7 +4,8 @@ Repository and information for the Assure Support Site
 
 ## Table of Contents
 
-1. [Structure](#structure)
+1. [Repository Structure](#repository-structure)
+1. [Overview](#overview)
 1. [Local Startup](#local-startup)
 1. [Launching to AWS](#launching-to-aws)
 1. [Creating RDS Database](#creating-rds-database)
@@ -15,7 +16,7 @@ Repository and information for the Assure Support Site
 1. [Migrating Database Content](#migrating-database-content)
 1. [Custom Plugins](#custom-plugins)
 
-## Structure
+## Repository Structure
 
 Notable Repository Contents:
 
@@ -23,6 +24,7 @@ Notable Repository Contents:
 ./
 ├── config/                     # Secure config info
 │   └── qa-config-secure.php    # Contains MySQL credentials*
+├── documentation/              # Additional documentation
 ├── public/                     # Question2Answer website source code
 │   ├── assets/                 # Images, audio/video files, etc.
 │   ├── qa-custom-pages/        # HTML for custom pages
@@ -40,6 +42,12 @@ Notable Repository Contents:
 ```
 
 `*` Removed from `public/` and referenced by `public/qa-config.php` for [security](https://docs.question2answer.org/install/security/).
+
+## Overview
+
+This repository holds the source code for the Assure Alliance Support Site (working title "`Ask Ebenezer`"). This project was the work of the Summer 2022 internship at SIL, by Lingxin Chen, Danny Hammer, and Daniel March.
+
+The setup and installation for this website is a multi-step process that involves Amazon AWS, Docker, LetsEncrypt, and DNS servers. As such, the installation process can be found on the [installation and setup](https://github.com/ubsicap/assure_support_site/tree/master/documentation/InstallationAndSetup.md) page. Information about plugins and site settings can be found on the [configuration](https://github.com/ubsicap/assure_support_site/tree/master/documentation/Configuration.md) page
 
 ## Local Startup
 
@@ -275,12 +283,3 @@ Migrating data to the server depends on which database is implemented.
         - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p q2adb < Dump20220701.sql`
 
 Congratulations, you’re done. You can verify by either checking the site or the data through MySQL Workbench.
-
-## Custom Plugins
-
-There are two custom plugins included in this repository:
-
--   [`public/qa-plugin/account-reclaim`](https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/account-reclaim)
--   [`public/qa-plugin/auto-prune-accounts`](https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/auto-prune-accounts)
-
-Additional information for each plugin can be found in their `README.md` files linked above. In summary: `account-reclaim` provides the functionality for sending recovery emails and allowing users to "reclaim" archived Discourse accounts. `auto-prune-accounts` automatically marks unverified accounts for deletion after a specified amount of time and bulk-deletes them once triggered.
