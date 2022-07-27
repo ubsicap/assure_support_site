@@ -107,7 +107,7 @@ function createWarning (entries) {
 
 function displayWarning(warning, region) //add message to proper place in the html
 {
-  errorRegion.find('.post-validator-error').remove(); //remove previous warning if there was one
-  if(warningMessage != null) //there is a warning, add it
-  errorRegion.append(warningMessage);
+  region.find('.post-validator-error').remove(); //remove previous warning if there was one
+  if(warning != null) //there is a warning, add it
+  region.append(warning);
 }
