@@ -47,7 +47,7 @@ Notable Repository Contents:
 
 This repository holds the source code for the Assure Alliance Support Site (working title "`Ask Ebenezer`"). This project was the work of the Summer 2022 internship at SIL, by Lingxin Chen, Danny Hammer, and Daniel March.
 
-The setup and installation for this website is a multi-step process that involves Amazon AWS, Docker, LetsEncrypt, and DNS servers. As such, the installation process can be found on the [installation and setup](https://github.com/ubsicap/assure_support_site/tree/master/documentation/InstallationAndSetup.md) page. Information about plugins and site settings can be found on the [configuration](https://github.com/ubsicap/assure_support_site/tree/master/documentation/Configuration.md) page
+The setup and installation for this website is a multi-step process that involves Amazon Web Services, Docker, LetsEncrypt, and DNS servers. As such, the installation process can be found on the [installation and setup](https://github.com/ubsicap/assure_support_site/tree/master/documentation/InstallationAndSetup.md) page. Information about plugins and site settings can be found on the [configuration](https://github.com/ubsicap/assure_support_site/tree/master/documentation/Configuration.md) page
 
 ## Local Startup
 

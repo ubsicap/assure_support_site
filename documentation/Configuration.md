@@ -72,4 +72,4 @@ Below is a list of all [Q2A Plugins](https://docs.question2answer.org/addons/plu
 
 ## Pages
 
-Several custom pages are included in the site. While Q2A supports the creation of custom pages through the administration panel, we have also included the HTML in [this repository](https://github.com/ubsicap/assure_support_site/tree/master/public/qa-custom-pages) in case the database is cleared.
+Several custom pages are included in the site. While Q2A supports the creation of custom pages through the administration panel, we have also included the HTML in [a subdirectory of the site](https://github.com/ubsicap/assure_support_site/tree/master/public/qa-custom-pages) in case the database is cleared.

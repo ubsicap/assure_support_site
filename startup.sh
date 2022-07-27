@@ -157,7 +157,7 @@ check_credentials() {
     # Set the username, if needed
     if grep -q $RDS_MASTER_USERNAME $CONFIG_PATH;
     then
-        read -p "Set username for the RDS MySQL master account > " QA_MYSQL_USERNAME
+        read -p "Provide the username for the RDS MySQL master account > " QA_MYSQL_USERNAME
     else
         echo '- Username already defined'
     fi
@@ -166,7 +166,7 @@ check_credentials() {
     if grep -q $RDS_MASTER_PASSWORD $CONFIG_PATH;
     then
         stty -echo
-        read -p "Set password for the RDS MySQL master account > " QA_MYSQL_PASSWORD
+        read -p "Provide the password for the RDS MySQL master account > " QA_MYSQL_PASSWORD
         stty echo
         echo
     else
@@ -203,7 +203,7 @@ check_credentials() {
     fi
 
     if [ -z $ADMIN_EMAIL_ADDRESS ]; then
-        read -p "Enter an email account to utilize as the administrator contact > " ADMIN_EMAIL
+        read -p "Enter an email address to utilize as the webmaster/administrator (for contact regarding SSL expiration) > " ADMIN_EMAIL
     else
         echo "- Administrator email already set to $ADMIN_EMAIL_ADDRESS"
         echo "    To change this, modify /etc/environment"
