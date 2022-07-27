@@ -6,6 +6,7 @@ This document is a guide on how to set up the web server on a local machine for 
 
 1. [Before you begin](#before-you-begin)
 1. [Getting Started](#getting-started)
+1. [Database Management](#database-management)
 
 ## Before you begin
 
@@ -43,6 +44,8 @@ A local deployment is necessary during the ETL process to ensure that modified d
 1. Open your web browser to `localhost`.
 1. You will be prompted to create a "Super Administrator" account for the website. This is different than the administrator account for the database, but the same credentials may be used.
 1. Once created, you will be brought to the site's homepage.
+
+## Database Management
 
 You can access the database through [MySQL Workbench](https://www.mysql.com/products/workbench) with the following credentials:
 
