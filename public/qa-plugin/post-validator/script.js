@@ -8,15 +8,19 @@ $ (document).ready (function () {
     displayWarning(warningMessage, errorRegion);
   });
 
-  //check sensitive info in content
-  $ ('#content_ckeditor_ok').change (function () {
-    console.log('change content');
-    if ($ ('#content_ckeditor_ok').parent ().find ('.post-validator-error').length === 0) {
-      var warning = createWarning ('email');
-      $ ('#content_ckeditor_ok').parent ().append (warning);
-    }
+    //check sensitive info in body
+    $.getScript( "/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6" )
+    .done(function( script, textStatus ) {
+      $("iframe").on("load", function() {
+        console.log( $("iframe").contents().find("body"));
+    })
+      
+    })
+    .fail(function( jqxhr, settings, exception ) {
+      console.log( "failed to get editor");
   });
-
+  
+  
   //check sensitive info in tagbox, either add or remove warning
   $ ('.tagbox > ul').bind ('DOMSubtreeModified', function () {
     var listItems = $ ('.tagbox > ul li');
@@ -44,15 +48,6 @@ $ (document).ready (function () {
     }
   });
   
-  //check sensitive info in body
-  $.getScript( "/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6" )
-  .done(function( script, textStatus ) {
-    console.log( $("iframe"));
-  })
-  .fail(function( jqxhr, settings, exception ) {
-    console.log( "failed to get editor");
-});
-
   //check sensitive info in comments
   $ ('.qa-form-light-button-comment').click (function () {
     if ($ (' .qa-c-form ').css ('display') != 'none') {
