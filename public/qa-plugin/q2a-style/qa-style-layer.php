@@ -17,7 +17,7 @@ class qa_html_theme_layer extends qa_html_theme_base
                 </style>'
             );
         }
-        if($this->template == "" || $this->template == "questions" || $this->template == "unanswered" || $this->template == "users")
+        if($this->template == "home" || $this->template == "questions" || $this->template == "unanswered" || $this->template == "users")
         {
             $this->output('
                 <style>
