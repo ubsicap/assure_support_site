@@ -167,6 +167,9 @@
     color: inherit;
     opacity: .85;
 }
+#nfyReadClose:hover, #nfyReadClose:focus {
+    opacity: 1;
+}
 
 /* snow flat theme */
 .qam-account-items-wrapper #osnbox {
