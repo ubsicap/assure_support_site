@@ -5,9 +5,10 @@ $ (document).ready (function () {
     console.log ('title change');
     var warningMessage = checkField(this.value); //validate the text field
 
-    this.parent().find('.post-validator-error').remove(); //remove previous warning if there was one
+    var errorRegion = $('#title').parent(); //area for the warning message
+    errorRegion.parent().find('.post-validator-error').remove(); //remove previous warning if there was one
     if(warningMessage != null) //there is a warning, add it
-      this.parent().append(warningMessage);
+    errorRegion.parent().append(warningMessage);
   });
 
   //check sensitive info in content
