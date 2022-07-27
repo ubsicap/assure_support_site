@@ -12,7 +12,8 @@
     top: 31px;
     left: -280px;
     width: 460px;
-    background: #fefefe;
+    background: #337ab7;
+    color: #fff;
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
     box-shadow: 4px 4px 7px #ababab;
@@ -164,7 +165,8 @@
 #nfyReadClose {
     float: right;
     cursor: pointer;
-    color: #333;
+    color: inherit;
+    opacity: .85;
 }
 
 /* snow flat theme */
