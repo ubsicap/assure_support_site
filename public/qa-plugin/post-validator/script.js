@@ -2,19 +2,12 @@ $ (document).ready (function () {
 
   //check sensitive info in title
   $ ('#title').change (function () {
-    console.log ('change');
-    var VAL = this.value;
-    var email = new RegExp (
-      "\\b[A-Za-z\\.0-9!#$%&'*+/=?^_`{|}~-]+@[A-Za-z1-9-]+\\.[A-Za-z0-9-]+\\b"
-    );
-    if (email.test (VAL)) {
-      if ($ ('#title').parent ().find ('.post-validator-error').length === 0) {
-        var warning = createWarning ('email');
-        $ ('#title').parent ().append (warning);
-      }
-    } else {
-      $ ('#title').parent ().find ('.post-validator-error').remove ();
-    }
+    console.log ('title change');
+    var warningMessage = checkField(this.value); //validate the text field
+    if(warningMessage != null) //there is a warning
+      $ ('#title').parent().append(warningMessage);
+    else //no warning, remove any existing warning
+      $ ('#title').parent().find ('.post-validator-error').remove();
   });
 
   //check sensitive info in content
@@ -76,11 +69,31 @@ $ (document).ready (function () {
 
 });
 
+function checkField(text)
+{
+  var warnings = "";
+  emailMatches = checkEmail(text);
+  if(emailMatches != null) //add all the warnings (if there are any)
+    for(var match of emailMatches)
+      warnings = warnings + "<br>" + match;
 
-function createWarning (category) {
+  if(warning.length == 0)
+    return null; //no warning needed
+  else
+    return createWarning(warnings); //format with warning message
+}
+
+function checkEmail(text) //return null (no match) or an array of all the matches 
+{
+  var matches;
+  var emailRegex = "\\b[A-Za-z\\.0-9!#$%&'*+/=?^_`{|}~-]+@[A-Za-z1-9-]+\\.[A-Za-z0-9-]+\\b";
+  return text.match(emailRegex);
+}
+
+function createWarning (entries) {
   var warning =
     '<div class="post-validator-error">Sensitive information detected: ' +
-    category +
-    '. Please refer to: <a href="./best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
+    entries +
+    'Please refer to: <a href="./best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
   return warning;
 }
