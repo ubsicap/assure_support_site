@@ -6,9 +6,9 @@ $ (document).ready (function () {
     var warningMessage = checkField(this.value); //validate the text field
 
     var errorRegion = $('#title').parent(); //area for the warning message
-    errorRegion.parent().find('.post-validator-error').remove(); //remove previous warning if there was one
+    errorRegion.find('.post-validator-error').remove(); //remove previous warning if there was one
     if(warningMessage != null) //there is a warning, add it
-    errorRegion.parent().append(warningMessage);
+    errorRegion.append(warningMessage);
   });
 
   //check sensitive info in content
