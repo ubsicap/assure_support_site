@@ -16,6 +16,10 @@ Notable Repository Contents:
 ├── config/                     # Secure config info
 │   └── qa-config-secure.php    # Contains MySQL credentials*
 ├── documentation/              # Additional documentation
+│   ├── Configuration.md        # Plugins and admin panel settings
+│   ├── InstallationAndSetup.md # How to deploy for production
+│   ├── LocalDevelopment.md     # How to deploy for local development
+│   └── Maintenance.md          # Database management, SSL certification, etc.
 ├── public/                     # Question2Answer website source code (webroot)
 │   ├── assets/                 # Images, audio/video files, etc.
 │   ├── qa-custom-pages/        # HTML for custom pages
