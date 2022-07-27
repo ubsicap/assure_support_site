@@ -1,4 +1,5 @@
 $ (document).ready (function () {
+
   //check sensitive info in title
   $ ('#title').change (function () {
     console.log ('change');
@@ -13,6 +14,15 @@ $ (document).ready (function () {
       }
     } else {
       $ ('#title').parent ().find ('.post-validator-error').remove ();
+    }
+  });
+
+  //check sensitive info in content
+  $ ('#content_ckeditor_ok').change (function () {
+    console.log('change content');
+    if ($ ('#content_ckeditor_ok').parent ().find ('.post-validator-error').length === 0) {
+      var warning = createWarning ('email');
+      $ ('#content_ckeditor_ok').parent ().append (warning);
     }
   });
 
@@ -65,10 +75,12 @@ $ (document).ready (function () {
 
 
 });
+
+
 function createWarning (category) {
   var warning =
     '<div class="post-validator-error">Sensitive information detected: ' +
     category +
-    '. Please refer to: <a href="https://supportsitetest.tk/best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
+    '. Please refer to: <a href="./best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
   return warning;
 }
