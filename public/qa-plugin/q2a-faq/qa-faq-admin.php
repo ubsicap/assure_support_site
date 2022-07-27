@@ -63,35 +63,14 @@ class qa_faq_admin
 	font-weight:bold;
 	cursor:pointer;
 }';
-            case 'faq_section_0_title':
-                return qa_lang('qa-faq/faq_section_0_title');
-            case 'faq_section_0':
-                return qa_lang('qa-faq/faq_section_0');
-            case 'faq_section_1_title':
-                return qa_lang('qa-faq/faq_section_1_title');
-            case 'faq_section_1':
-                return qa_lang('qa-faq/faq_section_1');
-            case 'faq_section_2_title':
-                return qa_lang('qa-faq/faq_section_2_title');
-            case 'faq_section_2':
-                return qa_lang('qa-faq/faq_section_2');
-            case 'faq_section_3_title':
-                return qa_lang('qa-faq/faq_section_3_title');
-            case 'faq_section_3':
-                return qa_lang('qa-faq/faq_section_3');
-            case 'faq_section_4_title':
-                return qa_lang('qa-faq/faq_section_4_title');
-            case 'faq_section_4':
-                return qa_lang('qa-faq/faq_section_4');
-            case 'faq_section_5_title':
-                return qa_lang('qa-faq/faq_section_5_title');
-            case 'faq_section_5':
-                return qa_lang('qa-faq/faq_section_5');
-            case 'faq_section_6_title':
-                return qa_lang('qa-faq/faq_section_6_title');
-            case 'faq_section_6':
-                return qa_lang('qa-faq/faq_section_6');
             default:
+                // If the option is a FAQ entry, and that entry exists, return it
+                $faq_regex = "/faq_section_\d+(_title)?/";
+                if (preg_match($faq_regex, $option)) {
+                    if (qa_lang('qa-faq/' . $option) != '[qa-faq/' . $option . ']') {
+                        return qa_lang('qa-faq/' . $option);
+                    }
+                }
                 return null;
         }
     }

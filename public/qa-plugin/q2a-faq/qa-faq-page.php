@@ -65,7 +65,7 @@ class qa_faq_page
             $qa_content['custom'] .= "<div class=\"qa-faq-section\">";
             $qa_content['custom'] .= " <details>";
             $qa_content['custom'] .= " <summary class=\"qa-faq-section-title\">$title</summary>";
-            $qa_content['custom'] .= " <br>&emsp;$text";
+            $qa_content['custom'] .= " <br>$text";
             $qa_content['custom'] .= " </details>";
             $qa_content['custom'] .= "</div>";
 
