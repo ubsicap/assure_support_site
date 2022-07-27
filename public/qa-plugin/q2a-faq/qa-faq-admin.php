@@ -102,7 +102,6 @@ class qa_faq_admin
         //	Process form input
         $ok = null;
 
-
         if (qa_clicked('faq_save')) {
 
             qa_opt('faq_css', qa_post_text('faq_css'));

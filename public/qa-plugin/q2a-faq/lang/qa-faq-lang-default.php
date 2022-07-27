@@ -11,7 +11,7 @@ return array(
     // Option values
     'page_title' => 'Frequently Asked Questions',
     'page_pre_html' => 'The following is basic information about our forum. Please read this before posting questions or answers if you are unfamiliar with this sort of forum. Click on any question to show or hide the answer.',
-    'page_post_html' => '<hr>Didn\'t find the answer you were looking for? Please <a href="^qa_path(ask)?cat=">ask your question</a> and help make our community better!', // If you have a "General" category, put it's numerical ID after `?cat=`
+    'page_post_html' => 'Didn\'t find the answer you were looking for? Please <a href="^qa_path(ask)?cat=">ask your question</a> and help make our community better!', // If you have a "General" category, put it's numerical ID after `?cat=`
     'notify_text' => 'First time here? Checkout the ^faq!',
 
 
@@ -20,13 +20,13 @@ return array(
     'faq_section_0' => '^site_title is a community support forum for a variety of Bible translation tools, such as <a href="https://paratext.org/">Paratext</a> and <a href="https://pubassist.paratext.org/">Publishing Assistant</a>. It is a place to ask questions and get support for Bible translation projects.',
 
     'faq_section_1_title' => 'What kinds of questions can I ask here?',
-    'faq_section_1' => 'Any have questions about Bible translation tools are appropriate here. Are you starting a new project and need to know what software to use? Do you need help resolving an issue in your translation software? Not sure how to accomplish a translation task? This forum is the correct place to ask these kinds of questions.<br><br>Before you ask, please make sure to search for a similar question. You can search for questions by their <a href="^site_urlcategories">category</a> <a href="^site_urltags">tag</a> or <a href="^site_urlsearch">title</a>.',
+    'faq_section_1' => 'Any have questions about Bible translation tools are appropriate here. Are you starting a new project and need to know what software to use? Do you need help resolving an issue in your translation software? Not sure how to accomplish a translation task? This forum is the correct place to ask these kinds of questions.<br><br>Before you ask, please make sure to search for a similar question. You can search for questions by their <a href="^site_urlcategories">category</a>, <a href="^site_urltags">tag</a>, or <a href="^site_urlsearch">title</a>.',
 
     'faq_section_2_title' => 'What kinds of questions should be avoided?',
     'faq_section_2' => 'Please avoid asking questions that are too subjective or argumentative. This is not a place to debate politics, theology, or philosophy.',
 
     'faq_section_3_title' => 'What should I avoid in my answers?',
-    'faq_section_3' => '^site_title is a <strong>question and answer</strong> support forum for Bible translation software. It is <strong>not</strong> a discussion group or a place to debate politics, theology, or philosophy.<br/><br/>For brief discussion, or to thank someone for their answer, please post comments, not answers. To post a comment, click the "comment" button below an answer.<center><img src="' . ASSETS_DIR . 'comment.png" alt="Comment Button"></center>',
+    'faq_section_3' => '^site_title is a <strong>question and answer</strong> support forum for Bible translation software. It is <strong>not</strong> a discussion group or a place to debate politics, theology, or philosophy.<br/><br/>For brief discussion, or to thank someone for their answer, please post comments, not answers. To post a comment, click the "comment" button below an answer, as shown in the image below:<center><img src="' . ASSETS_DIR . 'comment.png" alt="Comment Button"></center>',
 
     'faq_section_4_title' => 'What do the points mean? How does point system work?',
     'faq_section_4' => 'Points are a measure of a user\'s reputation and helpfulness on this forum. When a question or answer is voted up, the user who posted it will gain points.<br/><br/>For example, if you ask an interesting question or useful answer, it will likely be voted up. On the other hand if the question is poorly-worded or the answer is misleading - it will likely be voted down. Each up vote on a question will generate <strong>^qa_opt(points_per_q_voted_up) points</strong>, whereas each vote against will subtract <strong>^qa_opt(points_per_q_voted_down) points</strong>. The following table lists points gained per activity:<br/><br/>^pointstable',
