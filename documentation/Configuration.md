@@ -1,5 +1,7 @@
 # Site Configuration Information
 
+This document contains information such about installed plugins, custom pages, and admin panel configurations.
+
 ## Table of Contents
 
 1. [Plugins](#plugins)
