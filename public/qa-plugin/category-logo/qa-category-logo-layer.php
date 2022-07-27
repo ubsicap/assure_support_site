@@ -65,7 +65,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 		if(strlen($src)) {
 			$alt = 'icon';
 			$style = 'width:22px;height:22px;display:inline-block';
-			return '<img src="'.$src.'" alt="'.$alt.'" style="'.$style.'">';
+			return '<img class="qa-category-logo" src="'.$src.'" alt="'.$alt.'" style="'.$style.'">';
 		} else 
 			return '';
 		
