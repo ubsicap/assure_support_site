@@ -17,6 +17,16 @@ class qa_html_theme_layer extends qa_html_theme_base
                 </style>'
             );
         }
+        if($this->template == "" || $this->template == "questions" || $this->template == "unanswered" || $this->template == "users")
+        {
+            $this->output('
+                <style>
+                    .qa-q-item-tag-list {
+                        font-size: 12px;
+                    }
+                </style>'
+            );
+        }
         //css for the selected page on the tob bar,
         $this->output('
             <style>
