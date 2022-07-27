@@ -4,6 +4,9 @@ qa-cache/*/
 # Ignore backed up SSL certs
 local_certs
 
+# Also ignore the install script, once it's been moved
+config/qa-install.php
+
 # This is a premium plugin; it is not public code, so don't track it
 pupi-dm
 
@@ -20,6 +23,7 @@ dbdata
 .vscode
 *.pem
 *.ppk
+vendor
 
 # Anything in this folder will not be tracked, obviously
 untracked/
