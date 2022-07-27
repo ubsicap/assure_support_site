@@ -64,7 +64,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 		//check if the logo url has been set or not
 		if(strlen($src)) {
 			$alt = 'icon';
-			$style = 'width:22px;height:22px;display:inline-block';
+			$style = 'width:22px;height:22px;display:inline-block;margin-right:2px;';
 			return '<img class="qa-category-logo" src="'.$src.'" alt="'.$alt.'" style="'.$style.'">';
 		} else 
 			return '';
