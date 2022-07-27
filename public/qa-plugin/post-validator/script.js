@@ -42,6 +42,15 @@ $ (document).ready (function () {
       $ ('.tagbox').parent ().find ('.post-validator-error').remove ();
     }
   });
+  
+  //check sensitive info in body
+  $.getScript( "/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6" )
+  .done(function( script, textStatus ) {
+    console.log( $("iframe"));
+  })
+  .fail(function( jqxhr, settings, exception ) {
+    console.log( "failed to get editor");
+});
 
   //check sensitive info in comments
   $ ('.qa-form-light-button-comment').click (function () {
