@@ -93,7 +93,7 @@ function checkField(text)
 function checkEmail(text) //return null (no match) or an array of all the matches 
 {
   var matches;
-  var emailRegex = "\\b[A-Za-z\\.0-9!#$%&'*+/=?^_`{|}~-]+@[A-Za-z1-9-]+\\.[A-Za-z0-9-]+\\b";
+  var emailRegex = "%\\b[A-Za-z\\.0-9!#$%&'*+/=?^_`{|}~-]+@[A-Za-z1-9-]+\\.[A-Za-z0-9-]+\\b%g";
   return text.match(emailRegex);
 }
 
