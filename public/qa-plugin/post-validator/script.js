@@ -77,7 +77,7 @@ function checkField(text)
     for(var match of emailMatches)
       warnings = warnings + "<br>" + match;
 
-  if(warning.length == 0)
+  if(warnings.length == 0)
     return null; //no warning needed
   else
     return createWarning(warnings); //format with warning message
