@@ -11,6 +11,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 		//check if it is for categories in the list
 		$flag = (strlen(@$parts['data']) !== 0) && ($this->compare_str($class, "-where"));
 		if($flag && qa_opt('category_logo_on')) {
+			@$parts['prefix'] = ''; //i.e. where meta should be "LOGO category" instead of "in LOGO category"
 			$logo = $this->get_logo($parts['data']);
 			$this->output(
 				'<' . $outertag . ' class="' . $class . (isset($extraclass) ? (' ' . $extraclass) : '') . '">',
