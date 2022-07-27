@@ -4,10 +4,10 @@ $ (document).ready (function () {
   $ ('#title').change (function () {
     console.log ('title change');
     var warningMessage = checkField(this.value); //validate the text field
-    if(warningMessage != null) //there is a warning
-      $ ('#title').parent().append(warningMessage);
-    else //no warning, remove any existing warning
-      $ ('#title').parent().find ('.post-validator-error').remove();
+
+    this.parent().find('.post-validator-error').remove(); //remove previous warning if there was one
+    if(warningMessage != null) //there is a warning, add it
+      this.parent().append(warningMessage);
   });
 
   //check sensitive info in content
@@ -94,6 +94,6 @@ function createWarning (entries) {
   var warning =
     '<div class="post-validator-error">Sensitive information detected: ' +
     entries +
-    'Please refer to: <a href="./best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
+    '<br>Please refer to: <a href="./best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
   return warning;
 }
