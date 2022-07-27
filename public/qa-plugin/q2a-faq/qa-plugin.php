@@ -14,16 +14,16 @@
 */
 
 
-	if (!defined('QA_VERSION')) { // don't allow this page to be requested directly from browser
-		header('Location: ../../');
-		exit;
-	}
+if (!defined('QA_VERSION')) { // don't allow this page to be requested directly from browser
+    header('Location: ../../');
+    exit;
+}
 
-    qa_register_plugin_phrases('lang/qa-faq-lang-*.php', 'qa-faq');
+qa_register_plugin_phrases('lang/qa-faq-lang-*.php', 'qa-faq');
 
-	qa_register_plugin_module('page', 'qa-faq-page.php', 'qa_faq_page', 'FAQ Page');
-	qa_register_plugin_layer('qa-faq-layer.php', 'FAQ Layer');
-	qa_register_plugin_module('module', 'qa-faq-admin.php', 'qa_faq_admin', 'Faq Admin');
+qa_register_plugin_module('page', 'qa-faq-page.php', 'qa_faq_page', 'FAQ Page');
+qa_register_plugin_layer('qa-faq-layer.php', 'FAQ Layer');
+qa_register_plugin_module('module', 'qa-faq-admin.php', 'qa_faq_admin', 'Faq Admin');
 	
 
 /*
