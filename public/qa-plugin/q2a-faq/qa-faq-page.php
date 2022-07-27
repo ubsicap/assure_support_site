@@ -54,7 +54,7 @@ class qa_faq_page
 
         $qa_content['title'] = qa_opt('faq_page_title');
 
-        $qa_content['custom'] = $this->filter_subs(qa_opt('faq_pre_html'));
+        $qa_content['custom'] = $this->filter_subs(qa_opt('faq_pre_html')) + "<br><br>";
 
         $idx = 0;
 

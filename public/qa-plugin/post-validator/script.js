@@ -88,7 +88,7 @@ function checkField(text)
 function checkEmail(text) //return null (no match) or an array of all the matches 
 {
   var matches;
-  var emailRegex = "\\b[A-Za-z\\.0-9!#$%&'*+/=?^_`{|}~-]+@[A-Za-z1-9-]+\\.[A-Za-z0-9-]+\\b";
+  var emailRegex = /\b[A-Za-z\.0-9!#$%&'*+/=?^_`{|}~-]+@[A-Za-z1-9-]+\.[A-Za-z0-9-]+\b/g;
   return text.match(emailRegex);
 }
 
@@ -102,7 +102,7 @@ function createWarning (entries) {
 
 function displayWarning(warning, region) //add message to proper place in the html
 {
-  errorRegion.find('.post-validator-error').remove(); //remove previous warning if there was one
-  if(warningMessage != null) //there is a warning, add it
-  errorRegion.append(warningMessage);
+  region.find('.post-validator-error').remove(); //remove previous warning if there was one
+  if(warning != null) //there is a warning, add it
+  region.append(warning);
 }
