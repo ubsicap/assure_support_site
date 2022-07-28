@@ -68,13 +68,13 @@ class post_validator_admin
 				array( //mac
 					'type' => 'checkbox',
 					'label' => qa_lang('post_validator_lang/check_mac'),
-					'tags' => 'name="check ip"',
+					'tags' => 'name="check mac"',
 					'value' => qa_opt('post_val_check_mac'),
 				),
 				array( //image
 					'type' => 'checkbox',
 					'label' => qa_lang('post_validator_lang/check_image'),
-					'tags' => 'name="check ip"',
+					'tags' => 'name="check image"',
 					'value' => qa_opt('post_val_check_image'),
 				),
 			),
