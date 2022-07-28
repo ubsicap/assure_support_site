@@ -44,7 +44,7 @@ class qa_faq_admin
 	position: relative;
 }
 .notify-faq > a {
-    color: #3b9bed
+    color: #3b9bed;
     font-weight: bold;
 }
 
