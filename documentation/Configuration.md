@@ -4,7 +4,6 @@ This document contains information such about installed plugins, custom pages, a
 
 ## Table of Contents
 
--   [Table of Contents](#table-of-contents)
 -   [Pages](#pages)
 -   [Plugins](#plugins)
     -   [account-reclaim](#account-reclaim)
@@ -66,7 +65,7 @@ Support for Google Analytics. Requires a tracking code from Google Analytics.
 
 ### [post-validator](../public/qa-plugin/post-validator)
 
-_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/post-validatorREADME.md).
+_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/post-validator/README.md).
 
 Warns users if they attempt to post identifying information.
 
