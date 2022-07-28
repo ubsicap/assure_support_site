@@ -13,8 +13,12 @@ $ (document).ready (function () {
   //check sensitive info in body
   $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
     .done (function (script, textStatus) {
+      console.log("script")
+      console.log($("iframe"))
       $ ('iframe').on ('load', function () {
+        console.log("load")
         $ ('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {
+          console.log("bind")
           var bodies = $ ('iframe').contents ().find ('body');
           var warningMessage = checkField ($(bodies).textWithLineBreaks()); //validate the text field
           var errorRegion = $ ('#cke_content').parent (); //area for the warning message
@@ -172,6 +176,7 @@ function displayWarning (
 (function ($) {
   'use strict';
   $.fn.textWithLineBreaks = function () {
+    console.log("fun")
       var onnewline = true,
           f = function (n) {
               var ret = "";
