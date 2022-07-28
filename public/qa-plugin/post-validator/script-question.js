@@ -40,11 +40,26 @@ $ (document).ready (function () {
     {
       $ ('textarea').on ('input', function () {
         var warningMessage = checkField (this.value); //validate the text field
-        warningMessage = '<tr><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
-        var errorRegion = $ ('textarea').parent ().parent().parent(); //area for the warning message
-        displayWarning (warningMessage, errorRegion);
+        if(warningMessage != null) {
+          warningMessage = '<tr><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
+    var errorRegion = $ ('textarea').parent ().parent().parent(); //area for the warning message
+    displayWarningForComment (warningMessage, errorRegion);
+        }
       });
     }
   });
 });
 
+function displayWarningForComment(warning, region) //add message to proper place in the html
+{
+  var found = region.find('.post-validator-error');
+  if($(found)) {
+    $(found).parent().parent().remove();
+  }
+  //there is a warning, add it
+  if (warning != null)  {
+    console.log(region.last())
+    $(warning).insertBefore(region.last());
+  }
+    // region.append (warning);
+}

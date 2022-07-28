@@ -12,6 +12,7 @@ function checkField(text)
   
   if (warnings.length == 0)
       return null; //no warning needed
+    console.log(warnings)
   return createWarning (warnings); //format with warning message
 }
 
