@@ -8,7 +8,7 @@ class account_reclaim_admin
 	{
 		switch ($option) {
 			case 'account_reclaim_enabled':
-				return true;
+				return 1; // true
 			default:
 		}
 	}

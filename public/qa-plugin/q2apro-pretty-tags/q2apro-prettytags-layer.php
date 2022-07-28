@@ -120,7 +120,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 	public function form_text_single_row($field, $style)
 	{
 		if (qa_opt('q2apro_prettytags_enabled') && strpos($field['tags'], 'id="tags"') !== false)
-			$this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text" maxlength="'.qa_opt('tag_max_len').'"/>');
+			$this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text"/>');
 		else
 			parent::form_text_single_row($field, $style);
 	}

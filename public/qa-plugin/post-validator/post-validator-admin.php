@@ -8,7 +8,7 @@ class post_validator_admin
 	{
 		switch ($option) {
 			case 'post_validator_enabled':
-				return true;
+				return 1; // true
 			default:
 		}
 	}
