@@ -339,12 +339,11 @@ generate_ssl() {
     # This line is for DEVELOPMENT ONLY. Notice
     # the `--dry-run` flag? Removing that will
     # run in production mode. Production mode is
-    # RATE LIMITED! Don't use it unless you need
-    # to!
+    # RATE LIMITED! Don't use unless you need to!
     #
     #============================================
-    #certbot certonly --dry-run --non-interactive --agree-tos -m daniel_hammer@sil.org -d supportsitetest.tk -d www.supportsitetest.tk --webroot -w $WEBROOT
-    sudo certbot certonly --dry-run \
+    # sudo certbot certonly --dry-run \
+    sudo certbot certonly \
         --non-interactive \
         --agree-tos \
         --expand \
@@ -374,7 +373,7 @@ init_ssl() {
 
     # Make a backup directory for the SSL certs
     sudo mkdir ./local_certs > /dev/null 2>&1
-    sudo cp -Lr /etc/letsencrypt/live/$DOMAIN_NAME/* ./local_certs
+    sudo cp -Lr /etc/letsencrypt/live/$DOMAIN_NAME/ ./local_certs
 
     # Copy the appropriate certs for Portainer
     sudo cp -L ./local_certs/cert.pem ./local_certs/portainer.crt
