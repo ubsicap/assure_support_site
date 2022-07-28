@@ -112,7 +112,7 @@ Now you can launch the website itself.
     - `sh startup.sh`
 1. You may be prompted to provide information such as the AWS RDS credentials, website's domain name, and webmaster's email address.
 1. Once you have provided credentials, the `docker-compose.yml` file will be ran and the Docker containers will start.
-1. Open your web browser to `http://<instance public IP>`.
+1. Open your web browser to `http://<Elastic IP>`.
 1. You will be prompted to create a "Super Administrator" account for the website. This is different than the administrator account for the database, but the same email address may be used.
 1. Once created, you will be brought to the site's homepage.
 1. Ensure that you can navigate to `https://<Elastic IP>` **OR** `https://<Domain Name>` and arrive at the same web page.
