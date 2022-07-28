@@ -109,12 +109,14 @@ function addWarningText(warnings, type) //get the warning text formatted, don't 
 {
   if(warnings == null) //no warning
     return "";
-  var warningText = "<br>&nbsp;&nbsp;" + type + ": "
+  var warningText = "<br>&nbsp;&nbsp;&nbsp;&nbsp;" + type + ": "
   for(var match of warnings)
     warningText += match + ", ";
   warningText = warningText.slice(0, -2); //remove the last space and comma
-  if(warningText.length > 80) //chop off the end of the warning if it is too long
-  warningText = warningText.substring(0,77) + "...";
+
+  var maxWarningLength = 200; //max string length before cutting off
+  if(warningText.length > maxWarningLength) //chop off the end of the warning if it is too long
+    warningText = warningText.substring(0,maxWarningLength-3) + "...";
   return warningText;
 }
 
@@ -176,7 +178,7 @@ function checkRegistrationCode(text) //paratext registration code check i.e. AB1
 function checkImage(text) //check if an image is in the post (only returns true/false, not an array!)
 {
   var valRegex = /<img[^>]*>/;
-  return text.match(valRegex)!=null; //true if an image element is in the text
+  return valRegex.test(text); //true if an image element is in the text
 }
 function checkNames(text) //names may be added in the future, but currently no validation exists
 {
