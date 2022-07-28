@@ -59,6 +59,12 @@ class post_validator_admin
 					'tags' => 'name="check phone"',
 					'value' => qa_opt('post_val_check_phone'),
 				),
+				array( //registration
+					'type' => 'checkbox',
+					'label' => qa_lang('post_validator_lang/check_registration'),
+					'tags' => 'name="check registration"',
+					'value' => qa_opt('post_val_check_registration'),
+				),
 				array( //ip
 					'type' => 'checkbox',
 					'label' => qa_lang('post_validator_lang/check_ip'),
