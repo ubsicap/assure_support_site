@@ -16,8 +16,16 @@ $ (document).ready (function () {
         $ ('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {
           console.log("bind")
           var bodies = $ ('iframe').contents ().find ('body');
-          var warningMessage = checkField ($(bodies).html()); //validate the text field
-          var errorRegion = $ ('#cke_1_contents').parent (); //area for the warning message
+          var warningMessage = checkField ($(bodies).textWithLineBreaks()); //validate the text field (plaintext)
+          
+          if(checkImage($(bodies).html())) //special case for image in text
+          {
+            if(warningMessage == null) //image but no other warnings
+              warningMessage = createSimpleWarning("Make sure images don't contain sensitive information!");
+            else //otherwise insert in the warning
+              warningMessage = insertInWarning(warningMessage,"Make sure images don't contain sensitive information!");
+          }
+          var errorRegion = $ ('#cke_content').parent (); //area for the warning message
           displayWarning (warningMessage, errorRegion);
       });
       if ($("iframe"). length ) {
@@ -98,23 +106,22 @@ function checkField(text)
   warnings += addWarningText(checkMAC(text), "MAC Address");
   
   if (warnings.length == 0)
-  {
-    if(checkImage(text)) //special case for image, just print simple warning
-      return createSimpleImageWarning("<br>Make sure images don't contain sensitive information!");
-    else 
       return null; //no warning needed
-  }
-  if(checkImage(text)) //append image warning to message
-    warnings += "<br>Make sure images don't contain sensitive information!";
   return createWarning (warnings); //format with warning message
 }
 
-function createSimpleImageWarning (text) //create html warning without reference to page
+function createSimpleWarning (text) //create html warning without reference to page
 {
     return "<div class=\"post-validator-error\">" + text + "</div>";
 }
+function insertInWarning(warning, text) //warning should be in format of createWarning return
+{
+  //insert right before "Please refer to:"
+  var insertIndex = warning.indexOf("Please refer to: <a href");
+  return warning.slice(0,insertIndex) + text + "<br>" + warning.slice(insertIndex);
+}
 
-function createWarning (entries, simple) //create html warning message
+function createWarning (entries) //create html warning message
 {
     var warning =
       '<div class="post-validator-error">Sensitive information detected: ' +
@@ -149,7 +156,7 @@ function checkEmail(text)
 function checkPhone(text) //phone number check, difficult as phone numbers vary in length often
 {
   //phone numbers may be difficult as international phone numbers vary significantly, here we limit between 7 and 15 digits
-  var valRegex = /\b(\d[\s-.()]*){7,15}\b/g;
+  var valRegex = /\b(\d[\s-()]*){7,15}\b/g;
   return text.match(valRegex);
 }
 function checkIP(text) //ip address address search
@@ -198,14 +205,10 @@ function checkNames(text) //names may be added in the future, but currently no v
 }
 //end regex functions
 
-function displayWarning (
-  warning,
-  region //add message to proper place in the html
-) {
-  region.find ('.post-validator-error').remove (); //remove previous warning if there was one
-  if (
-    warning != null //there is a warning, add it
-  )
+function displayWarning(warning, region) //add message to proper place in the html
+{
+  region.find('.post-validator-error').remove(); //remove previous warning if there was one
+  if (warning != null) //there is a warning, add it
     region.append (warning);
 }
 
