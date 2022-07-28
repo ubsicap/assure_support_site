@@ -157,7 +157,8 @@ Toggleable support for HTML in email body.
 
 _Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/sso-authentication/README.md).
 
-Facebook, Google, and Paratext Registry SSO support.
+This plugin allows single sign on for Facebook and Google.
+Support for Paratext Registry SSO is not yet configured, as this requires external support.
 
 ### [title-length-counter](https://github.com/MominRaza/title-length-counter)
 
