@@ -27,7 +27,7 @@ $ (document).ready (function () {
           if(checkImage($(bodies).html())) //special case for image in text
           {
             if(warningMessage == null) //image but no other warnings
-              warningMessage = createSimpleImageWarning("Make sure images don't contain sensitive information!");
+              warningMessage = createSimpleWarning("Make sure images don't contain sensitive information!");
             else //otherwise insert in the warning
               warningMessage = insertInWarning(warningMessage,"Make sure images don't contain sensitive information!");
           }
@@ -119,11 +119,11 @@ function createSimpleWarning (text) //create html warning without reference to p
 function insertInWarning(warning, text) //warning should be in format of createWarning return
 {
   //insert right before "Please refer to:"
-  var insertIndex = warning.indexOf("Please refer to: <a href")-1;
+  var insertIndex = warning.indexOf("Please refer to: <a href");
   return warning.slice(0,insertIndex) + text + "<br>" + warning.slice(insertIndex);
 }
 
-function createWarning (entries, simple) //create html warning message
+function createWarning (entries) //create html warning message
 {
     var warning =
       '<div class="post-validator-error">Sensitive information detected: ' +
