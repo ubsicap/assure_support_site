@@ -22,7 +22,7 @@ $ (document).ready (function () {
           var bodies = $ ('iframe').contents ().find ('body');
           var warningMessage = checkField ($(bodies).textWithLineBreaks()); //validate the text field
           var errorRegion = $ ('#cke_content').parent (); //area for the warning message
-          displayWarning (warningMessage, errorRegion);
+          displayWarning(warningMessage, errorRegion);
         
         }); 
       });
@@ -38,10 +38,10 @@ $ (document).ready (function () {
     listItems.each (function (idx, li) {
       if (idx === listItems.length - 1) return false; //does not check for the input
       var product = $ (li);
-      var VAL = product.children (':first').text (); //get the text of tag
+      var VAL = product.children (':first').html(); //get the text of tag
       var warningMessage = checkField (VAL); //validate the text field
-      var errorRegion = $ ('.tagbox').parent (); //area for the warning message
-      displayWarning (warningMessage, errorRegion);
+      var errorRegion = $ ('.tagbox').parent(); //area for the warning message
+      displayWarning(warningMessage, errorRegion);
 
       // var email = new RegExp (
       //   "\\b[A-Za-z\\.0-9!#$%&'*+/=?^_`{|}~-]+@[A-Za-z1-9-]+\\.[A-Za-z0-9-]+\\b"
