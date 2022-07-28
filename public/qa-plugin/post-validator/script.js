@@ -85,17 +85,46 @@ $ (document).ready (function () {
   });
 });
 
-function checkField (text) {
+function checkField(text) 
+{
 
   var warnings = '';
   emailMatches = checkEmail(text);
-  if (emailMatches != null) //add all the warnings (if there are any)
-    for (var match of emailMatches)
-      warnings = warnings + '<br>' + match;
+  //add all the warnings (if there are any
+  addWarningText(checkNames(text), "Names");
+  addWarningText(checkEmail(text), "Email");
+  addWarningText(checkPhone(text), "Phone Number");
+  addWarningText(checkRegistrationCode(text), "Registration Key");
+  addWarningText(checkIP(text), "IP");
+  addWarningText(checkMAC(text), "MAC Address");
+  if(checkImage(text)) //special case for image (as it just true or false)
+    warning += "<br>Make sure images don't contain sensitive information!";
 
   if (warnings.length == 0)
     return null; //no warning needed
   else return createWarning (warnings); //format with warning message
+}
+
+function addWarningText(warnings, type) //get the warning text formatted, don't add anything there are no warnings
+{
+  if(warnings == null) //no warning
+    return "";
+  var warningText = "<br>\t" + type + ": "
+  for(var match of warnings)
+  warningText += match + ", ";
+  warningText = warningText + "\b\b"; //two backspaces to remove the last space and comma
+  if(warningText.length > 80) //chop off the end of the warning if it is too long
+  warningText = warningText.substring(0,77) + "...";
+  return warningText;
+}
+
+function createWarning (entries) //create html warning message
+{
+    var warning =
+      '<div class="post-validator-error">Sensitive information detected: ' +
+      entries +
+      '<br>Please refer to: <a href="./best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
+    return warning;
 }
 
 //regex functions, return null (no match) or an array of all the matches
@@ -121,7 +150,7 @@ function checkIP(text) //ip address address search
   for(var entry in matches) //go through each match  and check it is a true ip
   {
     var trueIp = true;
-    for(var seg in entry.split(".")) //each portion of the ip should be <= 255
+    for(var seg of entry.split(".")) //each portion of the ip should be <= 255
       if(parseInt(seg) > 255) //invalid, should be in range [0-255]
         trueIp = false;
     if(trueIp)
@@ -152,14 +181,6 @@ function checkNames(text) //names may be added in the future, but currently no v
   return null;
 }
 //end regex functions
-
-function createWarning (entries) {
-  var warning =
-    '<div class="post-validator-error">Sensitive information detected: ' +
-    entries +
-    '<br>Please refer to: <a href="./best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
-  return warning;
-}
 
 function displayWarning (
   warning,
