@@ -376,8 +376,8 @@ init_ssl() {
     sudo cp -Lr /etc/letsencrypt/live/$DOMAIN_NAME/ ./local_certs
 
     # Copy the appropriate certs for Portainer
-    sudo cp -L ./local_certs/cert.pem ./local_certs/portainer.crt
-    sudo cp -L ./local_certs/privkey.pem ./local_certs/portainer.key
+    sudo cp -L ./local_certs/cert.pem /certs/portainer.crt
+    sudo cp -L ./local_certs/privkey.pem /certs/portainer.key
 }
 
 
