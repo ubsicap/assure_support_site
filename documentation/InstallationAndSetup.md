@@ -2,7 +2,7 @@
 
 This document is a guide on how to set up a web server to run the contents of this repository in a production environment.
 
-If you are looking to set up the site locally, such as for development, please refer to the [Local Development](https://github.com/ubsicap/assure_support_site/blob/master/documentation/LocalDevelopment.md) guide.
+If you are looking to set up the site locally, such as for development, please refer to the [Local Development](./LocalDevelopment.md) guide.
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ You will need an email address to server as the webmaster. It will be used for a
 
 When dealing with Amazon Web Services, ensure that your location is the same across all platforms (EC2, RDS). The location should be displayed in the top right.
 
-**VERY IMPORTANT NOTE**: In the [`startup.sh`](https://github.com/ubsicap/assure_support_site/blob/master/startup.sh) file, within the `generate_ssl()` function, [Certbot](https://certbot.eff.org/instructions?ws=other&os=ubuntufocal) is used to generate SSL certificates. _If you are running this for development_, you must **make sure** that the call to `certbot` includes the `--dry-run` flag. If you do not, you risk being rate limted (per 168 hours).
+**VERY IMPORTANT NOTE**: In the [`startup.sh`](../startup.sh) file, within the `generate_ssl()` function, [Certbot](https://certbot.eff.org/instructions?ws=other&os=ubuntufocal) is used to generate SSL certificates. _If you are running this for development_, you must **make sure** that the call to `certbot` includes the `--dry-run` flag. If you do not, you risk being rate limted (per 168 hours).
 
 ## Creating RDS Instance
 
@@ -75,7 +75,7 @@ The EC2 instance is the host of the web server and its details will depend entir
     - **Type**: `MYSQL/Aurora`, **Protocol**: `TCP`, **Port Range**: `3306`, **Source**: `<Your IP>`
 1. Expand the `Advanced details` section.
 1. Scroll down until you see a field marked `User data`.
-1. Paste the contents of the [`ec2_user_data.sh`](https://github.com/ubsicap/assure_support_site/blob/master/ec2_user_data.sh) script into this field.
+1. Paste the contents of the [`ec2_user_data.sh`](../ec2_user_data.sh) script into this field.
 1. Click `Launch Instance`.
 1. While waiting for the instance to boot (it may take a few minutes), click on it and copy its public IPv4 address.
 1. Connect to your instance through `ssh` using your preferred method. The command-line method will look like the following (note you may need to `sudo`, depending on file permissions):
