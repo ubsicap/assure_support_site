@@ -91,14 +91,14 @@ function checkField(text)
   var warnings = '';
   emailMatches = checkEmail(text);
   //add all the warnings (if there are any
-  addWarningText(checkNames(text), "Names");
-  addWarningText(checkEmail(text), "Email");
-  addWarningText(checkPhone(text), "Phone Number");
-  addWarningText(checkRegistrationCode(text), "Registration Key");
-  addWarningText(checkIP(text), "IP");
-  addWarningText(checkMAC(text), "MAC Address");
+  warnings += addWarningText(checkNames(text), "Names");
+  warnings += addWarningText(checkEmail(text), "Email");
+  warnings += addWarningText(checkPhone(text), "Phone Number");
+  warnings += addWarningText(checkRegistrationCode(text), "Registration Key");
+  warnings += addWarningText(checkIP(text), "IP");
+  warnings += addWarningText(checkMAC(text), "MAC Address");
   if(checkImage(text)) //special case for image (as it just true or false)
-    warning += "<br>Make sure images don't contain sensitive information!";
+    warnings += "<br>Make sure images don't contain sensitive information!";
 
   if (warnings.length == 0)
     return null; //no warning needed
