@@ -11,13 +11,13 @@ This document is a guide on how to set up the web server on a local machine for 
 ## Before you begin
 
 The local development environment is vastly different than the production environment in terms of setup.
-Once setup, the environments differ only in three major aspects:
+However, once setup, the environments differ only in three major aspects:
 
 -   Local deployments include a local database running in a Docker container.
--   Local deployments lack SSL certification (this can be rectified, but it is a [complicated process](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-20-04)).
+-   Local deployments lack SSL certification (this can be done, but it is a [complicated process](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-20-04)).
 -   Local deployments do not have a custom domain name.
 
-A local deployment is necessary during the ETL process to ensure that modified data does not break the site.
+A local deployment is necessary during the data import process to ensure that modified data does not break the site.
 
 ## Getting Started
 
