@@ -23,9 +23,9 @@
 				case 'q2apro_userinfo_enabled':
 					return 1; // true
 				case 'q2apro_userinfo_show_avatar':
-					return 1; // true
+					return 0; // false
 				case 'q2apro_userinfo_show_bonuspoints':
-					return 1; // true
+					return 0; // false
 				case 'q2apro_userinfo_show_downvotes':
 					return 1; // true
 				default:

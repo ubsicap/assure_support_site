@@ -21,7 +21,7 @@ class qa_ar_admin
             case 'qa_ar_redirect_page':
                 return 'account';
             case 'qa_ar_captcha_on_recover':
-                return true;
+                return 1; // true
             default:
                 return null;
         }

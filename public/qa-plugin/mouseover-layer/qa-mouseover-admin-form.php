@@ -25,7 +25,7 @@ class qa_mouseover_admin_form
 	public function option_default($option)
 	{
 		if ($option === 'mouseover_content_max_len')
-			return 480;
+			return 150;
 	}
 
 
