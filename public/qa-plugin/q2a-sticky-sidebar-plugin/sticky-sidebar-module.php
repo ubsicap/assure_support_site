@@ -27,10 +27,10 @@ class sticky_sidebar_module
                 return 100;
                 break;
             case 'sticky_sidebar_screen_width':
-                return 980;
+                return 991;
                 break;
             case 'sticky_sidebar_status':
-                return true;
+                return 1; // true
                 break;
         }
     }

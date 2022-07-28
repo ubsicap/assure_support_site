@@ -24,13 +24,13 @@ class qa_apa_admin
 
         switch ($option) {
             case 'qa_apa_enable_autoprune':
-                return true;
+                return 1; // true
             case 'qa_apa_timeout_minutes':
                 return '30';
             case 'qa_apa_prune_on_register':
             case 'qa_apa_prune_on_confirm':
             case 'qa_apa_prune_on_login':
-                return true;
+                return 1; // true
             default:
                 return null;
         }

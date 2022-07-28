@@ -23,9 +23,7 @@ class q2apro_prettytags_admin
 	{
 		switch ($option) {
 			case 'q2apro_prettytags_enabled':
-				return true;
-			case 'tag_max_len':
-				return 25;
+				return 1; // true
 			default:
 		}
 	}
@@ -42,7 +40,6 @@ class q2apro_prettytags_admin
 		$ok = null;
 		if (qa_clicked('q2apro_prettytags_save')) {
 			qa_opt('q2apro_prettytags_enabled', (bool)qa_post_text('q2apro_prettytags_enabled')); // empty or 1
-			qa_opt('tag_max_len', (int) qa_post_text('tag_max_len'));
 			$ok = qa_lang('admin/options_saved');
 		}
 
@@ -58,14 +55,6 @@ class q2apro_prettytags_admin
 					'label' => qa_lang('q2apro_prettytags_lang/enable_plugin'),
 					'tags' => 'name="q2apro_prettytags_enabled"',
 					'value' => qa_opt('q2apro_prettytags_enabled'),
-				),
-
-				array(
-					'label' => 'Maximum length of a tag:',
-					'type' => 'number',
-					'suffix' => 'characters',
-					'value' => (int) qa_opt('tag_max_len'),
-					'tags' => 'name="tag_max_len"'
 				),
 			),
 			'buttons' => array(

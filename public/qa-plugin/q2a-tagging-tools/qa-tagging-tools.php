@@ -117,17 +117,17 @@ class qa_tagging_tools
 	{
 		switch ($option) {
 			case 'tagging_tools_synonyms':
-				return '';
+				return 'pt,paratext';
 			case 'tagging_tools_min_length':
-				return 0;
+				return 2;
 			case 'tagging_tools_max_length':
-				return 0;
+				return 25;
 			case 'tagging_tools_prevent':
-				return 0;
+				return 0; // false
 			case 'tagging_tools_rep':
 				return 100;
 			case 'tagging_tools_redirect':
-				return 0;
+				return 0; // false
 		}
 	}
 
