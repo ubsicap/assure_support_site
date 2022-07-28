@@ -4,7 +4,22 @@ This document contains information such about installed plugins, custom pages, a
 
 ## Table of Contents
 
+-   [General](#general)
+-   [Emails](#emails)
+-   [Users](#users)
+-   [Layout](#layout)
+-   [Posting](#posting)
+-   [Viewing](#viewing)
+-   [Lists](#lists)
+-   [Categories](#categories)
+-   [Permissions](#permissions)
 -   [Pages](#pages)
+-   [RSS feeds](#rss-feeds)
+-   [Points](#points)
+-   [Spam](#spam)
+-   [Caching](#caching)
+-   [Stats](#stats)
+-   [Mailing](#mailing)
 -   [Plugins](#plugins)
     -   [account-reclaim](#account-reclaim)
     -   [auto-prune-accounts](#auto-prune-accounts)
@@ -26,10 +41,89 @@ This document contains information such about installed plugins, custom pages, a
     -   [send-account-reclaim](#send-account-reclaim)
     -   [sso-authentication](#sso-authentication)
     -   [title-length-counter](#title-length-counter)
+-   [Donut theme settings](#donut-theme-settings)
+
+## General
+
+-   **Preferred site URL**: Make sure it begins with `https://`
+-   **URL structure**: `/123/why-do-birds-sing (requires htaccess file)`
+-   **Site Theme** and **Theme for mobiles**: `Donut`
+-   **Question classification**: `Tags and Categories`
+
+## Emails
+
+-   Check **Send email via SMTP** and **Send SMTP username and password**
+-   Fill in the required fields with the appropriate SMTP credentials
+
+## Users
+
+-   **Disallowed usernames**: `anonymous`, `admin`, `anon`
+-   Check **Allow Gravatar avatars**
+
+## Layout
+
+-   Check **Show a logo image in the page header**
+-   **URL of logo**: `/path/to/your/logo`
+-   Check **Custom HTML in sidebar box**
+    -   `SITE_NAME is a public forum that connects users of Bible translation software, so that they can help one another to find solutions, and discover new ways of working together. We welcome users of all Bible translation software systems to discover how they can help one another to take God’s Word to the world.`
+-   Add the following widgets:
+    -   **Search Bar**: `Main area - Top`
+    -   **Related Questions**: `Main area - Bottom`
+    -   **Categories**: `Side panel - Below sidebar box`
+
+## Posting
+
+-   **Default editor for ...**: `PUPI DM Editor`
+-   Check **Check for similar questions when asking**, **Show example tags based on question**, and **Show matching tags while typing**
+
+## Viewing
+
+## Lists
+
+## Categories
+
+-   Add the following categories:
+    -   **Name**: `General`, **Slug**: `general`
+    -   **Name**: `Paratext`, **Slug**: `paratext`
+    -   **Name**: `Paratext Lite`, **Slug**: `paratext-lite`
+    -   **Name**: `Publishing Assistant`, **Slug**: `publishing-assistant`
+-   Uncheck **Allow questions with ...**
+
+## Permissions
+
+-   **Viewing question pages**: `Anybody`
+-   **Asking questions**: `Registered users with email confirmed`
+-   **Answering questions**: `Registered users with email confirmed`
+-   **Adding comments**: `Registered users with email confirmed`
+-   **Voting on questions**: `Registered users with email confirmed`
+-   **Voting on answers**: `Registered users with email confirmed`
 
 ## Pages
 
+-   Check **Questions**, **Unanswered**, **Tags**, **Categories**, **Users**, **Ask a Question**
+-   Add the following custom pages:
+    -   **FAQ** - **Position**: `After tabs at top`
+    -   **Best Practices** - **Slug**: `best-practices`, **Content**: [here](../public/qa-custom-pages/best_practices.html)
+    -   **Paratext Support Redirect** - **Slug**: `paratext support redirect`, **Content**: [here](../public/qa-custom-pages/paratext_redirect.html)
+
 Several custom pages are included in the site. While Q2A supports the creation of custom pages through the administration panel, we have also included the HTML in [a subdirectory of the site](../public/qa-custom-pages) in case the database is cleared.
+
+## RSS feeds
+
+## Points
+
+## Spam
+
+-   Check **Request confirmation ...**, **All new users ...**, **User captcha ...**
+-   **Use captcha module**: `reCAPTCHA`
+
+## Caching
+
+## Stats
+
+-   Run each of the **Database clean-up operations** at the bottom of the page
+
+## Mailing
 
 ## Plugins
 
@@ -60,7 +154,7 @@ Does not use CRON jobs- rather it just marks accounts for deletion and bulk-dele
 #### Configuration
 
     - A 30 minute "grace period" is plenty of time. Shorten this if you find too many spam accounts are being created.
-    - Check all *Delete unverified accounts when...** boxes
+    - Check all *Delete unverified accounts when ...** boxes
 
 ### [category-logo](../public/qa-plugin/category-logo)
 
@@ -227,3 +321,5 @@ Display title length and prevent typing past the max length.
 
 This plugin has been slightly modified to also display when editing questions.
 It also displays warning colors when the post's title is below the minimum or at the maximum length.
+
+## Donut theme settings
