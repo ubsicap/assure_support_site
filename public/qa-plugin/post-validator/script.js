@@ -109,10 +109,10 @@ function addWarningText(warnings, type) //get the warning text formatted, don't 
 {
   if(warnings == null) //no warning
     return "";
-  var warningText = "<br>\t" + type + ": "
+  var warningText = "<br>&nbsp;&nbsp;" + type + ": "
   for(var match of warnings)
-  warningText += match + ", ";
-  warningText = warningText + "\b\b"; //two backspaces to remove the last space and comma
+    warningText += match + ", ";
+  warningText = warningText.slice(0, -2); //remove the last space and comma
   if(warningText.length > 80) //chop off the end of the warning if it is too long
   warningText = warningText.substring(0,77) + "...";
   return warningText;
@@ -156,6 +156,8 @@ function checkIP(text) //ip address address search
     if(trueIp)
       finalMatches.push(entry); //must be a falid ip
   }
+  if(finalMatches.length == 0) //return null if no matches
+    return null;
   return finalMatches;
 }
 function checkMAC(text) //mac address 
