@@ -1,10 +1,6 @@
 $ (document).ready (function () {
   //check sensitive info in title
   $ ('#title').change (function () {
-  //   this.value.filter(function(){
-  //     var emailRegex = /\b[A-Za-z\.0-9!#$%&'*+/=?^_`{|}~-]+@[A-Za-z1-9-]+\.[A-Za-z0-9-]+\b/g;
-  //     return text.match (emailRegex);
-  // }).wrap('<span style="color: red" />');
     var warningMessage = checkField (this.value); //validate the text field
     var errorRegion = $ ('#title').parent (); //area for the warning message
     displayWarning (warningMessage, errorRegion);
@@ -12,23 +8,24 @@ $ (document).ready (function () {
 
   
   //check sensitive info in body
-
-  $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
+ $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
     .done (function (script, textStatus) {
       console.log("script")
-      
-      setTimeout(function () { 
+      var interval = setInterval(function() {
         console.log("load")
         $ ('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {
           console.log("bind")
           var bodies = $ ('iframe').contents ().find ('body');
           var warningMessage = checkField ($(bodies).html()); //validate the text field
-          var errorRegion = $ ('#cke_content').parent (); //area for the warning message
+          var errorRegion = $ ('#cke_1_contents').parent (); //area for the warning message
           displayWarning (warningMessage, errorRegion);
-      }); }, 1000)
-      
-    })
-    .fail (function (jqxhr, settings, exception) {
+      });
+      if ($("iframe"). length ) {
+        console.log("c")
+        clearInterval(interval);
+        }    
+    }, 100);
+        }) .fail (function (jqxhr, settings, exception) {
       console.log ('failed to get editor');
     });
 
@@ -63,8 +60,9 @@ $ (document).ready (function () {
     // }
   });
 
+  
   //check sensitive info in comments
-  $ ('.qa-form-light-button-comment').click (function () {
+  $ ('.qa-a-item-buttons, .qa-c-item-buttons').click (function () {
     if ($ (' .qa-c-form ').css ('display') != 'none') {
       $ ('textarea').on ('input', function () {
         var VAL = this.value;
