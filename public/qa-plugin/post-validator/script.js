@@ -144,10 +144,10 @@ function checkIP(text) //ip address address search
 {
   //ip's in the format of num.num.num.num where number [0-255]
   //regex checks for num.(3 times)num (where num is [0-999]), we validate after to make sure this is valid
-  var valRegex = /\b(\d{0,3}\s*\.\s*){3}\d{0,3}\b/g;
+  var valRegex = /\b(\d{1,3}\s*\.\s*){3}\d{1,3}\b/g;
   var matches = text.match(valRegex);
   var finalMatches = []; //matches that are true ip addresses
-  for(var entry in matches) //go through each match  and check it is a true ip
+  for(var entry of matches) //go through each match  and check it is a true ip
   {
     var trueIp = true;
     for(var seg of entry.split(".")) //each portion of the ip should be <= 255
