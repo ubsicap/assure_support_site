@@ -99,6 +99,7 @@ function checkField(text)
   warnings += addWarningText(checkMAC(text), "MAC Address");
   if(checkImage(text)) //special case for image (as it just true or false)
     warnings += "<br>Make sure images don't contain sensitive information!";
+  warnings += "<br>" + text;
 
   if (warnings.length == 0)
     return null; //no warning needed
@@ -140,7 +141,7 @@ function checkPhone(text) //phone number check, difficult as phone numbers vary 
 {
   //phone numbers may be difficult as international phone numbers vary significantly, here we limit between 7 and 15 digits
   var valRegex = /\b(\d[\s-.()]*){7,15}\b/g;
-  return text.match (valRegex);
+  return text.match(valRegex);
 }
 function checkIP(text) //ip address address search
 {
@@ -148,6 +149,8 @@ function checkIP(text) //ip address address search
   //regex checks for num.(3 times)num (where num is [0-999]), we validate after to make sure this is valid
   var valRegex = /\b(\d{1,3}\s*\.\s*){3}\d{1,3}\b/g;
   var matches = text.match(valRegex);
+  if(matches == null)
+    return null;
   var finalMatches = []; //matches that are true ip addresses
   for(var entry of matches) //go through each match  and check it is a true ip
   {
