@@ -16,9 +16,9 @@ class qa_html_theme_layer extends qa_html_theme_base
             setcookie('qa_faq_noshow', 'true', 0, '/', QA_COOKIE_DOMAIN);
 
             // notify new user of faq
-            $notice = '<div class="notify-container">';
+            $notice = '<div class="notify-faq-container">';
             $text = str_replace('^faq', '<a href="' . qa_path_html(qa_opt('faq_page_url')) . '">' . qa_opt('faq_page_slug') . '</a>', qa_opt('faq_notify_text'));
-            $notice .= '<div class="notify">' . $text . '<div class="notify-close" onclick="jQuery(this).parent().slideUp(\'fast\')">x</div></div>';
+            $notice .= '<div class="notify-faq">' . $text . '<div class="notify-faq-close" onclick="jQuery(this).parent().slideUp(\'fast\')">x</div></div>';
             $notice .= '</div>';
             $this->output($notice);
         }

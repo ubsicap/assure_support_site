@@ -23,7 +23,7 @@ class qa_faq_admin
             case 'faq_notify_text':
                 return qa_lang('qa-faq/notify_text');
             case 'faq_css':
-                return '.notify-container {
+                return '.notify-faq-container {
 	left: 0;
 	right: 0;
 	top: 0;
@@ -32,7 +32,7 @@ class qa_faq_admin
 	width: 100%;
 	z-index: 10000;
 }
-.notify {
+.notify-faq {
 	background-color: #F6DF30;
 	color: #444444;
 	font-weight: bold;
@@ -43,7 +43,7 @@ class qa_faq_admin
 	padding: 10px 0;
 	position:relative;
 }
-.notify-close {
+.notify-faq-close {
 	color: #735005;
 	cursor: pointer;
 	font-size: 18px;
