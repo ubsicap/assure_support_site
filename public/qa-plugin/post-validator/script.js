@@ -120,7 +120,7 @@ function insertInWarning(warning, text) //warning should be in format of createW
 {
   //insert right before "Please refer to:"
   var insertIndex = warning.indexOf("Please refer to: <a href")-1;
-  return warning.splice(0,insertIndex) + text + "<br>" + warning.splice(insertIndex);
+  return warning.slice(0,insertIndex) + text + "<br>" + warning.slice(insertIndex);
 }
 
 function createWarning (entries, simple) //create html warning message
