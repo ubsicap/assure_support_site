@@ -9,7 +9,7 @@ If you are looking to set up the site locally, such as for development, please r
 1. [Before you begin](#before-you-begin)
 1. [Creating RDS Instance](#creating-rds-instance)
     1. [RDS Security](#rds-security)
-1. [Launching to AWS](#launching-to-aws)
+1. [Deploying to AWS](#deploying-to-aws)
     1. [Creating the Instance](#creating-ec2-instance)
     1. [Domain Name](#domain-name)
     1. [Launching the Website](#launching-the-website)
@@ -56,7 +56,7 @@ Make sure to note down the database password and username (`admin` by default).
 -   For the RDS instance, the only inbound port permitted should be MySql(3306). The source ip of the inbound rule should be the private ip of the EC2 instance.
 -   This can be configured in the security groups of the EC2 and RDS instance.
 
-## Launching to AWS
+## Deploying to AWS
 
 Now you can begin the process of launching the web server and setting up the website.
 
@@ -78,7 +78,7 @@ The EC2 instance is the host of the web server and its details will depend entir
 1. Paste the contents of the [`ec2_user_data.sh`](../ec2_user_data.sh) script into this field.
 1. Click `Launch Instance`.
 1. While waiting for the instance to boot (it may take a few minutes), click on it and copy its public IPv4 address.
-1. Connect to your instance through `ssh` using your preferred method. The command-line method will look like the following (note you may need to `sudo`, depending on file permissions):
+1. Connect to your instance through `ssh` using your preferred method. The command-line method will look like the following (you may need to `sudo`, depending on file permissions):
     - `ssh -i </path/to/key.pem> <username>@<instance public IPv4>`
     - `<username>` should be `ubuntu` if you chose an Ubuntu AMI.
 1. Once connected, ensure that the contents of this repository have been coped into `/home/<username>/app`.
@@ -94,8 +94,7 @@ You will need a static ("Elastic") IP address, a domain name, and the ability to
     - For development, we used "Amazon's pool of IPv4 addresses."
 1. After the IP was generated, click "Actions" and then "Associate" and associate the Elastic IP with the EC2 instance running the server.
 1. If you do not already have a domain name registered, register one before proceeding.
-    - [freenom](https://my.freenom.com/domains.php) was used for development.
-    - Dev domain name is `supportsitetest.tk`.
+    - [freenom](https://my.freenom.com/domains.php) was used for development, and the devevelopment domain name is `supportsitetest.tk`.
     - Used "freenom DNS" instead of custom name server.
 1. Configure the following DNS records for your domain:
    | NAME | TYPE | TTL | TARGET |
@@ -120,23 +119,24 @@ Now you can launch the website itself.
 
 ## Importing Data
 
-In order to transfer data to the site, you will need to have an accessible copy and `ssh` access to the EC2 instance.
+In order to transfer data to the site, you will need to have a local copy of it and `ssh` access to the EC2 instance.
+To mitigate errors when importing, ensure that the data loads properly on a [local deployment](./LocalDevelopment.md).
 
-1. Getting a dump of the desired data from your local machine.
+1. Get a dump of the desired data from your local machine.
     1. View your database from MySql Workbench.
     1. Go to Server > Data Export
     1. Select the schema with the desired tables (if you don’t want to overwrite the tables storing site configuration do not select `qa_options` and `qa_pages`).
     1. Choose Export to Self-Contained File
     1. Start Export
-1. Moving the dump to the EC2 instance.
+1. Move the dump to the EC2 instance.
     1. Before you do this make sure you can SSH (secure shell) into the EC2 instance.
     1. Use `scp` to send the dump file to the EC2 instance
-        - `scp -i <your .pem key> <local dump file> <user>@<Elastic IP>:<destination of dump file>`
+        - `scp -i </path/to/key.pem> <local dump file> <user>@<Elastic IP>:<destination of dump file>`
         - Example: `scp -i q2a_intern_key Dump20220701.sql ubuntu@supportsitetest.tk:~/dumps/Dump20220701.sql`
-1. Importing the data to the RDS instance.
+1. Import the data to the RDS instance.
     1. Now that the dump is on the EC2 instance we can import the data to RDS.
     1. Connect to the EC2 instance via ssh.
-        - `ssh -i <your .pem key> <user>@<Elastic IP>`
+        - `ssh -i </path/to/key.pem> <user>@<Elastic IP>`
     1. Ensure mysql is installed
         - `sudo apt install -y mysql-client-core-8.0`
     1. (Optional) Verify your connection to the database works, for example:
@@ -152,3 +152,4 @@ Once the site has been set up properly, you may want to perfom the following act
 -   Check that you are always redirected to `https://<Domain Name>/` when attempting to access the site through the Elastic IP or domain name using either HTTP or HTTPS.
 -   Install the [Dynamic Mentions](https://bitbucket.org/pupi1985/q2a-dynamic-mentions-public) plugin by copying the `pupi-dm/` folder into `public/qa-plugin/` in the web server.
     -   This plugin is not included in this repository as, at the time of writing, the plugin is premium and not to be publicized.
+-   Follow any steps in the [Configuration](./Configuration.md) document to ensure pages and plugins are setup properly.
