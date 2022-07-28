@@ -11,6 +11,8 @@ This document contains information such about installed plugins, custom pages, a
 
 Below is a list of all [Q2A Plugins](https://docs.question2answer.org/addons/plugins/) installed for this site. Plugins marked with an asterisk are custom and were developed alongside the site.
 
+To do: Add a description for each plugin, a description of the configuration (if there is a stylesheet or some bulk text field the content should be listed or mentioned where to find a copy of it), also if the plugin has been updated from the original in case of future downloads. Any paid plugins also need to be mentioned regardless if they are on the repository or not (i.e. dynamic mentions).
+
 -   [account-reclaim](https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/account-reclaim)`*`
     -   Allows users to reclaim their archived accounts from support.paratext.org
 -   [auto-prune-accounts](https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/auto-prune-accounts)`*`
@@ -63,14 +65,18 @@ Below is a list of all [Q2A Plugins](https://docs.question2answer.org/addons/plu
     -   Send emails to users in the archived database table
 -   [sso-authentication](https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/sso-authentication)`*`
     -   Facebook, Google, and Paratext Registry SSO support
+    -   This plugin allows single sign on for Facebook and Google, currently the Paratext Registry is not configured (this requires external support).
 -   [tag-cloud-widget](https://github.com/q2a/question2answer/tree/dev/qa-plugin/tag-cloud-widget)
     -   Included with Q2A
 -   [title-length-counter](https://github.com/MominRaza/title-length-counter)
     -   Display title length and prevent typing past the max length
--   [wysiwyg-editor](https://github.com/q2a/question2answer/tree/dev/qa-plugin/wysiwyg-editor)
+-   [wysiwyg-editor](https://github.com/q2a/question2answer/tree/dev/qa-plugin/wysiwyg-editor)   
     -   Included with Q2A
+    -   This plugin is the text editor for the ask question and add answer/comment pages. It allows easy html formatting (e.g. text decoration, images, tables).
 -   [xml-sitemap](https://github.com/q2a/question2answer/tree/dev/qa-plugin/xml-sitemap)
     -   Included with Q2A
+
+## Plugins
 
 ## Pages
 
