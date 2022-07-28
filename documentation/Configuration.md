@@ -46,6 +46,10 @@ Allows users to reclaim their archived accounts from support.paratext.org.
 "Archived Account" is the term used for an account that was once associated with support.paratext.org but has been anonymized upon the migration to this new site.
 The process largely mimics the "Forgot Password" process, with a few tweaks.
 
+#### Configuration
+
+    - We recommend checking **Use CAPTCHA on account recovery**
+
 ### [auto-prune-accounts](../public/qa-plugin/auto-prune-accounts)
 
 _Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/auto-prune-accounts/README.md).
@@ -53,15 +57,32 @@ _Custom plugin_: This plugin was designed specifically for this website. More de
 Automatically delete accounts that have not verified their email after a set amount of time.
 Does not use CRON jobs- rather it just marks accounts for deletion and bulk-deletes them on certain triggers.
 
+#### Configuration
+
+    - A 30 minute "grace period" is plenty of time. Shorten this if you find too many spam accounts are being created.
+    - Check all *Delete unverified accounts when...** boxes
+
 ### [category-logo](../public/qa-plugin/category-logo)
 
 _Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/category-logo/README.md).
 
 Display a image next to category names, such as logos for categories that represent products.
 
+#### Configuration
+
+-   Add the following paths:
+    -   **Paratext**: `/assets/ParatextCenter.png`
+    -   **Publishing Assistant**: `/assets/PublishingAssistant.png`
+    -   **Paratext Lite**: `/assets/ParatextLiteCenter.png`
+    -   **General**: `/assets/logo.png`
+
 ### [google-analytics](https://github.com/kufeiko/QA-Google-Analytics-Plugin)
 
 Support for Google Analytics. Requires a tracking code from Google Analytics.
+
+#### Configuration
+
+    - Add the **[Google Global Site Tag](https://developers.google.com/analytics/devguides/collection/gtagjs)**
 
 ### [post-validator](../public/qa-plugin/post-validator)
 
@@ -75,18 +96,48 @@ _Premium Plugin_: This plugin is proprietary. It was purchased during developmen
 
 Support for dynamically-suggested @mentions in posts.
 
+#### Configuration
+
+-   **User Fetch Type**: `Remote`
+-   **Type of editor for ...**: `Full`
+-   **Minimum mention user permit**: `Registered users`
+-   Check **Enable On-Site Notifications integration**
+-   Check **Enable email notifications**
+
 ### [q2a-badges](https://github.com/NoahY/q2a-badges)
 
 Assigns users badges for certain (configurable) milestones, such as number of answers posted.
+
+#### Configuration
+
+    - Disable the following badges:
+        - Verified Human, Autobiographer, Photogenic
+        - Renewal, Revival, Resurrection
+        - Commenter, Commentator, Annotator
+        - Editor, Copy Editor, Senior Editor
+        - Watchdog, Bloodhound, Pitbull
+        - Medalist, Champion Olympian
+    - Set the `Notify Duration` to 0 (disabled)
+    - Uncheck `Show list of ...` boxes
 
 ### [q2a-faq](https://github.com/gturri/q2a-faq/)
 
 Adds a Frequently Asked Questions page, fully configurable through the admin panel.
 
+#### Configuration
+
+-   Default configuration is acceptable
+-   You can add FAQ entries from this section
+
 ### [q2a-hashtagger](https://github.com/pupi1985/q2a-hashtagger)
 
 Convert #tags to hyperlinks in posts.
 Similar to the dynamic mentions plugin, but does not dynamically suggest tags.
+
+#### Configuration
+
+-   Uncheck **Keep "#" symbol for tag names**
+-   Check everything else
 
 ### [q2a-pupi-srs](https://github.com/pupi1985/q2a-pupi-srs)
 
@@ -120,6 +171,12 @@ For example, the synonym `pt,paratext` would automatically convert the tag `pt` 
 It also has the ability to retroactively apply these synonyms.
 Lastly, it can remove tags altogether by placing them on standalone lines.
 During the migration from the old site to this one, we are automatically generating tag data for posts, so it will be useful to apply these synonyms retroactively.
+
+#### Configuration
+
+-   **Minimum tag length**: `2`
+-   **Maximum tag length**: `25`
+-   Do not check **Add 301 redirects for tag synonyms**
 
 To see a list of all tag synonyms used in development (and thus, the synonyms we suggest using), refer to the [TagSynonyms file](../public/qa-plugin/q2a-tagging-tools/TagSynonyms.md).
 Copy and paste all desired rules into the Tagging Tools' admin form.
@@ -159,6 +216,10 @@ _Custom plugin_: This plugin was designed specifically for this website. More de
 
 This plugin allows single sign on for Facebook and Google.
 Support for Paratext Registry SSO is not yet configured, as this requires external support.
+
+#### Configuration
+
+-   Add **Client id** and **Client secret** for each service selected
 
 ### [title-length-counter](https://github.com/MominRaza/title-length-counter)
 
