@@ -25,6 +25,7 @@ class post_validator_admin
 			qa_opt('post_val_check_name', (bool) qa_post_text('check_name'));
 			qa_opt('post_val_check_email', (bool) qa_post_text('check_email'));
 			qa_opt('post_val_check_phone', (bool) qa_post_text('check_phone'));
+			qa_opt('post_val_check_registration', (bool) qa_post_text('check_registration'));
 			qa_opt('post_val_check_ip', (bool) qa_post_text('check_ip'));
 			qa_opt('post_val_check_mac', (bool) qa_post_text('check_mac'));
 			qa_opt('post_val_check_image', (bool) qa_post_text('check_image'));
