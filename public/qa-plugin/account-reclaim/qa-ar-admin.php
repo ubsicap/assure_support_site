@@ -17,14 +17,11 @@ class qa_ar_admin
      */
     function option_default($option)
     {
-
         switch ($option) {
             case 'qa_ar_redirect_page':
                 return 'account';
             case 'qa_ar_captcha_on_recover':
                 return true;
-            case 'qa_ar_register_archived_timeout':
-                return '3';
             default:
                 return null;
         }
@@ -48,9 +45,6 @@ class qa_ar_admin
 
             // Create an option for the redirect page after account reclaim
             qa_opt('qa_ar_redirect_page', qa_post_text('qa_ar_redirect_page'));
-
-            // Timeout (in minutes) between warning a user when creating an account with an archived email
-            qa_opt('qa_ar_register_archived_timeout', intval(qa_post_text('qa_ar_register_archived_timeout')) ? intval(qa_post_text('qa_ar_register_archived_timeout')) : 3);
 
             // Toggle whether to use CAPTCHA on account recovery
             qa_opt('qa_ar_captcha_on_recover', (bool)qa_post_text('qa_ar_captcha_on_recover'));
@@ -76,12 +70,6 @@ class qa_ar_admin
             'value' => qa_opt('qa_ar_redirect_page'),
             'type' => 'textarea',
             'rows' => '1'
-        );
-        $fields[] = array(
-            'label' => qa_lang('qa-ar/admin_register_archived_timeout'),
-            'tags' => 'NAME="qa_ar_register_archived_timeout"',
-            'value' => (int) qa_opt('qa_ar_register_archived_timeout'),
-            'type' => 'number'
         );
         $fields[] = array(
             'label' => qa_lang('qa-ar/admin_captcha_on_recover'),
