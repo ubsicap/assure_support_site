@@ -23,36 +23,40 @@ class qa_faq_admin
             case 'faq_notify_text':
                 return qa_lang('qa-faq/notify_text');
             case 'faq_css':
-                return '.notify-faq-container {
-	left: 0;
-	right: 0;
-	top: 0;
+                return '
+.notify-faq-container {
+	left: 25px;
+	bottom: 25px;
 	padding: 0;
 	position: fixed;
 	width: 100%;
+    max-width: 350px;
 	z-index: 10000;
 }
 .notify-faq {
-	background-color: #F6DF30;
-	color: #444444;
-	font-weight: bold;
+	background-color: #424242;
+	color: #fff;
 	width: 100%;
-	text-align: center;
+	text-align: left;
 	font-family: sans-serif;
 	font-size: 14px;
-	padding: 10px 0;
-	position:relative;
+	padding: 10px 40px 10px 25px;
+	position: relative;
 }
+.notify-faq > a {
+    color: #3b9bed
+    font-weight: bold;
+}
+
 .notify-faq-close {
-	color: #735005;
 	cursor: pointer;
+    font-weight: bold;
 	font-size: 18px;
 	line-height: 18px;
-	padding: 0 3px;
 	position: absolute;
-	right: 8px;
+	right: 10px;
 	text-decoration: none;
-	top: 8px;
+	top: 10px;
 }
 .qa-faq-section {
 	margin-bottom: 10px;
