@@ -97,13 +97,31 @@ function checkField(text)
   warnings += addWarningText(checkRegistrationCode(text), "Registration Key");
   warnings += addWarningText(checkIP(text), "IP");
   warnings += addWarningText(checkMAC(text), "MAC Address");
-  if(checkImage(text)) //special case for image (as it just true or false)
-    warnings += "<br>Make sure images don't contain sensitive information!";
-  warnings += "<br>" + text;
-
+  
   if (warnings.length == 0)
-    return null; //no warning needed
-  else return createWarning (warnings); //format with warning message
+  {
+    if(checkImage(text)) //special case for image, just print simple warning
+      return createSimpleImageWarning("<br>Make sure images don't contain sensitive information!");
+    else 
+      return null; //no warning needed
+  }
+  if(checkImage(text)) //append image warning to message
+    warnings += "<br>Make sure images don't contain sensitive information!";
+  return createWarning (warnings); //format with warning message
+}
+
+function createSimpleImageWarning (text) //create html warning without reference to page
+{
+    return "<div class=\"post-validator-error\">" + text + "</div>";
+}
+
+function createWarning (entries, simple) //create html warning message
+{
+    var warning =
+      '<div class="post-validator-error">Sensitive information detected: ' +
+      entries +
+      '<br>Please refer to: <a href="./best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
+    return warning;
 }
 
 function addWarningText(warnings, type) //get the warning text formatted, don't add anything there are no warnings
@@ -121,14 +139,6 @@ function addWarningText(warnings, type) //get the warning text formatted, don't 
   return warningText;
 }
 
-function createWarning (entries) //create html warning message
-{
-    var warning =
-      '<div class="post-validator-error">Sensitive information detected: ' +
-      entries +
-      '<br>Please refer to: <a href="./best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
-    return warning;
-}
 
 //regex functions, return null (no match) or an array of all the matches
 function checkEmail(text)
