@@ -20,7 +20,7 @@ $ (document).ready (function () {
         $ ('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {
           console.log("bind")
           var bodies = $ ('iframe').contents ().find ('body');
-          var warningMessage = checkField ($(bodies).textWithLineBreaks()); //validate the text field
+          var warningMessage = checkField ($(bodies).html()); //validate the text field
           var errorRegion = $ ('#cke_content').parent (); //area for the warning message
           displayWarning(warningMessage, errorRegion);
         
@@ -38,7 +38,7 @@ $ (document).ready (function () {
     listItems.each (function (idx, li) {
       if (idx === listItems.length - 1) return false; //does not check for the input
       var product = $ (li);
-      var VAL = product.children (':first').html(); //get the text of tag
+      var VAL = product.children (':first').text(); //get the text of tag
       var warningMessage = checkField (VAL); //validate the text field
       var errorRegion = $ ('.tagbox').parent(); //area for the warning message
       displayWarning(warningMessage, errorRegion);
@@ -99,7 +99,7 @@ function checkField(text)
   warnings += addWarningText(checkMAC(text), "MAC Address");
   if(checkImage(text)) //special case for image (as it just true or false)
     warnings += "<br>Make sure images don't contain sensitive information!";
-  warnings += "<br>" + text.replace(/(<|>)/g, ' ');
+  warnings += "<br>" + text;
 
   if (warnings.length == 0)
     return null; //no warning needed
