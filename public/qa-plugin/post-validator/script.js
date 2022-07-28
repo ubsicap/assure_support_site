@@ -99,7 +99,7 @@ function checkField(text)
   warnings += addWarningText(checkMAC(text), "MAC Address");
   if(checkImage(text)) //special case for image (as it just true or false)
     warnings += "<br>Make sure images don't contain sensitive information!";
-  warnings += "<br>" + text.replace(/<[^>]*>/g, ' ');
+  warnings += "<br>" + text.replace(/(<|>)/g, ' ');
 
   if (warnings.length == 0)
     return null; //no warning needed
