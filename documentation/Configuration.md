@@ -4,6 +4,7 @@ This document contains information such about installed plugins, custom pages, a
 
 ## Table of Contents
 
+-   [Donut theme settings](#donut-theme-settings)
 -   [General](#general)
 -   [Emails](#emails)
 -   [Users](#users)
@@ -41,7 +42,13 @@ This document contains information such about installed plugins, custom pages, a
     -   [send-account-reclaim](#send-account-reclaim)
     -   [sso-authentication](#sso-authentication)
     -   [title-length-counter](#title-length-counter)
--   [Donut theme settings](#donut-theme-settings)
+
+## Donut theme settings
+
+-   Check **Enable top bar**
+    -   **Left text**: `New here? <a href="https://supportsitetest.tk/register" style="color: inherit;">Create a new account</a>!`
+    -   **Right text**: `Got redirected? <a href="https://supportsitetest.tk/recover-account" style="color: inherit;">Reclaim your existing Paratext Support account</a>!`
+-   Check **Enable sticky header on scroll**, **Enable back to top button**, and **Show site status above footer**
 
 ## General
 
@@ -321,5 +328,3 @@ Display title length and prevent typing past the max length.
 
 This plugin has been slightly modified to also display when editing questions.
 It also displays warning colors when the post's title is below the minimum or at the maximum length.
-
-## Donut theme settings
