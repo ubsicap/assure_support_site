@@ -6,14 +6,15 @@ Automatically delete accounts that have not verified their email after a configu
 
 ## Contents
 
-```
-├── lang                            // Language files
-│   └── qa-ar-lang-default.php      // Default (English)
-├── metadata.json                   // Plugin metadata
-├── qa-ar-admin.php                 // Admin page configuration
-├── qa-ar-events.php                // Bulk-deletes unverified accounts when triggered
-├── qa-ar-filters.php               // Email filter for pruning when attempting to register
-└── qa-plugin.php                   // Registers the plugin
+```sh
+auto-prune-accounts/
+├── lang                            # Language files
+│   └── qa-ar-lang-default.php      # Default (English)
+├── metadata.json                   # Plugin metadata
+├── qa-ar-admin.php                 # Admin page configuration
+├── qa-ar-events.php                # Bulk-deletes unverified accounts when triggered
+├── qa-ar-filters.php               # Email filter for pruning when attempting to register
+└── qa-plugin.php                   # Registers the plugin
 ```
 
 ## Functionality

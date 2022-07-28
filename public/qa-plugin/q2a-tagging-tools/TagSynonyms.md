@@ -1,14 +1,7 @@
-# Tagging Tools Synonyms
-
-The [Tagging Tools](https://github.com/svivian/q2a-tagging-tools) plugin allows you to create "tag synonyms" which map similar tags to each other.
-For example, the synonym `pt,paratext` would automatically convert the tag `pt` to `paratext` when a post is submitted.
-It also has the ability to retroactively apply these synonyms.
-Lastly, it can remove tags altogether by placing them on standalone lines.
-Since we are automatically generating tag data for posts, it will be useful to apply these synonyms retroactively.
-
 Below is a list of tag synonyms to apply. Copy and paste all desired rules into the Tagging Tools' admin form.
 
 **Abbreviations**
+
 ```
 3.0,usfm-3.0
 7.5,paratext-7.5
@@ -36,6 +29,7 @@ rs,roman-script
 ```
 
 **Plurality**
+
 ```
 accounts,account
 additions,addition
@@ -135,6 +129,7 @@ words,word
 ```
 
 **Misspellings and Refactors**
+
 ```
 administrator,admin
 anti-virus,antivirus
@@ -151,6 +146,7 @@ s/r,send-receive
 ```
 
 **Tags to remove**
+
 ```
 1:2
 way

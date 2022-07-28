@@ -4,18 +4,19 @@ Allows users to reclaim archived accounts.
 
 ## Contents
 
-```
-├── lang                            // Language files
-│   └── qa-ar-lang-default.php      // Default (English)
-├── metadata.json                   // Plugin metadata
-├── qa-ar-admin.php                 // Admin page configuration
-├── qa-ar-event.php                 // Handles deletion of archived accounts
-├── qa-ar-filter.php                // Registration page confirmation for archived accounts
-├── qa-ar-functions.php             // Custom helper functions
-├── qa-ar-layer.php                 // Registration page layer for archived accounts
-├── qa-ar-overrides.php             // Overrides of Q2A builtin functions
-├── qa-ar-page.php                  // Recovery and Reclaim pages
-└── qa-plugin.php                   // Registers the plugin
+```sh
+account-reclaim/
+├── lang                            # Language files
+│   └── qa-ar-lang-default.php      # Default (English)
+├── metadata.json                   # Plugin metadata
+├── qa-ar-admin.php                 # Admin page configuration
+├── qa-ar-event.php                 # Handles deletion of archived accounts
+├── qa-ar-filter.php                # Registration page confirmation for archived accounts
+├── qa-ar-functions.php             # Custom helper functions
+├── qa-ar-layer.php                 # Registration page layer for archived accounts
+├── qa-ar-overrides.php             # Overrides of Q2A builtin functions
+├── qa-ar-page.php                  # Recovery and Reclaim pages
+└── qa-plugin.php                   # Registers the plugin
 ```
 
 ## Functionality
