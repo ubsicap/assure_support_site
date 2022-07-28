@@ -8,15 +8,38 @@ class qa_html_theme_layer extends qa_html_theme_base
 	{
 		qa_html_theme_base::head_script();
 		// check if plugin is enabled, only load js-css-files if tags are needed: ask and edit question page
-		if (qa_opt('post_validator_enabled') && ($this->template == 'ask' || $this->template == 'question')) {
+		if (qa_opt('post_validator_enabled') && ($this->template == 'ask'|| isset($this->content['form_q_edit']))) {
 			// mobile identifier
 			$ismobile = qa_is_mobile_probably() ? 'true' : 'false';
 			$this->output('<script type="text/javascript">
 					var ismobile = ' . $ismobile . ';
 				</script>');
 			// $this->output('<script type="text/javascript" src="' . QA_PLUGIN_DIR . 'post-validator/script.js"></script>');
-			$this->output('<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script.js"></script>');
-			$this->output(' 
+			$this->output('<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-ask.js"></script>');
+			$this->output('<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'utility.js"></script>');
+			
+		}
+
+		if (qa_opt('post_validator_enabled') && ($this->template == 'question' && !isset($this->content['form_q_edit']))) {
+			// mobile identifier
+			$ismobile = qa_is_mobile_probably() ? 'true' : 'false';
+			$this->output('<script type="text/javascript">
+					var ismobile = ' . $ismobile . ';
+				</script>');
+			// $this->output('<script type="text/javascript" src="' . QA_PLUGIN_DIR . 'post-validator/script.js"></script>');
+			$this->output('<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-question.js"></script>');
+			$this->output('<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'utility.js"></script>');
+			
+		}
+
+		
+	}
+
+	function head_css()
+    {
+        qa_html_theme_base::head_css();
+		if (qa_opt('post_validator_enabled') && ($this->template == 'ask' || $this->template == 'question')) {
+        $this->output(' 
 				<style type="text/css">
 					.post-validator-error 
 					{
@@ -42,7 +65,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 				</style>'
 			);
 		}
-	}
+    }
 
 	// end qa_html_theme_layer
 }
