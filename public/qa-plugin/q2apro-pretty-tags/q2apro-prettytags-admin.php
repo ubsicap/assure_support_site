@@ -18,53 +18,66 @@
 class q2apro_prettytags_admin
 {
 
-	// option's value is requested but the option has not yet been set
-	function option_default($option)
-	{
-		switch ($option) {
-			case 'q2apro_prettytags_enabled':
-				return 1; // true
-			default:
-		}
-	}
+    // option's value is requested but the option has not yet been set
+    function option_default($option)
+    {
+        switch ($option) {
+            case 'q2apro_prettytags_enabled':
+                return 1; // true
+            case 'tag_max_len':
+                return 25;
+            default:
+        }
+    }
 
-	function allow_template($template)
-	{
-		return ($template != 'admin');
-	}
+    function allow_template($template)
+    {
+        return ($template != 'admin');
+    }
 
-	function admin_form(&$qa_content)
-	{
+    function admin_form(&$qa_content)
+    {
 
-		// process the admin form if admin hit Save-Changes-button
-		$ok = null;
-		if (qa_clicked('q2apro_prettytags_save')) {
-			qa_opt('q2apro_prettytags_enabled', (bool)qa_post_text('q2apro_prettytags_enabled')); // empty or 1
-			$ok = qa_lang('admin/options_saved');
-		}
+        // process the admin form if admin hit Save-Changes-button
+        $ok = null;
+        if (qa_clicked('q2apro_prettytags_save')) {
+            qa_opt('q2apro_prettytags_enabled', (bool)qa_post_text('q2apro_prettytags_enabled')); // empty or 1
+            // qa_opt('tag_max_len', (int) qa_post_text('tag_max_len'));
+            $ok = qa_lang('admin/options_saved');
+        }
 
-		qa_set_display_rules($qa_content, array(
-			'tag_max_len_display' => 'tag_on_field',
-		));
+        qa_set_display_rules($qa_content, array(
+            'tag_max_len_display' => 'tag_on_field',
+        ));
 
-		return array(
-			'ok' => ($ok && !isset($error)) ? $ok : null,
-			'fields' => array(
-				array(
-					'type' => 'checkbox',
-					'label' => qa_lang('q2apro_prettytags_lang/enable_plugin'),
-					'tags' => 'name="q2apro_prettytags_enabled"',
-					'value' => qa_opt('q2apro_prettytags_enabled'),
-				),
-			),
-			'buttons' => array(
-				array(
-					'label' => qa_lang('main/save_button'),
-					'tags' => 'name="q2apro_prettytags_save"',
-				),
-			),
-		);
-	}
+        return array(
+            'ok' => ($ok && !isset($error)) ? $ok : null,
+            'fields' => array(
+                array(
+                    'type' => 'checkbox',
+                    'label' => qa_lang('q2apro_prettytags_lang/enable_plugin'),
+                    'tags' => 'name="q2apro_prettytags_enabled"',
+                    'value' => qa_opt('q2apro_prettytags_enabled'),
+                ),
+                // We're using TaggingTools, so disable this
+                /*
+                array(
+                    'label' => 'Maximum length of a tag:',
+                    'type' => 'number',
+                    'suffix' => 'characters',
+                    'value' => (int) qa_opt('tag_max_len'),
+                    'tags' => 'name="tag_max_len"'
+                ),
+                */
+            ),
+            'buttons' => array(
+                array(
+                    'label' => qa_lang('main/save_button'),
+                    'tags' => 'name="q2apro_prettytags_save"',
+                ),
+            ),
+        );
+    }
 }
 
 

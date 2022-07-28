@@ -119,8 +119,11 @@ class qa_html_theme_layer extends qa_html_theme_base
 
 	public function form_text_single_row($field, $style)
 	{
-		if (qa_opt('q2apro_prettytags_enabled') && strpos($field['tags'], 'id="tags"') !== false)
-			$this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text"/>');
+		if (qa_opt('q2apro_prettytags_enabled') && strpos($field['tags'], 'id="tags"') !== false) {
+            // If the TaggingTools plugin is available (it is), use it instead
+            $maxTagLen = !empty(qa_opt('tagging_tools_max_length')) ? qa_opt('tagging_tools_max_length') : qa_opt('tag_max_len');
+			$this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style .'-text" maxlength="' . $maxTagLen . '"/>');
+        }
 		else
 			parent::form_text_single_row($field, $style);
 	}
