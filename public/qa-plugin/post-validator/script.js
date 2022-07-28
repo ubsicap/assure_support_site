@@ -101,7 +101,7 @@ function checkField(text)
   if (warnings.length == 0)
   {
     if(checkImage(text)) //special case for image, just print simple warning
-      return createSimpleImageWarning("<br>Make sure images don't contain sensitive information!");
+      return createSimpleImageWarning("Make sure images don't contain sensitive information!");
     else 
       return null; //no warning needed
   }
