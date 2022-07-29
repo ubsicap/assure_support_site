@@ -160,7 +160,7 @@ function onCKEditor(context)
   {
     if(warningMessage != null)
       warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
-    var errorRegion = $ ('.cke_inner').parent().parent().parent().parent().parent().parent(); //area for the warning message
+    var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
   }
 
   displayWarning(warningMessage, errorRegion);

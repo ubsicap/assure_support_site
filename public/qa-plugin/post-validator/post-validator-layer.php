@@ -37,7 +37,6 @@ class qa_html_theme_layer extends qa_html_theme_base
 	function head_script() //attach scripts for displaying warnings
 	{
 		qa_html_theme_base::head_script();
-		$this->output("<script> console.log(" . print_r(qa_get_state()) . ");</script>");
 		// check if plugin is enabled, only load js-css-files if tags are needed: ask and edit question page
 		if (qa_opt('post_validator_enabled') && ($this->template == 'ask'|| isset($this->content['form_q_edit'])))
 			$this->output(get_val_script('ask'));
