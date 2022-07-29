@@ -155,6 +155,7 @@ function onCKEditor(context)
       warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
     var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
   }
+  console.log(context);
   console.log(warningMessage);
   console.log(errorRegion);
   displayWarning(warningMessage, errorRegion);
