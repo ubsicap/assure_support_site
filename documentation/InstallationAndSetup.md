@@ -144,6 +144,12 @@ To mitigate errors when importing, ensure that the data loads properly on a [loc
         - You can run `\q` to exit the MySQL connection
     1. Import the file into RDS, for example:
         - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p q2adb < Dump20220701.sql`
+        - If you encounter `ERROR 1227 (42000) at line 18: Access denied; you need (at least one of) the SUPER, SYSTEM_VARIABLES_ADMIN or SESSION_VARIABLES_ADMIN privilege(s) for this operation`, refer to [AWS' guide](%6I4i1zcnXOBwqpMzcD7syLkdR4rnl) on how to resolve
+            - You may need to delete the following lines from your dump file:
+                - `  18: SET @@SESSION.SQL_LOG_BIN= 0;`
+                - `  24: SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';`
+                - `1237: SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;`
+
 
 ## Post Installation
 
