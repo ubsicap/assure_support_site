@@ -23,12 +23,12 @@ $ (document).ready (function ()
           var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
           console.log(warningMessage);
           displayWarning(warningMessage, errorRegion);
-        });
-       
-      }, 100)
-      if ($("iframe").contents().find('body').length ) {
+        }); 
+      if ($("iframe").contents().find('body').length ) 
+      {
         clearInterval(interval);
       }  
+      }, 100)
       ;}) 
  
     .fail (function (jqxhr, settings, exception) {
