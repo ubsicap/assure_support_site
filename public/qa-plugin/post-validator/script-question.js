@@ -19,7 +19,7 @@ $ (document).ready (function ()
               warningMessage = insertInWarning(warningMessage,"Make sure images don't contain sensitive information!");
           }
           if(warningMessage != null)
-            warningMessage = '<tr><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
+            warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
           var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
           console.log(warningMessage);
           displayWarning(warningMessage, errorRegion);
