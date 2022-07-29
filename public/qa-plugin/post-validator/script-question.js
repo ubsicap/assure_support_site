@@ -22,9 +22,9 @@ $ (document).ready (function () {
         });
        
       }, 100)
-      if ($("iframe"). length ) {
+      if ($("iframe").contents().find('body').length ) {
         clearInterval(interval);
-      }   
+      }  
       ;}) 
  
     .fail (function (jqxhr, settings, exception) {
@@ -32,13 +32,14 @@ $ (document).ready (function () {
     });
   });
 
-  $('.qa-a-item-buttons, .qa-c-item-buttons').click(function()
+  $('.qa-a-item-buttons, .qa-c-item-buttons').children().first().click(function()
   {
     //check sensitive info in body
     $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
     .done (function (script, textStatus) {
       var interval = setInterval(function() {
         $ ('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {
+          console.log("iframe found");
           var bodies = $ ('iframe').contents ().find ('body');
           var warningMessage = checkField ($(bodies).textWithLineBreaks()); //validate the text field
 
@@ -58,7 +59,7 @@ $ (document).ready (function () {
         });
        
       }, 100)
-      if ($("iframe"). length ) {
+      if ($("iframe").contents().find('body').length ) {
         clearInterval(interval);
       }   
       ;}) 
@@ -70,7 +71,7 @@ $ (document).ready (function () {
 
   /*
   //check sensitive info in comments
-  $('.qa-a-item-buttons, .qa-c-item-buttons').click(function() 
+  $('.qa-a-item-buttons, .qa-c-item-buttons').children().first().click(function() 
   {
     if ($ (' .qa-c-form ').css ('display') != 'none') 
     {
