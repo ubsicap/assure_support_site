@@ -27,6 +27,8 @@ function get_val_script($for)
 		$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-ask.js"></script>';
 	elseif($for == "question") //for answers and comments
 		$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-question.js"></script>';
+	elseif($for == "question-edit")
+		$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-question-edit.js"></script>';
 	return $scriptText;
 }
 
@@ -49,7 +51,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 			if(!$isEditPage)
 				$this->output(get_val_script('question'));
 			else //edit answer/comment
-				$var = true;
+				$this->output(get_val_script('question-edit'));
 		}
 	}
 

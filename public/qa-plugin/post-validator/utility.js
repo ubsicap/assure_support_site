@@ -133,7 +133,7 @@ function displayWarning(warning, region) //add message to proper place in the ht
 }
 
 //function for on editor text box change, validates and adds warning message
-//context should be one of the following "ask", "question"
+//context should be one of the following "ask", "question", "question-edit"
 function onCKEditor(context)
 {
   var bodies = $ ('iframe').contents ().find('body');
@@ -146,18 +146,23 @@ function onCKEditor(context)
     else //otherwise insert in the warning
       warningMessage = insertInWarning(warningMessage,"Make sure images don't contain sensitive information!");
   }
+
   //find the proper error region
   if(context == "ask")
     var errorRegion = $ ('.cke_inner').parent ().parent();
-  else //context == "question"
+  else if(context == "question")
   {
     if(warningMessage != null)
       warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
     var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
   }
-  console.log(context);
-  console.log(warningMessage);
-  console.log(errorRegion);
+  else //context == "question-edit"
+  {
+    if(warningMessage != null)
+      warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
+    var errorRegion = $ ('.cke_inner').parent().parent().parent().parent().parent().parent(); //area for the warning message
+  }
+
   displayWarning(warningMessage, errorRegion);
 }
 
