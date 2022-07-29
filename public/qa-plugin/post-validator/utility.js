@@ -11,8 +11,7 @@ function checkField(text)
   warnings += addWarningText(checkMAC(text), "MAC Address");
   
   if (warnings.length == 0)
-      return null; //no warning needed
-    console.log(warnings)
+    return null; //no warning needed
   return createWarning (warnings); //format with warning message
 }
 
@@ -137,7 +136,6 @@ function displayWarning(warning, region) //add message to proper place in the ht
 (function ($) {
   'use strict';
   $.fn.textWithLineBreaks = function () {
-    console.log("fun")
       var onnewline = true,
           f = function (n) {
               var ret = "";
