@@ -51,6 +51,8 @@ $ (document).ready (function () {
           }
           if(warningMessage != null)
             warningMessage = '<tr><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
+          console.log(warningMessage);
+          console.log(errorRegion);
           var errorRegion = $ ('.cke_inner').parent().parent().parent(); //area for the warning message
           displayWarning (warningMessage, errorRegion);
         });
@@ -66,6 +68,7 @@ $ (document).ready (function () {
     });
   });
 
+  /*
   //check sensitive info in comments
   $('.qa-a-item-buttons, .qa-c-item-buttons').click(function() 
   {
@@ -81,6 +84,7 @@ $ (document).ready (function () {
       });
     }
   });
+  */
 });
 
 function displayWarningForComment(warning, region) //add message to proper place in the html
