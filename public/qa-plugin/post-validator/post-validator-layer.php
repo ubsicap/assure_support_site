@@ -46,10 +46,10 @@ class qa_html_theme_layer extends qa_html_theme_base
 			if(isset($_GET['state']))
 			{
 				$isEditPage = true;
-				$this->output("<script> DEBUG_MESSAGE" . $_GET['state'] . "</script>");
+				$this->output("<script> //DEBUG_MESSAGE " . print_r($_GET) . "</script>");
 			}
 			else 
-				$this->output("<script> DEBUG_MESSAGE" . "no state found!" . "</script>");
+				$this->output("<script> //DEBUG_MESSAGE " . print_r($_GET) . "</script>");
 			//case for normal question view
 			
 			//case for edit answer/comment
