@@ -1,9 +1,7 @@
 $ (document).ready (function () 
 {
-  console.log(window.location.search());
-
   //check sensitive info in answer in comments
-  $('.qa-q-view-buttons, .qa-a-item-buttons, .qa-c-item-buttons').click(function()
+  $('.qa-q-view-buttons, .qa-a-item-buttons, .qa-c-item-buttons').children().last().click(function()
   {
     //check sensitive info in body
     $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
@@ -20,8 +18,11 @@ $ (document).ready (function ()
             else //otherwise insert in the warning
               warningMessage = insertInWarning(warningMessage,"Make sure images don't contain sensitive information!");
           }
-          var errorRegion = $ ('.cke_inner').parent().parent(); //area for the warning message
-          displayWarning (warningMessage, errorRegion);
+          if(warningMessage != null)
+            warningMessage = '<tr><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
+          var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
+          console.log(warningMessage);
+          displayWarning(warningMessage, errorRegion);
         });
        
       }, 100)
@@ -35,6 +36,7 @@ $ (document).ready (function ()
     });
   });
 
+  /*
   $('.qa-a-item-buttons, .qa-c-item-buttons').children().first().click(function()
   {
     console.log("button click");
@@ -72,7 +74,8 @@ $ (document).ready (function ()
       console.log ('Failed to get editor!');
     });
   });
-
+  */
+ 
   /*
   //check sensitive info in comments
   $('.qa-a-item-buttons, .qa-c-item-buttons').children().first().click(function() 

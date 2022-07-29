@@ -38,8 +38,19 @@ class qa_html_theme_layer extends qa_html_theme_base
 		// check if plugin is enabled, only load js-css-files if tags are needed: ask and edit question page
 		if (qa_opt('post_validator_enabled') && ($this->template == 'ask'|| isset($this->content['form_q_edit'])))
 			$this->output(get_val_script('ask'));
-		elseif (qa_opt('post_validator_enabled') && ($this->template == 'question' && !isset($this->content['form_q_edit'])))
-			$this->output(get_val_script('question'));
+		elseif (qa_opt('post_validator_enabled') && ($this->template == 'question'))
+		{
+			$isEditPage = false;
+			if(isset($_GET['state']) && $_GET['state'].substr(0,4)=='edit')
+				$isEditPage = true;
+			//case for normal question view
+			
+			//case for edit answer/comment
+			if(!$isEditPage)
+				$this->output(get_val_script('question'));
+			else //edit answer/comment
+				$var = true;
+		}
 	}
 
 	function head_css()
