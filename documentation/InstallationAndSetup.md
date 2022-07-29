@@ -127,7 +127,7 @@ To mitigate errors when importing, ensure that the data loads properly on a [loc
     1. Go to **Server > Data Export**.
     1. Select the schema with the desired tables (if you don’t want to overwrite the tables storing site configuration do not select `qa_options` and `qa_pages`).
     1. Choose **Export to Self-Contained File**.
-    1. Click **Advanced Options** and make sure **set-gtid-purged - Add 'SET @@GLOBAL.GTID_PURGED' to the output** is set to `OFF`.
+    1. Click **Advanced Options** and make sure [**set-gtid-purged - Add 'SET @@GLOBAL.GTID_PURGED' to the output**](https://stackoverflow.com/a/54679361) is set to `OFF`.
     1. Start Export.
 1. Move the dump to the EC2 instance.
     1. Before you do this make sure you can SSH (secure shell) into the EC2 instance.
