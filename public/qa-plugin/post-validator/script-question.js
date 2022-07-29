@@ -5,11 +5,8 @@ $ (document).ready (function () {
     //check sensitive info in body
     $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
     .done (function (script, textStatus) {
-      console.log("script")
       var interval = setInterval(function() {
-        console.log("load")
         $ ('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {
-          console.log("bind")
           var bodies = $ ('iframe').contents ().find ('body');
           var warningMessage = checkField ($(bodies).textWithLineBreaks()); //validate the text field (plaintext)
           
@@ -26,13 +23,12 @@ $ (document).ready (function () {
        
       }, 100)
       if ($("iframe"). length ) {
-        console.log("c")
         clearInterval(interval);
       }   
       ;}) 
  
     .fail (function (jqxhr, settings, exception) {
-      console.log ('failed to get editor');
+      console.log ('Failed to get editor!');
     });
   });
 
@@ -61,7 +57,6 @@ function displayWarningForComment(warning, region) //add message to proper place
   }
   //there is a warning, add it
   if (warning != null)  {
-    console.log(region.last())
     $(warning).insertBefore(region.last());
   }
     // region.append (warning);

@@ -10,11 +10,8 @@ $ (document).ready (function () {
   //check sensitive info in body
  $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
     .done (function (script, textStatus) {
-      console.log("script")
       var interval = setInterval(function() {
-        console.log("load")
         $ ('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {
-          console.log("bind")
           var bodies = $ ('iframe').contents ().find ('body');
           var warningMessage = checkField ($(bodies).textWithLineBreaks()); //validate the text field (plaintext)
           if(checkImage($(bodies).html())) //special case for image in text
@@ -24,19 +21,15 @@ $ (document).ready (function () {
             else //otherwise insert in the warning
               warningMessage = insertInWarning(warningMessage,"Make sure images don't contain sensitive information!");
           }
-          console.log(warningMessage)
           var errorRegion = $ ('.cke_inner').parent ().parent(); //area for the warning message
           displayWarning (warningMessage, errorRegion);
         });
         if ($("iframe").contents().find('body').length ) {
-          console.log("c")
-          console.log($("iframe").contents().find('body').contents());
           clearInterval(interval);
         }   
-    }, 100);
-    
-        }) .fail (function (jqxhr, settings, exception) {
-      console.log ('failed to get editor');
+      }, 100);
+    }) .fail (function (jqxhr, settings, exception) {
+      console.log('Failed to get editor!')
     });
 
 
