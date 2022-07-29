@@ -149,7 +149,7 @@ function onCKEditor(context)
 
   //find the proper error region
   if(context == "ask")
-    var errorRegion = $ ('.cke_inner').parent ().parent();
+    var errorRegion = $ ('.cke_inner').parent().parent();
   else if(context == "question")
   {
     if(warningMessage != null)
@@ -161,6 +161,7 @@ function onCKEditor(context)
     if(warningMessage != null)
       warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
     var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
+    console.debug(errorRegion);
   }
 
   displayWarning(warningMessage, errorRegion);
