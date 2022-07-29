@@ -7,30 +7,11 @@ $ (document).ready (function ()
     $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
     .done (function (script, textStatus) {
       var interval = setInterval(function() {
-        $ ('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {
-          var bodies = $ ('iframe').contents ().find ('body');
-          var warningMessage = checkField ($(bodies).textWithLineBreaks()); //validate the text field (plaintext)
-          
-          if(checkImage($(bodies).html())) //special case for image in text
-          {
-            if(warningMessage == null) //image but no other warnings
-              warningMessage = createSimpleWarning("Make sure images don't contain sensitive information!");
-            else //otherwise insert in the warning
-              warningMessage = insertInWarning(warningMessage,"Make sure images don't contain sensitive information!");
-          }
-          if(warningMessage != null)
-            warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
-          var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
-          console.log(warningMessage);
-          displayWarning(warningMessage, errorRegion);
-        }); 
-      if ($("iframe").contents().find('body').length ) 
-      {
-        clearInterval(interval);
-      }  
+        $('iframe').contents ().find ('body').bind ('DOMSubtreeModified', onCKEditor("question")); 
+        if ($("iframe").contents().find('body').length ) 
+          clearInterval(interval);
       }, 100)
       ;}) 
- 
     .fail (function (jqxhr, settings, exception) {
       console.log ('Failed to get editor!');
     });

@@ -132,6 +132,33 @@ function displayWarning(warning, region) //add message to proper place in the ht
     region.append (warning);
 }
 
+//function for on editor text box change, validates and adds warning message
+//context should be one of the following "ask", "question"
+function onCKEditor(context)
+{
+  var bodies = $ ('iframe').contents ().find ('body');
+  var warningMessage = checkField ($(bodies).textWithLineBreaks()); //validate the text field (plaintext)
+  
+  if(checkImage($(bodies).html())) //special case for image in text
+  {
+    if(warningMessage == null) //image but no other warnings
+      warningMessage = createSimpleWarning("Make sure images don't contain sensitive information!");
+    else //otherwise insert in the warning
+      warningMessage = insertInWarning(warningMessage,"Make sure images don't contain sensitive information!");
+  }
+  //find the proper error region
+  if(context == "question")
+    var errorRegion = $ ('.cke_inner').parent ().parent();//
+  else //context == "ask"
+  {
+    if(warningMessage != null)
+      warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
+    var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
+  }
+  displayWarning(warningMessage, errorRegion);
+}
+
+
 //reference: https://github.com/antialias/textWithLineBreaks
 (function ($) {
   'use strict';
