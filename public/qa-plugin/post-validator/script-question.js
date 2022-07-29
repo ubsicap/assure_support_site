@@ -1,10 +1,5 @@
 $ (document).ready (function () 
 {
-
-  //if we're on an edit page
-
-  //otherwise on view page
-
   //check sensitive info in answer
   $('.qa-q-view-buttons').children().last().click(function()
   {
