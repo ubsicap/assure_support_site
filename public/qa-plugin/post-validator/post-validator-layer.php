@@ -18,7 +18,7 @@ function get_val_script($for)
 		var enabled_registration = ' . string_bool_option('post_val_check_registration') . ';
 		var enabled_ip = ' . string_bool_option('post_val_check_ip') . ';
 		var enabled_mac = ' . string_bool_option('post_val_check_mac') . ';
-		var enabled_image = ' . string_bool_option('post_val_check_images') . ';
+		var enabled_image = ' . string_bool_option('post_val_check_image') . ';
 	</script>'; //all the option variables
 	$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'utility.js"></script>'; //main functions
 
