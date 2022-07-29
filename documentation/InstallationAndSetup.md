@@ -124,13 +124,14 @@ To mitigate errors when importing, ensure that the data loads properly on a [loc
 
 1. Get a dump of the desired data from your local machine.
     1. View your database from MySql Workbench.
-    1. Go to Server > Data Export
+    1. Go to **Server > Data Export**.
     1. Select the schema with the desired tables (if you don’t want to overwrite the tables storing site configuration do not select `qa_options` and `qa_pages`).
-    1. Choose Export to Self-Contained File
-    1. Start Export
+    1. Choose **Export to Self-Contained File**.
+    1. Click **Advanced Options** and make sure **set-gtid-purged - Add 'SET @@GLOBAL.GTID_PURGED' to the output** is set to `OFF`.
+    1. Start Export.
 1. Move the dump to the EC2 instance.
     1. Before you do this make sure you can SSH (secure shell) into the EC2 instance.
-    1. Use `scp` to send the dump file to the EC2 instance
+    1. Use `scp` to send the dump file to the EC2 instance:
         - `scp -i </path/to/key.pem> <local dump file> <user>@<Elastic IP>:<destination of dump file>`
         - Example: `scp -i q2a_intern_key Dump20220701.sql ubuntu@supportsitetest.tk:~/dumps/Dump20220701.sql`
 1. Import the data to the RDS instance.
@@ -139,17 +140,14 @@ To mitigate errors when importing, ensure that the data loads properly on a [loc
         - `ssh -i </path/to/key.pem> <user>@<Elastic IP>`
     1. Ensure mysql is installed
         - `sudo apt install -y mysql-client-core-8.0`
-    1. (Optional) Verify your connection to the database works, for example:
-        - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p`
+    1. (Optional) Verify your connection to the database works, for example: `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p`
         - You can run `\q` to exit the MySQL connection
-    1. Import the file into RDS, for example:
-        - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p q2adb < Dump20220701.sql`
-        - If you encounter `ERROR 1227 (42000) at line 18: Access denied; you need (at least one of) the SUPER, SYSTEM_VARIABLES_ADMIN or SESSION_VARIABLES_ADMIN privilege(s) for this operation`, refer to [AWS' guide](%6I4i1zcnXOBwqpMzcD7syLkdR4rnl) on how to resolve
-            - You may need to delete the following lines from your dump file:
-                - `  18: SET @@SESSION.SQL_LOG_BIN= 0;`
-                - `  24: SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';`
-                - `1237: SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;`
-
+    1. Import the file into RDS, for example: `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p q2adb < Dump20220701.sql`
+        - If you encounter `ERROR 1227 (42000) at line 18: Access denied; you need (at least one of) the SUPER, SYSTEM_VARIABLES_ADMIN or SESSION_VARIABLES_ADMIN privilege(s) for this operation`, you may need to [delete the following lines](https://help.poralix.com/articles/mysql-access-denied-you-need-the-super-privilege-for-this-operation) from your dump file:
+            - `--17: SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;`
+            - `--18: SET @@SESSION.SQL_LOG_BIN= 0;`
+            - `--24: SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';`
+            - `1237: SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;`
 
 ## Post Installation
 
