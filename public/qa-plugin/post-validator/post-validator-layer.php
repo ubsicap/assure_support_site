@@ -3,22 +3,22 @@
 
 //helper functions for head_script
 //get the main scripts needed to display the warnings, $for should either by ask or question, returns the script as a string
-function string_bool_option($val)
+function string_bool_option($opt_name)
 {
-	return $val ? 'true' : 'false';
+	return qa_opt($opt_name) ? 'true' : 'false';
 }
 
 function get_val_script($for)
 {
 	$scriptText = 
 	'<script type="text/javascript">
-		var enabled_name = ' . string_bool_option(qa_opt('post_val_name')=='1') . ';
-		var enabled_email = ' . string_bool_option(qa_opt('post_val_email')=='1') . ';
-		var enabled_phone = ' . string_bool_option(qa_opt('post_val_phone')=='1') . ';
-		var enabled_registration = ' . string_bool_option(qa_opt('post_val_registration')=='1') . ';
-		var enabled_ip = ' . string_bool_option(qa_opt('post_val_ip')=='1') . ';
-		var enabled_mac = ' . string_bool_option(qa_opt('post_val_mac')=='1') . ';
-		var enabled_image = ' . string_bool_option(qa_opt('post_val_images')=='1') . ';
+		var enabled_name = ' . string_bool_option('post_val_name') . ';
+		var enabled_email = ' . string_bool_option('post_val_email') . ';
+		var enabled_phone = ' . string_bool_option('post_val_phone') . ';
+		var enabled_registration = ' . string_bool_option('post_val_registration') . ';
+		var enabled_ip = ' . string_bool_option('post_val_ip') . ';
+		var enabled_mac = ' . string_bool_option('post_val_mac') . ';
+		var enabled_image = ' . string_bool_option('post_val_images') . ';
 	</script>'; //all the option variables
 	$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'utility.js"></script>'; //main functions
 
