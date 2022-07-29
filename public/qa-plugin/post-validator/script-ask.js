@@ -28,10 +28,9 @@ $ (document).ready (function () {
           var errorRegion = $ ('.cke_inner').parent ().parent(); //area for the warning message
           displayWarning (warningMessage, errorRegion);
         });
-        if ($("iframe").length ) {
+        if ($("iframe").contents().find('body').length ) {
           console.log("c")
-          console.log($("iframe").length);
-          console.log($("iframe").contents);
+          console.log($("iframe").contents().find('body').contents());
           clearInterval(interval);
         }   
     }, 100);
