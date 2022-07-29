@@ -41,7 +41,7 @@ In AWS create an RDS instance with the following settings:
 -   20 GiB allocated
 -   Enable storage autoscaling
 -   100 GiB maximum
--   Default VPC (make sure id matches the existing EC2 instance)
+-   Default VPC (make note of this ID, you will need it for the EC2 instance)
 -   Public Access: No
 -   VPC security groups: MySQL Access (if that isn't a group, just use default)
 -   Password authentication
@@ -68,6 +68,7 @@ The EC2 instance is the host of the web server and its details will depend entir
 1. Select Ubuntu 20.04 as the image.
 1. Select/create a key pair for `ssh` access.
     - Make sure you save the `.pem` key file, as these will be used to access the server later.
+1. Make sure the VPC is the same as the one used for the RDS instance.
 1. Select/create a network security group according to your deployment needs. For development, the following rules were used:
     - **Type**: `HTTP`, **Protocol**: `TCP`, **Port Range**: `80`, **Source**: `0.0.0.0/0`
     - **Type**: `HTTPS`, **Protocol**: `TCP`, **Port Range**: `443`, **Source**: `0.0.0.0/0`
