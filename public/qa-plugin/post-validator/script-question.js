@@ -7,7 +7,7 @@ $ (document).ready (function ()
     $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
     .done (function (script, textStatus) {
       var interval = setInterval(function() {
-        $('iframe').contents ().find ('body').bind ('DOMSubtreeModified', onCKEditor("question")); 
+        $('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {onCKEditor("ask");}); 
         if ($("iframe").contents().find('body').length ) 
           clearInterval(interval);
       }, 100)

@@ -136,7 +136,7 @@ function displayWarning(warning, region) //add message to proper place in the ht
 //context should be one of the following "ask", "question"
 function onCKEditor(context)
 {
-  var bodies = $ ('iframe').contents ().find ('body');
+  var bodies = $ ('iframe').contents ().find('body');
   var warningMessage = checkField ($(bodies).textWithLineBreaks()); //validate the text field (plaintext)
   
   if(checkImage($(bodies).html())) //special case for image in text
