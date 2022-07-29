@@ -131,6 +131,12 @@ function displayWarning(warning, region) //add message to proper place in the ht
   if (warning != null) //there is a warning, add it
     region.append (warning);
 }
+function displayWarningEdit(warning, region) //add message to proper place in the html
+{
+  region.find('.post-validator-error').remove(); //remove previous warning if there was one
+  if (warning != null) //there is a warning, add it
+    warning.insertAfter(region.children().first());
+}
 
 //function for on editor text box change, validates and adds warning message
 //context should be one of the following "ask", "question", "question-edit"
@@ -156,16 +162,16 @@ function onCKEditor(context)
       warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
     var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
   }
-  else //context == "question-edit"
+  
+  if(context != "question-edit") //normal insert
+    displayWarning(warningMessage, errorRegion);
+  else //special insert and region for question-edit 
   {
     if(warningMessage != null)
       warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
     var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
-    console.log(errorRegion);
+    displayWarningEdit(warningMessage, errorRegion) 
   }
-  console.log(context);
-
-  displayWarning(warningMessage, errorRegion);
 }
 
 
