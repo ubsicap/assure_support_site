@@ -13,7 +13,10 @@ $ (document).ready (function () {
       console.log("script")
       var interval = setInterval(function() {
         console.log("load")
-        
+        if ($("iframe").length ) {
+          console.log("c")
+          clearInterval(interval);
+        }   
         $ ('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {
           console.log("bind")
           var bodies = $ ('iframe').contents ().find ('body');
@@ -31,10 +34,7 @@ $ (document).ready (function () {
           displayWarning (warningMessage, errorRegion);
       });
     }, 100);
-    if ($("iframe").length ) {
-      console.log("c")
-      clearInterval(interval);
-    }   
+    
         }) .fail (function (jqxhr, settings, exception) {
       console.log ('failed to get editor');
     });
