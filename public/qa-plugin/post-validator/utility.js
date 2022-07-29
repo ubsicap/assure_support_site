@@ -37,6 +37,7 @@ function createWarning (entries) //create html warning message
 
 function addWarningText(warnings, type) //get the warning text formatted, don't add anything there are no warnings
 {
+  console.log(warnings)
   if(warnings == null) //no warning
     return "";
   var warningText = "<br>&nbsp;&nbsp;&nbsp;&nbsp;" + type + ": "
