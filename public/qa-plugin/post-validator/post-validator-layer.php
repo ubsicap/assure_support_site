@@ -43,7 +43,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 		elseif (qa_opt('post_validator_enabled') && ($this->template == 'question'))
 		{
 			$isEditPage = false;
-			if(isset($_GET['state']) && $_GET['state'].substr(0,4)=='edit')
+			if(isset($_GET['state']))
 			{
 				$isEditPage = true;
 				$this->output("<script> DEBUG_MESSAGE" . $_GET['state'] . "</script>");
