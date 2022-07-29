@@ -23,11 +23,14 @@ $ (document).ready (function () {
           var errorRegion = $ ('.cke_inner').parent ().parent(); //area for the warning message
           displayWarning (warningMessage, errorRegion);
         });
-        if ($("iframe"). length ) {
-          console.log("c")
-          clearInterval(interval);
-        }    
-      }, 100);}) 
+       
+      }, 100)
+      if ($("iframe"). length ) {
+        console.log("c")
+        clearInterval(interval);
+      }   
+      ;}) 
+ 
     .fail (function (jqxhr, settings, exception) {
       console.log ('failed to get editor');
     });
