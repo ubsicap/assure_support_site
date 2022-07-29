@@ -18,7 +18,7 @@ function get_val_script($for)
 		var enabled_registration = ' . string_bool_option(qa_opt('post_val_registration')=='1') . ';
 		var enabled_ip = ' . string_bool_option(qa_opt('post_val_ip')=='1') . ';
 		var enabled_mac = ' . string_bool_option(qa_opt('post_val_mac')=='1') . ';
-		var enabled_images = ' . string_bool_option(qa_opt('post_val_images')=='1') . ';
+		var enabled_image = ' . string_bool_option(qa_opt('post_val_images')=='1') . ';
 	</script>'; //all the option variables
 	$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'utility.js"></script>'; //main functions
 
