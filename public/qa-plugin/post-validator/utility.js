@@ -147,14 +147,16 @@ function onCKEditor(context)
       warningMessage = insertInWarning(warningMessage,"Make sure images don't contain sensitive information!");
   }
   //find the proper error region
-  if(context == "question")
-    var errorRegion = $ ('.cke_inner').parent ().parent();//
-  else //context == "ask"
+  if(context == "ask")
+    var errorRegion = $ ('.cke_inner').parent ().parent();
+  else //context == "question"
   {
     if(warningMessage != null)
       warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
     var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
   }
+  console.log(warningMessage);
+  console.log(errorRegion);
   displayWarning(warningMessage, errorRegion);
 }
 
