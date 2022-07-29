@@ -1,7 +1,7 @@
 $ (document).ready (function () 
 {
   //check sensitive info in answer in comments
-  $('.qa-q-view-buttons, .qa-a-item-buttons, .qa-c-item-buttons').children().last().click(function()
+  $('.qa-q-view-buttons').children().last().click(function()
   {
     //check sensitive info in body
     $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
