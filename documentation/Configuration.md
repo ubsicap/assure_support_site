@@ -72,7 +72,7 @@ This document contains information such about installed plugins, custom pages, a
 -   Check **Show a logo image in the page header**
 -   **URL of logo**: `/path/to/your/logo`
 -   Check **Custom HTML in sidebar box**
-    -   `SITE_NAME is a public forum that connects users of Bible translation software, so that they can help one another to find solutions, and discover new ways of working together. We welcome users of all Bible translation software systems to discover how they can help one another to take God’s Word to the world.`
+    -   `Ask Ebenezer is a public forum that connects users of Bible translation software, so that they can help one another to find solutions, and discover new ways of working together. We welcome users of all Bible translation software systems to discover how they can help one another to take God’s Word to the world.<hr><i>Then Samuel took a stone and set it up between Mizpah and Shen. He named it Ebenezer, saying, “Thus far the Lord has helped us."</i><br><b>1 Samuel 7:12</b>`
 -   Add the following widgets:
     -   **Search Bar**: `Main area - Top`
     -   **Related Questions**: `Main area - Bottom`
