@@ -54,6 +54,7 @@ Make sure to note down the database password and username (`admin` by default).
 -   To protect the site data, the database should have been configured so that only instances on the same VPC (i.e. the EC2 instance) can access it.
 -   The EC2 instance should only have ports open for ssh (22), http (80), ssl (443), MySql (3306).
 -   For the RDS instance, the only inbound port permitted should be MySql(3306). The source ip of the inbound rule should be the private ip of the EC2 instance.
+    - You may need to come back and modify this after the Elastic IP has been generated. Just select the DB instance, then select its VPC security group, click **Edit Inbound rules** and set the source IP to the private IP of the EC2 instance.
 -   This can be configured in the security groups of the EC2 and RDS instance.
 
 ## Deploying to AWS
