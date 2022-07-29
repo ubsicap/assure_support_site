@@ -136,6 +136,7 @@ anti-virus,antivirus
 autocorrect.txt,autocorrect
 find/replace,find-replace
 heb/grk,hebrew-greek
+heb-grk,hebrew-greek
 hyphenatedwords.txt,hyphen
 interlinearization,interlinear
 registery.paratext.org,registry
@@ -143,6 +144,7 @@ send/receive,send-receive
 settings.xml,settings
 spell,spellcheck
 s/r,send-receive
+s-r,send-receive
 ```
 
 **Tags to remove**
@@ -150,4 +152,44 @@ s/r,send-receive
 ```
 1:2
 way
+```
+
+**Paratext Settings/Tools**
+```
+basicchecks,basic-checks
+biblicalterms,biblical-terms
+check-lists,checklists
+compareversions,compare-versions
+confictnotes,conflict-notes
+consultantnotes,consultant-notes
+consultantnote,consultant-notes
+consultant-note,consultant-notes
+definepriorities,define-priorities
+deleteproject,delete-project
+healthreport,project-health-report
+health-report,project-health-report
+languagesettings,language-settings
+managebooks,manage-books
+markhistory,mark-history
+noteslist,notes-list
+numbersettings,number-settings
+parallelpassages,parallel-passages
+paratextlive,paratext-live
+progresscharts,progress-charts
+projectcanons,project-canons
+projecthealthreport,project-health-report
+projecthistory,project-history
+projectnotes,project-notes
+projectnote,project-notes
+projectplan,project-plan
+projectproperties,project-properties
+projectsettings,project-settings
+project-note,project-notes
+quickreference,quick-reference
+quotationrules,quotation-rules
+recentchanges,recent-changes
+scripturereference,scripture-reference
+spellcheck,spell-check
+userpermissions,user-permissions
+word-list,wordlist
 ```
