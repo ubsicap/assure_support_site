@@ -1,4 +1,7 @@
-$ (document).ready (function () {
+$ (document).ready (function () 
+{
+  console.log(window.location.search());
+
   //check sensitive info in answer in comments
   $('.qa-q-view-buttons, .qa-a-item-buttons, .qa-c-item-buttons').click(function()
   {
