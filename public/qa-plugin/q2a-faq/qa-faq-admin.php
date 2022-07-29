@@ -66,6 +66,13 @@ class qa_faq_admin
 	font-size:125%;
 	font-weight:bold;
 	cursor:pointer;
+}
+summary.qa-faq-section-title {
+    padding: 5px 8px;
+    display: list-item;
+}
+div.qa-faq-section > details {
+    margin-bottom: 15px;
 }';
             default:
                 // If the option is a FAQ entry, and that entry exists, return it
