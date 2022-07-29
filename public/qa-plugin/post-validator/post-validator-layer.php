@@ -51,7 +51,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 			}
 			else
 			*/ 
-			$this->output("<script> console.log(" . $this->context . ");</script>");
+			$this->output("<script> console.log(" . var_dump($this->context) . ");</script>");
 			//case for normal question view
 			
 			//case for edit answer/comment
