@@ -1,6 +1,6 @@
 $ (document).ready (function () {
   //check sensitive info in answer in comments
-  $('.qa-q-view-buttons').click(function()
+  $('.qa-q-view-buttons, .qa-a-item-buttons, .qa-c-item-buttons').click(function()
   {
     //check sensitive info in body
     $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
@@ -41,8 +41,8 @@ $ (document).ready (function () {
         var warningMessage = checkField (this.value); //validate the text field
         if(warningMessage != null) {
           warningMessage = '<tr><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
-    var errorRegion = $ ('textarea').parent ().parent().parent(); //area for the warning message
-    displayWarningForComment (warningMessage, errorRegion);
+          var errorRegion = $ ('textarea').parent ().parent().parent(); //area for the warning message
+          displayWarningForComment (warningMessage, errorRegion);
         }
       });
     }
