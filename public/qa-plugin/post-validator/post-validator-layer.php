@@ -46,10 +46,10 @@ class qa_html_theme_layer extends qa_html_theme_base
 			if(isset($_GET['state']))
 			{
 				$isEditPage = true;
-				$this->output("<script> console.log(" . var_dump($_GET) . ");</script>");
+				$this->output("<script> console.log(" . $_GET['state'] . ");</script>");
 			}
 			else 
-				$this->output("<script> console.log(" . var_dump($_GET) . ");</script>");
+				$this->output("<script> console.log(" . $_GET['state'] . ");</script>");
 			//case for normal question view
 			
 			//case for edit answer/comment
