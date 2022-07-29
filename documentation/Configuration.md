@@ -49,6 +49,8 @@ This document contains information such about installed plugins, custom pages, a
     -   **Left text**: `New here? <a href="https://supportsitetest.tk/register" style="color: inherit;">Create a new account</a>!`
     -   **Right text**: `Got redirected? <a href="https://supportsitetest.tk/recover-account" style="color: inherit;">Reclaim your existing Paratext Support account</a>!`
 -   Check **Enable sticky header on scroll**, **Enable back to top button**, and **Show site status above footer**
+-   Either uncheck **Show home page banner**, or configure it to your liking.
+-   Uncheck **Show social links at footer** and **Show copyright at footer**
 
 ## General
 
@@ -119,6 +121,8 @@ Several custom pages are included in the site. While Q2A supports the creation o
 
 ## Points
 
+-   Set **Multiply all points** to `1`
+
 ## Spam
 
 -   Check **Request confirmation ...**, **All new users ...**, **User captcha ...**
@@ -137,7 +141,7 @@ Several custom pages are included in the site. While Q2A supports the creation o
 `To do: Add a description for each plugin, a description of the configuration (if there is a stylesheet or some bulk text field the content should be listed or mentioned where to find a copy of it), also if the plugin has been updated from the original in case of future downloads. Any paid plugins also need to be mentioned regardless if they are on the repository or not (i.e. dynamic mentions).`
 
 Below is a list of all [Q2A Plugins](https://docs.question2answer.org/addons/plugins/) installed for this site.
-We have omitted the [default plugins](https://github.com/q2a/question2answer/tree/dev/qa-plugin) included with Q2A for the sake of brevity.
+We have omitted the [default plugins](https://github.com/q2a/question2answer/tree/dev/qa-plugin) included with Q2A for the sake of brevity. The default options for most plugins will suffice, unless other options are provided.
 
 ### [account-reclaim](../public/qa-plugin/account-reclaim)
 
@@ -171,6 +175,7 @@ Display a image next to category names, such as logos for categories that repres
 
 #### Configuration
 
+-   Check **Add specific logo to corresponding categories**
 -   Add the following paths:
     -   **Paratext**: `/assets/ParatextCenter.png`
     -   **Publishing Assistant**: `/assets/PublishingAssistant.png`
@@ -215,10 +220,12 @@ Assigns users badges for certain (configurable) milestones, such as number of an
         - Verified Human, Autobiographer, Photogenic
         - Renewal, Revival, Resurrection
         - Commenter, Commentator, Annotator
+        - Voter, Avid Voter, Devoted Voter
         - Editor, Copy Editor, Senior Editor
         - Watchdog, Bloodhound, Pitbull
         - Medalist, Champion Olympian
     - Set the `Notify Duration` to 0 (disabled)
+    - Check **Add badges to profile pages** and **Show badges on main profile field**
     - Uncheck `Show list of ...` boxes
 
 ### [q2a-faq](https://github.com/gturri/q2a-faq/)
@@ -253,6 +260,10 @@ Most notably, the ability to add custom roles to users has been implemented.
 Administrators can now assign a unique role to users by visiting their profile.
 This custom role will display next to the user's display name across the site, and the color for custom titles can be configured via CSS in the admin panel.
 
+#### Configuration
+
+-   Check all boxes
+
 ### [q2a-sticky-sidebar-plugin](https://github.com/stefanmm/q2a-sticky-sidebar-plugin/)
 
 Sidebar stays on the screen when you scroll down.
@@ -285,6 +296,10 @@ Copy and paste all desired rules into the Tagging Tools' admin form.
 ### [q2apro-on-site-notifications](https://github.com/q2apro/q2apro-on-site-notifications)
 
 Notification icons similar to social media.
+
+#### Configuration
+
+-   Enable the plugin
 
 ### [q2apro-pretty-tags](https://github.com/ProThoughts/q2apro-pretty-tags)
 
