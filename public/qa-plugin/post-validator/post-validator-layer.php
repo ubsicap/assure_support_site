@@ -44,7 +44,10 @@ class qa_html_theme_layer extends qa_html_theme_base
 		{
 			$isEditPage = false;
 			if(isset($_GET['state']) && $_GET['state'].substr(0,4)=='edit')
+			{
 				$isEditPage = true;
+				$this->output("<script>" . $_GET['state'] . "</script>");
+			}
 			//case for normal question view
 			
 			//case for edit answer/comment
