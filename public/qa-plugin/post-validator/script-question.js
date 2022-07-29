@@ -34,6 +34,7 @@ $ (document).ready (function () {
 
   $('.qa-a-item-buttons, .qa-c-item-buttons').children().first().click(function()
   {
+    console.log("button click");
     //check sensitive info in body
     $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
     .done (function (script, textStatus) {
