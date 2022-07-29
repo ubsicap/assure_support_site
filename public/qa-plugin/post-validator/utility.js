@@ -135,7 +135,7 @@ function displayWarningEdit(warning, region) //add message to proper place in th
 {
   region.find('.post-validator-error').remove(); //remove previous warning if there was one
   if (warning != null) //there is a warning, add it
-    warning.insertAfter(region.children().first());
+    region.children().first().after(warning);
 }
 
 //function for on editor text box change, validates and adds warning message
