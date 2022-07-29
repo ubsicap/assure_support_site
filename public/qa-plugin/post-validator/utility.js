@@ -163,6 +163,7 @@ function onCKEditor(context)
     var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
     console.debug(errorRegion);
   }
+  console.debug(context);
 
   displayWarning(warningMessage, errorRegion);
 }
