@@ -2,9 +2,9 @@
     box-sizing: border-box;
 }
 
-html,
 body {
     margin: 0;
+    font-family: 'Noto Sans';
 }
 
 .header {
@@ -40,18 +40,30 @@ body {
 .main h3{
     font-size: 95px;
     color: #dce2e3;
-    font-family: 'Noto Sans';
     margin: 0;
-    padding-top: 10%;
+    padding-top: 6%;
 }
 
 .main h6{
     font-size: 80px;
     color: #dce2e3;
-    font-family: 'Noto Sans';
     margin: 0;
-    padding-top: 2%;
-    padding-left: 20%;
+    padding-top: 1%;
+    padding-left: 17%;
+}
+
+.center {
+    width: 85%;
+    overflow-wrap: break-word;
+    margin-left: 8%;
+    margin-top: 5%;
+}
+
+.main p {
+    margin-top: 5%;
+    font-size: 19px;
+    color: #dce2e3;
+    font-style: oblique;
 }
 
 
