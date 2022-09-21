@@ -25,7 +25,7 @@ body {
 
 .header h1 {
     font-weight: bold;
-    color: #797579;
+    color: #161515;
     margin-top: auto; 
     margin-bottom: auto;
 }
@@ -39,31 +39,30 @@ body {
 
 .main h3{
     font-size: 95px;
-    color: #dce2e3;
+    color: #161515;
     margin: 0;
     padding-top: 6%;
 }
 
 .main h6{
     font-size: 80px;
-    color: #dce2e3;
+    color: #161515;
     margin: 0;
     padding-top: 1%;
     padding-left: 17%;
 }
 
 .center {
-    width: 85%;
+    width: 80%;
     overflow-wrap: break-word;
-    margin-left: 8%;
+    margin-left: 10%;
     margin-top: 5%;
 }
 
 .main p {
     margin-top: 5%;
-    font-size: 19px;
-    color: #dce2e3;
-    font-style: oblique;
+    font-size: 23px;
+    color: #161515;
 }
 
 
