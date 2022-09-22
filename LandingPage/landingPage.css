@@ -53,15 +53,15 @@ body {
 }
 
 .center {
-    width: 80%;
+    width: 100%;
     overflow-wrap: break-word;
-    margin-left: 10%;
+    margin-left: 0%;
     margin-top: 5%;
 }
 
 .main p {
     margin-top: 5%;
-    font-size: 23px;
+    font-size: 21px;
     color: #161515;
 }
 
