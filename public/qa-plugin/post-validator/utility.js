@@ -37,7 +37,6 @@ function createWarning (entries) //create html warning message
 
 function addWarningText(warnings, type) //get the warning text formatted, don't add anything there are no warnings
 {
-  console.log(warnings)
   if(warnings == null) //no warning
     return "";
   var warningText = "<br>&nbsp;&nbsp;&nbsp;&nbsp;" + type + ": "
@@ -132,6 +131,49 @@ function displayWarning(warning, region) //add message to proper place in the ht
   if (warning != null) //there is a warning, add it
     region.append (warning);
 }
+function displayWarningEdit(warning, region) //add message to proper place in the html
+{
+  region.find('.post-validator-error').remove(); //remove previous warning if there was one
+  if (warning != null) //there is a warning, add it
+    region.children().first().after(warning);
+}
+
+//function for on editor text box change, validates and adds warning message
+//context should be one of the following "ask", "question", "question-edit"
+function onCKEditor(context)
+{
+  var bodies = $ ('iframe').contents ().find('body');
+  var warningMessage = checkField ($(bodies).textWithLineBreaks()); //validate the text field (plaintext)
+  
+  if(checkImage($(bodies).html())) //special case for image in text
+  {
+    if(warningMessage == null) //image but no other warnings
+      warningMessage = createSimpleWarning("Make sure images don't contain sensitive information!");
+    else //otherwise insert in the warning
+      warningMessage = insertInWarning(warningMessage,"Make sure images don't contain sensitive information!");
+  }
+
+  //find the proper error region
+  if(context == "ask")
+    var errorRegion = $ ('.cke_inner').parent().parent();
+  else if(context == "question")
+  {
+    if(warningMessage != null)
+      warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
+    var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
+  }
+  
+  if(context != "question-edit") //normal insert
+    displayWarning(warningMessage, errorRegion);
+  else //special insert and region for question-edit 
+  {
+    if(warningMessage != null)
+      warningMessage = '<tr class="post-validator-error"><td class="qa-form-tall-data">'+warningMessage+'</td></tr>';
+    var errorRegion = $ ('.cke_inner').parent().parent().parent().parent(); //area for the warning message
+    displayWarningEdit(warningMessage, errorRegion) 
+  }
+}
+
 
 //reference: https://github.com/antialias/textWithLineBreaks
 (function ($) {

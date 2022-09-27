@@ -41,7 +41,7 @@ In AWS create an RDS instance with the following settings:
 -   20 GiB allocated
 -   Enable storage autoscaling
 -   100 GiB maximum
--   Default VPC (make sure id matches the existing EC2 instance)
+-   Default VPC (make note of this ID, you will need it for the EC2 instance)
 -   Public Access: No
 -   VPC security groups: MySQL Access (if that isn't a group, just use default)
 -   Password authentication
@@ -54,6 +54,7 @@ Make sure to note down the database password and username (`admin` by default).
 -   To protect the site data, the database should have been configured so that only instances on the same VPC (i.e. the EC2 instance) can access it.
 -   The EC2 instance should only have ports open for ssh (22), http (80), ssl (443), MySql (3306).
 -   For the RDS instance, the only inbound port permitted should be MySql(3306). The source ip of the inbound rule should be the private ip of the EC2 instance.
+    - You may need to come back and modify this after the Elastic IP has been generated. Just select the DB instance, then select its VPC security group, click **Edit Inbound rules** and set the source IP to the private IP of the EC2 instance.
 -   This can be configured in the security groups of the EC2 and RDS instance.
 
 ## Deploying to AWS
@@ -68,6 +69,7 @@ The EC2 instance is the host of the web server and its details will depend entir
 1. Select Ubuntu 20.04 as the image.
 1. Select/create a key pair for `ssh` access.
     - Make sure you save the `.pem` key file, as these will be used to access the server later.
+1. Make sure the VPC is the same as the one used for the RDS instance.
 1. Select/create a network security group according to your deployment needs. For development, the following rules were used:
     - **Type**: `HTTP`, **Protocol**: `TCP`, **Port Range**: `80`, **Source**: `0.0.0.0/0`
     - **Type**: `HTTPS`, **Protocol**: `TCP`, **Port Range**: `443`, **Source**: `0.0.0.0/0`
@@ -124,13 +126,14 @@ To mitigate errors when importing, ensure that the data loads properly on a [loc
 
 1. Get a dump of the desired data from your local machine.
     1. View your database from MySql Workbench.
-    1. Go to Server > Data Export
+    1. Go to **Server > Data Export**.
     1. Select the schema with the desired tables (if you don’t want to overwrite the tables storing site configuration do not select `qa_options` and `qa_pages`).
-    1. Choose Export to Self-Contained File
-    1. Start Export
+    1. Choose **Export to Self-Contained File**.
+    1. Click **Advanced Options** and make sure [**set-gtid-purged - Add 'SET @@GLOBAL.GTID_PURGED' to the output**](https://stackoverflow.com/a/54679361) is set to `OFF`.
+    1. Start Export.
 1. Move the dump to the EC2 instance.
     1. Before you do this make sure you can SSH (secure shell) into the EC2 instance.
-    1. Use `scp` to send the dump file to the EC2 instance
+    1. Use `scp` to send the dump file to the EC2 instance:
         - `scp -i </path/to/key.pem> <local dump file> <user>@<Elastic IP>:<destination of dump file>`
         - Example: `scp -i q2a_intern_key Dump20220701.sql ubuntu@supportsitetest.tk:~/dumps/Dump20220701.sql`
 1. Import the data to the RDS instance.
@@ -139,11 +142,14 @@ To mitigate errors when importing, ensure that the data loads properly on a [loc
         - `ssh -i </path/to/key.pem> <user>@<Elastic IP>`
     1. Ensure mysql is installed
         - `sudo apt install -y mysql-client-core-8.0`
-    1. (Optional) Verify your connection to the database works, for example:
-        - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p`
+    1. (Optional) Verify your connection to the database works, for example: `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p`
         - You can run `\q` to exit the MySQL connection
-    1. Import the file into RDS, for example:
-        - `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p q2adb < Dump20220701.sql`
+    1. Import the file into RDS, for example: `mysql -h q2a-db-test.cmnnis04whwr.us-east-1.rds.amazonaws.com -P 3306 -u admin -p q2adb < Dump20220701.sql`
+        - If you encounter `ERROR 1227 (42000) at line 18: Access denied; you need (at least one of) the SUPER, SYSTEM_VARIABLES_ADMIN or SESSION_VARIABLES_ADMIN privilege(s) for this operation`, you may need to [delete the following lines](https://help.poralix.com/articles/mysql-access-denied-you-need-the-super-privilege-for-this-operation) from your dump file:
+            - `--17: SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;`
+            - `--18: SET @@SESSION.SQL_LOG_BIN= 0;`
+            - `--24: SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';`
+            - `1237: SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;`
 
 ## Post Installation
 

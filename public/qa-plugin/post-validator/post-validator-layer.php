@@ -27,6 +27,8 @@ function get_val_script($for)
 		$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-ask.js"></script>';
 	elseif($for == "question") //for answers and comments
 		$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-question.js"></script>';
+	elseif($for == "question-edit")
+		$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-question-edit.js"></script>';
 	return $scriptText;
 }
 
@@ -38,8 +40,18 @@ class qa_html_theme_layer extends qa_html_theme_base
 		// check if plugin is enabled, only load js-css-files if tags are needed: ask and edit question page
 		if (qa_opt('post_validator_enabled') && ($this->template == 'ask'|| isset($this->content['form_q_edit'])))
 			$this->output(get_val_script('ask'));
-		elseif (qa_opt('post_validator_enabled') && ($this->template == 'question' && !isset($this->content['form_q_edit'])))
-			$this->output(get_val_script('question'));
+		elseif (qa_opt('post_validator_enabled') && ($this->template == 'question'))
+		{
+			$isEditPage = false;
+			if(strlen(qa_get_state()) >= 4 && substr(qa_get_state(), 0, 4) == "edit")
+				$isEditPage = true;
+			
+			//case for edit answer/comment
+			if(!$isEditPage)
+				$this->output(get_val_script('question'));
+			else //edit answer/comment
+				$this->output(get_val_script('question-edit'));
+		}
 	}
 
 	function head_css()

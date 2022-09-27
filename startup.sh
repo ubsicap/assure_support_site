@@ -373,9 +373,10 @@ init_ssl() {
 
     # Make a backup directory for the SSL certs
     sudo mkdir ./local_certs > /dev/null 2>&1
-    sudo cp -Lr /etc/letsencrypt/live/$DOMAIN_NAME/ ./local_certs
+    sudo cp -Lr /etc/letsencrypt/live/$DOMAIN_NAME/ ./local_certs/
 
     # Copy the appropriate certs for Portainer
+    sudo mkdir /certs/
     sudo cp -L ./local_certs/cert.pem /certs/portainer.crt
     sudo cp -L ./local_certs/privkey.pem /certs/portainer.key
 }
