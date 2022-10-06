@@ -49,10 +49,10 @@ class qa_marker_admin
 }
 				
 .qa-who-marker-moderator {
-	color: #db0707;
+	color: #BB451B;
 }
 .qa-marker-svg-moderator {
-	fill: #db0707;
+	fill: #BB451B;
 }
 				
 .qa-who-marker-admin {
