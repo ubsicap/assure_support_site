@@ -18,7 +18,7 @@ class title_length_counter_admin
 
 /* Color when the title is too long */
 #title-length-count.exceed {
-    color: red;
+    color: #bb451b;
 }
 
 /* Color when the title is too short */

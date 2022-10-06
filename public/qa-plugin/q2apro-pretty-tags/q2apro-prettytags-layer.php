@@ -276,7 +276,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 	border-radius: 20px;
 	}
 	.exceed {
-		color: red;
+		color: #bb451b;
 	}
 	.tagbox .selected .tag {
 	background: #555555;
