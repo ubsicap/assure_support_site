@@ -61,19 +61,7 @@ class qa_marker_admin
 .qa-marker-svg-admin {
 	fill: #a8a822;
 }
-.qa-who-marker-dev{
-	color: #42a644;
-}
-.qa-marker-svg-dev{
-	fill: #42a644;
-}
-
-.qa-who-marker-support{
-	color: #42a644;
-}
-.qa-marker-svg-support{
-	fill: #42a644;
-}';
+';
             default:
                 return null;
         }
