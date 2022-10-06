@@ -23,7 +23,7 @@ class title_length_counter_admin
 
 /* Color when the title is too short */
 #title-length-count.below {
-    color: red;
+    color: #bb451b;
 }
 
 /* Style for Title Length Counter Plugin LTR */
