@@ -878,8 +878,8 @@ header#nav-header {
 .qa-form-basic-button,
 .qa-template-user .qa-part-form-profile #level .qa-form-wide-static a {
     color: #fff;
-    background-color: #337ab7;
-    border-color: #2e6da4
+    background-color: #252525;
+    border-color: #6d6a75
 }
 
 .qa-form-tall-button:hover,
@@ -1999,7 +1999,7 @@ header#nav-header {
     -webkit-box-shadow: none;
     box-shadow: none;
     outline: none;
-    background-color: #337ab7;
+    background-color: #6d6a75;
     color: #fff;
     padding: 10px 12px;
     z-index: 1000 !important;
@@ -2014,7 +2014,7 @@ header#nav-header {
     -webkit-box-shadow: none;
     box-shadow: none;
     color: #fff;
-    background-color: #286090
+    background-color: #252525
 }
 
 .qa-search-field.form-control {
@@ -2700,7 +2700,8 @@ header#nav-header {
     background-color: #fff;
     border: 1px solid #ddd;
     border-bottom-color: transparent;
-    cursor: default
+    cursor: default;
+    font-weight: bold;
 }
 
 .qa-nav-sub .qa-nav-sub-list.nav-justified {
@@ -4067,7 +4068,7 @@ a.qa-browse-cat-link:visited {
     font-size: 20px;
     margin: 10px 0;
     padding-bottom: 10px;
-    color: #337ab7;
+    color: #252525;
     border-bottom: 1px dashed #e2e2e2
 }
 
@@ -4636,7 +4637,7 @@ a.qa-category-link:hover {
 .qa-template-user .qa-part-form-activity td span.qa-uf-user-upvoteds,
 .qa-template-user .qa-part-form-activity td span.qa-uf-user-downvoteds {
     font-size: 18px;
-    color: #337ab7;
+    color: #252525;
     font-weight: 700
 }
 
