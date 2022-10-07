@@ -31,8 +31,8 @@ class qa_html_theme_layer extends qa_html_theme_base
         $this->output('
             <style>
                 .navbar-nav > li.active > a {
-                    opacity: 1;
-                    color: #337ab7;
+                    opacity: 0.9;
+                    color: #310b0b;
                 }       
             </style>'
         );

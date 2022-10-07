@@ -250,7 +250,7 @@ img {
 }
 
 header#top-header {
-    background-color: #337ab7;
+    background-color: #226197;
     color: #fff;
     position: relative;
     min-height: 5px
@@ -320,8 +320,8 @@ header#nav-header {
 }
 
 .navbar a {
-    color: #000;
-    opacity: .5;
+    color: #310b0b;
+    opacity: 0.5;
     font-weight: bold;
     -webkit-transition: all 200ms ease-out;
     transition: all 200ms ease-out
@@ -605,7 +605,7 @@ header#nav-header {
     }
 
     .navbar-nav>li>a {
-        padding: 20px 0;
+        padding: 20px 5px;
         line-height: 30px
     }
 
@@ -680,7 +680,7 @@ header#nav-header {
 .donut-masthead {
     position: relative;
     margin-bottom: 20px;
-    color: #337ab7
+    color: #252525
 }
 
 .donut-masthead .page-title {
@@ -1164,11 +1164,11 @@ header#nav-header {
 }
 
 .qa-voted-up-button {
-    color: #5cb85c
+    color: #ffd8a9
 }
 
 .qa-voted-down-button {
-    color: #d9534f
+    color: #bf5008
 }
 
 .qa-form-light-button {
@@ -2397,6 +2397,7 @@ header#nav-header {
 }
 
 .qa-nav-cat-item a {
+    color: #252525;
     padding-bottom: 1px
 }
 
@@ -2459,7 +2460,7 @@ header#nav-header {
     margin-right: 5px;
     padding: 0 0 0 3px;
     border-radius: 5px;
-    color: #555
+    color: #226197
 }
 
 .qa-netvote-count {
@@ -2977,7 +2978,7 @@ header#nav-header {
 .qa-template-qa .qa-body-wrapper .qa-sidebar{
     background-color: #d9edf7;
     border-color: #bce8f1;
-    color: #31708f;
+    color: #226197;
     display: inherit !important;
   }
 .qa-sidebar {
@@ -2988,7 +2989,7 @@ header#nav-header {
 }
 
 .qa-sidebar hr {
-    border-top-color: #a6e1ec
+    border-top-color: #738598
 }
 
 .qa-sidebar .alert-link {
@@ -3076,8 +3077,8 @@ header#nav-header {
 }
 
 .qa-a-count {
-    border: 1px solid #d6e9c6;
-    color: #3c763d;
+    border: 1px solid #ffd8a9;
+    color: #bf5008;
     float: left;
     width: 60px;
     height: 60px;
@@ -3517,6 +3518,7 @@ header#nav-header {
 .qa-q-item-title a {
     font-size: 18px;
     font-weight: bold;
+    color: #252525;
     line-height: 1.42857143
 }
 
