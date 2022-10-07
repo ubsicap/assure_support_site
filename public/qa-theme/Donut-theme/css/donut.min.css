@@ -320,8 +320,8 @@ header#nav-header {
 }
 
 .navbar a {
-    color: #310b0b;
-    opacity: 0.5;
+    color: #252525;
+    opacity: 0.6;
     font-weight: bold;
     -webkit-transition: all 200ms ease-out;
     transition: all 200ms ease-out
@@ -698,6 +698,10 @@ header#nav-header {
     font-size: 30px;
     margin: 0
 }
+
+.page-title h1 a span{
+    color: #252525;
+  }
 
 #osnbox {
     margin-top: 15px
@@ -2542,7 +2546,7 @@ header#nav-header {
 }
 
 .qa-tag-link {
-    color: #337ab7;
+    color: #555555;
     text-decoration: none;
     cursor: pointer;
     padding: 0px 10px;
@@ -2551,7 +2555,7 @@ header#nav-header {
 }
 
 .qa-tag-link:hover {
-    color: #286090;
+    color: #0e0c0c;
     background-color: #eee;
     text-decoration: none
 }
@@ -3694,7 +3698,8 @@ header#nav-header {
 }
 
 .qa-suggest-next a {
-    font-weight: bold
+    font-weight: bold;
+    color: #252525
 }
 
 .qa-part-ranking {
@@ -3959,9 +3964,9 @@ a.qa-browse-cat-link:visited {
     font-weight: 700
 }
 
-.qa-q-view-when-data {
+/* .qa-q-view-when-data {
     font-weight: 700
-}
+} */
 
 .qa-q-view-who-title {
     font-size: 14px;
@@ -4178,9 +4183,9 @@ a.qa-browse-cat-link:visited {
     font-size: 12px
 }
 
-.qa-a-item-when-data {
+/* .qa-a-item-when-data {
     font-weight: 700
-}
+} */
 
 .qa-a-item-who-title {
     font-size: 12px;
@@ -4467,17 +4472,22 @@ a.qa-browse-cat-link:visited {
     border-bottom: none
 }
 
-.qa-user-link {
-    color: #337ab7;
+.qa-user-link, .qa-q-item-what, .qa-q-view-what, .qa-a-item-what {
+    color: #555555;
     font-weight: 700
+}
+a.qa-user-link:hover, a.qa-q-item-what:hover, a.qa-q-view-what:hover, a.qa-a-item-what:hover {
+    color: #0e0c0c;
 }
 
 .qa-category-link {
-    color: #337ab7;
+    color: #555555;
     font-weight: bold;
     font-size: 15px
 }
-
+a.qa-category-link:hover {
+    color: #0e0c0c;
+}
 .qa-widget-side a {
     margin: 0 3px 3px 0;
     display: inline-block

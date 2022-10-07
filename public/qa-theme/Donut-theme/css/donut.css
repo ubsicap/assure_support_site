@@ -271,8 +271,8 @@ header#nav-header {
   box-shadow: 0 1px 15px 0 rgba(0, 0, 0, 0.2);
 }
 .navbar a {
-  color: #310b0b;
-  opacity: 0.5;
+  color: #252525;
+  opacity: 0.6;
   font-weight: bold;
   -webkit-transition: all 200ms ease-out;
   transition: all 200ms ease-out;
@@ -593,6 +593,9 @@ header#nav-header {
   clear: none;
   font-size: 30px;
   margin: 0;
+}
+.page-title h1 a span{
+  color: #252525;
 }
 /*Styling for the Onsite Noification*/
 #osnbox {
@@ -2196,7 +2199,7 @@ header#nav-header {
   margin-bottom: 20px;
 }
 .qa-tag-link {
-  color: #337ab7;
+  color: #555555;
   text-decoration: none;
   cursor: pointer;
   padding: 0px 10px; /*making sure no overlap when viewed in mobile*/
@@ -2204,7 +2207,7 @@ header#nav-header {
   border-radius: 15px;
 }
 .qa-tag-link:hover {
-  color: #286090;
+  color: #0e0c0c;
   background-color: #eeeeee;
   text-decoration: none;
 }
@@ -2314,6 +2317,7 @@ header#nav-header {
   line-height: 1.42857143;
   border: 1px solid transparent;
   border-radius: 4px 4px 0 0;
+  color: #d08c60;
 }
 .qa-nav-sub .qa-nav-sub-list > li > a:hover {
   border-color: #eeeeee #eeeeee #ddd;
@@ -2803,7 +2807,7 @@ header#nav-header {
   padding: 6px 12px;
   line-height: 1.42857143;
   text-decoration: none;
-  color: #337ab7;
+  color: #403d39;
   background-color: #fff;
   border: 1px solid #ddd;
   margin-left: -1px;
@@ -2836,8 +2840,8 @@ header#nav-header {
 .qa-page-links-list > .active > span:focus {
   z-index: 3;
   color: #fff;
-  background-color: #337ab7;
-  border-color: #337ab7;
+  background-color: #555555;
+  border-color: #ccc5b9;
   cursor: default;
 }
 .qa-page-links-list > .disabled > span,
@@ -3176,6 +3180,7 @@ header#nav-header {
 }
 .qa-suggest-next a {
   font-weight: bold;
+  color: #252525;
 }
 /* Users and categories */
 .qa-part-ranking {
@@ -3397,9 +3402,9 @@ a.qa-browse-cat-link:visited {
 .qa-q-view-extra-content {
   font-weight: 700;
 }
-.qa-q-view-when-data {
+/* .qa-q-view-when-data {
   font-weight: 700;
-}
+} */
 .qa-q-view-who-title {
   font-size: 14px;
   font-weight: 700;
@@ -3576,9 +3581,9 @@ a.qa-browse-cat-link:visited {
   vertical-align: middle;
   font-size: 12px;
 }
-.qa-a-item-when-data {
+/* .qa-a-item-when-data {
   font-weight: 700;
-}
+} */
 .qa-a-item-who-title {
   font-size: 12px;
   font-weight: 700;
@@ -3823,14 +3828,21 @@ a.qa-browse-cat-link:visited {
   border-bottom: none;
 }
 /* Classes passed to theme */
-.qa-user-link {
-  color: #337ab7;
+
+.qa-user-link, .qa-q-item-what, .qa-q-view-what, .qa-a-item-what {
+  color: #555555;
   font-weight: 700;
 }
+a.qa-user-link:hover, a.qa-q-item-what:hover, a.qa-q-view-what:hover, a.qa-a-item-what:hover {
+  color: #0e0c0c;
+}
 .qa-category-link {
-  color: #337ab7;
+  color: #555555;
   font-weight: bold;
   font-size: 15px;
+}
+a.qa-category-link:hover {
+  color: #0e0c0c;
 }
 .qa-widget-side a {
   margin: 0 3px 3px 0;
