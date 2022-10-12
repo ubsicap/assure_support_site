@@ -37,12 +37,12 @@ input[type="submit"] {
 input[type=checkbox] {
   margin-right: 5px;
 }
-textarea {
+/* textarea {
   height: 50px;
 }
 textarea.qa-form-tall-text {
   height: 100px;
-}
+} */
 input[name="file"] {
   display: inline;
   margin-left: 10px;
@@ -768,8 +768,9 @@ header#nav-header {
 .qa-form-basic-button,
 .qa-template-user .qa-part-form-profile #level .qa-form-wide-static a {
   color: #fff;
-  background-color: #252525;
+  background-color: #333333;
   border-color: #6d6a75;
+  opacity: 0.8;
 }
 .qa-form-tall-button:hover,
 .qa-form-tall-table input[type="button"]:hover,

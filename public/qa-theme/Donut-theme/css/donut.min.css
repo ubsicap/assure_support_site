@@ -878,8 +878,9 @@ header#nav-header {
 .qa-form-basic-button,
 .qa-template-user .qa-part-form-profile #level .qa-form-wide-static a {
     color: #fff;
-    background-color: #252525;
-    border-color: #6d6a75
+    background-color: #333333;
+    border-color: #6d6a75;
+    opacity: 0.8;
 }
 
 .qa-form-tall-button:hover,
