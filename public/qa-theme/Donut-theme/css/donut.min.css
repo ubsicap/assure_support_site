@@ -880,7 +880,6 @@ header#nav-header {
     color: #fff;
     background-color: #333333;
     border-color: #6d6a75;
-    opacity: 0.8;
 }
 
 .qa-form-tall-button:hover,
@@ -938,31 +937,25 @@ header#nav-header {
 .qa-form-wide-button-saverecalc,
 .qa-form-tall-button-save,
 .qa-unfavorite-button,
+.qa-form-wide-button-save:focus,
+.qa-form-wide-button-saverecalc:focus,
+.qa-form-tall-button-save:focus,
 .qa-form-light-button-answer,
 .qa-form-light-button-approve,
 .qa-form-wide-button-unblock {
     color: #fff;
-    background-color: #5cb85c;
-    border-color: #4cae4c
+  background-color: #333333;
+  border-color: #6d6a75;
 }
 
-.qa-form-wide-button-save:hover,
-.qa-form-wide-button-saverecalc:hover,
-.qa-form-tall-button-save:hover,
 .qa-unfavorite-button:hover,
 .qa-form-light-button-answer:hover,
 .qa-form-light-button-approve:hover,
 .qa-form-wide-button-unblock:hover,
-.qa-form-wide-button-save:active,
-.qa-form-wide-button-saverecalc:active,
-.qa-form-tall-button-save:active,
 .qa-unfavorite-button:active,
 .qa-form-light-button-answer:active,
 .qa-form-light-button-approve:active,
 .qa-form-wide-button-unblock:active,
-.qa-form-wide-button-save:focus,
-.qa-form-wide-button-saverecalc:focus,
-.qa-form-tall-button-save:focus,
 .qa-unfavorite-button:focus,
 .qa-form-light-button-answer:focus,
 .qa-form-light-button-approve:focus,
@@ -976,8 +969,8 @@ header#nav-header {
 .qa-form-tall-button-cancel,
 .qa-form-wide-button-cancel {
     color: #fff;
-    background-color: #f0ad4e;
-    border-color: #eea236
+    background-color: #5cb85c;
+    border-color: #4cae4c;
 }
 
 .qa-favorite-button:hover,
@@ -1166,10 +1159,6 @@ header#nav-header {
 
 .qa-q-list-vote-disabled .qa-vote-buttons {
     display: none
-}
-
-.qa-voted-up-button {
-    color: #ffd8a9
 }
 
 .qa-voted-down-button {

@@ -152,7 +152,7 @@ class q2apro_onsitenotifications_page
 
                 // List all events
                 $notifyBoxEvents = '<div id="nfyWrap" class="nfyWrap">
-						<div class="nfyTop">' . qa_lang('q2apro_onsitenotifications_lang/my_notifications') . ' <a id="nfyReadClose">' . qa_lang('q2apro_onsitenotifications_lang/close') . ' | × |</a> </div>
+						<div class="nfyTop">' . qa_lang('q2apro_onsitenotifications_lang/my_notifications') . ' <a id="nfyReadClose">×</a> </div>
 						<div class="nfyContainer">
 							<div id="nfyContainerInbox">
 						';
