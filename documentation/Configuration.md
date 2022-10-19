@@ -74,7 +74,7 @@ This document contains information such about installed plugins, custom pages, a
 -   Check **Show a logo image in the page header**
 -   **URL of logo**: `/path/to/your/logo`
 -   Check **Custom HTML in sidebar box**
-    -   `Ask Ebenezer is a public forum that connects users of Bible translation software, so that they can help one another to find solutions, and discover new ways of working together. We welcome users of all Bible translation software systems to discover how they can help one another to take God’s Word to the world.<hr><i>Then Samuel took a stone and set it up between Mizpah and Shen. He named it Ebenezer, saying, “Thus far the Lord has helped us."</i><br><b>1 Samuel 7:12</b>`
+    -   `Support.Bible is a public forum that connects users of Bible translation software, so that they can help one another to find solutions, and discover new ways of working together. We welcome users of all Bible translation software systems to discover how they can help one another to take God’s Word to the world.<hr>`
 -   Add the following widgets:
     -   **Search Bar**: `Main area - Top`
     -   **Related Questions**: `Main area - Bottom`
@@ -96,6 +96,7 @@ This document contains information such about installed plugins, custom pages, a
     -   **Name**: `Paratext`, **Slug**: `paratext`
     -   **Name**: `Paratext Lite`, **Slug**: `paratext-lite`
     -   **Name**: `Publishing Assistant`, **Slug**: `publishing-assistant`
+    -   **Name**: `FLExTrans`, **Slug**: `flextrans`
 -   Uncheck **Allow questions with ...**
 
 ## Permissions
@@ -113,6 +114,7 @@ This document contains information such about installed plugins, custom pages, a
 -   Add the following custom pages:
     -   **FAQ** - **Position**: `After tabs at top`
     -   **Best Practices** - **Slug**: `best-practices`, **Content**: [here](../public/qa-custom-pages/best_practices.html)
+    -   **Welcome**
     -   **Paratext Support Redirect** - **Slug**: `paratext support redirect`, **Content**: [here](../public/qa-custom-pages/paratext_redirect.html)
 
 Several custom pages are included in the site. While Q2A supports the creation of custom pages through the administration panel, we have also included the HTML in [a subdirectory of the site](../public/qa-custom-pages) in case the database is cleared.
@@ -167,50 +169,7 @@ Does not use CRON jobs- rather it just marks accounts for deletion and bulk-dele
     - A 30 minute "grace period" is plenty of time. Shorten this if you find too many spam accounts are being created.
     - Check all *Delete unverified accounts when ...** boxes
 
-### [category-logo](../public/qa-plugin/category-logo)
-
-_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/category-logo/README.md).
-
-Display a image next to category names, such as logos for categories that represent products.
-
-#### Configuration
-
--   Check **Add specific logo to corresponding categories**
--   Add the following paths:
-    -   **Paratext**: `/assets/ParatextCenter.png`
-    -   **Publishing Assistant**: `/assets/PublishingAssistant.png`
-    -   **Paratext Lite**: `/assets/ParatextLiteCenter.png`
-    -   **General**: `/assets/logo.png`
-
-### [google-analytics](https://github.com/kufeiko/QA-Google-Analytics-Plugin)
-
-Support for Google Analytics. Requires a tracking code from Google Analytics.
-
-#### Configuration
-
-    - Add the **[Google Global Site Tag](https://developers.google.com/analytics/devguides/collection/gtagjs)**
-
-### [post-validator](../public/qa-plugin/post-validator)
-
-_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/post-validator/README.md).
-
-Warns users if they attempt to post identifying information.
-
-### [pupi-dm](https://bitbucket.org/pupi1985/q2a-dynamic-mentions-public)
-
-_Premium Plugin_: This plugin is proprietary. It was purchased during development, and is not included in this repository in honor of the purchase.
-
-Support for dynamically-suggested @mentions in posts.
-
-#### Configuration
-
--   **User Fetch Type**: `Remote`
--   **Type of editor for ...**: `Full`
--   **Minimum mention user permit**: `Registered users`
--   Check **Enable On-Site Notifications integration**
--   Check **Enable email notifications**
-
-### [q2a-badges](https://github.com/NoahY/q2a-badges)
+### [badges-Q2A](https://github.com/NoahY/q2a-badges)
 
 Assigns users badges for certain (configurable) milestones, such as number of answers posted.
 
@@ -228,16 +187,38 @@ Assigns users badges for certain (configurable) milestones, such as number of an
     - Check **Add badges to profile pages** and **Show badges on main profile field**
     - Uncheck `Show list of ...` boxes
 
-### [q2a-faq](https://github.com/gturri/q2a-faq/)
+### [category-logo](../public/qa-plugin/category-logo)
 
-Adds a Frequently Asked Questions page, fully configurable through the admin panel.
+_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/category-logo/README.md).
+
+Display a image next to category names, such as logos for categories that represent products.
 
 #### Configuration
 
--   Default configuration is acceptable
--   You can add FAQ entries from this section
+-   Check **Add specific logo to corresponding categories**
+-   Add the following paths:
+    -   **Paratext**: `/assets/ParatextCenter.png`
+    -   **Publishing Assistant**: `/assets/PublishingAssistant.png`
+    -   **Paratext Lite**: `/assets/ParatextLiteCenter.png`
+    -   **General**: `/assets/logo.png`
+    -   **FLExTrans**: `/assets/FLEXTransIcon.png`
 
-### [q2a-hashtagger](https://github.com/pupi1985/q2a-hashtagger)
+### [dynamic-mentions](https://bitbucket.org/pupi1985/q2a-dynamic-mentions-public)
+
+_Premium Plugin_: This plugin is proprietary. It was purchased during development, and is not included in this repository in honor of the purchase.
+
+Support for dynamically-suggested @mentions in posts.
+
+### [google-analytics](https://github.com/kufeiko/QA-Google-Analytics-Plugin)
+
+Support for Google Analytics. Requires a tracking code from Google Analytics.
+
+#### Configuration
+
+    - Add the **[Google Global Site Tag](https://developers.google.com/analytics/devguides/collection/gtagjs)**
+    
+
+### [hashtagger](https://github.com/pupi1985/q2a-hashtagger)
 
 Convert #tags to hyperlinks in posts.
 Similar to the dynamic mentions plugin, but does not dynamically suggest tags.
@@ -247,11 +228,69 @@ Similar to the dynamic mentions plugin, but does not dynamically suggest tags.
 -   Uncheck **Keep "#" symbol for tag names**
 -   Check everything else
 
-### [q2a-pupi-srs](https://github.com/pupi1985/q2a-pupi-srs)
 
-Provides spam control through multiple well-known spam checking services.
+### [on-site-notifications](https://github.com/q2apro/q2apro-on-site-notifications)
 
-### [q2a-role-markers](https://github.com/gurjyot/q2a-role-markers)
+Notification icons similar to social media.
+
+#### Configuration
+
+-   Enable the plugin
+
+### [post-validator](../public/qa-plugin/post-validator)
+
+_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/post-validator/README.md).
+
+Warns users if they attempt to post identifying information.
+
+#### Configuration
+
+-   **User Fetch Type**: `Remote`
+-   **Type of editor for ...**: `Full`
+-   **Minimum mention user permit**: `Registered users`
+-   Check **Enable On-Site Notifications integration**
+-   Check **Enable email notifications**
+
+### [pretty-tags](https://github.com/ProThoughts/q2apro-pretty-tags)
+
+Auto-suggest and auto-complete tags as you type them.
+
+This plugin has been modified to be more appropriate for this site, including UI changes.
+
+
+### [q2a-faq](https://github.com/gturri/q2a-faq/)
+
+Adds a Frequently Asked Questions page, fully configurable through the admin panel.
+
+#### Configuration
+
+-   Default configuration is acceptable
+-   You can add FAQ entries from this section
+
+
+### [q2a-style](../public/qa-plugin/q2a-style)
+
+_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/q2a-style/README.md).
+
+Various UI alterations, such as relocating the search bar, hiding redundant titles, highlighting the selected page name, etc.
+
+
+### [random-avatar](../public/qa-plugin/random-avatar)
+
+_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/random-avatar/README.md).
+
+All new accounts get a Gravatar image, generated uniquely from their email address.
+
+### [random-verse](../public/qa-plugin/random-verse)
+
+_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/random-verse/README.md).
+
+Selects a random verse to display in the sidebar in order to welcome users to the site. 
+
+#### Configuration
+- Add verses you want to display in this plugin. Pay attention to the formatting of the verses.
+
+### [role-markers](https://github.com/gurjyot/q2a-role-markers)
 
 Custom role names and markers adjacent to users with them.
 
@@ -264,19 +303,41 @@ This custom role will display next to the user's display name across the site, a
 
 -   Check all boxes
 
-### [q2a-sticky-sidebar-plugin](https://github.com/stefanmm/q2a-sticky-sidebar-plugin/)
+### [send-account-reclaim](../public/qa-plugin/send-account-reclaim)
+
+_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/send-account-reclaim/README.md).
+
+Send emails to users in the archived database table through the admin panel.
+Toggleable support for HTML in email body.
+
+
+### [simple-sticky-sidebar](https://github.com/stefanmm/q2a-sticky-sidebar-plugin/)
 
 Sidebar stays on the screen when you scroll down.
 
 This plugin has been slightly modified according to the theme of the website.
 
-### [q2a-style](../public/qa-plugin/q2a-style)
 
-_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/q2a-style/README.md).
+### [spam-registration-stopper](https://github.com/pupi1985/q2a-pupi-srs)
 
-Various UI alterations, such as relocating the search bar, hiding redundant titles, highlighting the selected page name, etc.
+Provides spam control through multiple well-known spam checking services.
 
-### [q2a-tagging-tools](https://github.com/svivian/q2a-tagging-tools)
+#### Configuration
+
+-  Enter API key of the spam checking services want to be used
+
+### [sso-authentication](../public/qa-plugin/sso-authentication)
+
+_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/sso-authentication/README.md).
+
+This plugin allows single sign on for Facebook and Google.
+Support for Paratext Registry SSO is not yet configured, as this requires external support.
+
+#### Configuration
+
+-   Add **Client id** and **Client secret** for each service selected
+
+### [tagging-tools](https://github.com/svivian/q2a-tagging-tools)
 
 Enforce min/max length for post tags and allows you to create "tag synonyms" which map similar tags to each other.
 For example, the synonym `pt,paratext` would automatically convert the tag `pt` to `paratext` when a post is submitted.
@@ -293,53 +354,15 @@ During the migration from the old site to this one, we are automatically generat
 To see a list of all tag synonyms used in development (and thus, the synonyms we suggest using), refer to the [TagSynonyms file](../public/qa-plugin/q2a-tagging-tools/TagSynonyms.md).
 Copy and paste all desired rules into the Tagging Tools' admin form.
 
-### [q2apro-on-site-notifications](https://github.com/q2apro/q2apro-on-site-notifications)
-
-Notification icons similar to social media.
-
-#### Configuration
-
--   Enable the plugin
-
-### [q2apro-pretty-tags](https://github.com/ProThoughts/q2apro-pretty-tags)
-
-Auto-suggest and auto-complete tags as you type them.
-
-This plugin has been modified to be more appropriate for this site, including UI changes.
-
-### [q2apro-userinfo](https://github.com/ProThoughts/q2apro-userinfo)
-
-Hover over a username to see information.
-
-This plugin has been modified to be more appropriate for this site, including UI changes.
-
-### [random-avatar](../public/qa-plugin/random-avatar)
-
-_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/random-avatar/README.md).
-
-All new accounts get a Gravatar image, generated uniquely from their email address.
-
-### [send-account-reclaim](../public/qa-plugin/send-account-reclaim)
-
-_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/send-account-reclaim/README.md).
-
-Send emails to users in the archived database table through the admin panel.
-Toggleable support for HTML in email body.
-
-### [sso-authentication](../public/qa-plugin/sso-authentication)
-
-_Custom plugin_: This plugin was designed specifically for this website. More details can be found at the plugin's [README](../public/qa-plugin/sso-authentication/README.md).
-
-This plugin allows single sign on for Facebook and Google.
-Support for Paratext Registry SSO is not yet configured, as this requires external support.
-
-#### Configuration
-
--   Add **Client id** and **Client secret** for each service selected
-
 ### [title-length-counter](https://github.com/MominRaza/title-length-counter)
 
 Display title length and prevent typing past the max length.
 
 This plugin has been slightly modified to also display when editing questions.
 It also displays warning colors when the post's title is below the minimum or at the maximum length.
+
+### [user-info](https://github.com/ProThoughts/q2apro-userinfo)
+
+Hover over a username to see information.
+
+This plugin has been modified to be more appropriate for this site, including UI changes.
