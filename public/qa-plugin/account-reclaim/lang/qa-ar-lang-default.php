@@ -6,7 +6,7 @@
 */
 
 return array(
-    'recover_page_title' => 'Reclaim an Existing Discourse Account',
+    'recover_page_title' => 'Reclaim your existing Paratext Support account!',
     'recover_email_label' => 'Enter the email address that you used with your support.paratext.org account:',
     'reclaim_email_label' => 'A recovery code has been sent to the following email address:',
     'reclaim_code_label' => 'Enter the recovery code here:',
