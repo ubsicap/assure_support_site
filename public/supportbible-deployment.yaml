@@ -1,0 +1,81 @@
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: sb-pv-claim
+#   labels:
+#     app: support-bible
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 20Gi
+# ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-server
+  labels:
+    app: support-bible
+spec:
+  selector:
+    matchLabels:
+      app: support-bible
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: support-bible
+        tier: frontend
+    spec:
+      containers:
+      - image: support-bible
+        name: php-apache
+        imagePullPolicy: Never #so that it will us local image instead of the one from docker hub
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: hostvol
+          mountPath: /var/www/html
+      volumes:
+        - name: hostvol
+          hostPath:
+            path: /data
+          # persistentVolumeClaim:
+          #   claimName: sb-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-server
+  labels:
+    app: support-bible
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: support-bible
+    tier: frontend
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: support-bible
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: support.bible
+    http:
+      paths:
+      - backend:
+          service:
+            name: web-server
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - support.bible
