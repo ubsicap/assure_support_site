@@ -11,7 +11,7 @@ RUN docker-php-ext-install calendar
 # General updates to ensure smooth runtime
 RUN apt-get update && apt-get upgrade -y && apt-get install -y libpng-dev git zip
 
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+# RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 #Install Composer for downloading Google API and Facebook client with PHP
 RUN curl -sS https://getcomposer.org/installer | php
@@ -29,7 +29,7 @@ COPY . /var/www/html
 
 # COPY --chmod=765 . /var/www/html
 
-RUN echo "ServerName 127.0.0.1" >> /etc/apache2/apache2.conf
+# RUN echo "ServerName 127.0.0.1" >> /etc/apache2/apache2.conf
 
 # Use the webroot as the working directory
 WORKDIR /var/www/html

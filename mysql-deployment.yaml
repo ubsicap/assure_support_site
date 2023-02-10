@@ -1,61 +1,48 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: q2a-mysql
-  labels:
-    app: q2a
-spec:
-  ports:
-    - port: 3306
-  selector:
-    app: q2a
-    tier: mysql
-  clusterIP: None
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mysql-pv-claim
-  labels:
-    app: q2a
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 20Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: q2a-mysql
+  name: sb-mysql
   labels:
-    app: q2a
+    app: support-bible
+    tier: db
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: q2a
-      tier: mysql
+      app: support-bible
+      tier: db
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: q2a
-        tier: mysql
+        app: support-bible
+        tier: db
     spec:
       containers:
       - image: mysql
-        name: mysql
+        name: support-bible-mysql
         env:
-          - name: MYSQL_DATABASE
-            value: q2a-mysql-db
-          - name: MYSQL_PASSWORD
-            value: #password in config
-          - name: MYSQL_ROOT_PASSWORD
-            value: #enter your root password
-          - name: MYSQL_USER
-            value: #username in config
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: rootpwd
+              name: mysql-secret
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              key: database
+              name: mysql-secret
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: mysql-secret
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: mysql-secret
         ports:
         - containerPort: 3306
           name: mysql
@@ -66,3 +53,32 @@ spec:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
           claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sb-mysql
+  labels:
+    app: support-bible
+    tier: db
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: support-bible
+    tier: db
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: support-bible
+    tier: db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+

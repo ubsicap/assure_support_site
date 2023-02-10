@@ -1,6 +1,6 @@
 # In order for the web server to process this file it must be renamed to ".htaccess"
 
-Options -Indexes
+Options +Indexes
 DirectoryIndex index.php
 
 <IfModule mod_rewrite.c>

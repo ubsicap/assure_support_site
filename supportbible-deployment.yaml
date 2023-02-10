@@ -1,43 +1,28 @@
 apiVersion: v1
-kind: Service
-metadata:
-  name: web-server
-  labels:
-    app: support-bible
-spec:
-  ports:
-    - port: 80
-  selector:
-    app: support-bible
-    tier: frontend
-  type: LoadBalancer
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: sb-pv-claim
-  labels:
-    app: support-bible
+  name: longhorn-volv-pvc
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: longhorn
   resources:
     requests:
-      storage: 20Gi
+      storage: 2Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-server
+  name: sb-apache-deployment
   labels:
     app: support-bible
+    tier: frontend
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: support-bible
       tier: frontend
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
@@ -45,15 +30,55 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: support-bible
-        name: php-apache
-        imagePullPolicy: Never #so that it will us local image instead of the one from docker hub
+      - image: lingxinchen/sb-php:latest
+        name: sb-php-apache
         ports:
         - containerPort: 80
         volumeMounts:
-        - name: hostvol
+        - name: volv
           mountPath: /var/www/html
       volumes:
-        - name: hostvol
-          persistentVolumeClaim:
-            claimName: sb-pv-claim
+      - name: volv
+        persistentVolumeClaim:
+          claimName: longhorn-volv-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sb-apache-service
+  labels:
+    app: support-bible
+    tier: frontend
+spec:
+  selector:
+    app: support-bible
+    tier: frontend
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sb-apache-ingress
+  labels:
+    app: support-bible
+    tier: frontend
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: support-bible.test
+    http:
+      paths:
+      - backend:
+          service:
+            name: sb-apache-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - support-bible.test
