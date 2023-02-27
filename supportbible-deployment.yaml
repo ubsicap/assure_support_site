@@ -25,10 +25,10 @@ spec:
         volumeMounts:
         - name: volv
           mountPath: /var/www/html
+      imagePullSecrets:
+      - name: regcred
       volumes:
       - name: volv
-        persistentVolumeClaim:
-          claimName: longhorn-volv-pvc
 ---
 apiVersion: v1
 kind: Service
