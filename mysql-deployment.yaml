@@ -1,27 +1,16 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: sb-mysql
   labels:
     app: support-bible
     tier: db
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: support-bible
-      tier: db
-  strategy:
-    type: Recreate
   template:
-    metadata:
-      labels:
-        app: support-bible
-        tier: db
     spec:
       containers:
-      - image: mysql
-        name: support-bible-mysql
+      - name: support-bible-mysql
+        image: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
@@ -46,13 +35,8 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
-        volumeMounts:
-        - name: mysql-persistent-storage
-          mountPath: /var/lib/mysql
-      volumes:
-      - name: mysql-persistent-storage
-        persistentVolumeClaim:
-          claimName: mysql-pv-claim
+      restartPolicy: Never
+  backoffLimit: 4
 ---
 apiVersion: v1
 kind: Service
@@ -62,23 +46,11 @@ metadata:
     app: support-bible
     tier: db
 spec:
+  type: ExternalName
+  externalName: replaceWithRDSName
   ports:
     - port: 3306
   selector:
     app: support-bible
     tier: db
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mysql-pv-claim
-  labels:
-    app: support-bible
-    tier: db
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 20Gi
 
