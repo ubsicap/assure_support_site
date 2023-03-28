@@ -26,7 +26,7 @@ spec:
         - name: volv
           mountPath: /var/www/html
       imagePullSecrets:
-      - name: regcred
+      - name: myregistrykey
       volumes:
       - name: volv
 ---
@@ -57,7 +57,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: support-bible.test
+  - host: staging.support.bible
     http:
       paths:
       - backend:
@@ -69,4 +69,4 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - support-bible.test
+    - staging.support.bible
