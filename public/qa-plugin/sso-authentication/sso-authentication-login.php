@@ -12,7 +12,7 @@ class sso_authentication_login
 			// 			require_once QA_PLUGIN_DIR . 'sso-authentication/google-config.php';
 		// 			$client = get_google_client();
 		// 			$client->revokeToken();
-		} else if (isset($_GET['code'], $_GET['hd'])) {
+		} else if (isset($_GET['code'], str_contains($_GET['scope'],'google'))) {
 			$this->loginWithGoogle();
 		} else if (isset($_GET['code'])) {
 			$this->loginWithFacebook();
