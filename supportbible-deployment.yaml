@@ -18,17 +18,12 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: lingxinchen/sb-php:latest
+      - image: lingxinchen/sb-php:1.0
         name: sb-php-apache
         ports:
         - containerPort: 80
-        volumeMounts:
-        - name: volv
-          mountPath: /var/www/html
       imagePullSecrets:
       - name: myregistrykey
-      volumes:
-      - name: volv
 ---
 apiVersion: v1
 kind: Service
