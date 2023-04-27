@@ -7,8 +7,7 @@
 */
 
 
-
-require_once QA_INCLUDE_DIR . 'db/users.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/qa-include/db/users.php';
 
 
 
