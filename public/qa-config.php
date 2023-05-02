@@ -35,8 +35,8 @@
 */
 
 define('QA_MYSQL_HOSTNAME', 'sb-mysql');
-define('QA_MYSQL_USERNAME', 'replace');
-define('QA_MYSQL_PASSWORD', 'replace');
+define('QA_MYSQL_USERNAME', 'admin');
+define('QA_MYSQL_PASSWORD', file_get_contents('db.key'));
 define('QA_MYSQL_DATABASE', 'q2a');
 
 /*

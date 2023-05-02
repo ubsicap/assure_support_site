@@ -3,6 +3,7 @@
 Options -Indexes
 DirectoryIndex index.php
 
+# rewrite url, configured in admin panel
 <IfModule mod_rewrite.c>
     RewriteEngine On
     #RewriteBase /
@@ -15,4 +16,30 @@ DirectoryIndex index.php
     RewriteRule ^.*$ index.php?qa-rewrite=$0&%{QUERY_STRING} [L]
 </IfModule>
 
+# Restrict access to key data
+<Files "/qa-plugin/sso-authentication/fb.key">
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !/qa-plugin/sso-authentication/sso-authentication-login.php
+    RewriteRule ^ - [F]
+  </IfModule>
+  Order deny,allow
+  Deny from all
+  <FilesMatch "^sso-authentication-login\.php$">
+    Allow from all
+  </FilesMatch>
+</Files>
+
+<Files "db.key">
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !qa-config.php
+    RewriteRule ^ - [F]
+  </IfModule>
+  Order deny,allow
+  Deny from all
+  <FilesMatch "^qa-config\.php$">
+    Allow from all
+  </FilesMatch>
+</Files>
 

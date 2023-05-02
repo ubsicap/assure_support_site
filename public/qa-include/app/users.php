@@ -374,8 +374,9 @@ if (QA_FINAL_EXTERNAL_USERS) {
 
 				if (strlen(@$fields['avatar']))
 					qa_set_user_avatar($userid, $fields['avatar']);
-
-				qa_set_logged_in_user($userid, $handle, false, $source);
+				
+				// so for new users they will log in automatically next time
+				qa_set_logged_in_user($userid, $handle, true, $source);
 			}
 		}
 	}

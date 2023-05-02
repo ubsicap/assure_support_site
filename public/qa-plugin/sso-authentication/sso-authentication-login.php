@@ -1,41 +1,22 @@
 <?php
-require_once 'facebook-config.php';
 
 class sso_authentication_login
 {
-	protected $client = null;
+	// used to check if users log in with Google, true for Google, false for Facebook
+	const IS_GOOGLE = true;
+	const REDIRECT_URL = 'qa-plugin/sso-authentication/login-callback.php';
+	protected $client = null; // to make sure client will not be created multiple times
+	protected $fbHelper = null;
 
 	// called early on during every page request 
 	// if a user is not currently logged in
 	function check_login()
 	{
-		if(qa_clicked('login-google')) {
-			echo '<script type="text/JavaScript"> 
-			console.log("clickedclickedclickedclickedclickedclickedclickedclickedclickedclickedclicked");
-		 </script>';
-		}
 		if (isset($_SESSION['code'])) {
 			if (isset($_SESSION['scope']) && strpos($_SESSION['scope'], 'google'))
-				// include package needed for using google client
-				require_once QA_BASE_DIR . 'vendor/autoload.php';
-
-			// retrieve google client
-			$this->client = $this->getClient();
-
-			// authorize client with token after user grants the permission
-			$token = $this->client->fetchAccessTokenWithAuthCode($_SESSION['code']);
-			$_SESSION['access_token'] = $token['access_token'];
-			$this->client->setAccessToken($token['access_token']);
-
-			// Make the HTTP GET request to the API endpoint to get user info
-			$url = 'https://www.googleapis.com/oauth2/v2/userinfo?access_token=' . urlencode($token['access_token']);
-			$response = file_get_contents($url);
-			$userInfo = json_decode($response, true);
-
-			// register user in Support.Bible
-			$this->registerUser($userInfo, 'google');
-		} else {
-			//fb
+				$this->logInWithSSO(self::IS_GOOGLE);
+			else
+				$this->logInWithSSO(!self::IS_GOOGLE);
 		}
 	}
 
@@ -43,21 +24,39 @@ class sso_authentication_login
 	// after a user is logged in
 	function match_source($source)
 	{
-		if (isset($_SESSION['logout']) && strcmp($source, 'google') === 0) {
-			// retrieve google client
-			$this->client =  $this->getClient();
-			// expire token so that user needs to grant permission next time for google
-			$this->client->revokeToken();
-			
+		if (isset($_SESSION['logout'])) {
+			if (strcmp($source, 'google') === 0) {
+				// retrieve google client
+				$this->client =  $this->getClient(self::IS_GOOGLE);
+				// expire token so that user needs to grant permission next time for google
+				$this->client->revokeToken();
+			} else if (strcmp($source, 'facebook') === 0 && isset($_COOKIE['fb_access_token'])) {
+				// decipher access token got from cookie
+				$access_token = openssl_decrypt($_COOKIE['fb_access_token'], 'aes-256-cbc', file_get_contents('fb.key', true), OPENSSL_RAW_DATA, '');
+
+				// remove cookie for access token
+				setcookie('fb_access_token', '', time() - 3600);
+
+				// check if access token is still valid in case user has already logged out 
+				// or access token has expired
+				$check_access_token = $this->validateFBRequest("https://graph.facebook.com/me?access_token={$access_token}");
+
+				// if access token of Facebook is not null, then expire it
+				// or else, Facebook will throw error regarding invalid token
+				if (!is_null($check_access_token)) {
+					$this->client =  $this->getClient(!self::IS_GOOGLE);
+					$this->client->delete('/me/permissions', [], $access_token); // revoke token
+				}
+			}
 			// log user out of Support.Bible
 			if (qa_is_logged_in()) {
-				echo "<script>console.log('logged in true');</script>";
 				qa_set_logged_in_user(null);
 			}
 			session_destroy();
 			//redirect to home page
 			qa_redirect('');
 		}
+
 		return true;
 	}
 
@@ -66,14 +65,10 @@ class sso_authentication_login
 	{
 		$label = qa_lang('sso-auth/google_login');
 		// Generate the authentication URL
-		$googleUrl = $this->generateAuthUrl();
-		// add unique state to url to avoid security attack
-		$state = urlencode(time() . '-' . bin2hex(random_bytes(5)));
-		$googleUrl .= '&state=' . $state;
-		$_SESSION['state'] = $state;
+		$googleUrl = $this->generateAuthUrl(self::IS_GOOGLE);
 		// store user's current page so they can come back after logged in
 		$_SESSION['return_url'] = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-		
+
 		// login html
 		echo <<<HTML
 					<div class="empty-div"> </div>
@@ -82,7 +77,7 @@ class sso_authentication_login
 						<span class="signin-text"> $label </span>
 					</a>
 					HTML;
-		$fbUrl = get_fb_url();
+		$fbUrl = $this->generateAuthUrl(!self::IS_GOOGLE);
 		$label = qa_lang('sso-auth/facebook_login');
 		echo <<<HTML
 					<a class="facebook-signin" href="$fbUrl">
@@ -101,21 +96,6 @@ class sso_authentication_login
      </script>';
 	}
 
-
-	function loginWithFacebook()
-	{
-
-		try {
-			$token = file_get_contents('https://graph.facebook.com/v14.0/oauth/access_token?client_id=' . qa_opt('facebook_authentication_client_id') . '&redirect_uri=' . qa_opt('site_url') . '&client_secret=' . qa_opt('facebook_authentication_client_secret') . '&code=' . $_GET['code']);
-			$token = json_decode($token, true);
-			$data = file_get_contents('https://graph.facebook.com/v14.0/me?client_id=' . qa_opt('facebook_authentication_client_id') . '&redirect_uri=' . qa_opt('site_url') . '&client_secret=' . qa_opt('facebook_authentication_client_secret') . '&code=' . $_GET['code'] . '&access_token=' . $token['access_token'] . '&fields=id,name,email');
-			$data = json_decode($data, true);
-			$this->registerUser($data, 'facebook');
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
-	}
 
 	function admin_form(&$qa_content)
 	{
@@ -187,41 +167,125 @@ class sso_authentication_login
 		);
 	}
 
+
 	// helper function
-	function getClient()
+	function getClient($isGoogle)
 	{
 		if (is_null($this->client)) {
-			require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
-			$redirect_uri = 'https://staging.support.bible/qa-plugin/sso-authentication/login-callback.php';
-			$this->client = new Google_Client();
-			$this->client->setClientId(qa_opt('google_authentication_client_id'));
-			$this->client->setClientSecret(qa_opt('google_authentication_client_secret'));
-			$this->client->setRedirectUri($redirect_uri);
-			$this->client->addScope("email");
-			$this->client->addScope("profile");
-			// offline access will give you both an access and refresh token so that
-			// your app can refresh the access token without user interaction.
-			$this->client->setAccessType('offline');
-			// Using "consent" ensures that your application always receives a refresh token.
-			// If you are not using offline access, you can omit this.
-			$this->client->setApprovalPrompt('consent');
-			$this->client->setIncludeGrantedScopes(true);   // incremental auth
+			require_once QA_BASE_DIR . 'vendor/autoload.php';
+			if ($isGoogle) {
+				$redirect_uri = qa_opt('site_url') . self::REDIRECT_URL;
+				$this->client = new Google_Client();
+				$this->client->setClientId(qa_opt('google_authentication_client_id'));
+				$this->client->setClientSecret(qa_opt('google_authentication_client_secret'));
+				$this->client->setRedirectUri($redirect_uri);
+				$this->client->addScope("email");
+				$this->client->addScope("profile");
+				// offline access will give you both an access and refresh token so that
+				// your app can refresh the access token without user interaction.
+				$this->client->setAccessType('offline');
+				// Using "consent" ensures that your application always receives a refresh token.
+				// If you are not using offline access, you can omit this.
+				$this->client->setApprovalPrompt('consent');
+				$this->client->setIncludeGrantedScopes(true);   // incremental auth
+			} else {
+				$this->client = new Facebook\Facebook([
+					'app_id' => qa_opt('facebook_authentication_client_id'),
+					'app_secret' => qa_opt('facebook_authentication_client_secret'),
+					'default_graph_version' => 'v2.10',
+				]);
+			}
 		}
-
 		return $this->client;
 	}
 
-	function generateAuthUrl()
+	// generate authorization url for user to login with SSO
+	function generateAuthUrl($isGoogle)
 	{
-		$scope = 'email profile';
-		return 'https://accounts.google.com/o/oauth2/v2/auth?'
-			. 'response_type=code'
-			. '&client_id=' . urlencode(qa_opt('google_authentication_client_id'))
-			. '&redirect_uri=' . urlencode(qa_opt('site_url') . 'qa-plugin/sso-authentication/login-callback.php')
-			. '&scope=' . urlencode($scope)
-			. '&prompt=select_account';
+		$redirect_uri = qa_opt('site_url') . self::REDIRECT_URL;
+		// make sure state in session will not change all the time
+		if (!isset($_SESSION['state'])) {
+			// add unique state to url to prevent cross origin attack
+			$state = urlencode(time() . bin2hex(random_bytes(5)));
+			$_SESSION['state'] = $state;
+		}
+
+		if ($isGoogle) {
+			// generate authorization url for google
+			$scope = urlencode('email profile');
+			return 'https://accounts.google.com/o/oauth2/v2/auth?'
+				. 'response_type=code'
+				. '&client_id=' . urlencode(qa_opt('google_authentication_client_id'))
+				. '&redirect_uri=' . urlencode($redirect_uri)
+				. '&scope=' . $scope
+				. '&state=' . $_SESSION['state']
+				. '&prompt=select_account';
+		} else {
+			$this->client =  $this->getClient(!self::IS_GOOGLE);
+			$this->fbHelper = $this->client->getRedirectLoginHelper();
+			$loginUrl = $this->fbHelper->getLoginUrl($redirect_uri, ['email', 'public_profile']);
+			return $loginUrl;
+		}
 	}
 
+	// after user grants login, use accesstoken to get users' info
+	function logInWithSSO($isGoogle)
+	{
+		require_once QA_BASE_DIR . 'vendor/autoload.php';
+		if ($isGoogle) {
+			// retrieve google client
+			$this->client = $this->getClient(self::IS_GOOGLE);
+
+			// authorize client with token after user grants the permission
+			$token = $this->client->fetchAccessTokenWithAuthCode($_SESSION['code']);
+			$this->client->setAccessToken($token['access_token']);
+
+			// Make the HTTP GET request to the API endpoint to get user info
+			$url = 'https://www.googleapis.com/oauth2/v2/userinfo?access_token=' . urlencode($token['access_token']);
+			$response = file_get_contents($url);
+			$userInfo = json_decode($response, true);
+			// register user in Support.Bible
+			$this->registerUser($userInfo, 'google');
+		} else {
+			// get user accesstoken
+			$auth = 'client_id=' . qa_opt("facebook_authentication_client_id") . '&redirect_uri=' . qa_opt('site_url') . self::REDIRECT_URL . '&client_secret=' . qa_opt("facebook_authentication_client_secret") . '&code=' . $_SESSION["code"];
+
+			$token = $this->validateFBRequest('https://graph.facebook.com/v14.0/oauth/access_token?' . $auth);
+			if (is_null($token)) {
+				echo 'Error: Authentication failed! (Failed to get user access token.)';
+				exit;
+			}
+
+			// store user accesstoken for logout
+			$access_token = $token['access_token'];
+			$cipherToken = openssl_encrypt($access_token, 'aes-256-cbc', file_get_contents('fb.key', true), OPENSSL_RAW_DATA, "");
+			$_SESSION['fb_access_token'] = $cipherToken;
+			setcookie('fb_access_token', $cipherToken, time() + (86400 * 30), true);
+
+			// get user data from Facebook using user accesstoken
+			$data = $this->validateFBRequest('https://graph.facebook.com/v14.0/me?' . $auth . '&access_token=' . $access_token . '&fields=id,name,email');
+			if (is_null($data)) {
+				echo 'Error: Log in failed! (Failed to get user data.)';
+				exit;
+			}
+			$this->registerUser($data, 'facebook');
+		}
+	}
+
+	// validate user's access token for Facebook
+	function validateFBRequest($request)
+	{
+		$response = file_get_contents($request);
+
+		if ($response === false) {
+			return null;
+		} else {
+			$data = json_decode($response, true);
+			return isset($data['error']) ? null : $data;
+		}
+	}
+
+	// register user to Support.Bible site
 	function registerUser($user_info, $provider)
 	{
 		$rootDir = $_SERVER['DOCUMENT_ROOT'];
@@ -292,7 +356,7 @@ class sso_authentication_login
 			echo <<<HTML
 					<h1>User</h1>
 					HTML;
-			qa_set_logged_in_user($existingAccountIds[0], $users[0], false, $provider);
+			qa_set_logged_in_user($existingAccountIds[0], $users[0], true, $provider);
 		}
 	}
 }
