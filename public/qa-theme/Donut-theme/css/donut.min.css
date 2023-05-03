@@ -196,7 +196,12 @@ a.qa-form-wide-table>tbody>tr>td.qa-form-wide-error:focus {
 .qa-form-tall-data {
     padding: 8px
 }
-
+form[name="ask"]>table.qa-form-tall-table>tbody>tr>td.qa-form-tall-label {
+    font-weight: bold;
+  }
+#category_note {
+    line-height: 1px;
+}
 .qa-form-tall-label select {
     margin-bottom: 5px
 }
