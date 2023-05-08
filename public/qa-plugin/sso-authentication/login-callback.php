@@ -8,6 +8,8 @@ $redirect_uri = isset($_SESSION['return_url']) ? $_SESSION['return_url'] : 'http
 if (isset($_GET['code'])) {
 	$scope = $_GET['scope'];
 	try {
+		// store parameter code to proccess it when redirected to home page
+		$_SESSION['code'] = $_GET['code'];
 		// both google & fb has parameter state, but we made our own state for Google
 		$isGoogle = isset($scope) && strpos($scope, 'google');
 		if (!isset($_GET['state']) || (isset($_GET['state']) && strcmp($_GET['state'], $_SESSION['state']) !== 0 && $isGoogle)) {
@@ -15,7 +17,7 @@ if (isset($_GET['code'])) {
 			echo 'Error: Authentication failed! (Invalid state)';
 			exit;
 		}
-		
+
 		ssoLogin($isGoogle);
 	} catch (Exception $e) {
 		echo 'Error?: ' . $e->getMessage();
@@ -32,10 +34,6 @@ if (isset($_GET['code'])) {
 // helper functions
 function ssoLogin($isGoogle)
 {
-
-	// store parameter code to proccess it when redirected to home page
-	$_SESSION['code'] = $_GET['code'];
-
 	// Store scope so that we know we will log in with Google when redirect to home page
 	if ($isGoogle) $_SESSION['scope'] = $_GET['scope'];
 

@@ -17,7 +17,7 @@ DirectoryIndex index.php
 </IfModule>
 
 # Restrict access to key data
-<Files "/qa-plugin/sso-authentication/fb.key">
+<Files "/qa-plugin/sso-authentication/token.key">
   <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !/qa-plugin/sso-authentication/sso-authentication-login.php

@@ -5,8 +5,8 @@ class sso_authentication_login
 	// used to check if users log in with Google, true for Google, false for Facebook
 	const IS_GOOGLE = true;
 	const REDIRECT_URL = 'qa-plugin/sso-authentication/login-callback.php';
-	protected $client = null; // to make sure client will not be created multiple times
-	protected $fbHelper = null;
+	private $googleClient = null; // to make sure client will not be created multiple times
+	private $fbClient = null;
 
 	// called early on during every page request 
 	// if a user is not currently logged in
@@ -26,13 +26,16 @@ class sso_authentication_login
 	{
 		if (isset($_SESSION['logout'])) {
 			if (strcmp($source, 'google') === 0) {
+				$access_token = openssl_decrypt($_COOKIE['google_access_token'], 'aes-256-cbc', file_get_contents('token.key', true), OPENSSL_RAW_DATA, '');
+				setcookie('google_access_token', '', time() - 3600);
 				// retrieve google client
-				$this->client =  $this->getClient(self::IS_GOOGLE);
+				$this->googleClient =  $this->getClient(self::IS_GOOGLE);
+				$this->googleClient->setAccessToken($access_token);
 				// expire token so that user needs to grant permission next time for google
-				$this->client->revokeToken();
+				$this->googleClient->revokeToken();
 			} else if (strcmp($source, 'facebook') === 0 && isset($_COOKIE['fb_access_token'])) {
 				// decipher access token got from cookie
-				$access_token = openssl_decrypt($_COOKIE['fb_access_token'], 'aes-256-cbc', file_get_contents('fb.key', true), OPENSSL_RAW_DATA, '');
+				$access_token = openssl_decrypt($_COOKIE['fb_access_token'], 'aes-256-cbc', file_get_contents('token.key', true), OPENSSL_RAW_DATA, '');
 
 				// remove cookie for access token
 				setcookie('fb_access_token', '', time() - 3600);
@@ -44,8 +47,8 @@ class sso_authentication_login
 				// if access token of Facebook is not null, then expire it
 				// or else, Facebook will throw error regarding invalid token
 				if (!is_null($check_access_token)) {
-					$this->client =  $this->getClient(!self::IS_GOOGLE);
-					$this->client->delete('/me/permissions', [], $access_token); // revoke token
+					$this->fbClient =  $this->getClient(!self::IS_GOOGLE);
+					$this->fbClient->delete('/me/permissions', [], $access_token); // revoke token
 				}
 			}
 			// log user out of Support.Bible
@@ -171,32 +174,31 @@ class sso_authentication_login
 	// helper function
 	function getClient($isGoogle)
 	{
-		if (is_null($this->client)) {
-			require_once QA_BASE_DIR . 'vendor/autoload.php';
-			if ($isGoogle) {
+
+		require_once QA_BASE_DIR . 'vendor/autoload.php';
+		if ($isGoogle) {
+			if ($this->googleClient == null) {
 				$redirect_uri = qa_opt('site_url') . self::REDIRECT_URL;
-				$this->client = new Google_Client();
-				$this->client->setClientId(qa_opt('google_authentication_client_id'));
-				$this->client->setClientSecret(qa_opt('google_authentication_client_secret'));
-				$this->client->setRedirectUri($redirect_uri);
-				$this->client->addScope("email");
-				$this->client->addScope("profile");
-				// offline access will give you both an access and refresh token so that
-				// your app can refresh the access token without user interaction.
-				$this->client->setAccessType('offline');
-				// Using "consent" ensures that your application always receives a refresh token.
-				// If you are not using offline access, you can omit this.
-				$this->client->setApprovalPrompt('consent');
-				$this->client->setIncludeGrantedScopes(true);   // incremental auth
-			} else {
-				$this->client = new Facebook\Facebook([
+				$this->googleClient = new Google_Client();
+				$this->googleClient->setClientId(qa_opt('google_authentication_client_id'));
+				$this->googleClient->setClientSecret(qa_opt('google_authentication_client_secret'));
+				$this->googleClient->setRedirectUri($redirect_uri);
+				$this->googleClient->addScope("email");
+				$this->googleClient->addScope("profile");
+			}
+			return $this->googleClient;
+		} else {
+			if ($this->fbClient == null) {
+
+
+				$this->fbClient = new Facebook\Facebook([
 					'app_id' => qa_opt('facebook_authentication_client_id'),
 					'app_secret' => qa_opt('facebook_authentication_client_secret'),
 					'default_graph_version' => 'v2.10',
 				]);
 			}
+			return $this->fbClient;
 		}
-		return $this->client;
 	}
 
 	// generate authorization url for user to login with SSO
@@ -204,13 +206,13 @@ class sso_authentication_login
 	{
 		$redirect_uri = qa_opt('site_url') . self::REDIRECT_URL;
 		// make sure state in session will not change all the time
-		if (!isset($_SESSION['state'])) {
-			// add unique state to url to prevent cross origin attack
-			$state = urlencode(time() . bin2hex(random_bytes(5)));
-			$_SESSION['state'] = $state;
-		}
 
 		if ($isGoogle) {
+			if (!isset($_SESSION['state'])) {
+				// add unique state to url to prevent cross origin attack
+				$state = urlencode(time() . bin2hex(random_bytes(5)));
+				$_SESSION['state'] = $state;
+			}
 			// generate authorization url for google
 			$scope = urlencode('email profile');
 			return 'https://accounts.google.com/o/oauth2/v2/auth?'
@@ -221,9 +223,9 @@ class sso_authentication_login
 				. '&state=' . $_SESSION['state']
 				. '&prompt=select_account';
 		} else {
-			$this->client =  $this->getClient(!self::IS_GOOGLE);
-			$this->fbHelper = $this->client->getRedirectLoginHelper();
-			$loginUrl = $this->fbHelper->getLoginUrl($redirect_uri, ['email', 'public_profile']);
+			$this->fbClient =  $this->getClient(!self::IS_GOOGLE);
+			$fbHelper = $this->fbClient->getRedirectLoginHelper();
+			$loginUrl = $fbHelper->getLoginUrl($redirect_uri, ['email', 'public_profile']);
 			return $loginUrl;
 		}
 	}
@@ -234,12 +236,12 @@ class sso_authentication_login
 		require_once QA_BASE_DIR . 'vendor/autoload.php';
 		if ($isGoogle) {
 			// retrieve google client
-			$this->client = $this->getClient(self::IS_GOOGLE);
-
+			$this->googleClient = $this->getClient(self::IS_GOOGLE);
 			// authorize client with token after user grants the permission
-			$token = $this->client->fetchAccessTokenWithAuthCode($_SESSION['code']);
-			$this->client->setAccessToken($token['access_token']);
-
+			$token = $this->googleClient->fetchAccessTokenWithAuthCode($_SESSION['code']);
+			$this->googleClient->setAccessToken($token['access_token']);
+			// store user accesstoken for logout
+			$this->storeToken($token, self::IS_GOOGLE);
 			// Make the HTTP GET request to the API endpoint to get user info
 			$url = 'https://www.googleapis.com/oauth2/v2/userinfo?access_token=' . urlencode($token['access_token']);
 			$response = file_get_contents($url);
@@ -257,10 +259,7 @@ class sso_authentication_login
 			}
 
 			// store user accesstoken for logout
-			$access_token = $token['access_token'];
-			$cipherToken = openssl_encrypt($access_token, 'aes-256-cbc', file_get_contents('fb.key', true), OPENSSL_RAW_DATA, "");
-			$_SESSION['fb_access_token'] = $cipherToken;
-			setcookie('fb_access_token', $cipherToken, time() + (86400 * 30), true);
+			$this->storeToken($token, !self::IS_GOOGLE);
 
 			// get user data from Facebook using user accesstoken
 			$data = $this->validateFBRequest('https://graph.facebook.com/v14.0/me?' . $auth . '&access_token=' . $access_token . '&fields=id,name,email');
@@ -282,6 +281,20 @@ class sso_authentication_login
 		} else {
 			$data = json_decode($response, true);
 			return isset($data['error']) ? null : $data;
+		}
+	}
+
+	// store access token to cookie
+	function storeToken($token, $isGoogle)
+	{
+		$access_token = $token['access_token'];
+		$cipherToken = openssl_encrypt($access_token, 'aes-256-cbc', file_get_contents('token.key', true), OPENSSL_RAW_DATA, "");
+		if ($isGoogle) {
+			$_SESSION['google_access_token'] = $cipherToken;
+			setcookie('google_access_token', $cipherToken, time() + (86400 * 30), true);
+		} else {
+			$_SESSION['fb_access_token'] = $cipherToken;
+			setcookie('fb_access_token', $cipherToken, time() + (86400 * 30), true);
 		}
 	}
 
