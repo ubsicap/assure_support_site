@@ -221,7 +221,7 @@ class sso_authentication_login
 				. '&redirect_uri=' . urlencode($redirect_uri)
 				. '&scope=' . $scope
 				. '&state=' . $_SESSION['state']
-				. '&prompt=select_account';
+				. '&prompt=consent';
 		} else {
 			$this->fbClient =  $this->getClient(!self::IS_GOOGLE);
 			$fbHelper = $this->fbClient->getRedirectLoginHelper();
@@ -239,6 +239,10 @@ class sso_authentication_login
 			$this->googleClient = $this->getClient(self::IS_GOOGLE);
 			// authorize client with token after user grants the permission
 			$token = $this->googleClient->fetchAccessTokenWithAuthCode($_SESSION['code']);
+			if (!isset($token['access_token'])) {
+				// to handle case when auth code is invalid, ask user to grant permission again
+				header('Location: ' . filter_var($this->generateAuthUrl(self::IS_GOOGLE), FILTER_SANITIZE_URL));
+			}
 			$this->googleClient->setAccessToken($token['access_token']);
 			// store user accesstoken for logout
 			$this->storeToken($token, self::IS_GOOGLE);
