@@ -34,10 +34,11 @@
 	define('QA_MYSQL_PORT', '3306');
 */
 
-define('QA_MYSQL_HOSTNAME', 'sb-mysql');
+define('QA_MYSQL_HOSTNAME', getenv('DB_HOST'));
 define('QA_MYSQL_USERNAME', 'admin');
-define('QA_MYSQL_PASSWORD', file_get_contents('db.key'));
+define('QA_MYSQL_PASSWORD', getenv('DB_KEY'));
 define('QA_MYSQL_DATABASE', 'q2a');
+define('QA_MYSQL_PORT', '3306');
 
 /*
 	If you want to get these values from environment variables,
