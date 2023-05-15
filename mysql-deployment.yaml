@@ -1,17 +1,31 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: sb-mysql
   labels:
     app: support-bible
     tier: db
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: support-bible
+      tier: db
   template:
+    metadata:
+      labels:
+        app: support-bible
+        tier: db
     spec:
       containers:
       - name: support-bible-mysql
         image: mysql
         env:
+        - name: MYSQL_HOST
+          valueFrom: 
+            secretKeyRef:
+              key: dbhost
+              name: mysql-secret
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -35,8 +49,7 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
-      restartPolicy: Never
-  backoffLimit: 4
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
@@ -46,10 +59,11 @@ metadata:
     app: support-bible
     tier: db
 spec:
-  type: ExternalName
-  externalName: replaceWithRDSName
+  type: ClusterIP
   ports:
     - port: 3306
+      name: mysql
+      targetPort: mysql
   selector:
     app: support-bible
     tier: db
