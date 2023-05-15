@@ -334,7 +334,7 @@ if (QA_FINAL_EXTERNAL_USERS) {
 			qa_fatal_error('External login mapped to more than one user'); // should never happen
 
 		if ($countusers) // user exists so log them in
-			qa_set_logged_in_user($users[0]['userid'], $users[0]['handle'], false, $source);
+			qa_set_logged_in_user($users[0]['userid'], $users[0]['handle'], true, $source);
 
 		else { // create and log in user
 			require_once QA_INCLUDE_DIR . 'app/users-edit.php';
@@ -345,7 +345,7 @@ if (QA_FINAL_EXTERNAL_USERS) {
 
 			if (count($users) == 1) {
 				qa_db_user_login_sync(false);
-				qa_set_logged_in_user($users[0]['userid'], $users[0]['handle'], false, $source);
+				qa_set_logged_in_user($users[0]['userid'], $users[0]['handle'], true, $source);
 
 			} else {
 				$handle = qa_handle_make_valid(@$fields['handle']);
@@ -361,7 +361,9 @@ if (QA_FINAL_EXTERNAL_USERS) {
 
 				$userid = qa_create_new_user((string)@$fields['email'], null /* no password */, $handle,
 					isset($fields['level']) ? $fields['level'] : QA_USER_LEVEL_BASIC, @$fields['confirmed']);
-
+					echo '<pre>';
+					var_dump("userid: ".$userid);
+					echo '</pre>';
 				qa_db_user_login_add($userid, $source, $identifier);
 				qa_db_user_login_sync(false);
 

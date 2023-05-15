@@ -44,7 +44,7 @@ if (!defined('QA_NEW_PASSWORD_LEN')){
  * @param $olduser
  * @return array
  */
-function qa_handle_email_filter(&$handle, &$email, $olduser = null)
+function qa_handle_email_filter(&$handle, &$email = null, $olduser = null)
 {
 	require_once QA_INCLUDE_DIR . 'db/users.php';
 	require_once QA_INCLUDE_DIR . 'util/string.php';

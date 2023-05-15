@@ -96,7 +96,7 @@ function qa_finish_reset_user($userId, $newPassword, $newEmail = null, $newUsern
         qa_ar_db_swap_name(qa_ar_db_get_anon($userId), $newUsername);
 
         // Setting the password is a different process than setting other fields
-        qa_db_user_set_password($userId, $newPassword);
+        if(isset($newPassword)) qa_db_user_set_password($userId, $newPassword);
 
         // Set the fields of the account to the newly provided values
         // Note these updates must happen here because the credentials are needed to log in below

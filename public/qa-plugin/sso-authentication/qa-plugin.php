@@ -12,6 +12,9 @@ qa_register_plugin_module('login', 'sso-authentication-login.php', 'sso_authenti
 // Register all language files
 qa_register_plugin_phrases('lang/sso-auth-lang-*.php', 'sso-auth');
 
+// Account Recovery and Reclaim pages
+qa_register_plugin_module('page', 'sso-recover-page.php', 'sso_recover_page', 'Recover Account Pages');
+
 /*
 	Omit PHP closing tag to help avoid accidental output
 */
