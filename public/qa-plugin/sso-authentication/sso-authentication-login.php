@@ -97,7 +97,7 @@ class sso_authentication_login
 	{
 		echo '<script type="text/JavaScript"> 
 		var aTag = document.getElementsByClassName("fa fa-sign-out")[0].parentElement;
-		aTag.href="https://staging.support.bible/qa-plugin/sso-authentication/logout.php";		
+		aTag.href="https://support.bible/qa-plugin/sso-authentication/logout.php";		
 		aTag.innerHTML = "<span class=\"fa fa-sign-out\"></span> Log out ";
      </script>';
 	}

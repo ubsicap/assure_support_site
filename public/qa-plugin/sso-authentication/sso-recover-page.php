@@ -160,7 +160,7 @@ function generate_create_content($request, $qa_content)
 
     // Prompt the user to enter a new username, autofilled with their current username
     $fields['new_0'] = array(
-        'label' => qa_lang('sso-auth/create_enter_new_username') . qa_lang_html('users/handle_label'),
+        'label' => qa_lang('sso-auth/create_enter_new_username'),
         'tags' => 'name="newusername" id="newusername"',
         'value' => isset($newUsername) ? $newUsername : (isset($_SESSION['username']) ?  $_SESSION['username']  : ''),
         'error' => qa_html(isset($errors['new_0']) ? $errors['new_0'] : null),
@@ -283,7 +283,7 @@ function generate_recover_content_sso($request, $qa_content)
 
     // Prompt the user to enter a new username, autofilled with their current username
     $fields['new_0'] = array(
-        'label' => qa_lang('sso-auth/reclaim_enter_new_username') . qa_lang_html('users/handle_label'),
+        'label' => qa_lang('sso-auth/reclaim_enter_new_username'),
         'tags' => 'name="newusername" id="newusername"',
         'value' => isset($newUsername) ? $newUsername : (isset($userInfo['handle']) ? $userInfo['handle'] : ''),
         'error' => qa_html(isset($errors['new_0']) ? $errors['new_0'] : null),

@@ -18,7 +18,7 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: lingxinchen/sb-php:1.0
+      - image: lingxinchen/sb-php:1.5
         name: sb-php-apache
         ports:
         - containerPort: 80
@@ -52,7 +52,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: staging.support.bible
+  - host: support.bible
     http:
       paths:
       - backend:
@@ -64,4 +64,4 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - staging.support.bible
+    - support.bible
