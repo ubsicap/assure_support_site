@@ -23,6 +23,7 @@ class post_validator_admin
 
 			//enable different validator options
 			qa_opt('post_val_check_name', (bool) qa_post_text('check_name'));
+			qa_opt('post_val_enable_warning', (bool) qa_post_text('enable_warning'));
 			qa_opt('post_val_check_email', (bool) qa_post_text('check_email'));
 			qa_opt('post_val_check_phone', (bool) qa_post_text('check_phone'));
 			qa_opt('post_val_check_registration', (bool) qa_post_text('check_registration'));
@@ -47,6 +48,12 @@ class post_validator_admin
 					'label' => qa_lang('post_validator_lang/check_name'),
 					'tags' => 'name="check name"',
 					'value' => qa_opt('post_val_check_name'),
+				),
+				array( //name
+					'type' => 'checkbox',
+					'label' => qa_lang('post_validator_lang/enable_warning'),
+					'tags' => 'name="enable warning"',
+					'value' => qa_opt('post_val_enable_warning'),
 				),
 				array( //email
 					'type' => 'checkbox',

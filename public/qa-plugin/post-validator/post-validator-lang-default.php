@@ -12,6 +12,7 @@
 		'check_mac' => 'Check for MAC addresses',
 		'check_image' => 'Show warning about images',
 		'plugin_disabled' => 'Plugin has been disabled.',
+		'enable_warning' => 'Add warning at ask question page'
 	);
 
 

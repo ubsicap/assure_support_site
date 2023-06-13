@@ -86,5 +86,39 @@ class qa_html_theme_layer extends qa_html_theme_base
 		}
     }
 
+	public function form_label($field, $style, $columns, $prefixed, $suffixed, $colspan)
+	{
+		if (qa_opt('post_validator_enabled') && qa_opt('post_val_enable_warning') && ($this->template == 'ask' || $this->template == 'question' || isset($this->content['form_q_edit'])) && ((strpos(@$field['label'], "Email me")!== false) || strpos(@$field['label'], "Save silently"))!== false) {
+			$extratags = '';
+			if ($columns > 1 && (@$field['type'] == 'select-radio' || @$field['rows'] > 1))
+				$extratags .= ' style="vertical-align:top;"';
+	
+			if (isset($colspan))
+				$extratags .= ' colspan="' . $colspan . '"';
+	
+			$this->output('<td class="qa-form-' . $style . '-label"' . $extratags . '>');
+			
+			$this->output("<label style='padding-bottom: 5px;'>Support.Bible is a public website. Please be careful about what you post, and please refer to our <a href='https://support.bible/best-practices' rel='noopener noreferrer'>Best Practices page</a>.</label>");
+
+			if ($prefixed) {
+				$this->output('<label>');
+				$this->form_field($field, $style);
+			}
+	
+			$this->output(@$field['label']);
+	
+			if ($prefixed)
+				$this->output('</label>');
+	
+			if ($suffixed) {
+				$this->output('&nbsp;');
+				$this->form_field($field, $style);
+			}
+	
+			$this->output('</td>');
+		}
+		else parent::form_label($field, $style, $columns, $prefixed, $suffixed, $colspan);		
+	}
+
 	// end qa_html_theme_layer
 }
