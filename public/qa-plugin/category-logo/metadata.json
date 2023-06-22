@@ -1,7 +1,7 @@
 {
-    "name": "Category Logo",
+    "name": "Category Logo and Sort",
     "uri": "https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/category-logo",
-    "description": "Adds icons to categories",
+    "description": "Adds icons to categories and sort categories according to the amount of questions in the category",
     "version": "1.0",
     "date": "2022-06-27",
     "author": "Paratext",

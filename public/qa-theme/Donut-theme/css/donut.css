@@ -850,8 +850,8 @@ header#nav-header {
 .qa-form-light-button-approve,
 .qa-form-wide-button-unblock {
   color: #fff;
-  background-color: #5cb85c;
-  border-color: #4cae4c;
+  background-color: #d9534f;
+  border-color: #d43f3a;
 }
 
 .qa-unfavorite-button:hover,
@@ -875,8 +875,8 @@ header#nav-header {
 .qa-form-tall-button-cancel,
 .qa-form-wide-button-cancel {
   color: #fff;
-  background-color: #5cb85c;
-  border-color: #4cae4c;
+    background-color: #f0ad4e;
+    border-color: #a37534;
 }
 .qa-favorite-button:hover,
 .qa-form-tall-button-cancel:hover,
@@ -1311,8 +1311,8 @@ header#nav-header {
 }
 .qa-favorite-button:hover {
   color: #fff;
-  background-color: #5cb85c;
-  border-color: #4cae4c;
+    background-color: #d9534f;
+    border-color: #d43f3a
 }
 .qa-unfavorite-button:hover {
   color: #fff;

@@ -9,6 +9,7 @@ class qa_category_logo {
 
 		if ($saved) {
 			qa_opt('category_logo_on', (int) qa_post_text('category_logo_on_field'));
+            qa_opt('category_sort_on', (int) qa_post_text('category_sort_on_field'));
             foreach($categories_backpaths as $category_backpath) {
             	qa_opt('category_logo_url_' .$category_backpath['backpath'].'', qa_post_text('category_logo_url_field_'.$category_backpath['backpath'].''));
             }
@@ -16,12 +17,20 @@ class qa_category_logo {
 
         $this -> qa_set_display_rules_helper($categories_backpaths);
         //make array consists of prompt and specific labels with corresponding categories
-        $fields = array(array(
+        $fields = array(
+            array(
             'label' => 'Add specific logo to corresponding categories',
             'type' => 'checkbox',
             'value' => qa_opt('category_logo_on'),
             'tags' => 'name="category_logo_on_field" id="category_logo_on_field"',
-        ));
+            ),
+            array(
+                'label' => 'Enable sorting categories based on the amount of questions in a category',
+                'type' => 'checkbox',
+                'value' => qa_opt('category_sort_on'),
+                'tags' => 'name="category_sort_on_field" id="category_sort_on_field"',
+            )
+    );
         $results = $this->get_categories($categories_backpaths);
         foreach($results as $result) {
             array_push($fields, $result);
