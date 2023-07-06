@@ -31,7 +31,7 @@ function createWarning (entries) //create html warning message
     var warning =
       '<div class="post-validator-error">Sensitive information detected: ' +
       entries +
-      '<br>Please refer to: <a href="./best-practices" target="_blank" rel="noopener noreferrer">our best practice page.</a></div>';
+      '<br>Please refer to our: <a href="https://support.bible/best-practices" target="_blank" rel="noopener noreferrer"> best practice page.</a></div>';
     return warning;
 }
 
