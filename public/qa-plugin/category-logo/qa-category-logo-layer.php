@@ -63,7 +63,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 			// Sort the remaining categories based on the amount of questions 
 			usort($navigation, function ($a, $b) {
 				// not sort general category 
-				if ($a["categoryid"] == null || $b["categoryid"] == null || $a["label"] == "General" || $b["label"] == "General")
+				if (!isset($a["categoryid"]) || !isset($b["categoryid"]) || $a["label"] == "General" || $b["label"] == "General")
 					return 0;
 				// Access the 'note' property of $navlinkA and $navlinkB for comparison
 				$noteA = $this->convertToNumeric($a["note"]);
