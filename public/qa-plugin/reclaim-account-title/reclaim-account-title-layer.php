@@ -32,7 +32,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 	public function addSubtitle()
 	{
 		$this->output('<h3>');
-		$this->output('You can also <a href="https://support.bible/recover-account" style="text-decoration: solid;">reclaim your existing Paratext Support account!</a>');
+		$this->output('You can also <a href="https://support.bible/recover-account" style="text-decoration: solid;">Reclaim your Existing Paratext Support or PTXPrint Community account</a>');
 		$this->output('</h3>');
 	}
 }

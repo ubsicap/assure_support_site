@@ -16,10 +16,16 @@ if (isset($_GET['code'])) {
 		logInWithSSO($isGoogle);
 	} catch (Exception $e) {
 		echo 'Error?: ' . $e->getMessage();
-		header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
 		exit();
 	}
 } 
+
+if (isset($_GET['error_message'])) {
+	require_once 'helper-functions.php';
+	$redirect_uri = isset($_SESSION['return_url']) ? $_SESSION['return_url'] : 'http://' . $_SERVER['HTTP_HOST'] . '/';
+	echo 'Error?: ' . $_GET['error_message'];
+	exit();
+}
 
 
 
