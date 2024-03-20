@@ -1,7 +1,8 @@
 {
     "require": {
         "google/apiclient": "2.0",
-        "facebook/graph-sdk": "~5.0"
+        "facebook/graph-sdk": "~5.0",
+        "edsdk/flmngr-server-php": "^1.5"
     },
     "scripts": {
         "pre-autoload-dump": "Google\\Task\\Composer::cleanup"

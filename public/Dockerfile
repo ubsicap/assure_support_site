@@ -13,11 +13,21 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y libpng-dev git zi
 
 # RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
+
+# Update and install the required PHP extensions
+RUN apt-get update && apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd exif
+
 #Install Composer for downloading Google API and Facebook client with PHP
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /bin/composer
 RUN composer require google/apiclient:^2.0
 RUN composer require facebook/graph-sdk:~5.0
+RUN composer require edsdk/flmngr-server-php
 
 # Install GD library for dynamic image creation
 RUN apt-get install -y libjpeg-dev libfreetype6-dev
