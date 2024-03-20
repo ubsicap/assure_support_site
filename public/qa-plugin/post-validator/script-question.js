@@ -1,54 +1,27 @@
-$ (document).ready (function () 
-{
-  //check sensitive info in answer
-  $('.qa-q-view-buttons').children().last().click(function()
-  {
-    //check sensitive info in body
-    $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
-    .done (function (script, textStatus) {
-      var interval = setInterval(function() {
-        $('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {onCKEditor("ask");}); 
-        if ($("iframe").contents().find('body').length ) 
-          clearInterval(interval);
-      }, 100)
-      ;}) 
-    .fail (function (jqxhr, settings, exception) {
-      console.log ('Failed to get editor!');
+$(document).ready(function() {
+  function setupEditorObservation(buttonSelector) {
+    $(buttonSelector).children().last().click(function() {
+      $.getScript('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
+        .done(function() {
+          var checkInterval = setInterval(function() {
+            var iframeBody = $('iframe').contents().find('body');
+            if (iframeBody.length) {
+              clearInterval(checkInterval);
+              var observer = new MutationObserver(function() {
+                onCKEditor("ask");
+              });
+              observer.observe(iframeBody[0], { childList: true, subtree: true });
+            }
+          }, 100);
+        })
+        .fail(function() {
+          console.log('Failed to get editor!');
+        });
     });
-  });
+  }
 
-  //check sensitive info in comment
-  $('.qa-a-item-buttons').children().last().click(function()
-  {
-    //check sensitive info in body
-    $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
-    .done (function (script, textStatus) {
-      var interval = setInterval(function() {
-        $('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {onCKEditor("ask");}); 
-        if ($("iframe").contents().find('body').length ) 
-          clearInterval(interval);
-      }, 100)
-      ;}) 
-    .fail (function (jqxhr, settings, exception) {
-      console.log ('Failed to get editor!');
-    });
-  });
-
-  //check sensitive info in reply (comment)
-  $('.qa-c-item-buttons').children().last().click(function()
-  {
-    //check sensitive info in body
-    $.getScript ('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
-    .done (function (script, textStatus) {
-      var interval = setInterval(function() {
-        $('iframe').contents ().find ('body').bind ('DOMSubtreeModified', function () {onCKEditor("ask");}); 
-        if ($("iframe").contents().find('body').length ) 
-          clearInterval(interval);
-      }, 100)
-      ;}) 
-    .fail (function (jqxhr, settings, exception) {
-      console.log ('Failed to get editor!');
-    });
-  });
-
+  // Setup observation for different button groups
+  setupEditorObservation('.qa-q-view-buttons');
+  setupEditorObservation('.qa-a-item-buttons');
+  setupEditorObservation('.qa-c-item-buttons');
 });
