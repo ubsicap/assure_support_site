@@ -1,0 +1,11 @@
+{
+  "name": "Category Search",
+  "uri": "https://github.com/Lin3141/qa-category-search",
+  "description": "Adds option to search questions within a category",
+  "version": "1.0",
+  "date": "2024-04-25",
+  "author": "Lingxin Chen",
+  "author_uri": "https://github.com/Lin3141",
+  "license": "GPLv2",
+  "load_order": "after_db_init"
+}
