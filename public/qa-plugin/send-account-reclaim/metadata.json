@@ -4,7 +4,7 @@
     "description": "Send emails to users in qa_reclaimaccount",
     "version": "1.0",
     "date": "2022-07-13",
-    "author": "Paratext",
+    "author": "Lingxin Chen",
     "author_uri": "https://github.com/ubsicap/assure_support_site/",
     "license": "GPLv2",
     "update_uri": "https://raw.githubusercontent.com/ubsicap/assure_support_site/master/public/qa-plugin/send-account-reclaim/metadata.json",

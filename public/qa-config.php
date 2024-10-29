@@ -206,6 +206,7 @@ define('QA_ALLOW_UNINDEXED_QUERIES', false);
 define('QA_OPTIMIZE_DISTANT_DB', false);
 define('QA_PERSISTENT_CONN_DB', false);
 define('QA_DEBUG_PERFORMANCE', false);
+define('QA_DB_MAX_CONTENT_LENGTH', 50000);
 
 /*
 	And lastly... if you want to, you can predefine any constant from qa-include/db/maxima.php in

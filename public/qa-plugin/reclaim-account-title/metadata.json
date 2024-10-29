@@ -3,7 +3,7 @@
 	"description": "Provides a subtitle of reclaim account in registration form",
 	"uri": "https://github.com/ubsicap/assure_support_site/tree/master/public/qa-plugin/reclaim-account-title",
 	"version": "2.0",
-	"author": "Paratext",
+	"author": "Lingxin Chen",
 	"author_uri": "https://github.com/ubsicap/assure_support_site/",
 	"license": "GPLv2",
 	"min_q2a": "1.7",

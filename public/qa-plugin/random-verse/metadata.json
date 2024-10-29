@@ -4,7 +4,7 @@
     "description": "Pick a random verse to display out of the subset of verses that is configured",
     "version": "1.0",
     "date": "2022-10-11",
-    "author": "Paratext",
+    "author": "Lingxin Chen",
     "author_uri": "https://github.com/ubsicap/assure_support_site/",
     "license": "GPLv2",
     "update_uri": "https://raw.githubusercontent.com/ubsicap/assure_support_site/master/public/qa-plugin/random-verse/metadata.json",

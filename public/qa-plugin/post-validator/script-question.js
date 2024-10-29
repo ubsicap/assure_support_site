@@ -1,7 +1,7 @@
 $(document).ready(function() {
   function setupEditorObservation(buttonSelector) {
     $(buttonSelector).children().last().click(function() {
-      $.getScript('/qa-plugin/wysiwyg-editor/ckeditor/ckeditor.js?1.8.6')
+      $.getScript('/qa-plugin/pupi-dm/ckeditor/ckeditor.js?1.8.6')
         .done(function() {
           var checkInterval = setInterval(function() {
             var iframeBody = $('iframe').contents().find('body');

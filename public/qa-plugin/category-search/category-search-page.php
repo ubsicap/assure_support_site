@@ -40,6 +40,7 @@ class category_search_page
 			$display = qa_opt_if_loaded('page_size_search');
 			$count = 4 * (isset($display) ? $display : QA_DB_RETRIEVE_QS_AS) + 1;
 
+			$categoryId = null;
 			if (!empty($searchCategory)) {
 				// Get the category ID from the search category
 				$categoryId = $this->get_category_id($searchCategory);

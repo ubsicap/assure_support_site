@@ -4,7 +4,7 @@
     "description": "Check a question/answer/comment before posting for sensitive information",
     "version": "1.0",
     "date": "2022-07-22",
-    "author": "Paratext",
+    "author": "Lingxin Chen, Daniel March",
     "author_uri": "https://github.com/ubsicap/assure_support_site/",
     "license": "GPLv2",
     "update_uri": "https://raw.githubusercontent.com/ubsicap/assure_support_site/master/public/qa-plugin/post-validator/metadata.json",

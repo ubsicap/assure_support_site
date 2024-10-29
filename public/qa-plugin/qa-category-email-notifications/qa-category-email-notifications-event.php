@@ -32,7 +32,7 @@ class qa_category_email_notifications_event
 						$bcclist[] = $emails[$i]['email'];
 					}
 
-                                        $this->category_email_notification_send_notification($bcclist, null, null, qa_lang('emails/q_posted_subject'), qa_lang('emails/q_posted_body'), array(
+                                        $this->category_email_notification_send_notification($bcclist, null, null, qa_lang('emails/q_posted_subject') . ": " . $params['title'], qa_lang('emails/q_posted_body'), array(
                                                 '^q_handle' => isset($handle) ? $handle : qa_lang('main/anonymous'),
                                                 '^q_title' => $params['title'], // don't censor title or content here since we want the admin to see bad words
                                                 '^q_content' => $params['text'],

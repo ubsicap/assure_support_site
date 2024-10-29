@@ -39,7 +39,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 		$selectedCategories = $this->content['search']['category'];
 
 		$dropdownHTML = '<select name="search-category" class="qa-search-dropdown">
-		<option value="" disabled selected>Select Category</option>'; //serve as label
+		<option value="" selected>All Categories</option>'; //serve as label
 
 		// Loop through the categories to add each as an <option>
 		foreach ($categories as $categoryTitle) {
@@ -61,7 +61,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 				' 
 				<style type="text/css">
 				.qa-search-dropdown {
-					padding: 10px 45px 10px 12px;
+					padding: 10px 45px 10px 10px;
     				font-size: 13px;
 					height: auto;
 					box-sizing: border-box;
