@@ -1025,7 +1025,7 @@ function qa_sanitize_html($html, $linksnewwindow = false, $storage = false)
 	$safe = htmLawed($html, array(
 		'safe' => 1,
 		'elements' => '*-form-input-select-textarea-style',
-		'schemes' => 'href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, telnet; *:file, http, https; style: !; classid:clsid',
+		'schemes' => 'src:data; href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, telnet; *:file, http, https; style: !; classid:clsid',
 		'keep_bad' => 0,
 		'anti_link_spam' => array('/.*/', ''),
 		'hook_tag' => 'qa_sanitize_html_hook_tag',

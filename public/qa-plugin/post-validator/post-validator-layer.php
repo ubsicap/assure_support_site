@@ -26,7 +26,7 @@ function get_val_script($for)
 	if($for == "ask") //for questions
 		$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-ask.js"></script>';
 	elseif($for == "question") //for answers and comments
-		$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-question.js"></script>';
+		$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-question.js?2.0.0"></script>';
 	elseif($for == "question-edit")
 		$scriptText .= '<script type="text/javascript" src="' . QA_HTML_THEME_LAYER_URLTOROOT . 'script-question-edit.js"></script>';
 	return $scriptText;

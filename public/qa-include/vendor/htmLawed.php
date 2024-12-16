@@ -338,6 +338,10 @@ $b = $a = '';
 if($c == null){$c = 'style'; $b = $p[1]; $a = $p[3]; $p = trim($p[2]);}
 $c = isset($C['schemes'][$c]) ? $C['schemes'][$c] : $C['schemes']['*'];
 static $d = 'denied:';
+if (strpos($p, "/files") !== false)  $d = ''; // make sure img from flmngr will not be blocked
+if (strpos($p, "sil.org") !== false)  $d = ''; // make sure img from sil (scripture forge) will not be blocked
+if (strpos($p, "support.bible") !== false)  $d = ''; // make sure img from this site will not be blocked
+
 if(isset($c['!']) && substr($p, 0, 7) != $d){$p = "$d$p";}
 if(isset($c['*']) or !strcspn($p, '#?;') or (substr($p, 0, 7) == $d)){return "{$b}{$p}{$a}";} // All ok, frag, query, param
 if(preg_match('`^([^:?[@!$()*,=/\'\]]+?)(:|&#(58|x3a);|%3a|\\\\0{0,4}3a).`i', $p, $m) && !isset($c[strtolower($m[1])])){ // Denied prot

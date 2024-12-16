@@ -18,8 +18,13 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: lingxinchen/sb-php:1.5
+      - image: lingxinchen/sb-php:3.55
         name: sb-php-apache
+        resources:
+          requests:
+            memory: "512Mi"   # Optional
+          limits:
+            memory: "512Mi"   # Required, sets a maximum memory limit
         ports:
         - containerPort: 80
       imagePullSecrets:
