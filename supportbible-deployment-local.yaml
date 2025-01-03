@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sb-apache-deployment
+  labels:
+    app: support-bible
+    tier: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: support-bible
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: support-bible
+        tier: frontend
+    spec:
+      containers:
+      - image: bobbeck/sb-php:3.56
+        name: sb-php-apache
+        resources:
+          requests:
+            memory: "512Mi"   # Optional
+          limits:
+            memory: "512Mi"   # Required, sets a maximum memory limit
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: myregistrykey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sb-apache-service
+  labels:
+    app: support-bible
+    tier: frontend
+spec:
+  selector:
+    app: support-bible
+    tier: frontend
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sb-apache-ingress
+  labels:
+    app: support-bible
+    tier: frontend
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: staging.support.bible
+    http:
+      paths:
+      - backend:
+          service:
+            name: sb-apache-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - support.bible
+    secretName: staging-support-bible-tls
