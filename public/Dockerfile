@@ -35,11 +35,7 @@ RUN rm /etc/apache2/sites-enabled/000-default.conf \
     && ln -s /etc/apache2/sites-available/myapp.conf /etc/apache2/sites-enabled/myapp.conf \
     && service apache2 restart
 
-ENV DB_KEY="SupportBible228DB!"
-#ENV DB_HOST="sb-mysql"
-ENV DB_HOST="support-bible.c5c5cgu5xuyk.us-east-1.rds.amazonaws.com"
-ENV TOKEN_KEY="PCiRcm2mO5r5D5m5MNbRKTnRQ2zX4K4tZ1xyJDXDlzk="
-ENV IV_KEY="e14fa92d33e40d2m"
+# place for environment variables
 
 COPY index.php /var/www/html/
 COPY . /var/www/html/
