@@ -18,7 +18,7 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: lingxinchen/sb-php:3.55
+      - image: bobbeck/sb-php:4.00
         name: sb-php-apache
         resources:
           requests:
@@ -27,6 +27,28 @@ spec:
             memory: "512Mi"   # Required, sets a maximum memory limit
         ports:
         - containerPort: 80
+        env:
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              key: db-host
+              name: db-user
+        - name: DB_KEY
+          valueFrom:
+            secretKeyRef:
+              key: db-key
+              name: db-user
+        - name: TOKEN_KEY                                                                             
+          valueFrom:                                                                                    
+            secretKeyRef:                                                                                 
+              key: token-key                                                                              
+              name: db-user                                                                         
+        - name: IV_KEY                                                                                
+          valueFrom:                                                                                    
+            secretKeyRef:                                                                                 
+              key: iv-key                                                                                 
+              name: db-user
+
       imagePullSecrets:
       - name: myregistrykey
 ---

@@ -32,17 +32,7 @@ RUN docker-php-ext-install -j$(nproc) gd
 RUN a2enmod rewrite
 COPY apache2.conf /etc/apache2/apache2.conf
 RUN rm /etc/apache2/sites-enabled/000-default.conf \
-    && ln -s /etc/apache2/sites-available/myapp.conf /etc/apache2/sites-enabled/myapp.conf \
     && service apache2 restart
-
-ARG DB_KEY
-ARG DB_HOST
-ARG TOKEN_KEY
-ARG IV_KEY
-ENV DB_KEY=$DB_KEY
-ENV DB_HOST=$DB_HOST
-ENV TOKEN_KEY=$TOKEN_KEY
-ENV IV_KEY=$IV_KEY
 
 COPY index.php /var/www/html/
 COPY . /var/www/html/
