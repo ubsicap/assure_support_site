@@ -18,7 +18,7 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: bobbeck/sb-php:4.02
+      - image: bobbeck/sb-php:4.11
         name: sb-php-apache
         resources:
           requests:
@@ -47,6 +47,16 @@ spec:
           valueFrom:
             secretKeyRef:
               key: iv-key
+              name: db-user
+        - name: DB_LOGIN
+          valueFrom:
+            secretKeyRef:
+              key: db-login
+              name: db-user
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              key: db-name
               name: db-user
 
       imagePullSecrets:

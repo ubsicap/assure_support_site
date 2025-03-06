@@ -31,8 +31,7 @@ RUN docker-php-ext-install -j$(nproc) gd
 # Copy your Apache2 configuration file into the image
 RUN a2enmod rewrite
 COPY apache2.conf /etc/apache2/apache2.conf
-RUN rm /etc/apache2/sites-enabled/000-default.conf \
-    && service apache2 restart
+RUN service apache2 restart
 
 COPY index.php /var/www/html/
 COPY . /var/www/html/

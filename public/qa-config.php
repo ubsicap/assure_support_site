@@ -35,9 +35,9 @@
 */
 
 define('QA_MYSQL_HOSTNAME', getenv('DB_HOST'));
-define('QA_MYSQL_USERNAME', 'admin');
+define('QA_MYSQL_USERNAME', getenv('DB_LOGIN'));
 define('QA_MYSQL_PASSWORD', getenv('DB_KEY'));
-define('QA_MYSQL_DATABASE', 'q2a');
+define('QA_MYSQL_DATABASE', getenv('DB_NAME'));
 define('QA_MYSQL_PORT', '3306');
 
 /*
