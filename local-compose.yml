@@ -8,11 +8,17 @@ services:
     container_name: q2a-apache              # Custom name for the q2a Apache server
     build:                                  # Build a new image
       context: ./public                     # Source of the container
-      dockerfile: DockerfileNoSSL           # Dockerfile to build from
+      dockerfile: Dockerfile                # Dockerfile to build from
     image: q2a-php-apache-local             # Name of the image of the Apache server being created
     restart: on-failure                     # Restart this container if a failure occurs
     depends_on:                             # Ensure this container starts *after* the DB container is running
       - "db"                                # Must be the name of the database *container*
+    environment:
+      DB_HOST: DATBASE_URL_TO_REPLACE
+      DB_PORT: DATABSE_PORT_TO_REPLACE # most likely 3306
+      DB_LOGIN: DATABASE_USERNAME_TO_REPLACE
+      DB_KEY: DATABASE_PASSWORD_TO_REPLACE
+      DB_NAME: DATABASE_NAME_TO_REPLACE
     volumes:                                # Bind the source directory to the website container
       - type: bind                          # Bind instead of Volume because we want to be able to make changes to the source folder without re-composing the container
         source: ./public                    # Must be the directory containing `index.php`
@@ -21,14 +27,17 @@ services:
         source: ./config                    #   without the website having direct access to those files
         target: /var/www/config/            #
     ports:                                  # Define what ports should be open for traffic
-      - "80:80"                             # Open 80 on the host to allow HTTP traffic
-      - "443:443"                           # Open 443 on the host to allow HTTPS traffic
+      - "8080:80"                           # Open 80 on the host to allow HTTP traffic
+      - "8443:443"                          # Open 443 on the host to allow HTTPS traffic
 
   # Configuration for the Q2A database container
   db:
     container_name: q2a-db                  # Note that this is used for the `QA_MYSQL_HOSTNAME` env var in `qa-config-external.php` in the Q2A container
-    image: mysql                            # Using a mySQL database
+    image: mysql:latest                     # Using a mySQL database
     restart: always                         # Always restart the container. See `https://www.cloudbees.com/blog/ensuring-containers-are-always-running-with-dockers-restart-policy` for more restart policies
+    command:
+      # need to remove the STRICT_TRANS_TABLES sql_mode, the rest are to enable the other defaults. ref https://dev.mysql.com/doc/refman/9.2/en/sql-mode.html
+      - --sql_mode=ONLY_FULL_GROUP_BY,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
     environment:                            # Setting the mySQL environment variables
       # This var is not used in `qa-config-external.php`
       MYSQL_ROOT_PASSWORD: ROOT_PASSWORD_TO_REPLACE
