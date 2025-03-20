@@ -37,6 +37,7 @@ A local deployment is necessary during the data import process to ensure that mo
         - `MYSQL_PASSWORD` - Value must match the `QA_MYSQL_PASSWORD` constant from above.
 1. Launch the containers with the following command:
    `docker compose -f local-compose.yml up -d`
+   if qa-config.php was changed, issue this command: docker compose -f local-compose.yml build
 1. Open your web browser to `localhost`.
 1. You will be prompted to create a "Super Administrator" account for the website. This is different than the administrator account for the database, but the same credentials may be used.
 1. Once created, you will be brought to the site's homepage.
