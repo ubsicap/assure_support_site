@@ -13,7 +13,7 @@ services:
     restart: on-failure                     # Restart this container if a failure occurs
     depends_on:                             # Ensure this container starts *after* the DB container is running
       - "db"                                # Must be the name of the database *container*
-    environment:
+    environment:                            # these vars must be the same as in q2a-config.php^
       DB_HOST: DATBASE_URL_TO_REPLACE
       DB_PORT: DATABSE_PORT_TO_REPLACE # most likely 3306
       DB_LOGIN: DATABASE_USERNAME_TO_REPLACE
