@@ -59,8 +59,8 @@ spec:
               key: db-name
               name: db-user
 
-      imagePullSecrets:
-      - name: myregistrykey
+              #imagePullSecrets:
+              #- name: myregistrykey
 ---
 apiVersion: v1
 kind: Service
@@ -102,3 +102,4 @@ spec:
   tls:
   - hosts:
     - support.bible
+    secretName: support-bible-tls
