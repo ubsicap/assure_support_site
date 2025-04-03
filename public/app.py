@@ -32,6 +32,11 @@ def parseLogFile(logfile):
 
    while logLine != None and logLine != "":
 
+      if logLine.endswith("Apache is up"):
+         print("Apache is up - logLine: " + logLine);
+         logLine = fAccess.readline();
+         return;
+
       try:
          parsed_obj = parser.parse(logLine);
          print("request_time: " + str(parsed_obj.request_time));

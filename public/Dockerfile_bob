@@ -19,6 +19,9 @@ RUN apt-get update && apt-get install -y python3 python3-pip
 # Install apachelogs
 RUN apt-get update && python3 -m pip install apachelogs
 
+# Install cron & crontab
+RUN apt-get update && apt-get install -y cron
+
 # Set this environment variable to allow Composer to run as super user
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -49,6 +52,13 @@ WORKDIR /var/www/html
 # Holds config files not served by the website
 RUN mkdir -p /var/www/config
 
+# Configure apache to send a "I'm up" message to the access.log
+# periodically
+COPY crontab_update.sh /etc/crontab_update.sh
+COPY heartbeat.sh /etc/heartbeat.sh
+RUN chmod a+x /etc/crontab_update.sh
+RUN chmod a+x /etc/heartbeat.sh
+RUN /etc/crontab_update.sh
 
 EXPOSE 80/tcp
 EXPOSE 443/tcp
