@@ -16,11 +16,10 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y libpng-dev git zi
 # Install Python 3 and pip
 RUN apt-get update && apt-get install -y python3 python3-pip
 
+RUN apt-get update && apt-get install -y supervisor && rm -rf /var/lib/apt/lists/*
+
 # Install apachelogs
 RUN apt-get update && python3 -m pip install apachelogs
-
-# Install cron & crontab
-RUN apt-get update && apt-get install -y cron
 
 # Set this environment variable to allow Composer to run as super user
 ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -40,8 +39,6 @@ RUN docker-php-ext-install -j$(nproc) gd
 # Copy your Apache2 configuration file into the image
 RUN a2enmod rewrite
 COPY apache2.conf /etc/apache2/apache2.conf
-#RUN service apache2 restart
-COPY app.py /etc/app.py
 
 COPY index.php /var/www/html/
 COPY . /var/www/html/
@@ -52,25 +49,17 @@ WORKDIR /var/www/html
 # Holds config files not served by the website
 RUN mkdir -p /var/www/config
 
-# Configure apache to send a "I'm up" message to the access.log
-# periodically
-COPY crontab_update.sh /etc/crontab_update.sh
-COPY heartbeat.sh /etc/heartbeat.sh
-RUN chmod a+x /etc/crontab_update.sh
-RUN chmod a+x /etc/heartbeat.sh
-RUN /etc/crontab_update.sh
+COPY supervisor_event_logger.sh /etc/supervisor_event_logger.sh
+COPY supervisord.conf /etc/supervisor/supervisord.conf
+
+# Ensure scripts are executable
+RUN chmod a+x supervisor_event_logger.sh
 
 EXPOSE 80/tcp
 EXPOSE 443/tcp
 
-CMD apachectl -D FOREGROUND & python3 -u /etc/app.py
+# Start Supervisor to manage both processes
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
 
-#CMD ["apache2-foreground"]
-# CMD ["php", "-S", "0.0.0.0:80"]
 
-# Create a start-up script to run Apache and your Python app concurrently
-#COPY entrypoint.sh /entrypoint.sh
-#RUN chmod +x /entrypoint.sh
-
-#ENTRYPOINT ["/entrypoint.sh"]
 

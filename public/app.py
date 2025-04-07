@@ -3,6 +3,7 @@ import datetime
 import apachelogs
 import sys
 from time import sleep
+import os
 
 access_log = "/var/log/apache2/access.log";
 error_log  = "/var/log/apache2/error.log";
@@ -66,10 +67,13 @@ def parseLogFile(logfile):
    fAccess.close();
 
 #parseLogFile(sample_log);
+
+#os.system("pgrep -af apache2 | grep -q 'foreground' && echo "Apache is running in foreground mode." || echo "Apache is not running in foreground mode."
+
 while 1:
-   print("Parse access.log");
+   print("app.py UP");
    parseLogFile(access_log);
-   sleep(60);
+   sleep(10);
 
 print("Parse error.log");
 parseLogFile(error_log);
