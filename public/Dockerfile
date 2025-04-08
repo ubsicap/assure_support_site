@@ -13,6 +13,14 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y libpng-dev git zi
 
 # RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
+# Install Python 3 and pip
+RUN apt-get update && apt-get install -y python3 python3-pip
+
+RUN apt-get update && apt-get install -y supervisor && rm -rf /var/lib/apt/lists/*
+
+# Install apachelogs
+RUN apt-get update && python3 -m pip install apachelogs
+
 # Set this environment variable to allow Composer to run as super user
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -31,7 +39,6 @@ RUN docker-php-ext-install -j$(nproc) gd
 # Copy your Apache2 configuration file into the image
 RUN a2enmod rewrite
 COPY apache2.conf /etc/apache2/apache2.conf
-RUN service apache2 restart
 
 COPY index.php /var/www/html/
 COPY . /var/www/html/
@@ -42,7 +49,20 @@ WORKDIR /var/www/html
 # Holds config files not served by the website
 RUN mkdir -p /var/www/config
 
+# put the sitemap at the domain root 
+COPY sitemap.xml /var/www/html/sitemap.xml
+
+COPY supervisor_event_logger.sh /etc/supervisor_event_logger.sh
+COPY supervisord.conf /etc/supervisor/supervisord.conf
+
+# Ensure scripts are executable
+RUN chmod a+x supervisor_event_logger.sh
+
 EXPOSE 80/tcp
 EXPOSE 443/tcp
-CMD ["apache2-foreground"]
-# CMD ["php", "-S", "0.0.0.0:80"]
+
+# Start Supervisor to manage both processes
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+
+
+

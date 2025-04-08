@@ -49,6 +49,9 @@ WORKDIR /var/www/html
 # Holds config files not served by the website
 RUN mkdir -p /var/www/config
 
+# put the sitemap at the domain root 
+COPY sitemap.xml /var/www/html/sitemap.xml
+
 COPY supervisor_event_logger.sh /etc/supervisor_event_logger.sh
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 
