@@ -38,7 +38,7 @@ Do this after you make a code change to the repository.
 2. If an error message appears, click `OK` to close the error box and try clicking `Activate` again. Repeat this process until the `Status` successfully changes to `"Active"`.
 
 ### 2: Build and Push a Docker Image
-1. In a terminal, navigate to the `/public` directory.
+1. In a terminal, navigate to the project root directory.
 2. Build the docker image and push the new image to Docker Hub using these commands:
 ```sh
 docker build -t lingxinchen/sb-php:3.55
@@ -47,7 +47,7 @@ docker push lingxinchen/sb-php:3.55
 > NOTE: Be sure to replace the image version in this example (3.55) with the latest version +1 (e.g. 3.56, 3.57, etc.) for subsequent updates.
 
 ### 3: Deploy to Staging or Production
-1. Go to the project root directory by running `cd ..`.
+1. Ensure you are in the project root directory.
 2. Run the following command to ensure you are using the correct context:
 ```sh
 kubectl config get-contexts
