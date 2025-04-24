@@ -24,6 +24,9 @@ dbdata
 *.pem
 *.ppk
 vendor
+google-auth.json
+Dockerfile_bob
+*local-compose.yml
 
 # Anything in this folder will not be tracked, obviously
 untracked/

@@ -24,43 +24,53 @@ This document contains information such about installed plugins, custom pages, a
 -   [Plugins](#plugins)
     -   [account-reclaim](#account-reclaim)
     -   [auto-prune-accounts](#auto-prune-accounts)
+    -   [badges-Q2A](#badges-q2a)
     -   [category-logo](#category-logo)
+    -   [category-search](#category-search)
+    -   [dynamic-mentions](#dynamic-mentions)
+    -   [faq-page](#faq-page)
     -   [google-analytics](#google-analytics)
+    -   [hashtagger](#hashtagger)
+    -   [on-site-notifications](#on-site-notifications)
+    -   [open-search-support](#open-search-support)
     -   [post-validator](#post-validator)
-    -   [q2a-badges](#q2a-badges)
-    -   [q2a-faq](#q2a-faq)
-    -   [q2a-hashtagger](#q2a-hashtagger)
-    -   [q2a-pupi-srs](#q2a-pupi-srs)
-    -   [q2a-role-markers](#q2a-role-markers)
-    -   [q2a-sticky-sidebar-plugin](#q2a-sticky-sidebar-plugin)
+    -   [pretty-tags](#pretty-tags)
     -   [q2a-style](#q2a-style)
-    -   [q2a-tagging-tools](#q2a-tagging-tools)
-    -   [q2apro-on-site-notifications](#q2apro-on-site-notifications)
-    -   [q2apro-pretty-tags](#q2apro-pretty-tags)
-    -   [q2apro-userinfo](#q2apro-userinfo)
     -   [random-avatar](#random-avatar)
+    -   [random-verse](#random-verse)
+    -   [reCAPTCHA](#reCAPTCHA)
+    -   [reclaim-account-title](#reclaim-account-title)
+    -   [role-markers](#role-markers)
     -   [send-account-reclaim](#send-account-reclaim)
+    -   [simple-sticky-sidebar](#simple-sticky-sidebar)
+    -   [spam-registration-stopper](#spam-registration-stopper)
+    -   [tagging-tools](#tagging-tools)
     -   [sso-authentication](#sso-authentication)
     -   [title-length-counter](#title-length-counter)
+    -   [user-info](#user-info)
 
 ## Donut theme settings
 
 -   Check **Enable top bar**
-    -   **Left text**: `New here? <a href="https://supportsitetest.tk/register" style="color: inherit;">Create a new account</a>!`
-    -   **Right text**: `Got redirected? <a href="https://supportsitetest.tk/recover-account" style="color: inherit;">Reclaim your existing Paratext Support account</a>!`
+    -   **Left text**: `New here? <a href="https://support.bible/register" style="color: inherit;">Create a new account</a>!`
+    -   **Right text**: `Got redirected? <a href="https://support.bible/recover-account" style="color: inherit;">Reclaim your existing Paratext Support account</a>!`
 -   Check **Enable sticky header on scroll**, **Enable back to top button**, and **Show site status above footer**
 -   Either uncheck **Show home page banner**, or configure it to your liking.
 -   Uncheck **Show social links at footer** and **Show copyright at footer**
 
 ## General
 
+-   **Q&A site name**: `Support.Bible Forum`
 -   **Preferred site URL**: Make sure it begins with `https://`
 -   **URL structure**: `/123/why-do-birds-sing (requires htaccess file)`
--   **Site Theme** and **Theme for mobiles**: `Donut`
+-   **Site language**: `English (UK)`
+-   **Site theme** and **Theme for mobiles**: `Donut`
 -   **Question classification**: `Tags and Categories`
 
 ## Emails
 
+-   **Sender address for messages from site**: `admin@support.bible`
+-   **Email address for admin messages - not shown to users**: `admin@support.bible`
 -   Check **Send email via SMTP** and **Send SMTP username and password**
 -   Fill in the required fields with the appropriate SMTP credentials
 
@@ -72,31 +82,47 @@ This document contains information such about installed plugins, custom pages, a
 ## Layout
 
 -   Check **Show a logo image in the page header**
--   **URL of logo**: `/path/to/your/logo`
+-   **URL of logo**: `/assets/NewSupportBibleLogo.png`
+-   **Logo width**: `300`
+-   **Logo height**: `200`
 -   Check **Custom HTML in sidebar box**
-    -   `Support.Bible is a public forum that connects users of Bible translation software, so that they can help one another to find solutions, and discover new ways of working together. We welcome users of all Bible translation software systems to discover how they can help one another to take God’s Word to the world.<hr>`
+    -   `Welcome to Support Bible, where you can ask questions and receive answers from other members of the community. <hr>`
 -   Add the following widgets:
-    -   **Search Bar**: `Main area - Top`
-    -   **Related Questions**: `Main area - Bottom`
-    -   **Categories**: `Side panel - Below sidebar box`
+    -   Available by default:
+        -   **Search Bar**: `Main area - Top`
+        -   **Related Questions**: `Main area - Bottom`
+        -   **Categories**: `Side panel - Below sidebar box`
+        -   **Give Feedback Widget**: `Side panel - Below sidebar box`
+    -   Available later:
+        -   **Tag Descriptions**: `Full width - Top of page`
+        -   **Tag Descriptions**: `Main area - Bottom`
+        -   **TagSearch Widget**: `Side panel - Top`
+    > NOTE: do this after setting plugins
 
 ## Posting
 
--   **Default editor for ...**: `PUPI DM Editor`
+-   **Default editor for ...**: `WYSIWYG Editor`
 -   Check **Check for similar questions when asking**, **Show example tags based on question**, and **Show matching tags while typing**
 
 ## Viewing
 
 ## Lists
 
+-   **Use search module**: `Category Search Module`
+> NOTE: do this after setting plugins
+
 ## Categories
 
 -   Add the following categories:
     -   **Name**: `General`, **Slug**: `general`
     -   **Name**: `Paratext`, **Slug**: `paratext`
+    -   **Name**: `PTXprint`, **Slug**: `ptxprint`
     -   **Name**: `Paratext Lite`, **Slug**: `paratext-lite`
-    -   **Name**: `Publishing Assistant`, **Slug**: `publishing-assistant`
     -   **Name**: `FLExTrans`, **Slug**: `flextrans`
+    -   **Name**: `Scripture Forge`, **Slug**: `scripture-forge`
+    -   **Name**: `Publishing Assistant`, **Slug**: `publishing-assistant`
+    -   **Name**: `Platform.Bible`, **Slug**: `platform-bible`
+    -   **Name**: `Paratext 10 Studio`, **Slug**: `paratext-10-studio`
 -   Uncheck **Allow questions with ...**
 
 ## Permissions
@@ -110,16 +136,28 @@ This document contains information such about installed plugins, custom pages, a
 
 ## Pages
 
--   Check **Questions**, **Unanswered**, **Tags**, **Categories**, **Users**, **Ask a Question**
+-   Check **Questions**, **Unanswered**, **Tags**, **Users**, **Ask a Question**
 -   Add the following custom pages:
-    -   **FAQ** - **Position**: `After tabs at top`
-    -   **Best Practices** - **Slug**: `best-practices`, **Content**: [here](../public/qa-custom-pages/best_practices.html)
+    -   **Privacy Policy**
+        -   **Heading**: `Privacy Policy`
+        -   **Content**: [here](../public/qa-custom-pages/privacy-policy.html)
+    -   **FAQ**
+        -   Use FAQ page available via plugins.
+        -   **Position**: `After tabs at top`
+    -   **Best Practices**
+        -   **Slug**: `best-practices`
+        -   **Content**: [here](../public/qa-custom-pages/best_practices.html)
     -   **Welcome**
-    -   **Paratext Support Redirect** - **Slug**: `paratext support redirect`, **Content**: [here](../public/qa-custom-pages/paratext_redirect.html)
+        -   **Content**: [here](../public/qa-custom-pages/welcome.html)
+    -   **Paratext Support Redirect**
+        -   **Slug**: `paratext-support-redirect`
+        -   **Content**: [here](../public/qa-custom-pages/paratext_redirect.html)
 
 Several custom pages are included in the site. While Q2A supports the creation of custom pages through the administration panel, we have also included the HTML in [a subdirectory of the site](../public/qa-custom-pages) in case the database is cleared.
 
 ## RSS feeds
+
+-   Uncheck **Feed for ...**, **Individual feeds per category**, **Include full text in feeds**.
 
 ## Points
 
@@ -127,8 +165,12 @@ Several custom pages are included in the site. While Q2A supports the creation o
 
 ## Spam
 
--   Check **Request confirmation ...**, **All new users ...**, **User captcha ...**
--   **Use captcha module**: `reCAPTCHA`
+-   Check **Request confirmation ...**, **All new users ...**
+-   Set **Rate limit for uploading files**: *per user/hour*: `15`
+-   Available later:
+    -   **User captcha ...**
+    -   **Use captcha module**: `reCAPTCHA`
+> NOTE: do this after setting plugins
 
 ## Caching
 
@@ -137,6 +179,19 @@ Several custom pages are included in the site. While Q2A supports the creation o
 -   Run each of the **Database clean-up operations** at the bottom of the page
 
 ## Mailing
+
+-   Check **Enable mass mailing to all users**
+-   Set
+    -   **From name**: `Support Bible`
+    -   **From email address**: `admin@support.bible`
+    -   **Subject line**: `A message from Support Bible`
+    -   **Body Text**:
+```text
+--
+Support Bible
+https://support.bible/
+```
+
 
 ## Plugins
 
@@ -155,7 +210,7 @@ The process largely mimics the "Forgot Password" process, with a few tweaks.
 
 #### Configuration
 
-    - We recommend checking **Use CAPTCHA on account recovery**
+-   We recommend checking **Use CAPTCHA on account recovery**
 
 ### [auto-prune-accounts](../public/qa-plugin/auto-prune-accounts)
 
@@ -166,8 +221,8 @@ Does not use CRON jobs- rather it just marks accounts for deletion and bulk-dele
 
 #### Configuration
 
-    - A 30 minute "grace period" is plenty of time. Shorten this if you find too many spam accounts are being created.
-    - Check all *Delete unverified accounts when ...** boxes
+-   A 30 minute "grace period" is plenty of time. Shorten this if you find too many spam accounts are being created.
+-   Check all *Delete unverified accounts when ...** boxes
 
 ### [badges-Q2A](https://github.com/NoahY/q2a-badges)
 
@@ -175,17 +230,33 @@ Assigns users badges for certain (configurable) milestones, such as number of an
 
 #### Configuration
 
-    - Disable the following badges:
-        - Verified Human, Autobiographer, Photogenic
-        - Renewal, Revival, Resurrection
-        - Commenter, Commentator, Annotator
-        - Voter, Avid Voter, Devoted Voter
-        - Editor, Copy Editor, Senior Editor
-        - Watchdog, Bloodhound, Pitbull
-        - Medalist, Champion Olympian
-    - Set the `Notify Duration` to 0 (disabled)
-    - Check **Add badges to profile pages** and **Show badges on main profile field**
-    - Uncheck `Show list of ...` boxes
+-   Check **Activate badges** and hit **Save**
+-   Enable the following badges:
+    -   Nice Question, Good Question, Great Question
+    -   Notable Question, Popular Question, Famous Question
+    -   Nice Answer, Good Answer, Great Answer
+    -   Gifted, Wise, Enlightened
+    -   Grateful, Respectful, Reverential
+    -   Liked, Loved, Revered
+    -   Asker, Questioner, Inquisitor
+    -   Answerer, Lecturer, Preacher
+    -   Reader, Avid Reader, Devoted Reader
+    -   Dedicated, Devoted, Zealous
+    -   Visitor, Trouper, Veteran
+    -   Regular, Old-Timer, Ancestor
+    -   100 Club, 1,000 Club, 10,000 Club
+    -   Medalist, Champion, Olympian
+    -   Nice Comment, Good Comment, Great Comment
+-   Disable the following badges:
+    -   Verified Human, Autobiographer, Photogenic
+    -   Renewal, Revival, Resurrection
+    -   Commenter, Commentator, Annotator
+    -   Voter, Avid Voter, Devoted Voter
+    -   Editor, Copy Editor, Senior Editor
+    -   Watchdog, Bloodhound, Pitbull
+-   Set the `Notify Duration` to 0 (disabled)
+-   Check **Add badges to profile pages** and **Show badges on main profile field**
+-   Uncheck `Show list of ...` boxes
 
 ### [category-logo](../public/qa-plugin/category-logo)
 
@@ -195,13 +266,23 @@ Display a image next to category names, such as logos for categories that repres
 
 #### Configuration
 
--   Check **Add specific logo to corresponding categories**
+-   Check **Add specific logo to corresponding categories** and **Enable sorting categories based on the amount of questions in a category**
 -   Add the following paths:
     -   **Paratext**: `/assets/ParatextCenter.png`
     -   **Publishing Assistant**: `/assets/PublishingAssistant.png`
     -   **Paratext Lite**: `/assets/ParatextLiteCenter.png`
     -   **General**: `/assets/logo.png`
     -   **FLExTrans**: `/assets/FLEXTransIcon.png`
+    -   **Scripture Forge**: `/assets/ScriptureForgeIcon.png`
+    -   **PTXprint**: `/assets/PTXprint.png`
+    -   **PlatformBibleLogo**: `/assets/PlatformBibleLogo.png`
+    -   **Paratext10Studio**: `/assets/ParatextStudio.png`
+
+### [category-search](../public/qa-plugin/category-search/README.md)
+
+#### Configuration
+
+-   Enable the plugin
 
 ### [dynamic-mentions](https://bitbucket.org/pupi1985/q2a-dynamic-mentions-public)
 
@@ -209,13 +290,24 @@ _Premium Plugin_: This plugin is proprietary. It was purchased during developmen
 
 Support for dynamically-suggested @mentions in posts.
 
+
+### [faq-page](https://github.com/gturri/q2a-faq/)
+
+Adds a Frequently Asked Questions page, fully configurable through the admin panel.
+
+#### Configuration
+
+-   Default configuration is acceptable
+-   You can add FAQ entries from this section
+
+
 ### [google-analytics](https://github.com/kufeiko/QA-Google-Analytics-Plugin)
 
 Support for Google Analytics. Requires a tracking code from Google Analytics.
 
 #### Configuration
 
-    - Add the **[Google Global Site Tag](https://developers.google.com/analytics/devguides/collection/gtagjs)**
+-   Add the **[Google Global Site Tag](https://developers.google.com/analytics/devguides/collection/gtagjs)**
     
 
 ### [hashtagger](https://github.com/pupi1985/q2a-hashtagger)
@@ -225,13 +317,19 @@ Similar to the dynamic mentions plugin, but does not dynamically suggest tags.
 
 #### Configuration
 
--   Uncheck **Keep "#" symbol for tag names**
+-   Uncheck **Enable mentions**
 -   Check everything else
 
 
 ### [on-site-notifications](https://github.com/q2apro/q2apro-on-site-notifications)
 
 Notification icons similar to social media.
+
+#### Configuration
+
+-   Enable the plugin
+
+### [open-search-support](../qa-plugin/opensearch-support)
 
 #### Configuration
 
@@ -245,27 +343,13 @@ Warns users if they attempt to post identifying information.
 
 #### Configuration
 
--   **User Fetch Type**: `Remote`
--   **Type of editor for ...**: `Full`
--   **Minimum mention user permit**: `Registered users`
--   Check **Enable On-Site Notifications integration**
--   Check **Enable email notifications**
+-   Check all options
 
 ### [pretty-tags](https://github.com/ProThoughts/q2apro-pretty-tags)
 
 Auto-suggest and auto-complete tags as you type them.
 
 This plugin has been modified to be more appropriate for this site, including UI changes.
-
-
-### [q2a-faq](https://github.com/gturri/q2a-faq/)
-
-Adds a Frequently Asked Questions page, fully configurable through the admin panel.
-
-#### Configuration
-
--   Default configuration is acceptable
--   You can add FAQ entries from this section
 
 
 ### [q2a-style](../public/qa-plugin/q2a-style)
@@ -288,7 +372,20 @@ _Custom plugin_: This plugin was designed specifically for this website. More de
 Selects a random verse to display in the sidebar in order to welcome users to the site. 
 
 #### Configuration
-- Add verses you want to display in this plugin. Pay attention to the formatting of the verses.
+
+-   Add verses you want to display in this plugin. Pay attention to the formatting of the verses.
+
+### [reCAPTCHA](../public/qa-plugin/recaptcha-captcha)
+
+#### Configuration
+
+-   Get a reCAPTCHA site and secret key and set it in the settings
+
+### [reclaim-account-title](../public/qa-plugin/reclaim-account-title)
+
+#### Configuration
+
+-   Enable the plugin
 
 ### [role-markers](https://github.com/gurjyot/q2a-role-markers)
 
@@ -309,6 +406,14 @@ _Custom plugin_: This plugin was designed specifically for this website. More de
 
 Send emails to users in the archived database table through the admin panel.
 Toggleable support for HTML in email body.
+
+#### Configuration
+
+-   Set
+    -   **From name**: `support.bible`
+    -   **From email address**: `admin@support.bible`
+    -   **Subject line**: whatever you want
+    -   **Body text**: whatever you want
 
 
 ### [simple-sticky-sidebar](https://github.com/stefanmm/q2a-sticky-sidebar-plugin/)

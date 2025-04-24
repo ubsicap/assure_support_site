@@ -5,13 +5,6 @@
 # codebase files
 .htaccess
 .travis.yml
-apache2.conf
-CHANGELOG.html
-CONTRIBUTING.md
-Dockerfile*
-LICENSE.html
-README.*
-VERSION.txt
-*.sh
+public/documents/
 *.yml
 *.yaml

@@ -7,25 +7,17 @@ services:
   php-apache-environment:
     container_name: q2a-apache              # Custom name for the q2a Apache server
     build:                                  # Build a new image
-      context: ./public                     # Source of the container
       dockerfile: Dockerfile                # Dockerfile to build from
     image: q2a-php-apache-local             # Name of the image of the Apache server being created
     restart: on-failure                     # Restart this container if a failure occurs
     depends_on:                             # Ensure this container starts *after* the DB container is running
       - "db"                                # Must be the name of the database *container*
-    environment:                            # these vars must be the same as in q2a-config.php^
+    environment:
       DB_HOST: DATBASE_URL_TO_REPLACE
       DB_PORT: DATABSE_PORT_TO_REPLACE # most likely 3306
       DB_LOGIN: DATABASE_USERNAME_TO_REPLACE
       DB_KEY: DATABASE_PASSWORD_TO_REPLACE
       DB_NAME: DATABASE_NAME_TO_REPLACE
-    volumes:                                # Bind the source directory to the website container
-      - type: bind                          # Bind instead of Volume because we want to be able to make changes to the source folder without re-composing the container
-        source: ./public                    # Must be the directory containing `index.php`
-        target: /var/www/html/              # Default root for Apache web server
-      - type: bind                          # This bind mount allows the web server to access config information
-        source: ./config                    #   without the website having direct access to those files
-        target: /var/www/config/            #
     ports:                                  # Define what ports should be open for traffic
       - "8080:80"                           # Open 80 on the host to allow HTTP traffic
       - "8443:443"                          # Open 443 on the host to allow HTTPS traffic
