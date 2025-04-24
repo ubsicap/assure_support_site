@@ -17,6 +17,9 @@ DirectoryIndex index.php
 </IfModule>
 
 # Restrict access to key data
+<FilesMatch "^(composer\.(lock|json)|\.travis\.yml|google-auth\.json)$">
+    Require all denied
+</FilesMatch>
 # <Files "/qa-plugin/sso-authentication/token.key">
 #   <IfModule mod_rewrite.c>
 #     RewriteEngine On

@@ -18,7 +18,7 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: bobbeck/sb-php:4.40
+      - image: mattgetgen/sb-php:4.44
         name: sb-php-apache
         resources:
           requests:
