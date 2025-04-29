@@ -41,7 +41,7 @@ Do this after you make a code change to the repository.
 1. In a terminal, navigate to the project root directory.
 2. Build the docker image and push the new image to Docker Hub using these commands:
 ```sh
-docker build -t lingxinchen/sb-php:3.55
+docker build -t lingxinchen/sb-php:3.55 .
 docker push lingxinchen/sb-php:3.55
 ```
 > NOTE: Be sure to replace the image version in this example (3.55) with the latest version +1 (e.g. 3.56, 3.57, etc.) for subsequent updates.
