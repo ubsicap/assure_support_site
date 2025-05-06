@@ -33,6 +33,9 @@ RUN apt-get update && apt-get install -y libjpeg-dev libfreetype6-dev
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install -j$(nproc) gd
 
+# Remove unnecessary dependencies for the rest of the stages
+RUN apt-get remove -y curl
+
 FROM install AS configure
 
 # Use the webroot as the working directory
