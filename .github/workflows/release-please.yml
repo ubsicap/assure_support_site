@@ -26,7 +26,7 @@ jobs:
         id: release
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          package-name: support-bible
+          # package-name: support-bible
           release-type: php
           manifest-file: .release-please-manifest.json
 
