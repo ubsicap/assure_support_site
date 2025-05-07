@@ -1389,6 +1389,7 @@ function qa_category_navigation_sub($parentcategories, $parentid, $selecteds, $p
 		foreach ($parentcategories[$parentid] as $category) {
 			$navigation[qa_html($category['tags'])] = array(
 				'url' => qa_path_html($pathprefix . $category['tags'], $pathparams),
+				'externalurl' => qa_html($category['externalurl']),
 				'label' => qa_html($category['title']),
 				'popup' => qa_html(@$category['content']),
 				'selected' => isset($selecteds[$category['categoryid']]),
