@@ -9,7 +9,6 @@ on:
   push:
     branches:
       - master
-      - mattgetgen/github-action
 
 permissions:
   contents: write
@@ -18,9 +17,9 @@ permissions:
 name: Release Please
 
 jobs:
-  app-release:
+  release-please:
     runs-on: ubuntu-latest
-    environment: build-default
+    # environment: build-default
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
