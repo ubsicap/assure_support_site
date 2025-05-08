@@ -25,7 +25,6 @@ jobs:
         id: release
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          # package-name: support-bible
           release-type: php
           manifest-file: .release-please-manifest.json
 
@@ -35,9 +34,10 @@ jobs:
       - name: Generate Tag Version
         if: ${{ steps.release.outputs.releases_created }}
         run: |
-          export tag_ver=`sed 's/support-bible-v//g' <(echo ${{ steps.release.outputs.tag_name }})`
-          echo "tag_ver: ${tag_ver}"
-          echo "tag_ver=${tag_ver}" >> "$GITHUB_ENV"
+          echo ${{ steps.release.outputs.tag_name }}
+          # export tag_ver=`sed 's/support-bible-v//g' <(echo ${{ steps.release.outputs.tag_name }})`
+          # echo "tag_ver: ${tag_ver}"
+          # echo "tag_ver=${tag_ver}" >> "$GITHUB_ENV"
 
       ## Image Build & DockerHub Delivery
       - name: Login to Docker Hub
@@ -57,12 +57,14 @@ jobs:
           DH_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}
         run: |
           echo "tag_ver: ${{ env.tag_ver }}"
-          if [ $tag_ver == "" ]; then
-             echo "tag_ver must be set"
-             exit 1
-          fi
-          docker build -t $(DH_NAME)/sb-php:latest .
-          docker tag sb-php:latest $(DH_NAME)/sb-php:$(tag_ver)
-          docker push $(DH_NAME)/sb-php:latest && \
-          docker push $(DH_NAME)/sb-php:$(tag_ver)
+          # if [ $tag_ver == "" ]; then
+          #    echo "tag_ver must be set"
+          #    exit 1
+          # fi
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/sb-php:latest .
+
+          # docker tag sb-php:latest ${{ secrets.DOCKER_HUB_USERNAME }}/sb-php:$(tag_ver)
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/sb-php:latest
+
+          # docker push $(DH_NAME)/sb-php:$(tag_ver)
 
