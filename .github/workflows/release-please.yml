@@ -57,6 +57,8 @@ jobs:
           DH_NAME: ${{ secrets.DOCKER_HUB_USERNAME }}
         run: |
           echo "tag_ver: ${{ env.tag_ver }}"
+          echo "DH_NAME: $(DH_NAME)"
+          echo "DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}"
           # if [ $tag_ver == "" ]; then
           #    echo "tag_ver must be set"
           #    exit 1
