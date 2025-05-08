@@ -34,7 +34,7 @@ jobs:
       - name: Generate Tag Version
         if: ${{ steps.release.outputs.releases_created }}
         run: |
-          echo ${{ steps.release.outputs.version }}
+          echo "version: ${{ steps.release.outputs.version }}"
           # export tag_ver=`sed 's/support-bible-v//g' <(echo ${{ steps.release.outputs.tag_name }})`
           # echo "tag_ver: ${tag_ver}"
           # echo "tag_ver=${tag_ver}" >> "$GITHUB_ENV"
