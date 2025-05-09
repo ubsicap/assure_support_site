@@ -1,3 +1,7 @@
 {
-    "release-type": "php"
+    "packages": {
+        ".": {
+            "release-type": "php"
+        }
+    }
 }
