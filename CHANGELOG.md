@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.1](https://github.com/ubsicap/assure_support_site/compare/v1.0.0...v1.0.1) (2025-05-09)
+
+
+### Bug Fixes
+
+* empty commit ([1fc75a8](https://github.com/ubsicap/assure_support_site/commit/1fc75a8bb012a4ae86be340202125a2bf0cbd840))
+* revert release-please version ([8df0317](https://github.com/ubsicap/assure_support_site/commit/8df0317daa60d107495f3f2983b0524eaf7f20ad))
+* update release please config ([bf5ed90](https://github.com/ubsicap/assure_support_site/commit/bf5ed90a68e275fb0a1b19bb55f3dcb8d1f61b68))
+
 ## 1.0.0 (2025-05-09)
 
 
