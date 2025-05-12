@@ -30,7 +30,9 @@ class qa_html_theme_layer extends qa_html_theme_base
 	{
 		//check to see if it is a category in sidepanel
 		if ((!strcmp($class, "nav-cat") || !strcmp($class, "browse-cat")) && strlen(@$navlink['note'])) {
+
 			$logo = $this->get_logo($navlink['label']);
+
 			if (isset($navlink['url'])) {
 				$this->output(
 					$logo .
@@ -50,6 +52,10 @@ class qa_html_theme_layer extends qa_html_theme_base
 						'>' . $navlink['label'] . '</span>'
 				);
 			}
+	
+			if (isset($navlink['externalurl']))
+				$this->output('<a href="' . $navlink['externalurl'] . '"><b>' . $navlink['externalurl'] . '</b></a>');
+
 			if (strlen(@$navlink['note']))
 				$this->output('<span class="qa-' . $class . '-note">' . $navlink['note'] . '</span>');
 		} else

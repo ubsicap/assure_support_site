@@ -238,8 +238,6 @@ class qa_html_theme extends qa_html_theme_base
 
         $this->output('</main>');
 
-        $this->output('<div class="container">', '');
-
         $this->widgets('full', 'top');
         $this->header();
         $this->widgets('full', 'high');
@@ -259,7 +257,6 @@ class qa_html_theme extends qa_html_theme_base
         $this->footer();
         $this->widgets('full', 'bottom');
 
-        $this->output('</div> <!-- END container -->');
         $this->output('</div> <!-- END body-wrapper -->');
         $this->body_suffix();
     }
@@ -1393,6 +1390,7 @@ class qa_html_theme extends qa_html_theme_base
                 Output the widgets (as provided in $this->content['widgets']) for $region and $place
             */
     {
+
         if (
             isset($this->content['widgets'][$region][$place]) &&
             is_array($this->content['widgets'][$region][$place]) &&

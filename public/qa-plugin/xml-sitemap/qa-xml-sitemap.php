@@ -222,7 +222,7 @@ class qa_xml_sitemap
 
 			while (1) {
 				$categories = qa_db_read_all_assoc(qa_db_query_sub(
-					"SELECT categoryid, backpath FROM ^categories WHERE categoryid>=# AND qcount>0 ORDER BY categoryid LIMIT 2",
+					"SELECT categoryid, backpath, externalurl FROM ^categories WHERE categoryid>=# AND qcount>0 ORDER BY categoryid LIMIT 2",
 					$nextcategoryid
 				));
 
