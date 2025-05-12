@@ -56,5 +56,5 @@ When you have decided that you want to merge this release, go to the Pull Reques
 
 The dockerhub repository that it pushes to is `mattgetgen/sb-php`. The tags will be `latest` and the version made by **release please** (i.e. `1.0.0`). The repo it uses is a private repo, and requires permissions to push to, as well as pull from. I have supplied a PAT from my dockerhub account, and given read/write permissions for this github action, as well as read permissions for both the staging and production kubernetes environment.
 
-From there, you will be able to update the image that kubernetes uses and point at the new version.
+From there, you will can update the image that kubernetes uses and point at the new version.
 
