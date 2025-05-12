@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/ubsicap/assure_support_site/compare/v1.0.2...v1.0.3) (2025-05-12)
+
+
+### Miscellaneous Chores
+
+* add GithubActions.md document ([6491dc7](https://github.com/ubsicap/assure_support_site/commit/6491dc790f890a853328b1b086893e558a723703))
+
 ## [1.0.2](https://github.com/ubsicap/assure_support_site/compare/v1.0.1...v1.0.2) (2025-05-09)
 
 
