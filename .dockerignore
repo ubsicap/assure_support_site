@@ -3,8 +3,5 @@
 .vendor
 
 # codebase files
-.htaccess
-.travis.yml
 public/documents/
-*.yml
-*.yaml
+google-auth.json

@@ -27,7 +27,7 @@ git clone git@github.com:ubsicap/assure_support_site.git
 ```
 2. Replace the `Dockerfile` shared with you under the `/public` directory.
 > NOTE: Do not push this change into the public repo.
-3. Put the `google-auth.json` file shared with you into the `/public/qa-plugin/sso-authentication` directory.
+3. Put the `google-auth.json` file shared with you into the `/public/qa-plugin/sso-authentication/data/` directory.
 > NOTE: Do not add this file to the public repo.
 
 ## Redeploy:
