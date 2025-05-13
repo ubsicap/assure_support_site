@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.3](https://github.com/ubsicap/assure_support_site/compare/v1.0.2...v1.0.3) (2025-05-13)
+
+
+### Bug Fixes
+
+* ([#11](https://github.com/ubsicap/assure_support_site/issues/11)) ([02822b2](https://github.com/ubsicap/assure_support_site/commit/02822b22750d300c75bf8ed0d2d14dc300ac2dc3))
+* new github commit ([#10](https://github.com/ubsicap/assure_support_site/issues/10)) ([cd8114a](https://github.com/ubsicap/assure_support_site/commit/cd8114a2f688e34e8274f4a71895e500dac23901))
+* try out github action ([#8](https://github.com/ubsicap/assure_support_site/issues/8)) ([6b8d5af](https://github.com/ubsicap/assure_support_site/commit/6b8d5af7f423a99898c372628161b5e90b00b893))
+
+
+### Miscellaneous Chores
+
+* add GithubActions.md document ([6491dc7](https://github.com/ubsicap/assure_support_site/commit/6491dc790f890a853328b1b086893e558a723703))
+
 ## [1.0.2](https://github.com/ubsicap/assure_support_site/compare/v1.0.1...v1.0.2) (2025-05-09)
 
 
