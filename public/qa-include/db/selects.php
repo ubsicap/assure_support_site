@@ -1028,7 +1028,7 @@ function qa_db_full_category_selectspec($slugsorid, $isid)
 	}
 
 	return array(
-		'columns' => array('categoryid', 'parentid', 'title', 'tags', 'qcount', 'content', 'backpath'),
+		'columns' => array('categoryid', 'parentid', 'title', 'tags', 'qcount', 'content', 'backpath', 'externalurl'),
 		'source' => '^categories WHERE ' . $identifiersql,
 		'arguments' => array($slugsorid),
 		'single' => 'true',
@@ -1076,6 +1076,7 @@ function qa_db_category_nav_selectspec($slugsorid, $isid, $ispostid = false, $fu
 		'tags' => '^categories.tags',
 		'qcount' => '^categories.qcount',
 		'position' => '^categories.position',
+		'externalurl' => '^categories.externalurl'
 	);
 
 	if ($full) {
@@ -1112,7 +1113,7 @@ function qa_db_category_nav_selectspec($slugsorid, $isid, $ispostid = false, $fu
 function qa_db_category_sub_selectspec($categoryid)
 {
 	return array(
-		'columns' => array('categoryid', 'title', 'tags', 'qcount', 'position'),
+		'columns' => array('categoryid', 'title', 'tags', 'qcount', 'position', 'externalurl'),
 		'source' => '^categories WHERE parentid<=># ORDER BY position',
 		'arguments' => array($categoryid),
 		'arraykey' => 'categoryid',
@@ -1884,7 +1885,7 @@ function qa_db_user_favorite_categories_selectspec($userid)
 	require_once QA_INCLUDE_DIR . 'app/updates.php';
 
 	return array(
-		'columns' => array('categoryid', 'title', 'tags', 'qcount', 'backpath', 'content'),
+		'columns' => array('categoryid', 'title', 'tags', 'qcount', 'backpath', 'externalurl', 'content'),
 		'source' => "^categories JOIN ^userfavorites ON ^categories.categoryid=^userfavorites.entityid WHERE ^userfavorites.userid=$ AND ^userfavorites.entitytype=$",
 		'arguments' => array($userid, QA_ENTITY_CATEGORY),
 		'sortasc' => 'title',

@@ -596,7 +596,6 @@ class qa_html_theme_base
 	public function nav_list($navigation, $class, $level = null)
 	{
 		$this->output('<ul class="qa-' . $class . '-list' . (isset($level) ? (' qa-' . $class . '-list-' . $level) : '') . '">');
-
 		$index = 0;
 
 		foreach ($navigation as $key => $navlink) {
@@ -658,8 +657,13 @@ class qa_html_theme_base
 			);
 		}
 
-		if (strlen(@$navlink['note']))
+		if (isset($navlink['externalurl']))
+			$this->output('<a href="' . $navlink['externalurl'] . '"><b>' . $navlink['externalurl'] . '</b></a>');
+
+		if (strlen(@$navlink['note'])) 
 			$this->output('<span class="qa-' . $class . '-note">' . $navlink['note'] . '</span>');
+		
+
 	}
 
 	public function logged_in()
@@ -677,6 +681,7 @@ class qa_html_theme_base
 
 	public function sidepanel()
 	{
+
 		$this->output('<div class="qa-sidepanel">');
 		$this->widgets('side', 'top');
 		$this->sidebar();

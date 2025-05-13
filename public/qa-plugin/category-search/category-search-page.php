@@ -176,6 +176,10 @@ class category_search_page
 		} else
 			$qa_content['error'] = qa_lang_html('main/search_explanation');
 
+
+		console_log("category-search-page::process_request, qa_content: ");
+		console_log($qa_content);
+
 		return $qa_content;
 	}
 
@@ -273,6 +277,9 @@ class category_search_page
 
 			$results[$key] = $result;
 		}
+
+		console_log("category-search-page::qa_get_search_results, results: ");
+		console_log($results);
 
 		return $results;
 	}

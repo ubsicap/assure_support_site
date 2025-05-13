@@ -242,6 +242,7 @@ function qa_db_table_definitions()
 			'position' => 'SMALLINT UNSIGNED NOT NULL',
 			// full slug path for category, with forward slash separators, in reverse order to make index from effective
 			'backpath' => 'VARCHAR(' . (QA_CATEGORY_DEPTH * (QA_DB_MAX_CAT_PAGE_TAGS_LENGTH + 1)) . ') NOT NULL DEFAULT \'\'',
+			'externalurl' => 'VARCHAR(' . (QA_CATEGORY_DEPTH * (QA_DB_MAX_CAT_PAGE_TAGS_LENGTH + 1)) . ') NOT NULL DEFAULT \'\'',
 			'PRIMARY KEY (categoryid)',
 			'UNIQUE parentid (parentid, tags)',
 			'UNIQUE parentid_2 (parentid, position)',
@@ -869,6 +870,7 @@ function qa_db_upgrade_tables()
 					'tags' => $definitions['categories']['tags'],
 					'qcount' => $definitions['categories']['qcount'],
 					'position' => $definitions['categories']['position'],
+					'externalurl' => $definitions['categories']['position'],
 					'PRIMARY KEY (categoryid)',
 					'UNIQUE `tags` (tags)',
 					'UNIQUE `position` (position)',
