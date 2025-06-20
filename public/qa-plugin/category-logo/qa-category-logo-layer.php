@@ -53,11 +53,18 @@ class qa_html_theme_layer extends qa_html_theme_base
 				);
 			}
 	
-			if (isset($navlink['externalurl']))
-				$this->output('<a href="' . $navlink['externalurl'] . '"><b>' . $navlink['externalurl'] . '</b></a>');
+			if (isset($navlink['externalurl'])) {
+			  if (strlen($navlink['externalurl'])) {
+			    if (strlen(@$navlink['note'])) {
+		               $this->output('<span class="qa-' . $class . '-note">' . $navlink['note'] . '</span>');
+			       $this->output('<a style="float:right;" href="' . $navlink['externalurl'] . '">website </a>');
+			    }
+			  } elseif (strlen(@$navlink['note'])) {
+		            $this->output('<span class="qa-' . $class . '-note">' . $navlink['note'] . '</span>');
+			  }
+		        }
 
-			if (strlen(@$navlink['note']))
-				$this->output('<span class="qa-' . $class . '-note">' . $navlink['note'] . '</span>');
+
 		} else
 			parent::nav_link($navlink, $class);
 	}

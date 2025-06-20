@@ -391,6 +391,16 @@ class qa_html_theme_base
 		$this->body_footer();
 		$this->body_hidden();
 
+		$this->output("<script>");
+                $this->output("window.onUsersnapLoad = function(api) {");
+                $this->output("api.init();");
+		$this->output("};");
+		$this->output("var script = document.createElement('script');");
+                $this->output("script.defer = 1;");
+		$this->output("script.src = 'https://widget.usersnap.com/global/load/1cf2709b-3ff0-4cff-8952-a2d2bca7590d?onload=onUsersnapLoad';");
+		$this->output("document.getElementsByTagName('head')[0].appendChild(script);");
+                $this->output("</script>");
+
 		$this->output('</body>');
 	}
 
@@ -657,12 +667,18 @@ class qa_html_theme_base
 			);
 		}
 
-		if (isset($navlink['externalurl']))
-			$this->output('<a href="' . $navlink['externalurl'] . '"><b>' . $navlink['externalurl'] . '</b></a>');
+                if (isset($navlink['externalurl'])) {
+                   if (strlen($navlink['externalurl'])) {
+                      if (strlen(@$navlink['note'])) {
+                         $this->output('<span class="qa-' . $class . '-note">' . $navlink['note'] . '</span>');
+                         $this->output('<a style="float:right;" href="' . $navlink['externalurl'] . '">website </a>');
+                      }
+                   } elseif (strlen(@$navlink['note'])) {
+                     $this->output('<span class="qa-' . $class . '-note">' . $navlink['note'] . '</span>');
+                   }
+		}
 
-		if (strlen(@$navlink['note'])) 
-			$this->output('<span class="qa-' . $class . '-note">' . $navlink['note'] . '</span>');
-		
+
 
 	}
 
