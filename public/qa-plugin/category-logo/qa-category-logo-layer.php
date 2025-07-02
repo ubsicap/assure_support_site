@@ -52,12 +52,12 @@ class qa_html_theme_layer extends qa_html_theme_base
 						'>' . $navlink['label'] . '</span>'
 				);
 			}
-	
+
 			if (isset($navlink['externalurl'])) {
 			  if (strlen($navlink['externalurl'])) {
-			    if (strlen(@$navlink['note'])) {
-		               $this->output('<span class="qa-' . $class . '-note">' . $navlink['note'] . '</span>');
-			       $this->output('<a style="float:right;" href="' . $navlink['externalurl'] . '">website </a>');
+		             if (strlen(@$navlink['note'])) {
+			       $this->output('<span class="qa-' . $class . '-note">' . $navlink['note'] . '</span>');
+			       $this->output('<a href="' . $navlink['externalurl'] . '" class="qa-nav-cat-product-url">website</a>');
 			    }
 			  } elseif (strlen(@$navlink['note'])) {
 		            $this->output('<span class="qa-' . $class . '-note">' . $navlink['note'] . '</span>');

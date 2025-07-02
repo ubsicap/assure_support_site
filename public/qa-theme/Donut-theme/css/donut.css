@@ -1926,11 +1926,13 @@ header#nav-header {
   margin-bottom: 20px;
   padding-left: 0;
 }
+
 .qa-nav-cat-list ul {
   margin-bottom: 20px;
   padding-left: 0;
   padding-right: 0;
 }
+/*
 .qa-nav-cat-list ul li {
   position: relative;
   display: block;
@@ -1940,6 +1942,8 @@ header#nav-header {
   border: 1px solid #ddd;
   padding-right: 0;
 }
+*/
+
 .qa-nav-cat-list ul li:first-child {
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
@@ -1991,11 +1995,7 @@ header#nav-header {
   color: #c7ddef;
 }
 .qa-nav-cat-list > li {
-  position: relative;
-  display: block;
-  padding: 10px 15px;
   margin-bottom: -1px;
-  background-color: #fff;
   border: 1px solid #ddd;
 }
 .qa-nav-cat-list > li:first-child {
@@ -2114,22 +2114,30 @@ header#nav-header {
   padding-bottom: 1px;
 }
 .qa-nav-cat-item .qa-nav-cat-note {
+  display: inline-block;
+  min-width: 10px;
+  color: #fff;
+  line-height: 1;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-align: center;
+  border-radius: 10px;
   float:  unset;
   background-color: unset;
   color: currentColor;
   font-weight: 700;
 }
-.qa-nav-cat-note {
-  color: #000;
-}
-.nav-cat-product-url a {
-    background-color: #d9edf7;
-}
-.nav-cat-product-url, .qa-nav-cat-item .qa-nav-cat-note {
+
+.qa-nav-cat-product-url,
+.qa-nav-cat-item .qa-nav-cat-note {
     padding: .1rem .8rem;
     margin: unset;
     font-size: 1.2rem;
     border-radius: 1rem;
+}
+
+a.qa-nav-cat-product-url {
+    background-color: #d9edf7;
 }
 
 .qa-nav-cat-link {
