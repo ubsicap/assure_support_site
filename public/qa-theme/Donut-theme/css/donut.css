@@ -2086,8 +2086,8 @@ header#nav-header {
 .qa-nav-cat-list-2 .qa-nav-cat-item:last-child,
 .qa-nav-cat-list-3 .qa-nav-cat-item:last-child,
 .qa-nav-cat-list-4 .qa-nav-cat-item:last-child {
-  border-right: none;
-  border-bottom-right-radius: 0 !important;
+	border-right: none;
+	border-bottom-right-radius: 0 !important;
   border-top-right-radius: 0 !important;
 }
 
@@ -2116,12 +2116,10 @@ header#nav-header {
 .qa-nav-cat-item .qa-nav-cat-note {
   display: inline-block;
   min-width: 10px;
-  color: #fff;
   line-height: 1;
   vertical-align: middle;
   white-space: nowrap;
   text-align: center;
-  border-radius: 10px;
   float:  unset;
   background-color: unset;
   color: currentColor;
