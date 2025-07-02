@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/ubsicap/assure_support_site/compare/v1.0.3...v1.0.4) (2025-07-02)
+
+
+### Bug Fixes
+
+* removed call to undef function ([a625157](https://github.com/ubsicap/assure_support_site/commit/a625157cb3e685762e8f2626d8f39fd024d84c6c))
+
 ## [1.0.3](https://github.com/ubsicap/assure_support_site/compare/v1.0.2...v1.0.3) (2025-05-13)
 
 
