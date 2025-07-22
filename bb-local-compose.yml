@@ -64,15 +64,15 @@ services:
     environment:                            # these vars must be the same as in q2a-config.php^
       DB_HOST: q2a-db
       DB_PORT: 3306 # most likely 3306
-      DB_USER: user
-      DB_PASSWORD: password
+      DB_LOGIN: user
+      DB_KEY: password
       DB_NAME: qadb-local
 
       SMTP_HOST: smtp.zoho.com
       SMTP_PORT: 587
       SMTP_USER: admin@support.bible
       SMTP_PASSWORD: 
-      TO_EMAIL: bob_beck@sil.org
+      SMTP_TO_EMAIL: bob_beck@sil.org
     restart: on-failure
     
 volumes:                                    # These volumes are stored on /var/lib/docker/volumes/ (on Linux)

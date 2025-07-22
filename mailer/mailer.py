@@ -4,6 +4,7 @@ import smtplib
 from email.mime.text import MIMEText
 import socket;
 import re;
+from datetime import date, timedelta;
 
 print("Start of mailer", flush=True)
 
@@ -44,18 +45,98 @@ except socket.gaierror as e:
     print(f"Error: {e}")
 check_internet()
 
+paratextCategoryId = 1; # paratext
+noRowsPerBuffer = 1000
+
+sqlDrop = "DROP TABLE temp;"
+cursor = db.cursor()
+try:
+   cursor.execute(sqlDrop);
+except mysql.connectorError as err:
+   print("Exception in DROP TABLE temp: ", err)
+
+print("DROP TABLE temp done")
+
+sqlCreate = f"CREATE TABLE temp AS \
+    SELECT qa_posts.postid, qa_posts.type, qa_posts.parentid, qa_posts.categoryid, \
+    qa_posts.created, qa_posts.title, qa_posts.content, qa_users.handle \
+    FROM qa_posts JOIN qa_users on qa_users.userid = qa_posts.userid;"
+cursor = db.cursor()
+cursor.execute(sqlCreate)
+rows = cursor.fetchall()
+print("rows: ", rows)
+
+
+
 while 1:
     
     cursor = db.cursor()
-    cursor.execute("SELECT postid, title FROM qa_posts")
+    cursor.execute("SELECT COUNT(*) from qa_posts")
+    rows = cursor.fetchall();
+    print("rows: ", rows)
+
+    maxNoRows = rows[0][0]
+    print("maxNoRows: ", maxNoRows, flush=True)
+    maxPostId = maxNoRows - 1 - noRowsPerBuffer if maxNoRows - 1 - noRowsPerBuffer > 0 else 1
+    print("maxPostId: ", maxPostId, flush=True)
+    sortedRows = []
+
+    while maxPostId >= 1:
+
+       if maxPostId > maxNoRows: break # done with this loop                                                                                                                                 
+
+       sqlQuery = f"SELECT q.postid AS question_id, \
+           q.type as question_type, \
+           q.title AS question_title, \
+           q.created as question_created, \
+           q.content AS question_content, \
+           q.categoryid as question_categoryid, \
+           a.postid AS answer_id, \
+           a.content AS answer_content, \
+           a.handle AS answer_author \
+        FROM temp q \
+        JOIN temp a ON a.parentid = q.postid \
+        WHERE q.type = 'Q' AND ( a.type = 'A' OR a.type = 'C') \
+              AND q.postid >= {maxPostId} AND q.postid <= {maxNoRows} \
+              AND q.categoryid = {paratextCategoryId} \
+        ORDER BY q.postid, a.postid;"
+
+       #sqlQuery = f"SELECT created, postid, title, categoryid from qa_posts \
+       # WHERE postid >=  {maxPostId} AND postid <= {maxNoRows};"
+       print("sqlQuery: ", sqlQuery, flush=True)
+       cursor.execute(sqlQuery)
+       rows = cursor.fetchall()
+       print("rows: ", rows)
+
+       yesterday = date.today() - timedelta(days=1)
+       yesterdaysDate = yesterday.strftime("%m/%d/%Y")
+       print("yesterday date: ", yesterdaysDate)
+
+       for question_id, question_type, question_title, question_created, question_content, \
+           question_categoryid, answer_id, answer_content, answer_author  in rows:
+
+          print("question_created: ", question_created.strftime("%m/%d/%Y"))
+          print("question_id: ", question_id)
+          print("answer_id: ", answer_id)
+          print("categoryid: ", question_categoryid)
+
+          if question_created.strftime("%m/%d/%Y") < yesterdaysDate:
+             continue; # only include posts from before yesterday
+        
+          sortedRows.append([answer_id, question_title, question_content, question_categoryid])
+        
+
+       maxNoRows = 0 if maxNoRows - noRowsPerBuffer - 1 < 0 else maxNoRows - noRowsPerBuffer
+       maxPostId = maxNoRows - noRowsPerBuffer if maxNoRows - noRowsPerBuffer > 0 else 1
+       print("maxPostId: ", maxPostId, flush=True)
+
+    print("sortedRows: ", sortedRows, flush=True)
+
+    exit
+
+    #cursor.execute("SELECT postid, title FROM qa_posts LIMIT noRows")
     rows = cursor.fetchall()
     body = "\n".join(f"{postid}: {title}" for postid, title in rows)
-
-    print("SMTP_USER: ", os.environ["SMTP_USER"])
-    print("SMTP_TO_EMAIL: ", os.environ["SMTP_TO_EMAIL"])
-    print("SMTP_HOST: ", os.environ["SMTP_HOST"])
-    print("SMTP_PORT: ", int(os.environ["SMTP_PORT"]))
-    print("SMTP_PASSWORD: ", os.environ["SMTP_PASSWORD"])
 
     host = os.environ["SMTP_HOST"].strip('"')
     clean_host = re.sub(r"^[\"']+|[\"']+$", "", host)
