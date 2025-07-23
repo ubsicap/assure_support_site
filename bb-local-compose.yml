@@ -68,10 +68,10 @@ services:
       DB_KEY: password
       DB_NAME: qadb-local
 
-      SMTP_HOST: smtp.zoho.com
+      SMTP_HOST: smtppro.zoho.com
       SMTP_PORT: 587
-      SMTP_USER: admin@support.bible
-      SMTP_PASSWORD: 
+      SMTP_USER: dev@support.bible
+      SMTP_PASSWORD: Nur=JilnowbUsDiamed0
       SMTP_TO_EMAIL: bob_beck@sil.org
     restart: on-failure
     

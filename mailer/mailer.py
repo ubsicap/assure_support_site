@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 import socket;
 import re;
 from datetime import date, timedelta;
+import argparse;
 
 print("Start of mailer", flush=True)
 
@@ -66,7 +67,10 @@ cursor.execute(sqlCreate)
 rows = cursor.fetchall()
 print("rows: ", rows)
 
-
+parser = argparse.ArgumentParser()
+parser.add_argument('noDays', help='fetch data for noDays prior to today')
+args = parser.parse_args()
+print(f"noDays: {args.noDays}")
 
 while 1:
     
@@ -92,6 +96,8 @@ while 1:
            q.content AS question_content, \
            q.categoryid as question_categoryid, \
            a.postid AS answer_id, \
+           a.created AS answer_created, \
+           a.type AS answer_type, \
            a.content AS answer_content, \
            a.handle AS answer_author \
         FROM temp q \
@@ -101,29 +107,32 @@ while 1:
               AND q.categoryid = {paratextCategoryId} \
         ORDER BY q.postid, a.postid;"
 
-       #sqlQuery = f"SELECT created, postid, title, categoryid from qa_posts \
-       # WHERE postid >=  {maxPostId} AND postid <= {maxNoRows};"
        print("sqlQuery: ", sqlQuery, flush=True)
        cursor.execute(sqlQuery)
        rows = cursor.fetchall()
        print("rows: ", rows)
 
-       yesterday = date.today() - timedelta(days=1)
-       yesterdaysDate = yesterday.strftime("%m/%d/%Y")
-       print("yesterday date: ", yesterdaysDate)
+       userDay = date.today() - timedelta(days=int(args.noDays))
+       userDate = userDay.strftime("%m/%d/%Y")
+       print("user Date: ", userDate)
 
        for question_id, question_type, question_title, question_created, question_content, \
-           question_categoryid, answer_id, answer_content, answer_author  in rows:
+           question_categoryid, answer_id, answer_created, answer_type, answer_content, \
+           answer_author  in rows:
 
           print("question_created: ", question_created.strftime("%m/%d/%Y"))
+          print("answer_created: ", answer_created.strftime("%m/%d/%Y"))
           print("question_id: ", question_id)
           print("answer_id: ", answer_id)
           print("categoryid: ", question_categoryid)
 
-          if question_created.strftime("%m/%d/%Y") < yesterdaysDate:
+          if answer_created.strftime("%m/%d/%Y") < userDate and \
+             question_created.strftime("%m/%d/%Y") < userDate:
              continue; # only include posts from before yesterday
         
-          sortedRows.append([answer_id, question_title, question_content, question_categoryid])
+          sortedRows.append([str(answer_id), answer_type, str(question_id), question_type, \
+                             str(question_categoryid), question_created.strftime("%m/%d/%Y"), \
+                             question_title, question_content, answer_author ])
         
 
        maxNoRows = 0 if maxNoRows - noRowsPerBuffer - 1 < 0 else maxNoRows - noRowsPerBuffer
@@ -132,33 +141,45 @@ while 1:
 
     print("sortedRows: ", sortedRows, flush=True)
 
-    exit
-
-    #cursor.execute("SELECT postid, title FROM qa_posts LIMIT noRows")
-    rows = cursor.fetchall()
-    body = "\n".join(f"{postid}: {title}" for postid, title in rows)
+    body = "\n"
+    for row in sortedRows:
+        body += f"{row[0]}, {row[1]}, {row[2]}, {row[3]}, \
+            {row[4]}, {row[5]}, {row[6]}, {row[7]}, {row[8]}\n"
+    
+    
+    print("body: ", body, flush=True)
 
     host = os.environ["SMTP_HOST"].strip('"')
     clean_host = re.sub(r"^[\"']+|[\"']+$", "", host)
     port = int(os.environ["SMTP_PORT"])
-    print(repr(clean_host))
-    print(repr(port))
 
     msg = MIMEText(body)
     msg["Subject"] = "Recent Posts"
     msg["From"] = os.environ["SMTP_USER"]
     msg["To"] = os.environ["SMTP_TO_EMAIL"]
 
+
     try:
-        with smtplib.SMTP(clean_host, port) as server:
-            server.starttls()
-            clean_user = re.sub(r"^[\"']+|[\"']+$", "", os.environ["SMTP_USER"])
-            clean_passwd = re.sub(r"^[\"']+|[\"']+$", "", os.environ["SMTP_PASSWORD"])
-            server.login(clean_user, clean_passwd)
-            server.send_message(msg)
-            print("Email sent!", flush=True)
-    except:
-        print("Exception in smtplib")
+        server = smtplib.SMTP(clean_host, port);
+        server.set_debuglevel(1);
+        server.starttls()
+    except Exception as e:
+        print("Connect failed: ", e, flush=True)
+
+    try: 
+        clean_user = re.sub(r"^[\"']+|[\"']+$", "", os.environ["SMTP_USER"])
+        clean_passwd = re.sub(r"^[\"']+|[\"']+$", "", os.environ["SMTP_PASSWORD"])
+        print("user:", clean_user)
+        print("password:", clean_passwd)
+        server.login(clean_user, clean_passwd)
+    except Exception as e:
+        print("Login failed: ", e, flush=True)
+    
+    try:
+        server.send_message(msg)
+        print("Email sent!", flush=True)
+    except Exception as e:
+        print("Send_message failure: ", e, flush=True)
 
 
 
