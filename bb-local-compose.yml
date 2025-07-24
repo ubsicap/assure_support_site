@@ -71,7 +71,7 @@ services:
       SMTP_HOST: smtppro.zoho.com
       SMTP_PORT: 587
       SMTP_USER: dev@support.bible
-      SMTP_PASSWORD: Nur=JilnowbUsDiamed0
+      SMTP_PASSWORD: 
       SMTP_TO_EMAIL: bob_beck@sil.org
     restart: on-failure
     
