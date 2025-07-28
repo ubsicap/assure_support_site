@@ -6,6 +6,8 @@ import socket;
 import re;
 from datetime import date, timedelta;
 import argparse;
+import csv;
+
 
 print("Start of mailer", flush=True)
 
@@ -141,45 +143,20 @@ while 1:
 
     print("sortedRows: ", sortedRows, flush=True)
 
-    body = "\n"
-    for row in sortedRows:
-        body += f"{row[0]}, {row[1]}, {row[2]}, {row[3]}, \
-            {row[4]}, {row[5]}, {row[6]}, {row[7]}, {row[8]}\n"
-    
-    
-    print("body: ", body, flush=True)
-
-    host = os.environ["SMTP_HOST"].strip('"')
-    clean_host = re.sub(r"^[\"']+|[\"']+$", "", host)
-    port = int(os.environ["SMTP_PORT"])
-
-    msg = MIMEText(body)
-    msg["Subject"] = "Recent Posts"
-    msg["From"] = os.environ["SMTP_USER"]
-    msg["To"] = os.environ["SMTP_TO_EMAIL"]
-
-
     try:
-        server = smtplib.SMTP(clean_host, port);
-        server.set_debuglevel(1);
-        server.starttls()
+       with open('/app/outputdb.csv', 'w+', newline='\n') as file:
+          print("after file open", flush=True)
+          writer = csv.writer(file)
+          print("after csv.write", flush=True)
+          writer.writerows(sortedRows)
+          print("after writerows", flush=True)
     except Exception as e:
-        print("Connect failed: ", e, flush=True)
-
-    try: 
-        clean_user = re.sub(r"^[\"']+|[\"']+$", "", os.environ["SMTP_USER"])
-        clean_passwd = re.sub(r"^[\"']+|[\"']+$", "", os.environ["SMTP_PASSWORD"])
-        print("user:", clean_user)
-        print("password:", clean_passwd)
-        server.login(clean_user, clean_passwd)
-    except Exception as e:
-        print("Login failed: ", e, flush=True)
+       print("open : ", e, flush=True)
     
-    try:
-        server.send_message(msg)
-        print("Email sent!", flush=True)
-    except Exception as e:
-        print("Send_message failure: ", e, flush=True)
+    print("end of mailer", flush=True)
+
+    exit
+    
 
 
 
@@ -187,5 +164,4 @@ while 1:
     time.sleep(24*60*60)
     # time.sleep(5)
 
-print("Done with mailer", flush=True)
 
