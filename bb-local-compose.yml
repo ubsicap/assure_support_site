@@ -54,10 +54,10 @@ services:
         source: q2a_db_volume               # This volume is located on the HOST MACHINE
         target: /var/lib/mysql              # Location of the MySQL database
 
-  mailer:
-    container_name: q2a-mailer
+  dataexport:
+    container_name: q2a-dataexport
     build:
-      context: ./mailer
+      context: ./DataExport
       dockerfile: Dockerfile
     depends_on:
       - db
@@ -68,11 +68,6 @@ services:
       DB_KEY: password
       DB_NAME: qadb-local
 
-      SMTP_HOST: smtppro.zoho.com
-      SMTP_PORT: 587
-      SMTP_USER: dev@support.bible
-      SMTP_PASSWORD: 
-      SMTP_TO_EMAIL: bob_beck@sil.org
     restart: on-failure
     
 volumes:                                    # These volumes are stored on /var/lib/docker/volumes/ (on Linux)

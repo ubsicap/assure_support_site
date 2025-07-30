@@ -134,7 +134,6 @@ def main(noDays, categoryId):
     allRows = []
     allRows.append(columnLabels)
     allRows.extend(rows)
-    print("allRows: ", allRows)
 
     try:
         with open("/app/outputdb.csv", 'w+', newline='\n') as file:
