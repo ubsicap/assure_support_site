@@ -4,6 +4,7 @@ WORKDIR /app
 COPY DataExport.py .
 
 RUN pip install mysql-connector-python
-RUN pip install secure-smtplib
+RUN apt update
+RUN apt install tar
 
 CMD ["python", "./DataExport.py", "20", "1"]

@@ -5,7 +5,7 @@ import argparse;
 import csv;
 import time
 
-print("Start of mailer", flush=True)
+print("Start of Data Export", flush=True)
 
 def get_dns_info():
     dns_info = socket.getaddrinfo('smtp.zoho.com', None)
@@ -71,12 +71,12 @@ def main(noDays, categoryId):
     cursor = db.cursor()
     cursor.execute(sqlCreate)
     rows = cursor.fetchall()
-    print("rows: ", rows)
+    
+    print("Create Table temp1 done")
 
 
     sqlCreate = f"CREATE TABLE temp2 AS \
         SELECT q.postid AS question_id, \
-        q.categoryid as question_categoryid, \
         q.created AS question_created, \
         q.title AS question_title, \
         q.content AS question_content, \
@@ -93,9 +93,11 @@ def main(noDays, categoryId):
     cursor = db.cursor()
     cursor.execute(sqlCreate)
 
+   
+    print("Create Table temp2 done")
+
     sqlCreate = f"CREATE TABLE temp3 AS \
     SELECT q.postid AS question_id, \
-    q.categoryid as question_categoryid, \
     q.created AS question_created, \
     q.title AS question_title, \
     q.content AS question_content, \
@@ -104,13 +106,15 @@ def main(noDays, categoryId):
     0 AS uservotes \
     FROM temp1 q \
     JOIN temp1 a ON a.parentid = q.postid \
-    JOIN temp2 q2 ON q2.question_id != q.postid \
     WHERE q.type = 'Q' AND ( a.type = 'A' OR a.type = 'C') \
     AND q.categoryid = {categoryId} AND q.created >= DATE_SUB(CURDATE(), INTERVAL {noDays} DAY) \
     ORDER BY q.postid, a.postid;"
 
     cursor = db.cursor()
     cursor.execute(sqlCreate)
+   
+    print("Create Table temp3 done")
+
 
     sqlUnion = f"CREATE TABLE temp4 AS \
         SELECT * FROM temp2 \
@@ -119,15 +123,20 @@ def main(noDays, categoryId):
 
     cursor = db.cursor()
     cursor.execute(sqlUnion)
+   
+    print("Create Table temp4 done")
 
-
-    sqlDump = f"SELECT * \
-    FROM temp4;"
+    sqlDump = f"SELECT * FROM temp4;"
     cursor = db.cursor()
     cursor.execute(sqlDump)
 
-    columnLabels = ["Question Id", "Question Category Id", "Question Created Date", \
-                    "Question Title", "Question Content", "Answer Id", "Answer Author"]
+    columnLabels = ["Question Id", 
+                    "Question Created Date",
+                    "Question Title",
+                    "Question Content",
+                    "Answer Id",
+                    "Author",
+                    "User Votes"]
 
     rows = cursor.fetchall()
 
@@ -135,10 +144,14 @@ def main(noDays, categoryId):
     allRows.append(columnLabels)
     allRows.extend(rows)
 
+   
+    print("Fetch all temp4 rows done")
+
     try:
         with open("/app/outputdb.csv", 'w+', newline='\n') as file:
             writer = csv.writer(file)
             writer.writerows(allRows)
+            print("temp4 rows written to disk")
     except Exception as e:
         print("open : ", e, flush=True)
         
