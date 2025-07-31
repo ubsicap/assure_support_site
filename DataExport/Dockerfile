@@ -7,4 +7,4 @@ RUN pip install mysql-connector-python
 RUN apt update
 RUN apt install tar
 
-CMD ["python", "./DataExport.py", "20", "1"]
+CMD ["python", "./DataExport.py", "10", "1"]

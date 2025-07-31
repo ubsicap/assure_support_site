@@ -48,7 +48,7 @@ def main(noDays, categoryId):
 
     cursor = db.cursor()
 
-    for i in range(1, 5):
+    for i in range(1, 3):
         sqlShow = f"SHOW TABLES LIKE 'temp{i}'"
         print("sqlShow: ", sqlShow)
         cursor.execute(sqlShow)
@@ -70,10 +70,18 @@ def main(noDays, categoryId):
         JOIN qa_users on qa_users.userid = qa_posts.userid;"
     cursor = db.cursor()
     cursor.execute(sqlCreate)
-    rows = cursor.fetchall()
-    
-    print("Create Table temp1 done")
 
+    print("Create table temp1 done")
+
+    sqlModifyColumn = f"ALTER TABLE temp1 MODIFY COLUMN content TEXT;"
+    cursor = db.cursor()
+    cursor.execute(sqlModifyColumn)
+
+    sqlAddColumn = f"ALTER TABLE temp1 ADD uservotes int DEFAULT 0;"
+    cursor = db.cursor()
+    cursor.execute(sqlAddColumn)
+    
+    print("Alter Table temp1 done")
 
     sqlCreate = f"CREATE TABLE temp2 AS \
         SELECT q.postid AS question_id, \
@@ -81,11 +89,11 @@ def main(noDays, categoryId):
         q.title AS question_title, \
         q.content AS question_content, \
         a.postid AS answer_id, \
+        a.content AS answer_content, \
         a.handle AS answer_author, \
-        u.vote AS uservotes \
+        q.uservotes AS uservotes \
         FROM temp1 q \
         JOIN temp1 a ON a.parentid = q.postid \
-        JOIN qa_uservotes u ON u.postid = q.postid \
         WHERE q.type = 'Q' AND ( a.type = 'A' OR a.type = 'C') \
         AND q.categoryid = {categoryId} AND q.created >= DATE_SUB(CURDATE(), INTERVAL {noDays} DAY) \
         ORDER BY q.postid, a.postid;"
@@ -93,65 +101,61 @@ def main(noDays, categoryId):
     cursor = db.cursor()
     cursor.execute(sqlCreate)
 
-   
+    sqlSelect = "SELECT * FROM temp2;"
+    cursor.execute(sqlSelect)
+    rows = cursor.fetchall()
+
     print("Create Table temp2 done")
 
-    sqlCreate = f"CREATE TABLE temp3 AS \
-    SELECT q.postid AS question_id, \
-    q.created AS question_created, \
-    q.title AS question_title, \
-    q.content AS question_content, \
-    a.postid AS answer_id, \
-    a.handle AS answer_author, \
-    0 AS uservotes \
-    FROM temp1 q \
-    JOIN temp1 a ON a.parentid = q.postid \
-    WHERE q.type = 'Q' AND ( a.type = 'A' OR a.type = 'C') \
-    AND q.categoryid = {categoryId} AND q.created >= DATE_SUB(CURDATE(), INTERVAL {noDays} DAY) \
-    ORDER BY q.postid, a.postid;"
-
+    sqlSelect = "SELECT * FROM qa_uservotes;" 
     cursor = db.cursor()
-    cursor.execute(sqlCreate)
-   
-    print("Create Table temp3 done")
+    cursor.execute(sqlSelect)
+    userVotesRows = cursor.fetchall()
 
-
-    sqlUnion = f"CREATE TABLE temp4 AS \
-        SELECT * FROM temp2 \
-        UNION \
-        SELECT * from temp3;"
-
+    sqlSelect = "SELECT * FROM temp1;"
     cursor = db.cursor()
-    cursor.execute(sqlUnion)
-   
-    print("Create Table temp4 done")
+    cursor.execute(sqlSelect)
+    temp1Rows = cursor.fetchall()
 
-    sqlDump = f"SELECT * FROM temp4;"
-    cursor = db.cursor()
-    cursor.execute(sqlDump)
+    #print("temp1 rows: ", temp1Rows)
+    ##print("temp2 rows: ", rows)
+    #print("userVoteRows: ", userVotesRows)
+
+    tableList = []
+    # update "uservotes" column with "votes" column from table "uservotes"
+    for row in rows:
+        rowList = list(row)
+        for uvRow in userVotesRows:
+            #print("rowList: ", rowList)
+            if rowList[0] == uvRow[0]:
+               rowList[7] = uvRow[2]
+        tableList.append(rowList)
+
+    #print("tableList after vote update")
+    #print("tableList: ", tableList)
+
 
     columnLabels = ["Question Id", 
                     "Question Created Date",
                     "Question Title",
                     "Question Content",
                     "Answer Id",
+                    "Answer Content",
                     "Author",
                     "User Votes"]
 
-    rows = cursor.fetchall()
+
 
     allRows = []
     allRows.append(columnLabels)
-    allRows.extend(rows)
+    allRows.extend(tableList)
 
-   
-    print("Fetch all temp4 rows done")
 
     try:
         with open("/app/outputdb.csv", 'w+', newline='\n') as file:
             writer = csv.writer(file)
             writer.writerows(allRows)
-            print("temp4 rows written to disk")
+            print("rows written to disk")
     except Exception as e:
         print("open : ", e, flush=True)
         
