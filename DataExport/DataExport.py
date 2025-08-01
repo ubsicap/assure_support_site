@@ -94,7 +94,8 @@ def main(noDays, categoryId):
         q.uservotes AS uservotes \
         FROM temp1 q \
         JOIN temp1 a ON a.parentid = q.postid \
-        WHERE q.type = 'Q' AND ( a.type = 'A' OR a.type = 'C') \
+        WHERE (q.type = 'Q' AND ( a.type = 'A' OR a.type = 'C')) \
+            OR (q.type = 'A' and a.type = 'C') \
         AND q.categoryid = {categoryId} AND q.created >= DATE_SUB(CURDATE(), INTERVAL {noDays} DAY) \
         ORDER BY q.postid, a.postid;"
 
