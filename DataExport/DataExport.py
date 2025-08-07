@@ -65,7 +65,8 @@ def main(noDays, categoryId):
 
     sqlCreate = f"CREATE TABLE temp1 AS \
         SELECT qa_posts.postid, qa_posts.type, qa_posts.parentid, qa_posts.categoryid, \
-        qa_posts.created, qa_posts.title, qa_posts.content, qa_users.handle \
+        qa_posts.created, qa_posts.title, qa_posts.content, qa_users.handle, \
+        qa_posts.upvotes, qa_posts.downvotes \
         FROM qa_posts \
         JOIN qa_users on qa_users.userid = qa_posts.userid;"
     cursor = db.cursor()
@@ -77,10 +78,6 @@ def main(noDays, categoryId):
     cursor = db.cursor()
     cursor.execute(sqlModifyColumn)
 
-    sqlAddColumn = f"ALTER TABLE temp1 ADD uservotes int DEFAULT 0;"
-    cursor = db.cursor()
-    cursor.execute(sqlAddColumn)
-    
     print("Alter Table temp1 done")
 
     sqlCreate = f"CREATE TABLE temp2 AS \
@@ -88,15 +85,16 @@ def main(noDays, categoryId):
         q.created AS question_created, \
         q.title AS question_title, \
         q.content AS question_content, \
+        q.upvotes AS question_upvotes, \
+        q.downvotes AS question_downvotes, \
         a.postid AS answer_id, \
         a.content AS answer_content, \
         a.handle AS answer_author, \
-        q.uservotes AS uservotes \
+        a.upvotes AS answer_upvotes, \
+        a.downvotes AS answer_downvotes \
         FROM temp1 q \
         JOIN temp1 a ON a.parentid = q.postid \
-        WHERE (q.type = 'Q' AND ( a.type = 'A' OR a.type = 'C')) \
-            OR (q.type = 'A' and a.type = 'C') \
-        AND q.categoryid = {categoryId} AND q.created >= DATE_SUB(CURDATE(), INTERVAL {noDays} DAY) \
+        WHERE q.categoryid = {categoryId} AND q.created >= DATE_SUB(CURDATE(), INTERVAL {noDays} DAY) \
         ORDER BY q.postid, a.postid;"
 
     cursor = db.cursor()
@@ -106,50 +104,21 @@ def main(noDays, categoryId):
     cursor.execute(sqlSelect)
     rows = cursor.fetchall()
 
-    print("Create Table temp2 done")
-
-    sqlSelect = "SELECT * FROM qa_uservotes;" 
-    cursor = db.cursor()
-    cursor.execute(sqlSelect)
-    userVotesRows = cursor.fetchall()
-
-    sqlSelect = "SELECT * FROM temp1;"
-    cursor = db.cursor()
-    cursor.execute(sqlSelect)
-    temp1Rows = cursor.fetchall()
-
-    #print("temp1 rows: ", temp1Rows)
-    ##print("temp2 rows: ", rows)
-    #print("userVoteRows: ", userVotesRows)
-
-    tableList = []
-    # update "uservotes" column with "votes" column from table "uservotes"
-    for row in rows:
-        rowList = list(row)
-        for uvRow in userVotesRows:
-            #print("rowList: ", rowList)
-            if rowList[0] == uvRow[0]:
-               rowList[7] = uvRow[2]
-        tableList.append(rowList)
-
-    #print("tableList after vote update")
-    #print("tableList: ", tableList)
-
-
     columnLabels = ["Question Id", 
                     "Question Created Date",
                     "Question Title",
                     "Question Content",
+                    "Question Upvotes",
+                    "Question Downvotes",
                     "Answer Id",
                     "Answer Content",
                     "Author",
-                    "User Votes"]
-
-
+                    "Answer Upvotes",
+                    "Answer Downvotes"]
 
     allRows = []
     allRows.append(columnLabels)
-    allRows.extend(tableList)
+    allRows.extend(rows)
 
 
     try:
