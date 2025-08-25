@@ -100,7 +100,7 @@ if (count($users)) {
 		}
 
 		foreach ($userfields as $userfield) {
-			if (strlen(@$user['profile'][$userfield['title']]))
+			if (strlen(isset($user['profile'][$userfield['title']]) ? $user['profile'][$userfield['title']] : ''))
 				$message['content'] .= '<br/>' . qa_html($userfield['content'] . ': ' . $user['profile'][$userfield['title']]);
 		}
 

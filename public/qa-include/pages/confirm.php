@@ -34,17 +34,13 @@ if (QA_FINAL_EXTERNAL_USERS) {
 
 // Fetch the handle from POST or GET
 $handle = qa_post_text('username');
-if (!isset($handle)) {
-	$handle = qa_get('u');
-}
-$handle = trim($handle); // if $handle is null, trim returns an empty string
+$handle = isset($handle) ? $handle : (string)qa_get('u');
+$handle = trim($handle);
 
 // Fetch the code from POST or GET
 $code = qa_post_text('code');
-if (!isset($code)) {
-	$code = qa_get('c');
-}
-$code = trim($code); // if $code is null, trim returns an empty string
+$code = isset($code) ? $code : (string)qa_get('c');
+$code = trim($code);
 
 $loggedInUserId = qa_get_logged_in_userid();
 $emailConfirmationSent = false;
