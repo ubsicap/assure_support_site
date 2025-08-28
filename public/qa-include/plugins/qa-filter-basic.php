@@ -72,7 +72,7 @@ class qa_filter_basic
 		$qmaxlength = max($qminlength, min(qa_opt('max_len_q_title'), QA_DB_MAX_TITLE_LENGTH));
 		$this->validate_field_length($errors, $question, 'title', $qminlength, $qmaxlength);
 
-		//$this->validate_field_length($errors, $question, 'content', 0, QA_DB_MAX_CONTENT_LENGTH); // for storage
+		// $this->validate_field_length($errors, $question, 'content', 0, QA_DB_MAX_CONTENT_LENGTH); // for storage
 		$this->validate_field_length($errors, $question, 'text', qa_opt('min_len_q_content'), null); // for display
 		// ensure content error is shown
 		if (isset($errors['text'])) {
@@ -101,14 +101,14 @@ class qa_filter_basic
 
 	public function filter_answer(&$answer, &$errors, $question, $oldanswer)
 	{
-		//$this->validate_field_length($errors, $answer, 'content', 0, QA_DB_MAX_CONTENT_LENGTH); // for storage
+		// $this->validate_field_length($errors, $answer, 'content', 0, QA_DB_MAX_CONTENT_LENGTH); // for storage
 		$this->validate_field_length($errors, $answer, 'text', qa_opt('min_len_a_content'), null, 'content'); // for display
 		$this->validate_post_email($errors, $answer);
 	}
 
 	public function filter_comment(&$comment, &$errors, $question, $parent, $oldcomment)
 	{
-		//$this->validate_field_length($errors, $comment, 'content', 0, QA_DB_MAX_CONTENT_LENGTH); // for storage
+		// $this->validate_field_length($errors, $comment, 'content', 0, QA_DB_MAX_CONTENT_LENGTH); // for storage
 		$this->validate_field_length($errors, $comment, 'text', qa_opt('min_len_c_content'), null, 'content'); // for display
 		$this->validate_post_email($errors, $comment);
 	}
@@ -118,7 +118,7 @@ class qa_filter_basic
 		foreach (array_keys($profile) as $field) {
 			// ensure fields are not NULL
 			$profile[$field] = (string)$profile[$field];
-			$this->validate_field_length($errors, $profile, $field, 0, QA_DB_MAX_CONTENT_LENGTH);
+			$this->validate_field_length($errors, $profile, $field, 0, QA_DB_MAX_PROFILE_CONTENT_LENGTH);
 		}
 	}
 
@@ -172,7 +172,7 @@ class qa_filter_basic
 	 */
 	private function validate_post_email(&$errors, $post)
 	{
-		if (@$post['notify'] && strlen(@$post['email'])) {
+		if (@$post['notify'] && strlen(isset($post['email']) ? $post['email'] : '')) {
 			$error = $this->filter_email($post['email'], null);
 			if (isset($error)) {
 				$errors['email'] = $error;

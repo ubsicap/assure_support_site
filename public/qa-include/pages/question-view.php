@@ -198,7 +198,7 @@ function qa_page_q_post_rules($post, $parentpost = null, $siblingposts = null, $
 		($rules['reshowimmed'] || ($nothiddenbyother && !$post['flagcount']));
 
 	$rules['deleteable'] = $post['hidden'] && !qa_user_permit_error('permit_delete_hidden', null, $userlevel, true, $userfields);
-	$rules['claimable'] = !isset($post['userid']) && isset($userid) && strlen(@$post['cookieid']) && (strcmp(@$post['cookieid'], $cookieid) == 0)
+	$rules['claimable'] = !isset($post['userid']) && isset($userid) && isset($post['cookieid']) && $post['cookieid'] === $cookieid
 		&& !($post['basetype'] == 'Q' ? $permiterror_post_q : ($post['basetype'] == 'A' ? $permiterror_post_a : $permiterror_post_c));
 	$rules['followable'] = $post['type'] == 'A' ? qa_opt('follow_on_as') : false;
 
@@ -470,7 +470,7 @@ function qa_page_q_question_view($question, $parentquestion, $closepost, $usersh
 
 	// Extra value display
 
-	if (strlen(@$question['extra']) && qa_opt('extra_field_active') && qa_opt('extra_field_display')) {
+	if (strlen(isset($question['extra']) ? $question['extra'] : '') && qa_opt('extra_field_active') && qa_opt('extra_field_display')) {
 		$q_view['extra'] = array(
 			'label' => qa_html(qa_opt('extra_field_label')),
 			'content' => qa_html(qa_block_words_replace($question['extra'], qa_get_block_words_preg())),
@@ -946,7 +946,7 @@ function qa_page_q_add_a_form(&$qa_content, $formid, $captchareason, $question, 
 					'content' => array_merge(
 						qa_editor_load_field($editor, $qa_content, @$in['content'], @$in['format'], 'a_content', 12, $formrequested, $loadnow),
 						array(
-							'error' => qa_html(@$errors['content']),
+							'error' => qa_html(isset($errors['content']) ? $errors['content'] : null),
 						)
 					),
 				),
@@ -978,7 +978,7 @@ function qa_page_q_add_a_form(&$qa_content, $formid, $captchareason, $question, 
 				qa_set_up_name_field($qa_content, $form['fields'], @$in['name'], 'a_');
 
 			qa_set_up_notify_fields($qa_content, $form['fields'], 'A', qa_get_logged_in_email(),
-				isset($in['notify']) ? $in['notify'] : qa_opt('notify_users_default'), @$in['email'], @$errors['email'], 'a_');
+				isset($in['notify']) ? $in['notify'] : qa_opt('notify_users_default'), @$in['email'], isset($errors['email']) ? $errors['email'] : null, 'a_');
 
 			$onloads = array();
 
@@ -1097,7 +1097,7 @@ function qa_page_q_add_c_form(&$qa_content, $question, $parent, $formid, $captch
 					'content' => array_merge(
 						qa_editor_load_field($editor, $qa_content, @$in['content'], @$in['format'], $prefix . 'content', 4, $loadfocusnow, $loadfocusnow),
 						array(
-							'error' => qa_html(@$errors['content']),
+							'error' => qa_html(isset($errors['content']) ? $errors['content'] : null),
 						)
 					),
 				),
@@ -1128,7 +1128,7 @@ function qa_page_q_add_c_form(&$qa_content, $question, $parent, $formid, $captch
 				qa_set_up_name_field($qa_content, $form['fields'], @$in['name'], $prefix);
 
 			qa_set_up_notify_fields($qa_content, $form['fields'], 'C', qa_get_logged_in_email(),
-				isset($in['notify']) ? $in['notify'] : qa_opt('notify_users_default'), @$in['email'], @$errors['email'], $prefix);
+				isset($in['notify']) ? $in['notify'] : qa_opt('notify_users_default'), @$in['email'], isset($errors['email']) ? $errors['email'] : null, $prefix);
 
 			$onloads = array();
 

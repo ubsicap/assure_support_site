@@ -49,7 +49,7 @@ if (!qa_admin_check_privileges($qa_content))
 
 // Work out the appropriate state for the page
 
-$editcategory = @$categories[$editcategoryid];
+$editcategory = isset($categories[$editcategoryid]) ? $categories[$editcategoryid] : null;
 
 if (isset($editcategory)) {
 	$parentid = qa_get('addsub');
@@ -62,7 +62,7 @@ if (isset($editcategory)) {
 
 	elseif (qa_clicked('dosavecategory')) {
 		$parentid = qa_post_text('parent');
-		$editcategory = array('parentid' => strlen($parentid) ? $parentid : null);
+		$editcategory = array('parentid' => is_numeric($parentid) ? $parentid : null);
 	}
 }
 
@@ -72,7 +72,7 @@ $setparent = !$setmissing && (qa_post_text('setparent') || qa_get('setparent')) 
 
 $hassubcategory = false;
 foreach ($categories as $category) {
-	if (!strcmp($category['parentid'], $editcategoryid))
+	if (!strcmp(isset($category['parentid']) ? $category['parentid'] : '', isset($editcategoryid) ? $editcategoryid : ''))
 		$hassubcategory = true;
 }
 
@@ -93,6 +93,7 @@ if (qa_clicked('dosaveoptions')) {
 	}
 }
 
+$errors = array();
 
 // Process saving an old or new category
 
@@ -129,11 +130,10 @@ if (qa_clicked('docancel')) {
 	} else {
 		require_once QA_INCLUDE_DIR . 'util/string.php';
 
-		$inname = qa_post_text('name');
+		$inname = (string)qa_post_text('name');
 		$incontent = qa_post_text('content');
 		$inparentid = $setparent ? qa_get_category_field_value('parent') : $editcategory['parentid'];
 		$inposition = qa_post_text('position');
-		$errors = array();
 
 		// Check the parent ID
 
@@ -147,8 +147,8 @@ if (qa_clicked('docancel')) {
 			$errors['name'] = qa_lang_sub('main/max_length_x', QA_DB_MAX_CAT_PAGE_TITLE_LENGTH);
 		else {
 			foreach ($incategories as $category) {
-				if (!strcmp($category['parentid'], $inparentid) &&
-					strcmp($category['categoryid'], @$editcategory['categoryid']) &&
+				if (!strcmp(isset($category['parentid']) ? $category['parentid'] : '', $inparentid) &&
+					strcmp($category['categoryid'], isset($editcategory['categoryid']) ? $editcategory['categoryid'] : '') &&
 					qa_strtolower($category['title']) == qa_strtolower($inname)
 				) {
 					$errors['name'] = qa_lang('admin/category_already_used');
@@ -190,7 +190,7 @@ if (qa_clicked('docancel')) {
 				$errors['slug'] = qa_lang_sub('admin/slug_bad_chars', '+ /');
 			elseif (!isset($inparentid) && qa_admin_is_slug_reserved($inslug)) // only top level is a problem
 				$errors['slug'] = qa_lang('admin/slug_reserved');
-			elseif (isset($matchcategoryid) && strcmp($matchcategoryid, @$editcategory['categoryid']))
+			elseif (isset($matchcategoryid) && strcmp($matchcategoryid, isset($editcategory['categoryid']) ? $editcategory['categoryid'] : ''))
 				$errors['slug'] = qa_lang('admin/category_already_used');
 			elseif (isset($matchpage))
 				$errors['slug'] = qa_lang('admin/page_already_used');
@@ -295,7 +295,7 @@ if ($setmissing) {
 				'tags' => 'name="name" id="name"',
 				'label' => qa_lang_html(count($categories) ? 'admin/category_name' : 'admin/category_name_first'),
 				'value' => qa_html(isset($inname) ? $inname : @$editcategory['title']),
-				'error' => qa_html(@$errors['name']),
+				'error' => qa_html(isset($errors['name']) ? $errors['name'] : null),
 			),
 
 			'questions' => array(),
@@ -309,7 +309,7 @@ if ($setmissing) {
 				'tags' => 'name="slug"',
 				'label' => qa_lang_html('admin/category_slug'),
 				'value' => qa_html(isset($inslug) ? $inslug : @$editcategory['tags']),
-				'error' => qa_html(@$errors['slug']),
+				'error' => qa_html(isset($errors['slug']) ? $errors['slug'] : null),
 			),
 
 			'content' => array(
@@ -317,7 +317,7 @@ if ($setmissing) {
 				'tags' => 'name="content"',
 				'label' => qa_lang_html('admin/category_description'),
 				'value' => qa_html(isset($incontent) ? $incontent : @$editcategory['content']),
-				'error' => qa_html(@$errors['content']),
+				'error' => qa_html(isset($errors['content']) ? $errors['content'] : null),
 				'rows' => 2,
 			),
 		),
@@ -460,7 +460,7 @@ if ($setmissing) {
 		$passedself = false;
 
 		foreach ($categories as $key => $category) {
-			if (!strcmp($category['parentid'], @$editcategory['parentid'])) {
+			if (!strcmp(isset($category['parentid']) ? $category['parentid'] : '', isset($editcategory['parentid']) ? $editcategory['parentid'] : '')) {
 				if (isset($previous))
 					$positionhtml = qa_lang_html_sub('admin/after_x', qa_html($passedself ? $category['title'] : $previous['title']));
 				else
@@ -468,7 +468,7 @@ if ($setmissing) {
 
 				$positionoptions[$category['position']] = $positionhtml;
 
-				if (!strcmp($category['categoryid'], @$editcategory['categoryid']))
+				if (!strcmp($category['categoryid'], isset($editcategory['categoryid']) ? $editcategory['categoryid'] : ''))
 					$passedself = true;
 
 				$previous = $category;
@@ -500,7 +500,7 @@ if ($setmissing) {
 				$childrenhtml = '';
 
 				foreach ($categories as $category) {
-					if (!strcmp($category['parentid'], $editcategory['categoryid'])) {
+					if (!strcmp(isset($category['parentid']) ? $category['parentid'] : '', $editcategory['categoryid'])) {
 						$childrenhtml .= (strlen($childrenhtml) ? ', ' : '') .
 							'<a href="' . qa_path_html(qa_request(), array('edit' => $category['categoryid'])) . '">' . qa_html($category['title']) . '</a>' .
 							' (' . $category['qcount'] . ')';
