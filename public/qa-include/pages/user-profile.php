@@ -219,7 +219,7 @@ if (!QA_FINAL_EXTERNAL_USERS) {
 
 							$categoryid = qa_get_category_field_value('uc_' . $index . '_cat');
 
-							if (strlen($categoryid) && strlen($inlevel)) {
+							if (strlen((string)$categoryid) && strlen($inlevel)) {
 								$inuserlevels[] = array(
 									'entitytype' => QA_ENTITY_CATEGORY,
 									'entityid' => $categoryid,
@@ -307,7 +307,7 @@ if (!QA_FINAL_EXTERNAL_USERS) {
 	if (qa_clicked('dowallpost')) {
 		$inmessage = qa_post_text('message');
 
-		if (!strlen($inmessage)) {
+		if (!strlen((string)$inmessage)) {
 			$errors['message'] = qa_lang('profile/post_wall_empty');
 		} elseif (!qa_check_form_security_code('wall-' . $useraccount['handle'], qa_post_text('code'))) {
 			$errors['message'] = qa_lang_html('misc/form_security_again');
@@ -341,7 +341,7 @@ if ($loginlevel >= QA_USER_LEVEL_ADMIN && qa_clicked('dosetbonus')) {
 $qa_content = qa_content_prepare();
 
 $qa_content['title'] = qa_lang_html_sub('profile/user_x', $userhtml);
-$qa_content['error'] = @$errors['page'];
+$qa_content['error'] = isset($errors['page']) ? $errors['page'] : null;
 
 if (!QA_FINAL_EXTERNAL_USERS && isset($loginuserid) && $loginuserid != $useraccount['userid']) {
 	$favoritemap = qa_get_favorite_non_qs_map();
@@ -436,7 +436,7 @@ if (!QA_FINAL_EXTERNAL_USERS) {
 			// Category-specific levels
 
 			if (qa_using_categories()) {
-				$catleveladd = strlen(qa_get('catleveladd')) > 0;
+				$catleveladd = strlen((string)qa_get('catleveladd')) > 0;
 
 				if (!$catleveladd && !count($userlevels)) {
 					$qa_content['form_profile']['fields']['level']['suffix'] = strtr(qa_lang_html('users/category_level_add'), array(
@@ -561,7 +561,7 @@ if (!QA_FINAL_EXTERNAL_USERS) {
 			'label' => qa_lang_html('users/email_label'),
 			'tags' => 'name="email"',
 			'value' => $userediting ? $htmlemail : ('<a href="mailto:' . $htmlemail . '">' . $htmlemail . '</a>'),
-			'error' => qa_html(@$errors['email']),
+			'error' => qa_html(isset($errors['email']) ? $errors['email'] : null),
 			'note' => ($doconfirms ? (qa_lang_html($isconfirmed ? 'users/email_confirmed' : 'users/email_not_confirmed') . ' ') : '') .
 				($userediting ? '' : qa_lang_html('users/only_shown_admins')),
 			'id' => 'email',
@@ -608,7 +608,7 @@ if (!QA_FINAL_EXTERNAL_USERS) {
 
 	foreach ($userfields as $userfield) {
 		if (($userfield['flags'] & QA_FIELD_FLAGS_LINK_URL) && !$fieldsediting) {
-			$valuehtml = qa_url_to_html_link(@$userprofile[$userfield['title']], qa_opt('links_in_new_window'));
+			$valuehtml = qa_url_to_html_link(isset($userprofile[$userfield['title']]) ? $userprofile[$userfield['title']] : '', qa_opt('links_in_new_window'));
 		} else {
 			$value = @$inprofile[$userfield['fieldid']];
 			if (!isset($value))
@@ -638,7 +638,7 @@ if (!QA_FINAL_EXTERNAL_USERS) {
 			'label' => qa_html($label),
 			'tags' => 'name="field_' . $userfield['fieldid'] . '"',
 			'value' => $valuehtml,
-			'error' => qa_html(@$errors[$userfield['fieldid']]),
+			'error' => qa_html(isset($errors[$userfield['fieldid']]) ? $errors[$userfield['fieldid']] : null),
 			'note' => $notehtml,
 			'rows' => ($userfield['flags'] & QA_FIELD_FLAGS_MULTI_LINE) ? 8 : null,
 			'id' => 'userfield-' . $userfield['fieldid'],
@@ -936,7 +936,7 @@ if (!QA_FINAL_EXTERNAL_USERS && qa_opt('allow_user_walls')) {
 				'tags' => 'name="message" id="message"',
 				'value' => qa_html(@$inmessage, false),
 				'rows' => 2,
-				'error' => qa_html(@$errors['message']),
+				'error' => qa_html(isset($errors['message']) ? $errors['message'] : null),
 			),
 		);
 

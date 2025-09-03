@@ -44,7 +44,7 @@ if (!defined('QA_NEW_PASSWORD_LEN')){
  * @param $olduser
  * @return array
  */
-function qa_handle_email_filter(&$handle, &$email = null, $olduser = null)
+function qa_handle_email_filter(&$handle, &$email, $olduser = null)
 {
 	require_once QA_INCLUDE_DIR . 'db/users.php';
 	require_once QA_INCLUDE_DIR . 'util/string.php';
@@ -52,7 +52,7 @@ function qa_handle_email_filter(&$handle, &$email = null, $olduser = null)
 	$errors = array();
 
 	// sanitize 4-byte Unicode and invisible characters
-	$handle = qa_remove_utf8mb4($handle);
+	$handle = qa_remove_utf8mb4((string)$handle);
 	$handle = preg_replace('/\p{C}+/u', '', $handle);
 
 	$filtermodules = qa_load_modules_with('filter', 'filter_handle');
@@ -103,7 +103,7 @@ function qa_handle_make_valid($handle)
 	require_once QA_INCLUDE_DIR . 'db/maxima.php';
 	require_once QA_INCLUDE_DIR . 'db/users.php';
 
-	if (!strlen($handle))
+	if (!strlen((string)$handle))
 		$handle = qa_lang('users/registered_user');
 
 	$handle = preg_replace('/[\\@\\+\\/]/', ' ', $handle);
@@ -157,7 +157,7 @@ function qa_password_validate($password, $olduser = null)
 
 	if (!isset($error)) {
 		$minpasslen = max(QA_MIN_PASSWORD_LEN, 1);
-		if (qa_strlen($password) < $minpasslen)
+		if (qa_strlen((string)$password) < $minpasslen)
 			$error = qa_lang_sub('users/password_min', $minpasslen);
 	}
 
@@ -512,6 +512,7 @@ function qa_set_user_avatar($userid, $imagedata, $oldblobid = null)
 	if (qa_to_override(__FUNCTION__)) { $args=func_get_args(); return qa_call_override(__FUNCTION__, $args); }
 
 	require_once QA_INCLUDE_DIR . 'util/image.php';
+
 	$imagedata = qa_image_constrain_data($imagedata, $width, $height, qa_opt('avatar_store_size'));
 
 	if (isset($imagedata)) {

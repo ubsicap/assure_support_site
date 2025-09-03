@@ -350,7 +350,7 @@ if (QA_FINAL_EXTERNAL_USERS) {
 			} else {
 				$handle = qa_handle_make_valid(@$fields['handle']);
 
-				if (strlen(@$fields['email'])) { // remove email address if it will cause a duplicate
+				if (strlen(isset($fields['email']) ? $fields['email'] : '')) { // remove email address if it will cause a duplicate
 					$emailusers = qa_db_user_find_by_email($fields['email']);
 					if (count($emailusers)) {
 						qa_redirect('login', array('e' => $fields['email'], 'ee' => '1'));
@@ -364,19 +364,20 @@ if (QA_FINAL_EXTERNAL_USERS) {
 					echo '<pre>';
 					var_dump("userid: ".$userid);
 					echo '</pre>';
+
 				qa_db_user_login_add($userid, $source, $identifier);
 				qa_db_user_login_sync(false);
 
 				$profilefields = array('name', 'location', 'website', 'about');
 
 				foreach ($profilefields as $fieldname) {
-					if (strlen(@$fields[$fieldname]))
+					if (strlen(isset($fields[$fieldname]) ? $fields[$fieldname] : ''))
 						qa_db_user_profile_set($userid, $fieldname, $fields[$fieldname]);
 				}
 
-				if (strlen(@$fields['avatar']))
+				if (strlen(isset($fields['avatar']) ? $fields['avatar'] : ''))
 					qa_set_user_avatar($userid, $fields['avatar']);
-				
+
 				// so for new users they will log in automatically next time
 				qa_set_logged_in_user($userid, $handle, true, $source);
 			}
@@ -410,7 +411,7 @@ if (QA_FINAL_EXTERNAL_USERS) {
 				if ($remember)
 					qa_set_session_cookie($handle, $sessioncode, $remember); // extend 'remember me' cookies each time
 
-				$sessioncode = trim($sessioncode); // trim to prevent passing in blank values to match uninitiated DB rows
+				$sessioncode = trim(isset($sessioncode) ? $sessioncode : ''); // trim to prevent passing in blank values to match uninitiated DB rows
 
 				// Try to recover session from the database if PHP session has timed out
 				if (!isset($_SESSION['qa_session_userid_' . $suffix]) && !empty($handle) && !empty($sessioncode)) {
@@ -418,7 +419,7 @@ if (QA_FINAL_EXTERNAL_USERS) {
 
 					$userinfo = qa_db_single_select(qa_db_user_account_selectspec($handle, false)); // don't get any pending
 
-					if (strtolower(trim($userinfo['sessioncode'])) == strtolower($sessioncode))
+					if (strtolower(trim(isset($userinfo['sessioncode']) ? $userinfo['sessioncode'] : '')) == strtolower($sessioncode))
 						qa_set_session_user($userinfo['userid'], $userinfo['sessionsource']);
 					else
 						qa_clear_session_cookie(); // if cookie not valid, remove it to save future checks
@@ -536,7 +537,7 @@ if (QA_FINAL_EXTERNAL_USERS) {
 
 		require_once QA_INCLUDE_DIR . 'util/image.php';
 
-		if (strlen($blobId) == 0 || (isset($size) && (int)$size <= 0)) {
+		if (strlen((string)$blobId) == 0 || (isset($size) && (int)$size <= 0)) {
 			return null;
 		}
 
@@ -563,7 +564,7 @@ if (QA_FINAL_EXTERNAL_USERS) {
 	{
 		if (qa_to_override(__FUNCTION__)) { $args=func_get_args(); return qa_call_override(__FUNCTION__, $args); }
 
-		if (strlen($handle) === 0) {
+		if (strlen((string)$handle) === 0) {
 			return qa_lang('main/anonymous');
 		}
 
@@ -669,7 +670,7 @@ if (QA_FINAL_EXTERNAL_USERS) {
 				break;
 			case 'local-default':
 				$html = qa_get_avatar_blob_html(qa_opt('avatar_default_blobid'), qa_opt('avatar_default_width'), qa_opt('avatar_default_height'), $size, $padding);
-				if (strlen($handle) == 0) {
+				if (strlen((string)$handle) == 0) {
 					return $html;
 				}
 				break;
@@ -953,7 +954,7 @@ function qa_user_level_for_post($post)
 {
 	if (qa_to_override(__FUNCTION__)) { $args=func_get_args(); return qa_call_override(__FUNCTION__, $args); }
 
-	if (strlen(@$post['categoryids']))
+	if (strlen(isset($post['categoryids']) ? $post['categoryids'] : ''))
 		return qa_user_level_for_categories(explode(',', $post['categoryids']));
 
 	return null;
@@ -1277,7 +1278,7 @@ function qa_set_form_security_key()
 	if (!qa_is_logged_in() && !@$qa_form_key_cookie_set) {
 		$qa_form_key_cookie_set = true;
 
-		if (strlen(@$_COOKIE['qa_key']) != QA_FORM_KEY_LENGTH) {
+		if (strlen(isset($_COOKIE['qa_key']) ? $_COOKIE['qa_key'] : '') != QA_FORM_KEY_LENGTH) {
 			require_once QA_INCLUDE_DIR . 'util/string.php';
 			$_COOKIE['qa_key'] = qa_random_alphanum(QA_FORM_KEY_LENGTH);
 		}
@@ -1368,7 +1369,7 @@ function qa_check_form_security_code($action, $value)
 				if ($loggedin) {
 					$silentproblems[] = 'now logged out';
 				} else {
-					$key = @$_COOKIE['qa_key'];
+					$key = isset($_COOKIE['qa_key']) ? $_COOKIE['qa_key'] : null;
 
 					if (!isset($key)) {
 						$silentproblems[] = 'key cookie missing';
