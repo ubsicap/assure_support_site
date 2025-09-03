@@ -104,7 +104,7 @@ function qa_limits_calc_remaining($action, $userlimits, $iplimits)
 			break;
 
 		case QA_LIMIT_LOGINS:
-			$usermax = 1; // not really relevant
+			$usermax = 2; // not really relevant
 			$ipmax = qa_opt('max_rate_ip_logins');
 			break;
 
