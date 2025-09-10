@@ -133,11 +133,10 @@ function qa_send_email($params)
 
 	// @error_log(print_r($params, true));
 
-	require_once QA_INCLUDE_DIR . 'vendor/PHPMailer6/PHPMailer.php';
-	require_once QA_INCLUDE_DIR . 'vendor/PHPMailer6/Exception.php';
+	require_once QA_INCLUDE_DIR . 'vendor/PHPMailer/PHPMailerAutoload.php';
 
-	\PHPMailer\PHPMailer\PHPMailer::$validator = 'php';
-	$mailer = new \PHPMailer\PHPMailer\PHPMailer();
+	PHPMailer::$validator = 'php';
+	$mailer = new PHPMailer();
 	$mailer->CharSet = 'utf-8';
 
 	$mailer->From = $params['fromemail'];
@@ -154,8 +153,6 @@ function qa_send_email($params)
 		$mailer->isHTML(true);
 
 	if (qa_opt('smtp_active')) {
-		require_once QA_INCLUDE_DIR . 'vendor/PHPMailer6/SMTP.php';
-
 		$mailer->isSMTP();
 		$mailer->Host = qa_opt('smtp_address');
 		$mailer->Port = qa_opt('smtp_port');
