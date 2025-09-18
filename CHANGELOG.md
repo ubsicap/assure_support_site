@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.1.0](https://github.com/ubsicap/assure_support_site/compare/v1.0.3...v1.1.0) (2025-09-18)
+
+
+### Features
+
+* update plugins ([681f6a2](https://github.com/ubsicap/assure_support_site/commit/681f6a2f4f45a90a450890f8c1ec0b064e3cc7ce))
+
+
+### Bug Fixes
+
+* removed call to undef function ([a625157](https://github.com/ubsicap/assure_support_site/commit/a625157cb3e685762e8f2626d8f39fd024d84c6c))
+* update ajax, app, and db files ([77a2a4a](https://github.com/ubsicap/assure_support_site/commit/77a2a4ae5a1b06da8704d994f168811e6e2f3c5d))
+* update config ([a47d7fc](https://github.com/ubsicap/assure_support_site/commit/a47d7fcd110842630fc6014835c154b1b37ca827))
+* update public/documents ([84c1f75](https://github.com/ubsicap/assure_support_site/commit/84c1f753dc2d3656c55a3c11791f877abbc2262b))
+* update qa-include ([e8ffdab](https://github.com/ubsicap/assure_support_site/commit/e8ffdabe716b9be95444d80842f523aa82a4b4da))
+
+
+### Miscellaneous Chores
+
+* update SnowFlat theme ([c512ff2](https://github.com/ubsicap/assure_support_site/commit/c512ff2437f960691db4fb417696a52bf705726b))
+
 ## [1.0.3](https://github.com/ubsicap/assure_support_site/compare/v1.0.2...v1.0.3) (2025-05-13)
 
 
