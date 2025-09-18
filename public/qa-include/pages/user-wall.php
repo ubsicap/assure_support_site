@@ -83,7 +83,7 @@ foreach ($usermessages as $message) {
 if (qa_clicked('dowallpost')) {
 	$inmessage = qa_post_text('message');
 
-	if (!strlen($inmessage)) {
+	if (!strlen((string)$inmessage)) {
 		$errors['message'] = qa_lang('profile/post_wall_empty');
 	} elseif (!qa_check_form_security_code('wall-' . $useraccount['handle'], qa_post_text('code'))) {
 		$errors['message'] = qa_lang_html('misc/form_security_again');
@@ -99,7 +99,7 @@ if (qa_clicked('dowallpost')) {
 $qa_content = qa_content_prepare();
 
 $qa_content['title'] = qa_lang_html_sub('profile/wall_for_x', $userhtml);
-$qa_content['error'] = @$errors['page'];
+$qa_content['error'] = isset($errors['page']) ? $errors['page'] : null;
 
 $qa_content['message_list'] = array(
 	'tags' => 'id="wallmessages"',
@@ -127,7 +127,7 @@ if ($start == 0) { // only allow posting on first page
 				'tags' => 'name="message" id="message"',
 				'value' => qa_html(@$inmessage, false),
 				'rows' => 2,
-				'error' => qa_html(@$errors['message']),
+				'error' => qa_html(isset($errors['message']) ? $errors['message'] : null),
 			),
 		);
 

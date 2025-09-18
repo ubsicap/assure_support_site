@@ -46,7 +46,8 @@ function qa_has_gd_image()
 function qa_image_file_too_big($imagefile, $size = null)
 {
 	if (function_exists('memory_get_usage')) {
-		$gotbytes = trim(@ini_get('memory_limit'));
+		$memLim = ini_get('memory_limit');
+		$gotbytes = trim(isset($memLim) ? $memLim : '');
 
 		$gotbytes = convert_to_bytes(substr($gotbytes, -1), $gotbytes);
 
