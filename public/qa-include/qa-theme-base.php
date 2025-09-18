@@ -1117,6 +1117,7 @@ class qa_html_theme_base
 			$this->form_field($field, $style);
 		}
 
+		$this->output('<span style="color:red; margin-right: 5px">*</span>');
 		$this->output(@$field['label']);
 
 		if ($prefixed)

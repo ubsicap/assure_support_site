@@ -607,7 +607,7 @@ class qa_html_theme extends qa_html_theme_base
 
     public function form_text_single_row($field, $style)
     {
-        $this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text form-control"/>');
+        $this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text form-control" required/>');
     }
 
     public function form_text_multi_row($field, $style)
