@@ -1407,7 +1407,13 @@ class qa_html_theme_base
 	{
 		$tag = ($columns > 1) ? 'span' : 'div';
 
-		$this->output('<' . $tag . ' class="qa-form-' . $style . '-note">' . @$field['note'] . '</' . $tag . '>');
+		if (strpos($field['note'], 'Indicates') !== false) {
+		  $this->output('<br>');
+	          $this->output('<span style="color:red; margin-right: 5px">*</span>');
+		  $this->output(@$field['note']);
+		} else {
+		  $this->output('<' . $tag . ' class="qa-form-' . $style . '-note">' . @$field['note'] . '</' . $tag . '>');
+		}
 	}
 
 	public function ranking($ranking)

@@ -218,7 +218,7 @@ foreach ($userfields as $userfield) {
 }
 
 if (qa_opt('captcha_on_register'))
-	qa_set_up_captcha_field($qa_content, $qa_content['form']['fields'], @$errors);
+	qa_set_up_captcha_field($qa_content, $qa_content['form']['fields'], @$errors, 'Indicates required field');
 
 // show T&Cs checkbox
 if ($show_terms) {
