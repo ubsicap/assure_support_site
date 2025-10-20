@@ -208,6 +208,9 @@ define('QA_PERSISTENT_CONN_DB', false);
 define('QA_DEBUG_PERFORMANCE', false);
 define('QA_DB_MAX_CONTENT_LENGTH', 50000);
 
+// Configure allowed HTML for posts - add img tag support
+define('QA_HTML_ALLOW_TAGS', true);
+define('QA_HTML_ALLOW_IMAGES', true);
 /*
 	And lastly... if you want to, you can predefine any constant from qa-include/db/maxima.php in
 	this file to override the default setting. Just make sure you know what you're doing!

@@ -47,6 +47,12 @@ COPY ./apache2.conf /etc/apache2/apache2.conf
 
 # Copy all public content to webroot
 COPY ./public/ /var/www/html/
+# Create uploads directory and set safe ownership and permissions
+
+RUN mkdir -p /var/www/html/qa-uploads \
+    && chown -R www-data:www-data /var/www/html/qa-uploads \
+    && chmod -R 755 /var/www/html/qa-uploads
+
 
 # Holds config files not served by the website
 # RUN mkdir -p /var/www/config
