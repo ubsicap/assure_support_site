@@ -167,6 +167,7 @@ return array(
 	'options' => 'options',
 	'options_reset' => 'Options reset',
 	'options_saved' => 'Options saved',
+	'options_config_error' => 'Configuration Error, Options not saved',
 	'page_already_used' => 'This is already being used by a page',
 	'page_content_html' => 'Content to display in page - HTML allowed:',
 	'page_default_slug' => 'page-^',

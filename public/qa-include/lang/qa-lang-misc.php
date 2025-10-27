@@ -24,7 +24,7 @@ return array(
 	'browse_categories' => 'Browse categories',
 	'captcha_approve_fix' => 'This verification will stop appearing once your account is approved.',
 	'captcha_confirm_fix' => 'To avoid this verification in future, please ^5confirm your email address^6.',
-	'captcha_error' => 'Please complete the anti-spam verification',
+	'captcha_error' => 'Invalid anti-spam verification',
 	'captcha_label' => 'Anti-spam verification:',
 	'captcha_login_fix' => 'To avoid this verification in future, please ^1log in^2 or ^3register^4.',
 	'feed_a_edited_prefix' => 'Answer edited: ',

@@ -26,13 +26,12 @@
 		
 		// plugin
 		'label_q' => 'Captcha Question:',
-		'label_a' => 'Answer option 1:',
-		'label_a2' => 'Answer option 2:',
+		'label_a' => 'Valid answers (2-9)',
 		'label_error' => 'Error message',
+		'label_configuration_error' => 'Configuration Error message',
 		'captcha_question' => 'What is the color of the sky?',
-		'captcha_answer' => 'blue',
-		'captcha_answer2' => 'red',
 		'captcha_errormsg' => 'Your answer is incorrect.',
+		'captcha_config_errormsg' => 'Your configuration is incorrect.',
 		'emails_notallowed' => '*Emails are not allowed*',
 		'is_duplicate' => 'A question with this title already exists. Please add more details.',
 		'emaildomain_unwanted' => 'Trashmails are not allowed.',

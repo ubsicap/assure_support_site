@@ -1,5 +1,11 @@
 <?php
-
+function console_log($output, $with_script_tags = true) {
+	$js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . ');';
+	if ($with_script_tags) {
+	   $js_code = '<script>' . $js_code . '</script>';
+	}
+	echo $js_code;
+}
 /*
 	Plugin Name: Stop Spam
 	Plugin URI: http://www.q2apro.com/plugins/stop-spam
@@ -50,11 +56,11 @@
 				case 'q2apro_stopspam_captcha_question':
 					return qa_lang('q2apro_stopspam_lang/captcha_question');
 				case 'q2apro_stopspam_captcha_answer':
-					return qa_lang('q2apro_stopspam_lang/captcha_answer');
-				case 'q2apro_stopspam_captcha_answer2':
-					return qa_lang('q2apro_stopspam_lang/captcha_answer2');
+					return 'blue, red, navy, dark blue, sand, none, black, gray';
 				case 'q2apro_stopspam_captcha_errormsg':
 					return qa_lang('q2apro_stopspam_lang/captcha_errormsg');
+				case 'q2apro_stopspam_captcha_invalid_no_answers':
+					return qa_lang('q2apro_stopspam_lang/captcha_config_errormsg');
 				case 'q2apro_stopspam_filter_emails':
 					return 'trbvn.com, trashmail, 10minutemail.com';
 				case 'q2apro_stopspam_filter_words':
@@ -89,9 +95,7 @@
 			{
 				qa_opt('q2apro_stopspam_captcha_question', (string)qa_post_text('q2apro_stopspam_captcha_question'));
 				qa_opt('q2apro_stopspam_captcha_answer', (string)qa_post_text('q2apro_stopspam_captcha_answer'));
-				qa_opt('q2apro_stopspam_captcha_answer2', (string)qa_post_text('q2apro_stopspam_captcha_answer2'));
-				qa_opt('q2apro_stopspam_captcha_errormsg', (string)qa_post_text('q2apro_stopspam_captcha_errormsg'));
-				// filter words
+				qa_opt('q2apro_stopspam_captcha_errormsg', (string)qa_post_text('q2apro_stopspam_captcha_errormsg'));				// filter words
                 qa_opt('q2apro_stopspam_filter_emails', (string)qa_post_text('q2apro_stopspam_filter_emails'));
                 qa_opt('q2apro_stopspam_filter_words', (string)qa_post_text('q2apro_stopspam_filter_words'));
                 qa_opt('q2apro_stopspam_filter_languages', (string)qa_post_text('q2apro_stopspam_filter_languages'));
@@ -102,7 +106,15 @@
                 qa_opt('q2apro_stopspam_mask_emails', (int)qa_post_text('q2apro_stopspam_mask_emails'));
                 qa_opt('q2apro_prevent_spamvotes', (int)qa_post_text('q2apro_prevent_spamvotes'));
                 qa_opt('q2apro_block_guestswithoutip', (int)qa_post_text('q2apro_block_guestswithoutip'));
-				$ok = qa_lang('admin/options_saved');
+
+			    $tokens = explode(',', qa_opt('q2apro_stopspam_captcha_answer'));
+			    $count = count($tokens);
+			    if ($count < 2 || $count > 9) {
+			       console_log("Invalid number of tokens: " . $count);
+				   $ok = qa_lang('admin/options_config_error');
+				} else {
+				   $ok = qa_lang('admin/options_saved');
+				}
 			}
 			
 			// form fields to display frontend for admin
@@ -120,18 +132,13 @@
 				'value' => qa_opt('q2apro_stopspam_captcha_question'),
 			);
 			
+			// captcha answers
 			$fields[] = array(
-				'type' => 'input',
+                'type' => 'textarea',
+				'rows' => 1,
 				'label' => qa_lang('q2apro_stopspam_lang/label_a'),
 				'tags' => 'name="q2apro_stopspam_captcha_answer"',
 				'value' => qa_opt('q2apro_stopspam_captcha_answer'),
-			);
-			
-			$fields[] = array(
-				'type' => 'input',
-				'label' => qa_lang('q2apro_stopspam_lang/label_a2'),
-				'tags' => 'name="q2apro_stopspam_captcha_answer2"',
-				'value' => qa_opt('q2apro_stopspam_captcha_answer2'),
 			);
 			
 			$fields[] = array(
@@ -286,17 +293,18 @@
 			}
 			else if(!empty($_POST['captcha_challenge_field']))
 			{
-				// correct answer given
-				if( $_POST['captcha_challenge_field']==qa_opt('q2apro_stopspam_captcha_answer')
-					|| $_POST['captcha_challenge_field']==qa_opt('q2apro_stopspam_captcha_answer2') ) 
-				{
-					return true;
+			    $tokens = explode(',', qa_opt('q2apro_stopspam_captcha_answer'));
+				foreach ($tokens as $one_token) {
+					$trimmed_token = trim($one_token);
+					if (strcasecmp($_POST['captcha_challenge_field'], $trimmed_token) == 0) {
+						// correct answer given
+						return true;
+					}
+
 				}
-				else 
-				{
-					// wrong answer
-					$error = qa_opt('q2apro_stopspam_captcha_errormsg');
-				}
+				// wrong answer
+				$error = qa_opt('q2apro_stopspam_captcha_errormsg');
+
 			}
 			return false;
 		}
