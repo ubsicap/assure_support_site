@@ -54,21 +54,6 @@ services:
         source: q2a_db_volume               # This volume is located on the HOST MACHINE
         target: /var/lib/mysql              # Location of the MySQL database
 
-  dataexport:
-    container_name: q2a-dataexport
-    build:
-      context: ./DataExport
-      dockerfile: Dockerfile
-    depends_on:
-      - db
-    environment:                            # these vars must be the same as in q2a-config.php^
-      DB_HOST: q2a-db
-      DB_PORT: 3306 # most likely 3306
-      DB_LOGIN: user
-      DB_KEY: password
-      DB_NAME: qadb-local
-
-    restart: on-failure
     
 volumes:                                    # These volumes are stored on /var/lib/docker/volumes/ (on Linux)
   q2a_db_volume:                            # Persistent storage for DB
