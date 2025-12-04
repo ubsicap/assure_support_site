@@ -55,6 +55,29 @@ class qa_wysiwyg_upload
 			}
 		}
 
+        // ---------------------------
+        // JSON upload mode (Paste/Drop/Upload Image plugin)
+        // ---------------------------
+        if (qa_get('responseType') === 'json') {
+
+            header('Content-Type: application/json');
+
+            if ($message) {
+               echo json_encode([
+                   'uploaded' => 0,
+                   'error' => ['message' => $message]
+               ]);
+            } else {
+               echo json_encode([
+                   'uploaded' => 1,
+                   'fileName' => basename($url),
+                   'url' => $url
+               ]);
+           }
+
+           return null;
+       }
+
 		echo sprintf(
 			'<script>window.parent.CKEDITOR.tools.callFunction(%s, %s, %s);</script>',
 			qa_js(qa_get('CKEditorFuncNum')),

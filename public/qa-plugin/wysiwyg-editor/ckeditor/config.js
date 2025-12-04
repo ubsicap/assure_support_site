@@ -35,4 +35,8 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Add custom CSS
 	config.contentsCss = [CKEDITOR.getUrl('contents.css'), CKEDITOR.getUrl('contents-custom.css')];
+
+	config.extraPlugins = 'uploadimage,clipboard,uploadfile,widget,notification,uploadwidget,lineutils,notificationaggregator,widgetselection';
+
+
 };
