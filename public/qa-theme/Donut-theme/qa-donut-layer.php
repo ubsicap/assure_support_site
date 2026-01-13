@@ -305,7 +305,7 @@ class qa_html_theme extends qa_html_theme_base
         $this->header_clear();
         $this->header_custom();
         $this->output('</div> <!-- END qa-header -->', '');
-        $this->output('<div class="qa-main-shadow clearfix">', '');
+        $this->output('<div class="qa-main-shadow clearfix container">', '');
         $this->output('<div class="qa-main-wrapper clearfix row">', '');
     }
 
