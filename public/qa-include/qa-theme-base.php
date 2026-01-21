@@ -2241,7 +2241,7 @@ class qa_html_theme_base
 
 		// Check if form was submitted and update the variable
 		if (isset($_POST['read_form_submitted'])) {
-			if (isset($_POST['read']) && $_POST['read'] == 'READ') {
+			if (isset($_POST['read']) && $_POST['read'] == 'read') {
 				qa_post_view_set($postid, $userid, 1);
 				error_log("qa-theme-base::q_view_read - checkbox checked");
 			} else {
