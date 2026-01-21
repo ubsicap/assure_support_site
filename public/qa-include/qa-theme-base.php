@@ -723,6 +723,7 @@ class qa_html_theme_base
 	public function main()
 	{
 		$content = $this->content;
+
 		$hidden = !empty($content['hidden']) ? ' qa-main-hidden' : '';
 
 		$this->output('<div class="qa-main' . $hidden . '">');
@@ -850,6 +851,7 @@ class qa_html_theme_base
 
 	public function main_part($key, $part)
 	{
+
 		$isRanking = strpos($key, 'ranking') === 0;
 
 		$partdiv = (
@@ -1639,6 +1641,8 @@ class qa_html_theme_base
 
 	public function q_list_and_form($q_list)
 	{
+		error_log("qa-theme-base::q_list_and_form");
+
 		if (empty($q_list))
 			return;
 
@@ -1669,6 +1673,8 @@ class qa_html_theme_base
 
 	public function q_list($q_list)
 	{
+		error_log("qa-theme-base::q_list");
+
 		if (isset($q_list['qs'])) {
 			$this->output('<div class="qa-q-list' . ($this->list_vote_disabled($q_list['qs']) ? ' qa-q-list-vote-disabled' : '') . '">', '');
 			$this->q_list_items($q_list['qs']);
@@ -1678,6 +1684,8 @@ class qa_html_theme_base
 
 	public function q_list_items($q_items)
 	{
+		error_log("qa-theme-base::q_list_items plural");
+
 		foreach ($q_items as $q_item) {
 			$this->q_list_item($q_item);
 		}
@@ -1685,6 +1693,8 @@ class qa_html_theme_base
 
 	public function q_list_item($q_item)
 	{
+		error_log("qa-theme-base::q_list_item singular");
+
 		$this->output('<div class="qa-q-list-item' . rtrim(' ' . @$q_item['classes']) . '" ' . @$q_item['tags'] . '>');
 
 		$this->q_item_stats($q_item);
@@ -1696,7 +1706,9 @@ class qa_html_theme_base
 
 	public function q_item_stats($q_item)
 	{
-		$this->output('<div class="qa-q-item-stats">');
+		error_log("qa-theme-base::q_item_stats");
+
+		$this->output('<div class="q-item-stats">');
 
 		$this->voting($q_item);
 		$this->a_count($q_item);
@@ -1706,6 +1718,8 @@ class qa_html_theme_base
 
 	public function q_item_main($q_item)
 	{
+		error_log("qa-theme-base::q_item_main");
+
 		$this->output('<div class="qa-q-item-main">');
 
 		$this->view_count($q_item);
@@ -1740,6 +1754,8 @@ class qa_html_theme_base
 
 	public function q_item_content($q_item)
 	{
+		error_log("qa-theme-base::q_item_content");
+
 		if (!empty($q_item['content'])) {
 			$this->output('<div class="qa-q-item-content">');
 			$this->output_raw($q_item['content']);
@@ -1749,6 +1765,8 @@ class qa_html_theme_base
 
 	public function q_item_buttons($q_item)
 	{
+		error_log("qa-theme-base::q_item_buttons");
+
 		if (!empty($q_item['form'])) {
 			$this->output('<div class="qa-q-item-buttons">');
 			$this->form($q_item['form']);
@@ -1758,6 +1776,8 @@ class qa_html_theme_base
 
 	public function voting($post)
 	{
+		error_log("qa-theme-base::voting");
+
 		if (isset($post['vote_view'])) {
 			$this->output('<div class="qa-voting ' . (($post['vote_view'] == 'updown') ? 'qa-voting-updown' : 'qa-voting-net') . '" ' . @$post['vote_tags'] . '>');
 			$this->voting_inner_html($post);
@@ -1767,6 +1787,8 @@ class qa_html_theme_base
 
 	public function voting_inner_html($post)
 	{
+		error_log("qa-theme-base::voting_inner_html");
+
 		$this->vote_buttons($post);
 		$this->vote_count($post);
 		$this->vote_clear();
@@ -1774,6 +1796,8 @@ class qa_html_theme_base
 
 	public function vote_buttons($post)
 	{
+		error_log("qa-theme-base::vote_buttons");
+
 		$this->output('<div class="qa-vote-buttons ' . (($post['vote_view'] == 'updown') ? 'qa-vote-buttons-updown' : 'qa-vote-buttons-net') . '">');
 
 		switch (@$post['vote_state']) {
@@ -1885,6 +1909,9 @@ class qa_html_theme_base
 
 	public function post_hover_button($post, $element, $value, $class)
 	{
+		error_log(print_r("qa-theme-base::post_hover_button", true));
+
+
 		if (isset($post[$element]))
 			$this->output('<input ' . $post[$element] . ' type="submit" value="' . $value . '" class="' . $class . '-button"/> ');
 	}
@@ -2152,6 +2179,8 @@ class qa_html_theme_base
 
 	public function q_view($q_view)
 	{
+		error_log("qa-theme-base::q_view");
+
 		if (!empty($q_view)) {
 			$this->output('<div class="qa-q-view' . (@$q_view['hidden'] ? ' qa-q-view-hidden' : '') . rtrim(' ' . @$q_view['classes']) . '"' . rtrim(' ' . @$q_view['tags']) . '>');
 
@@ -2160,6 +2189,9 @@ class qa_html_theme_base
 			}
 
 			$this->q_view_stats($q_view);
+
+			$this->q_view_read($q_view);
+
 
 			if (isset($q_view['main_form_tags'])) {
 				$this->form_hidden_elements(@$q_view['voting_form_hidden']);
@@ -2175,6 +2207,8 @@ class qa_html_theme_base
 
 	public function q_view_stats($q_view)
 	{
+        error_log(print_r("qa-theme-base::q_view_stats", true));
+
 		$this->output('<div class="qa-q-view-stats">');
 
 		$this->voting($q_view);
@@ -2182,6 +2216,150 @@ class qa_html_theme_base
 
 		$this->output('</div>');
 	}
+
+	public function q_view_read($q_view)
+	{
+
+		error_log("qa-theme-base::q_view_read");
+
+		$this->output('<div class="qa-q-view-read">');
+
+		$userid = qa_get_logged_in_userid();
+		$postid = isset($q_view['raw']['postid']) ? $q_view['raw']['postid'] : null;
+
+		error_log("qa-theme-base::q_view_read - userid: " . ($userid ?? 'NULL'));
+		error_log("qa-theme-base::q_view_read - postid: " . ($postid ?? 'NULL'));
+
+		// Exit early if we don't have the required data
+		if (!$userid || !$postid) {
+			error_log("qa-theme-base::q_view_read - Missing userid or postid, skipping");
+			$this->output('</div>');
+			return;
+		}
+
+		require_once QA_INCLUDE_DIR . 'app/postview.php';
+
+		// Check if form was submitted and update the variable
+		if (isset($_POST['read_form_submitted'])) {
+			if (isset($_POST['read']) && $_POST['read'] == 'READ') {
+				qa_post_view_set($postid, $userid, 1);
+				error_log("qa-theme-base::q_view_read - checkbox checked");
+			} else {
+				// Form was submitted but checkbox not checked
+				qa_post_view_set($postid, $userid, 0);
+				error_log("qa-theme-base::q_view_read - checkbox UNchecked");
+			}
+		}
+
+		$viewflag = qa_post_view_get($postid, $userid);
+
+		error_log("qa-theme-base::q_view_read - fetched viewflag:");
+		error_log(print_r($viewflag, true));
+
+		$checkboxValue = 0; // Default value
+		if ($viewflag && $row = $viewflag->fetch_assoc()) {
+			$checkboxValue = $row['viewflag']; 
+			error_log("qa-theme-base::q_view_read - checkboxValue: $checkboxValue");
+		}
+
+		// Set checked attribute based on the variable
+		$checkedAttr = ($checkboxValue == 1) ? 'checked' : '';
+
+		error_log("qa-theme-base::q_view_read - About to output form");
+
+		// Output CSS styling to match the voting button
+		$this->output('
+		<style>
+		.red-box {
+			width: 80px;
+			height: 60px;
+			border: 1px solid red;
+			border-radius: 3px;
+			background-color: white;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 8px;
+			box-sizing: border-box;
+			box-shadow: 0 0 8px red;
+		}
+
+		.red-box .checkbox-container {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.red-box input[type="checkbox"] {
+			width: 16px;
+			height: 16px;
+			cursor: pointer;
+		}
+
+		.red-box label {
+			font-size: 14px;
+			font-weight: 500;
+			cursor: pointer;
+			user-select: none;
+		}
+		.qa-read-button {
+			display: inline-block;
+			text-align: center;
+			min-width: 40px;
+			padding: 4px 8px;
+			background: #f5f5f5;
+			border: 1px solid #ddd;
+			border-radius: 3px;
+			vertical-align: top;
+		}
+
+		.qa-read-button input[type="checkbox"] {
+			display: block;
+			margin: 0 auto 2px auto;
+			cursor: pointer;
+			width: 15px;
+			height: 15px;
+		}
+
+		.qa-read-button label {
+			display: block;
+			font-size: 10px;
+			color: #999;
+			text-transform: uppercase;
+			cursor: pointer;
+			margin: 0;
+			line-height: 1;
+		}
+
+		.qa-read-button:hover {
+			background: #eee;
+		}
+		</style>
+		');
+
+		$this->output('<div class="red-box">');
+		$this->output('<form method="POST" class="qa-read-button" style="margin: 0;">');
+		$this->output('<input type="hidden" name="read_form_submitted" value="1">');
+		$this->output('<input type="checkbox" id="read" name="read" value="read" '.$checkedAttr.' onchange="this.form.submit()">');
+		$this->output('<label for="read">read</label>');
+		$this->output('</form>');
+		$this->output('</div>');
+
+		$this->output('</div>');
+
+		error_log("qa-theme-base::q_view_read - Form output complete");
+	}
+
+	public function read($post)
+	{
+
+		$this->output('<div class="qa-voting ' . (($post['vote_view'] == 'updown') ? 'qa-voting-updown' : 'qa-voting-net') . '" ' . @$post['vote_tags'] . '>');
+		$this->voting_inner_html($post);
+		$this->output('</div>');
+
+	}
+
 
 	public function q_view_main($q_view)
 	{
@@ -2309,6 +2487,8 @@ class qa_html_theme_base
 
 	public function a_list_item($a_item)
 	{
+		error_log("qa-theme-base::a_list_item");
+
 		$extraclass = @$a_item['classes'] . ($a_item['hidden'] ? ' qa-a-list-item-hidden' : ($a_item['selected'] ? ' qa-a-list-item-selected' : ''));
 
 		$this->output('<div class="qa-a-list-item ' . $extraclass . '" ' . @$a_item['tags'] . '>');
@@ -2420,6 +2600,8 @@ class qa_html_theme_base
 
 	public function c_list_item($c_item)
 	{
+	    error_log("qa-theme-base::c_list_item");
+
 		$extraclass = @$c_item['classes'] . (@$c_item['hidden'] ? ' qa-c-item-hidden' : '');
 
 		$this->output('<div class="qa-c-list-item ' . $extraclass . '" ' . @$c_item['tags'] . '>');

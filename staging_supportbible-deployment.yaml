@@ -18,7 +18,7 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: bobbeck/sb-php:2.43
+      - image: bobbeck/sb-php:1.07
         name: sb-php-apache
         resources:
           requests:
