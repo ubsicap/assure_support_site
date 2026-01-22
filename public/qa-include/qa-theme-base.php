@@ -2267,13 +2267,13 @@ class qa_html_theme_base
 
 		error_log("qa-theme-base::q_view_read - About to output form");
 
-		// Output CSS styling to match the voting button
+		// Output CSS styling to match the voting button - lightsteelblue
 		$this->output('
 		<style>
-		.red-box {
+		.read-box {
 			width: 80px;
 			height: 60px;
-			border: 1px solid red;
+			border: 1.9px solid #bce8f1;
 			border-radius: 3px;
 			background-color: white;
 			display: flex;
@@ -2282,23 +2282,22 @@ class qa_html_theme_base
 			justify-content: center;
 			padding: 8px;
 			box-sizing: border-box;
-			box-shadow: 0 0 8px red;
 		}
 
-		.red-box .checkbox-container {
+		.read-box .checkbox-container {
 			display: flex;
 			align-items: center;
 			gap: 6px;
 		}
 
-		.red-box input[type="checkbox"] {
+		.read-box input[type="checkbox"] {
 			width: 16px;
 			height: 16px;
 			cursor: pointer;
 		}
 
-		.red-box label {
-			font-size: 14px;
+		.read-box label {
+			font-size: 13px;
 			font-weight: 500;
 			cursor: pointer;
 			user-select: none;
@@ -2324,7 +2323,7 @@ class qa_html_theme_base
 
 		.qa-read-button label {
 			display: block;
-			font-size: 10px;
+			font-size: 12px;
 			color: #999;
 			text-transform: uppercase;
 			cursor: pointer;
@@ -2338,7 +2337,7 @@ class qa_html_theme_base
 		</style>
 		');
 
-		$this->output('<div class="red-box">');
+		$this->output('<div class="read-box">');
 		$this->output('<form method="POST" class="qa-read-button" style="margin: 0;">');
 		$this->output('<input type="hidden" name="read_form_submitted" value="1">');
 		$this->output('<input type="checkbox" id="read" name="read" value="read" '.$checkedAttr.' onchange="this.form.submit()">');
