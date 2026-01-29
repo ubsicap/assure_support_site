@@ -37,6 +37,9 @@ class qa_html_theme extends qa_html_theme_base
         $this->head_script();
         $this->head_custom();
 
+        
+		$this->output('<script src="https://unpkg.com/lucide@latest"></script>');
+        
         $this->output('</head>');
     }
 
@@ -787,7 +790,7 @@ class qa_html_theme extends qa_html_theme_base
         $this->q_item_main($q_item);
         $this->q_item_clear();
 
-        $this->output('</div> <!-- END qa-q-list-item -->', '');
+        $this->output('</div> <!-- END qa-q-list-item -->', '');;
     }
 
     function q_item_avatar($q_item)
@@ -811,8 +814,10 @@ class qa_html_theme extends qa_html_theme_base
 
         $this->voting($q_item);
         $this->a_count($q_item);
+        $this->read_status();
 
         $this->output('</div>');
+
     }
 
     function post_meta($post, $class, $prefix = null, $separator = '<br/>')

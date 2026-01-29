@@ -390,6 +390,10 @@ class qa_html_theme_base
 		$this->body_content();
 		$this->body_footer();
 		$this->body_hidden();
+
+		// Initialize Lucide icons
+        $this->output('<script>lucide.createIcons();</script>');
+
 		$this->output('</body>');
 	}
 
@@ -1694,6 +1698,14 @@ class qa_html_theme_base
 		$this->output('</div> <!-- END qa-q-list-item -->', '');
 	}
 
+	public function read_status() {
+
+		$this->output('<div class="qa-read-status unread" title="Unread">');
+        $this->output('<i data-lucide="circle" class="read-status-icon"></i>');
+        $this->output('</div>');
+
+	}
+
 	public function q_item_stats($q_item)
 	{
 		$this->output('<div class="qa-q-item-stats">');
@@ -2179,6 +2191,7 @@ class qa_html_theme_base
 
 		$this->voting($q_view);
 		$this->a_count($q_view);
+		$this->read_status();
 
 		$this->output('</div>');
 	}
@@ -2266,6 +2279,13 @@ class qa_html_theme_base
 		if (!empty($q_view['form'])) {
 			$this->output('<div class="qa-q-view-buttons">');
 			$this->form($q_view['form']);
+
+        	// Add Mark as Unread button with Lucide icon
+        	$this->output('<button type="button" class="qa-form-light-button qa-form-light-button-unread" title="Mark as Unread">');
+        	$this->output('<i data-lucide="message-square-dot"></i>');
+        	$this->output('<span>Mark as Unread</span>');
+        	$this->output('</button>');
+
 			$this->output('</div>');
 		}
 	}

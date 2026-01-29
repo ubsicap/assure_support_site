@@ -598,6 +598,7 @@ header#nav-header {
   border-bottom: 1px solid #e2e2e2;
   padding: 25px 40px 25px 0 ;
 }
+
 /* page title */
 .page-title {
   position: relative;
@@ -2735,6 +2736,11 @@ a.qa-nav-cat-product-url {
 .qa-a-count-pad {
   font-size: 12px;
 }
+
+.qa-read-status {
+  color: blue;
+  }
+
 .qa-view-count {
   float: left;
   border: 1px solid #ddd;
@@ -4117,4 +4123,45 @@ a.qa-category-link:hover {
   border-bottom: 1px dashed #eeeeee;
   padding: 5px;
   margin: 10px 0;
+}
+/* Read status icon styling */
+.read-status-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Filled circle for unread posts */
+.qa-read-status.unread .read-status-icon {
+    fill: currentColor;
+    color: #007bff; /* Blue color for unread */
+}
+
+/* Outline circle for read posts */
+.qa-read-status.read .read-status-icon {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    color: #6c757d; /* Gray color for read */
+}
+.qa-form-light-button-unread {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 8px;
+    padding: 6px 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.qa-form-light-button-unread:hover {
+    background-color: #e9ecef;
+}
+
+.qa-form-light-button-unread i {
+    width: 16px;
+    height: 16px;
 }
