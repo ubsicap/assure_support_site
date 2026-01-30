@@ -99,6 +99,9 @@ function qa_check_page_clicks()
 	if (qa_is_http_post()) {
 		foreach ($_POST as $field => $value) {
 			if (strpos($field, 'vote_') === 0) { // voting...
+
+				error_log("VOTE click");
+
 				@list($dummy, $postid, $vote, $anchor) = explode('_', $field);
 
 				if (isset($postid) && isset($vote)) {
@@ -123,6 +126,8 @@ function qa_check_page_clicks()
 				}
 
 			} elseif (strpos($field, 'favorite_') === 0) { // favorites...
+				error_log("FAVORITE click");
+
 				@list($dummy, $entitytype, $entityid, $favorite) = explode('_', $field);
 
 				if (isset($entitytype) && isset($entityid) && isset($favorite)) {
@@ -138,6 +143,8 @@ function qa_check_page_clicks()
 				}
 
 			} elseif (strpos($field, 'notice_') === 0) { // notices...
+				error_log("NOTICE click");
+
 				@list($dummy, $noticeid) = explode('_', $field);
 
 				if (isset($noticeid)) {
@@ -171,6 +178,9 @@ function qa_check_page_clicks()
  */
 function qa_get_request_content()
 {
+	error_log("page.php::qa_get_request_content");
+
+
 	if (qa_to_override(__FUNCTION__)) { $args=func_get_args(); return qa_call_override(__FUNCTION__, $args); }
 
 	$requestlower = strtolower(qa_request());
@@ -203,6 +213,8 @@ function qa_get_request_content()
 	if (isset($qa_content))
 		qa_set_form_security_key();
 
+
+	
 	return $qa_content;
 }
 
@@ -214,6 +226,8 @@ function qa_get_request_content()
  */
 function qa_output_content($qa_content)
 {
+	error_log("page.php::qa_output_content");
+
 	if (qa_to_override(__FUNCTION__)) { $args=func_get_args(); return qa_call_override(__FUNCTION__, $args); }
 
 	global $qa_template;
@@ -393,6 +407,9 @@ function qa_do_content_stats($qa_content)
 function qa_page_routing()
 {
 	if (qa_to_override(__FUNCTION__)) { $args=func_get_args(); return qa_call_override(__FUNCTION__, $args); }
+
+	error_log("page.php::qa_page_routing");
+
 
 	return array(
 		'account' => 'pages/account.php',

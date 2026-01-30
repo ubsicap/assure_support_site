@@ -33,13 +33,18 @@ $code = qa_post_text('code');
 
 // Process general cancel button
 
-if (qa_clicked('docancel'))
+if (qa_clicked('docancel')) {
 	qa_page_q_refresh($pagestart);
+	error_log("CANCEL BUTTON");
+}
 
 
 // Process incoming answer (or button)
 
 if ($question['answerbutton']) {
+
+	error_log("ANSWER BUTTON");
+
 	if (qa_clicked('q_doanswer'))
 		qa_page_q_refresh($pagestart, 'answer');
 
@@ -91,6 +96,9 @@ if ($question['answerbutton']) {
 // Process close buttons for question
 
 if ($question['closeable']) {
+
+	error_log("CLOSE BUTTON");
+
 	if (qa_clicked('q_doclose'))
 		qa_page_q_refresh($pagestart, 'close');
 
@@ -119,6 +127,8 @@ if (qa_clicked('q_dodelete') && $question['deleteable'] && qa_page_q_click_check
 // Process edit or save button for question
 
 if ($question['editbutton'] || $question['retagcatbutton']) {
+	error_log("EDIT or SAVE BUTTON");
+
 	if (qa_clicked('q_doedit'))
 		qa_page_q_refresh($pagestart, 'edit-' . $questionid);
 
@@ -145,6 +155,9 @@ if ($question['editbutton'] || $question['retagcatbutton']) {
 // Process adding a comment to question (shows form or processes it)
 
 if ($question['commentbutton']) {
+
+	error_log("COMMENT BUTTON");
+
 	if (qa_clicked('q_docomment'))
 		qa_page_q_refresh($pagestart, 'comment-' . $questionid, 'C', $questionid);
 

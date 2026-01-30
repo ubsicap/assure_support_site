@@ -124,6 +124,8 @@ if (!$question['viewable']) {
 	return $qa_content;
 }
 
+error_log("question.php - VIEWABLE QUESTION");
+
 $permiterror = qa_user_post_permit_error('permit_view_q_page', $question, null, false);
 
 if ($permiterror && (qa_is_human_probably() || !qa_opt('allow_view_q_bots'))) {

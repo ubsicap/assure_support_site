@@ -1973,6 +1973,8 @@ function qa_load_theme_class($theme, $template, $content, $request)
 
 	// First load the default class
 
+	error_log("format::qa_load_theme_class");
+	
 	require_once QA_INCLUDE_DIR . 'qa-theme-base.php';
 
 	$classname = 'qa_html_theme_base';

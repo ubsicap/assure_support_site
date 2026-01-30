@@ -312,6 +312,8 @@ function qa_db_table_definitions()
 			'tags' => 'VARCHAR(' . QA_DB_MAX_TAGS_LENGTH . ')', // string of tags separated by commas
 			'name' => 'VARCHAR(' . QA_DB_MAX_NAME_LENGTH . ')', // name of author if post anonymonus
 			'notify' => 'VARCHAR(' . QA_DB_MAX_EMAIL_LENGTH . ')', // email address, or @ to get from user, or NULL for none
+			'viewflag' => 'boolean', // indicator this post was read (viewed)
+
 			'PRIMARY KEY (postid)',
 			'KEY type (type, created)', // for getting recent questions, answers, comments
 			'KEY type_2 (type, acount, created)', // for getting unanswered questions
