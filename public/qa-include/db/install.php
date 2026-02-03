@@ -306,12 +306,14 @@ function qa_db_table_definitions()
 			'format' => 'VARCHAR(' . QA_DB_MAX_FORMAT_LENGTH . ') CHARACTER SET ascii NOT NULL DEFAULT \'\'', // format of content, e.g. 'html'
 			'created' => 'DATETIME NOT NULL',
 			'updated' => 'DATETIME', // time of last update
-			'updatetype' => 'CHAR(1) CHARACTER SET ascii', // see /qa-include/app/updates.php
+			'updatetype' => 'CHAR(1) CHARACTER SET ascii', // see /qa-include/app/u
+			// updates.php
 			'title' => 'VARCHAR(' . QA_DB_MAX_TITLE_LENGTH . ')',
 			'content' => 'VARCHAR(' . QA_DB_MAX_CONTENT_LENGTH . ')',
 			'tags' => 'VARCHAR(' . QA_DB_MAX_TAGS_LENGTH . ')', // string of tags separated by commas
 			'name' => 'VARCHAR(' . QA_DB_MAX_NAME_LENGTH . ')', // name of author if post anonymonus
 			'notify' => 'VARCHAR(' . QA_DB_MAX_EMAIL_LENGTH . ')', // email address, or @ to get from user, or NULL for none
+			'read_status' => 'BOOLEAN', // has this post been read yet?
 			'PRIMARY KEY (postid)',
 			'KEY type (type, created)', // for getting recent questions, answers, comments
 			'KEY type_2 (type, acount, created)', // for getting unanswered questions

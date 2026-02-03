@@ -1698,11 +1698,55 @@ class qa_html_theme_base
 		$this->output('</div> <!-- END qa-q-list-item -->', '');
 	}
 
-	public function read_status() {
+	public function q_read_status($q_view, $read_status_value) 
+	{
 
-		$this->output('<div class="qa-read-status unread" title="Unread">');
-        $this->output('<i data-lucide="circle" class="read-status-icon"></i>');
-        $this->output('</div>');
+error_log("qa-theme-base::q_read_status start");
+
+		if ($read_status_value)
+		{
+			error_log("qa-theme-base::q_read_status - in current_field if");
+
+			$this->output('<div class="qa-read-status unread" title="Unread">');
+        	$this->output('<i data-lucide="circle" class="read-status-icon"></i>');
+        	$this->output('</div>');
+		}
+
+
+
+	}
+
+	public function q_get_read_status_value($q_view)
+	{
+
+		$userid = isset($q_view['raw']['userid']) ? $q_view['raw']['userid'] : null;
+		$postid = isset($q_view['raw']['postid']) ? $q_view['raw']['postid'] : null;
+
+		error_log("qa-theme-base::q_get_read_status_value - userid: " . ($userid ?? 'NULL'));
+		error_log("qa-theme-base::q_get_read_status_value - postid: " . ($postid ?? 'NULL'));
+
+		// Exit early if we don't have the required data
+		if (!$userid || !$postid) {
+			error_log("qa-theme-base::q_get_read_status_value - Missing userid or postid, skipping");
+			$this->output('</div>');
+			return;
+		}
+
+		require_once QA_INCLUDE_DIR . 'app/postread.php';
+
+		$read_status = qa_post_read_get($postid, $userid);
+
+		error_log("qa-theme-base::q_get_read_status_value - fetched read_status:");
+		error_log(print_r($read_status, true));
+
+	    $read_status_value = 0; // default value
+		if ($read_status && $row = $read_status->fetch_assoc()) {
+			$read_status_value = $row['read_status']; 
+		}
+	
+		error_log("qa-theme-base::q_get_read_status_value - read_status_value: " . $read_status_value);
+
+		return $read_status_value;
 
 	}
 
@@ -1712,6 +1756,9 @@ class qa_html_theme_base
 
 		$this->voting($q_item);
 		$this->a_count($q_item);
+
+		$read_status_value = $this->q_read_status_value($q_view);
+		$this->q_read_status($q_view, $read_status_value);
 
 		$this->output('</div>');
 	}
@@ -2191,7 +2238,11 @@ class qa_html_theme_base
 
 		$this->voting($q_view);
 		$this->a_count($q_view);
-		$this->read_status();
+
+		error_log("q_view_stats - start");
+
+
+		error_log("q_view_stats - end");
 
 		$this->output('</div>');
 	}
@@ -2274,18 +2325,12 @@ class qa_html_theme_base
 		}
 	}
 
+
 	public function q_view_buttons($q_view)
 	{
 		if (!empty($q_view['form'])) {
 			$this->output('<div class="qa-q-view-buttons">');
 			$this->form($q_view['form']);
-
-        	// Add Mark as Unread button with Lucide icon
-        	$this->output('<button type="button" class="qa-form-light-button qa-form-light-button-unread" title="Mark as Unread">');
-        	$this->output('<i data-lucide="message-square-dot"></i>');
-        	$this->output('<span>Mark as Unread</span>');
-        	$this->output('</button>');
-
 			$this->output('</div>');
 		}
 	}

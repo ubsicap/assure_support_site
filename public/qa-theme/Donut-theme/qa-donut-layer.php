@@ -39,7 +39,7 @@ class qa_html_theme extends qa_html_theme_base
 
         
 		$this->output('<script src="https://unpkg.com/lucide@latest"></script>');
-        
+
         $this->output('</head>');
     }
 
@@ -174,6 +174,251 @@ class qa_html_theme extends qa_html_theme_base
     function head_script() // change style of WYSIWYG editor to match theme better
     {
         parent::head_script();
+
+        $this->output('
+        <script>
+        function getReadStatus(postid) {
+            console.log("getReadStatus start - postid: " + postid);
+            
+            return fetch(qa_root + "qa-ajax-get-mark-read?postid=" + encodeURIComponent(postid), {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                }
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("getReadStatus - response");
+
+                if (data.indexOf("QA_AJAX_RESPONSE") !== -1) {
+                    console.log("getReadStatus - found QA_AJAX_RESPONSE");
+
+                    const parts = data.split("\n");
+                    
+                    console.log("PARTS 0: " + parts[0]);
+                    console.log("PARTS 1: " + parts[1]);
+                    console.log("PARTS 2: " + parts[2]);
+
+                    if (parts[1] === "1") {
+                        const read_status = parts[2][0];
+                        console.log("Read status retrieved: " + read_status);
+                        return read_status;
+                    } else {
+                        console.log("Error: " + parts[2]);
+                        return "0";
+                    }
+                } else {
+                    console.log("getReadStatus - DID NOT found QA_AJAX_RESPONSE");
+                    return "0";
+                }
+            })
+            .catch(error => {
+                console.error("Request failed:", error);
+                return "0";
+            });
+        }
+
+        function markAsReadArgs(postid, read_status) {
+            console.log("markAsReadArgs start - postid: " + postid + ", read_status: " + read_status);
+            
+            return fetch(qa_root + "qa-ajax-mark-read", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "post_id=" + encodeURIComponent(postid) + "&read_status=" + encodeURIComponent(read_status)
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("markAsReadArgs - data");
+
+                if (data.indexOf("QA_AJAX_RESPONSE") !== -1) {
+                    const parts = data.split("\n");
+
+                    console.log("markAsReadArgs - parts");
+
+                    if (parts[1] === "1") {
+                        console.log("Successfully marked as unread/read");
+                        window.location.reload(true);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error("Request failed:", error);
+            });
+        }
+
+        function displayIcon(postid, read_status) {
+            console.log("displayIcon start");
+            
+            const targetElement = document.querySelector(".qa-q-view-stats");
+            
+            if (targetElement) {
+                const iconContainer = document.createElement("div");
+                iconContainer.className = "qa-read-status unread";
+                iconContainer.title = "Unread";
+                
+                const icon = document.createElement("i");
+                icon.setAttribute("data-lucide", "circle");
+                icon.className = "read-status-icon";
+                
+                iconContainer.appendChild(icon);
+                targetElement.appendChild(iconContainer);
+                
+                // If you are using Lucide icons, reinitialize them
+                if (typeof lucide !== "undefined") {
+                    lucide.createIcons();
+                }
+                
+                console.log("Icon added to qa-q-view-stats!");
+            } else {
+                console.log("Element with class qa-q-view-stats not found!");
+            }
+            
+            // Find the answer button and add a button next to it
+            const answerButton = document.querySelector("button[name=\'q_doanswer\']");
+            
+            if (answerButton) {
+                // Create the new button
+                const newButton = document.createElement("button");
+                newButton.type = "button";
+                newButton.className = "qa-form-light-button qa-form-light-button-unread";
+                newButton.title = "Mark as Unread";
+                newButton.setAttribute("data-read-status", read_status);
+                
+                const buttonIcon = document.createElement("i");
+                buttonIcon.setAttribute("data-lucide", "message-square-dot");
+                
+                const buttonSpan = document.createElement("span");
+                buttonSpan.textContent = "Mark as Unread";
+                
+                newButton.appendChild(buttonIcon);
+                newButton.appendChild(buttonSpan);
+                
+                // Insert the button after the answer button
+                answerButton.parentNode.insertBefore(newButton, answerButton.nextSibling);
+                
+                // Reinitialize Lucide icons for the new button
+                if (typeof lucide !== "undefined") {
+                    lucide.createIcons();
+                }
+                
+                console.log("Button added next to answer button!");
+            } else {
+                console.log("Answer button with name q_doanswer not found!");
+            }
+
+            markAsReadArgs(postid, read_status);
+            
+            console.log("displayIcon end");
+        }
+
+        function wait(seconds, callback) {
+            console.log("wait start - seconds: " + seconds);
+            setTimeout(function() {
+                console.log("wait complete");
+                if (callback) {
+                    callback();
+                }
+            }, seconds);
+        }
+
+        // Extract qa parameter from URL using regex
+        function getUrlParameter(name) {
+            var regex = new RegExp("[?&]" + name + "=([^&]*)");
+            var results = regex.exec(window.location.search);
+            return results === null ? null : decodeURIComponent(results[1]);
+        }
+
+        var qaValue = getUrlParameter("qa");
+
+        if (qaValue) {
+            console.log("Post ID from URL: " + qaValue);
+            if (qaValue === "questions") {
+                // list of posts page
+                wait(1000, function() {
+                    displayIcon(qaValue, 1);
+                });
+            } else {
+                // individual post page
+                var qaInt = parseInt(qaValue, 10);
+                console.log("qaInt: " + qaValue);
+                if (!isNaN(qaInt)) {
+                    // Use Promise to get read_status
+                    getReadStatus(qaValue).then(function(read_status) {
+                        console.log("read_status from promise: " + read_status);
+                        if (read_status === "0") {
+                            // page not read, wait seconds til marking page read
+                            wait(2000, function() {
+                                displayIcon(qaValue, 1);
+                            });
+                        } else {
+                            // page read, do not wait seconds
+                            displayIcon(qaValue, 1);
+                        }
+                    });
+                } else {
+                    console.log("qaInt not a number");
+                }
+            }
+        } else {
+            console.log("qa parameter not found in URL");
+        }
+        </script>
+        ');
+
+
+        $this->output('
+        <script>
+        function markAsRead(button) {
+
+            console.log("markAsRead button start ");
+
+            button.disabled = true;
+            
+            setTimeout(function() {
+
+                const post_id = button.getAttribute("data-post-id");
+                const read_status = button.getAttribute("data-read-status");
+
+                fetch(qa_root + "qa-ajax-mark-read", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: "post_id=" + encodeURIComponent(post_id) + "&read_status=" + encodeURIComponent(read_status)
+                })
+                .then(response => response.text())
+                .then(data => {
+
+                    console.log("markAsRead - setTimeout - data");
+
+                    if (data.indexOf("QA_AJAX_RESPONSE") !== -1) {
+                        const parts = data.split("\n");
+
+                        console.log("markAsRead - setTimeout - parts");
+                        window.location.reload(true);
+
+                        if (parts[1] === "1") {
+                            button.querySelector("span").textContent = "Marked as Unread";
+                            console.log("Successfully marked as unread/read");
+                            window.location.reload(true);
+                        } else {
+                            button.disabled = false;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Request failed:", error);
+                    button.disabled = false;
+                });
+            }, 2000);
+
+            console.log("markAsRead button end ");
+        }
+        </script>
+        ');
+
 
         $js_paths = array(
             'bootstrap' => 'js/bootstrap.min.js?3.3.5',
@@ -814,8 +1059,6 @@ class qa_html_theme extends qa_html_theme_base
 
         $this->voting($q_item);
         $this->a_count($q_item);
-        $this->read_status();
-
         $this->output('</div>');
 
     }

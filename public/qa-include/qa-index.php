@@ -25,6 +25,7 @@ if (!defined('QA_BASE_DIR')) {
 	define('QA_BASE_DIR', dirname(empty($_SERVER['SCRIPT_FILENAME']) ? dirname(__FILE__) : $_SERVER['SCRIPT_FILENAME']) . '/');
 }
 
+error_log("qa-index.php BEGIN");
 
 // If this is an special non-page request, branch off here
 
@@ -44,6 +45,8 @@ else {
 	// Otherwise, load the Q2A base file which sets up a bunch of crucial stuff
 	$qa_autoconnect = false;
 	require 'qa-base.php';
+
+	error_log("qa-index - loaded qa-base");
 
 	/**
 	 * Determine the request and root of the installation, and the requested start position used by many pages.
@@ -166,6 +169,20 @@ else {
 			$urlformat
 		);
 	}
+	/**
+	 * Checks if a string ends with a given substring.
+	 *
+	 * @param string $string    The main string to check (haystack).
+	 * @param string $endString The substring to check for at the end (needle).
+	 * @return bool True if the string ends with the substring, false otherwise.
+	 */
+	function endsWith($string, $endString) {
+		$len = strlen($endString);
+		if ($len === 0) {
+			return true; // Every string ends with an empty string
+		}
+		return (substr($string, -$len) === $endString);
+	}
 
 	qa_index_set_request();
 
@@ -173,6 +190,17 @@ else {
 	// Branch off to appropriate file for further handling
 
 	$requestlower = strtolower(qa_request());
+
+	error_log("index.php - requestlower: " . $requestlower);
+
+	if (endsWith($requestlower, "ajax-mark-read")) {
+error_log("QA-INDEX - registering mark-read route");
+       require QA_INCLUDE_DIR . 'ajax/mark-read.php';
+	}
+	if (endsWith($requestlower, "ajax-get-mark-read")) {
+error_log("QA-INDEX - registering get-mark-read route");
+       require QA_INCLUDE_DIR . 'ajax/get-mark-read.php';
+	}
 
 	if ($requestlower == 'install') {
 		require QA_INCLUDE_DIR . 'qa-install.php';
