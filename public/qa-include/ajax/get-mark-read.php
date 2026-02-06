@@ -46,6 +46,9 @@ if (qa_db_num_rows($result) > 0) {
     
     error_log("GET-MARK-READ - Return success with read_status");
 
+    if ($read_status == null) {
+        $read_status = 0;
+    }
     echo "QA_AJAX_RESPONSE\n1\n" . $read_status;
 } else {
     error_log("GET-MARK-READ - No record found - return default status (0 = unread)");

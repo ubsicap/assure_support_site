@@ -7,14 +7,12 @@ require_once QA_INCLUDE_DIR . 'app/users.php';
 require_once QA_INCLUDE_DIR . 'app/posts.php';
 require_once QA_INCLUDE_DIR . 'db/messages.php';
 
-error_log("AJAX mark-unread.php");
-
-error_log("mark-unread - POST data: " . print_r($POST, true));
+error_log("AJAX mark-read.php");
 
 // Get user ID
 $userid = qa_get_logged_in_userid();
 
-error_log("mark-unread - userid: " . $userid);
+error_log("mark-read - userid: " . $userid);
 
 if (!isset($userid)) {
     error_log("QA_AJAX_RESPONSE\n0\nNot logged in");
@@ -29,12 +27,12 @@ if (!isset($post_id) || empty($post_id)) {
     return;
 }
 
-error_log("mark-unread - post_id: " . $post_id);
+error_log("mark-read - post_id: " . $post_id);
 
 // Get and validate read_status
 $read_status = qa_post_text('read_status');
 
-error_log("mark-unread - read_status: " . $read_status);
+error_log("mark-read - read_status: " . $read_status);
 
 // Perform the SQL UPDATE
 $result = qa_db_query_sub(

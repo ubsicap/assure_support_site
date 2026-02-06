@@ -4145,23 +4145,52 @@ a.qa-category-link:hover {
     stroke-width: 2;
     color: #6c757d; /* Gray color for read */
 }
+
+.qa-form-light-button i,
+.qa-form-light-button svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
+.qa-form-light-button span {
+    line-height: 1;
+    display: block;
+}
+
 .qa-form-light-button-unread {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-left: 8px;
-    padding: 6px 12px;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    cursor: pointer;
+  position: relative;
+  top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 5px 10px;           /* ← main adjustment */
+  width: fit-content;
+  min-width: 32px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  background-color: #ffffff;        /* ← white fill */
+  color: #000000;                   /* readable text */
+  border: 1px solid #ced4da;        /* visible border */
+  border-radius: 3px;               /* usually good for buttons */
+  text-transform: capitalize;
+  margin-bottom: 5px;
 }
 
 .qa-form-light-button-unread:hover {
-    background-color: #e9ecef;
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+.qa-form-light-button-unread i[data-lucide],
+.qa-form-light-button-unread svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
-.qa-form-light-button-unread i {
-    width: 16px;
-    height: 16px;
+.qa-form-light-button-unread span {
+  line-height: 1;
 }
