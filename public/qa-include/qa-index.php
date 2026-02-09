@@ -25,8 +25,6 @@ if (!defined('QA_BASE_DIR')) {
 	define('QA_BASE_DIR', dirname(empty($_SERVER['SCRIPT_FILENAME']) ? dirname(__FILE__) : $_SERVER['SCRIPT_FILENAME']) . '/');
 }
 
-error_log("qa-index.php BEGIN");
-
 // If this is an special non-page request, branch off here
 
 if (isset($_POST['qa']) && $_POST['qa'] == 'ajax') {
@@ -45,8 +43,6 @@ else {
 	// Otherwise, load the Q2A base file which sets up a bunch of crucial stuff
 	$qa_autoconnect = false;
 	require 'qa-base.php';
-
-	error_log("qa-index - loaded qa-base");
 
 	/**
 	 * Determine the request and root of the installation, and the requested start position used by many pages.
@@ -191,14 +187,10 @@ else {
 
 	$requestlower = strtolower(qa_request());
 
-	error_log("index.php - requestlower: " . $requestlower);
-
 	if (endsWith($requestlower, "ajax-mark-read")) {
-error_log("QA-INDEX - registering mark-read route");
        require QA_INCLUDE_DIR . 'ajax/mark-read.php';
 	}
 	if (endsWith($requestlower, "ajax-get-mark-read")) {
-error_log("QA-INDEX - registering get-mark-read route");
        require QA_INCLUDE_DIR . 'ajax/get-mark-read.php';
 	}
 
