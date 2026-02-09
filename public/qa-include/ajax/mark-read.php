@@ -7,7 +7,6 @@ require_once QA_INCLUDE_DIR . 'app/users.php';
 require_once QA_INCLUDE_DIR . 'app/posts.php';
 require_once QA_INCLUDE_DIR . 'db/messages.php';
 
-error_log("AJAX mark-read.php");
 
 // Get user ID
 $userid = qa_get_logged_in_userid();
@@ -31,12 +30,10 @@ if ($int_postid == 0) {
     error_log("mark-read  - non integer postid, invalid");
     return;
 }
-error_log("mark-read - post_id: " . $int_postid);
 
 // Get and validate read_status
 $read_status = qa_post_text('read_status');
 
-error_log("mark-read - read_status: " . $read_status);
 
 // Perform the SQL UPDATE
 $result = qa_db_query_sub(

@@ -2179,16 +2179,10 @@ class qa_html_theme_base
 
 	public function q_read_status($q_view, $read_status_value) 
 	{
-
-error_log("qa-theme-base::q_read_status start");
-
 		if ($read_status_value)
 		{
-			error_log("qa-theme-base::q_read_status - in current_field if");
-
 			$this->output('<div class="qa-read-status unread" title="Read">');
         	$this->output('<i data-lucide="circle" style="fill: #007bff; width: 12px; height: 12px; "></i>');
-
         	$this->output('</div>');
 		}
 
@@ -2201,12 +2195,8 @@ error_log("qa-theme-base::q_read_status start");
 		$userid = isset($q_view['raw']['userid']) ? $q_view['raw']['userid'] : null;
 		$postid = isset($q_view['raw']['postid']) ? $q_view['raw']['postid'] : null;
 
-		error_log("qa-theme-base::q_get_read_status_value - userid: " . ($userid ?? 'NULL'));
-		error_log("qa-theme-base::q_get_read_status_value - postid: " . ($postid ?? 'NULL'));
-
 		// Exit early if we don't have the required data
 		if (!$userid || !$postid) {
-			error_log("qa-theme-base::q_get_read_status_value - Missing userid or postid, skipping");
 			$this->output('</div>');
 			return;
 		}
@@ -2215,15 +2205,10 @@ error_log("qa-theme-base::q_read_status start");
 
 		$read_status = qa_post_read_get($postid, $userid);
 
-		error_log("qa-theme-base::q_get_read_status_value - fetched read_status:");
-		error_log(print_r($read_status, true));
-
 	    $read_status_value = 0; // default value
 		if ($read_status && $row = $read_status->fetch_assoc()) {
 			$read_status_value = $row['read_status']; 
 		}
-	
-		error_log("qa-theme-base::q_get_read_status_value - read_status_value: " . $read_status_value);
 
 		return $read_status_value;
 
@@ -2240,10 +2225,6 @@ error_log("qa-theme-base::q_read_status start");
 		   $this->q_read_status($q_view, $read_status_value);
 		}
 
-		error_log("q_view_stats - start");
-
-
-		error_log("q_view_stats - end");
 
 		$this->output('</div>');
 	}
@@ -2334,7 +2315,6 @@ error_log("qa-theme-base::q_read_status start");
 			$this->form($q_view['form']);
 
 			$read_status_value = $this->q_get_read_status_value($q_view);
-			error_log("q-theme-base::q_view_buttons - read_status_value: " . $read_status_value);
 
 			if ($read_status_value) {
 				// Add Mark as Unread button with Lucide icon

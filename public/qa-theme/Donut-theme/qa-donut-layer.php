@@ -179,16 +179,10 @@ class qa_html_theme extends qa_html_theme_base
         <script>
         function markAsRead(button) {
 
-            console.log("markAsRead button start ");
-
             button.disabled = true;
             
             const postid = button.getAttribute("data-post-id");
             const read_status = button.getAttribute("data-read-status");
-
-
-            console.log("markAsRead button - postid: " + postid);
-            console.log("markAsRead button - read_status: " + read_status);
 
             fetch(qa_root + "qa-ajax-mark-read", {
                 method: "POST",
@@ -200,14 +194,8 @@ class qa_html_theme extends qa_html_theme_base
             .then(response => response.text())
             .then(data => {
 
-                console.log("markAsRead - data");
-
                 if (data.indexOf("QA_AJAX_RESPONSE") !== -1) {
                     const parts = data.split("\n");
-
-                    console.log("markAsRead - parts[0]: " + parts[0]);
-                    console.log("markAsRead - parts[1]: " + parts[1]);
-                    console.log("markAsRead - parts[2]: " + parts[2]);
 
                     if (parts[1] === "1") {
                         console.log("Successfully marked as unread/read");
@@ -223,8 +211,6 @@ class qa_html_theme extends qa_html_theme_base
                 console.error("Request failed:", error);
                 button.disabled = false;
             });
-
-            console.log("markAsRead button end ");
         }
         function getReadStatus(postid) {
             console.log("getReadStatus start - postid: " + postid);
@@ -237,16 +223,10 @@ class qa_html_theme extends qa_html_theme_base
             })
             .then(response => response.text())
             .then(data => {
-                console.log("getReadStatus - response");
 
                 if (data.indexOf("QA_AJAX_RESPONSE") !== -1) {
-                    console.log("getReadStatus - found QA_AJAX_RESPONSE");
 
                     const parts = data.split("\n");
-                    
-                    console.log("PARTS 0: " + parts[0]);
-                    console.log("PARTS 1: " + parts[1]);
-                    console.log("PARTS 2: " + parts[2]);
 
                     if (parts[1] === "1") {
                         const read_status = parts[2][0];
@@ -268,7 +248,6 @@ class qa_html_theme extends qa_html_theme_base
         }
 
         function markAsReadArgs(postid, read_status) {
-            console.log("markAsReadArgs start - postid: " + postid + ", read_status: " + read_status);
             
             return fetch(qa_root + "qa-ajax-mark-read", {
                 method: "POST",
@@ -279,14 +258,9 @@ class qa_html_theme extends qa_html_theme_base
             })
             .then(response => response.text())
             .then(data => {
-                console.log("markAsReadArgs - data");
 
                 if (data.indexOf("QA_AJAX_RESPONSE") !== -1) {
                     const parts = data.split("\n");
-
-                    console.log("markAsReadArgs - parts[0]: " + parts[0]);
-                    console.log("markAsReadArgs - parts[1]: " + parts[1]);
-                    console.log("markAsReadArgs - parts[2]: " + parts[2]);
 
                     if (parts[1] === "1") {
                         console.log("Successfully marked as unread/read");
@@ -300,7 +274,6 @@ class qa_html_theme extends qa_html_theme_base
         }
 
         function displayIcon(postid, read_status, query_selector) {
-            console.log("query_selector start");
             
             const targetElement = document.querySelector(query_selector);
             
@@ -376,14 +349,11 @@ class qa_html_theme extends qa_html_theme_base
             }
 
             markAsReadArgs(postid, read_status);
-            
-            console.log("displayIcon end");
+
         }
 
         function wait(seconds, callback) {
-            console.log("wait start - seconds: " + seconds);
             setTimeout(function() {
-                console.log("wait complete");
                 if (callback) {
                     callback();
                 }
@@ -410,24 +380,16 @@ class qa_html_theme extends qa_html_theme_base
         }
 
         var postId = getPostIdFromUrl();
-        console.log("Extracted post ID:", postId);
-
         if (postId) {
             // individual post page
-            console.log("individual post page");
             // Use Promise to get read_status
             getReadStatus(postId).then(function(read_status) {
-              console.log("read_status from promise: " + read_status);
               if (read_status === "0") {
-                  console.log("read_status = 0, wait seconds til marking page read");
                   wait(2000, function() {
                       displayIcon(postId, 1, ".qa-q-view-stats");
                   });
               } 
             });
-        } else {
-            // list of posts page
-            console.log("list of posts page");
         }
         </script>
         ');

@@ -1,22 +1,6 @@
 <?php
 /*
-	Question2Answer by Gideon Greenspan and contributors
-	http://www.question2answer.org/
-
-	Description: Higher-level functions to create and manipulate posts
-
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	More about this license: http://www.question2answer.org/license.php
+	Posts table, read_status column - Application level query and update functions
 */
 
 if (!defined('QA_VERSION')) { // don't allow this page to be requested directly from browser
@@ -25,25 +9,26 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 }
 
 /**
- *	R
+ * Get the read_status_flag for $userid and $postid from the database
+ * @param $postid
+ * @param $userid
+ * @param $read_status_flag
  */
 function qa_post_read_get($postid, $userid)
 {
-
-   error_log("qa_post_read_get");
-
    require_once QA_INCLUDE_DIR . 'db/postread.php';
 
    return qa_db_post_read_get($postid, $userid);
 }
 
 /**
- *	R
+ * Set the read_status_flag for $userid and $postid in the database
+ * @param $postid
+ * @param $userid
+ * @param $read_status_flag
  */
 function qa_post_read_set($postid, $userid, $read_status_flag)
 {
-   error_log("qa_post_read_set");
-      
    require_once QA_INCLUDE_DIR . 'db/postread.php';
    
    qa_db_post_read_set($postid, $userid, $read_status_flag);
