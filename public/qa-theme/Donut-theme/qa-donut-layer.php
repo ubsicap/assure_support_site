@@ -183,11 +183,11 @@ class qa_html_theme extends qa_html_theme_base
 
             button.disabled = true;
             
-            const post_id = button.getAttribute("data-post-id");
+            const postid = button.getAttribute("data-post-id");
             const read_status = button.getAttribute("data-read-status");
 
 
-            console.log("markAsRead button - post_id: " + post_id);
+            console.log("markAsRead button - postid: " + postid);
             console.log("markAsRead button - read_status: " + read_status);
 
             fetch(qa_root + "qa-ajax-mark-read", {
@@ -195,7 +195,7 @@ class qa_html_theme extends qa_html_theme_base
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
-                body: "post_id=" + encodeURIComponent(post_id) + "&read_status=" + encodeURIComponent(read_status)
+                body: "postid=" + encodeURIComponent(postid) + "&read_status=" + encodeURIComponent(read_status)
             })
             .then(response => response.text())
             .then(data => {
@@ -275,7 +275,7 @@ class qa_html_theme extends qa_html_theme_base
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
-                body: "post_id=" + encodeURIComponent(postid) + "&read_status=" + encodeURIComponent(read_status)
+                body: "postid=" + encodeURIComponent(postid) + "&read_status=" + encodeURIComponent(read_status)
             })
             .then(response => response.text())
             .then(data => {

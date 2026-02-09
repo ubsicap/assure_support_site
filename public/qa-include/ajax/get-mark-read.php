@@ -29,13 +29,17 @@ if (!isset($postid) || empty($postid)) {
     error_log("QA_AJAX_RESPONSE\n0\nInvalid post ID");
     return;
 }
-
-error_log("GET-MARK-READ - valid postid: " . $postid);
+$int_postid = intval($postid);
+if ($int_postid == 0) {
+    error_log("GET_MARK-READ - non integer postid, invalid");
+    return;
+}
+error_log("GET-MARK-READ - valid postid: " . $int_postid);
 
 // Perform SELECT query to get read_status
 $result = qa_db_query_sub(
     'SELECT read_status FROM ^posts WHERE postid = $ AND userid = $',
-    $postid,
+    $int_postid,
     $userid
 );
 

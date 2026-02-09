@@ -20,14 +20,18 @@ if (!isset($userid)) {
 }
 
 // Get and validate post ID
-$post_id = qa_post_text('post_id');
+$postid = qa_post_text('postid');
 
-if (!isset($post_id) || empty($post_id)) {
+if (!isset($postid) || empty($postid)) {
     error_log("QA_AJAX_RESPONSE\n0\nInvalid post ID");
     return;
 }
-
-error_log("mark-read - post_id: " . $post_id);
+$int_postid = intval($postid);
+if ($int_postid == 0) {
+    error_log("mark-read  - non integer postid, invalid");
+    return;
+}
+error_log("mark-read - post_id: " . $int_postid);
 
 // Get and validate read_status
 $read_status = qa_post_text('read_status');
@@ -36,7 +40,7 @@ error_log("mark-read - read_status: " . $read_status);
 
 // Perform the SQL UPDATE
 $result = qa_db_query_sub(
-	'UPDATE ^posts SET read_status=$ WHERE postid=$ AND userid=$', $read_status,$post_id, $userid
+	'UPDATE ^posts SET read_status=$ WHERE postid=$ AND userid=$', $read_status,$int_postid, $userid
 );
 
 
