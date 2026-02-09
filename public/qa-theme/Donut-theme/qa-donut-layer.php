@@ -362,11 +362,8 @@ class qa_html_theme extends qa_html_theme_base
                 newButton.appendChild(buttonIcon);
                 newButton.appendChild(buttonSpan);
 
-                // Insert after the furthest-right button
-                furthestRightButton.parentNode.insertBefore(
-                    newButton,
-                    furthestRightButton.nextSibling
-                );
+                // Append after the furthest-right button
+                furthestRightButton.parentNode.appendChild(newButton);
 
                 // Reinitialize Lucide icons for the new button
                 if (typeof lucide !== "undefined") {
