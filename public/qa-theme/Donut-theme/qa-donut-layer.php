@@ -177,12 +177,89 @@ class qa_html_theme extends qa_html_theme_base
 
         $this->output('
         <script>
+        function log(...args) {
+            console.log(...args);
+        }
+
+        /*
+         *  for all read status icons on a "list of posts" page
+         *    if (dbase read_status == 1)
+         *       add read status icon to display
+         *    endif
+         *  endfor
+         */
+        function updateReadStatuses() {
+
+            log("updateReadStatuses");
+
+            // erase read status icon if database read_status value = 0
+            const divs = document.querySelectorAll(\'div[data-post-id]\');
+            log("updateReadStatuses - Found divs:", divs.length);
+            
+            divs.forEach((div, index) => {
+                const postid = div.dataset.postId;
+
+                log("updateReadStatuses - Processing index: ", index, "postid:", postid);
+
+                read_status = getReadStatus(postid).then(read_status => {
+                    log("updateReadStatuses - after getReadStatus - read_status: ",  read_status);
+
+                    if (read_status === "1") {
+
+                        // Get the first child of the div
+                        const firstChild = div.firstElementChild;
+                        
+                        if (firstChild) {
+                            // Find the last sibling at the same level as firstChild
+                            let lastSibling = firstChild;
+                            while (lastSibling.nextElementSibling) {
+                                lastSibling = lastSibling.nextElementSibling;
+                            }
+                            
+                            const iconContainer = document.createElement("div");
+                            iconContainer.title = "Read";
+                            iconContainer.className = "qa-q-read-status unread";
+                            
+                            const icon = document.createElement("i");
+                            icon.setAttribute("data-lucide", "circle");
+                            icon.style.fill = "#007bff"; 
+                            icon.style.width = "12px";
+                            icon.style.height = "12px";
+
+                            iconContainer.appendChild(icon);
+                            
+                            // Insert the icon container after the last sibling
+                            lastSibling.insertAdjacentElement(\'afterend\', iconContainer);
+
+                            // If you are using Lucide icons, reinitialize them
+                            if (typeof lucide !== "undefined") {
+                                lucide.createIcons();
+                            }
+
+                            log("updateReadStatuses - read_status icon added");
+                        }
+                    }
+
+                });
+
+            });
+        }
+
+        /*
+         *
+         * Individual posts page (postid argument)
+         *   set read_status in the database = read_status (argument)
+         *   remove read_status icon
+         * 
+         */
         function markAsRead(button) {
 
             button.disabled = true;
-            
+
             const postid = button.getAttribute("data-post-id");
             const read_status = button.getAttribute("data-read-status");
+
+            log("markAsRead - button - postid: ", postid, ", read_status: ", read_status);
 
             fetch(qa_root + "qa-ajax-mark-read", {
                 method: "POST",
@@ -198,22 +275,47 @@ class qa_html_theme extends qa_html_theme_base
                     const parts = data.split("\n");
 
                     if (parts[1] === "1") {
-                        console.log("Successfully marked as unread/read");
-                        window.location.reload(true);
-                        // go back to main questions page
-                        window.location.href = window.location.origin + \'/questions\';
+                        log("markAsRead - Successfully marked as unread/read");
+
+                        // Remove the read status icon
+                        const readStatusIcon = document.querySelector(\'.qa-q-view-stats .qa-q-read-status.unread\');
+
+                        if (readStatusIcon) {
+                            readStatusIcon.remove();
+                            log("markAsRead - Read status icon removed");
+                        } else {
+                            log("markAsRead - readStatusIcon NOT FOUND");
+                        }
+                        
+                        // Remove the Mark as Unread button
+                        button.remove();
+                        log("markAsRead - Mark as Unread button removed");
+
                     } else {
                         button.disabled = false;
                     }
                 }
             })
             .catch(error => {
-                console.error("Request failed:", error);
+                log("Request failed:", error);
                 button.disabled = false;
             });
         }
+
+        /*
+         *
+         * Individual post page (postid argument)
+         *   get read_status from database
+         *   return read_status
+         * 
+         */
         function getReadStatus(postid) {
-            console.log("getReadStatus start - postid: " + postid);
+
+            if (!postid) {
+                console.error("getReadStatus - No postid provided");
+                return Promise.resolve("0");
+            }
+            log("getReadStatus start - postid: " + postid);
             
             return fetch(qa_root + "qa-ajax-get-mark-read?postid=" + encodeURIComponent(postid), {
                 method: "GET",
@@ -230,25 +332,33 @@ class qa_html_theme extends qa_html_theme_base
 
                     if (parts[1] === "1") {
                         const read_status = parts[2][0];
-                        console.log("Read status retrieved: " + read_status);
+                        log("getReadStatus - Read status retrieved: " + read_status);
                         return read_status;
                     } else {
-                        console.log("Error: " + parts[2]);
+                        log("Error: " + parts[2]);
                         return "0";
                     }
                 } else {
-                    console.log("getReadStatus - DID NOT found QA_AJAX_RESPONSE");
+                    log("getReadStatus - DID NOT found QA_AJAX_RESPONSE");
                     return "0";
                 }
             })
             .catch(error => {
-                console.error("Request failed:", error);
+                log("getReadStatus - Request failed:", error);
                 return "0";
             });
         }
 
+        /*
+         *
+         * Individual post page (postid argument)
+         *   set database read_status = read_status (argument)
+         * 
+         */
         function markAsReadArgs(postid, read_status) {
             
+            log("markAsReadArgs - postid: ", postid, ", read_status: ", read_status);
+
             return fetch(qa_root + "qa-ajax-mark-read", {
                 method: "POST",
                 headers: {
@@ -263,30 +373,37 @@ class qa_html_theme extends qa_html_theme_base
                     const parts = data.split("\n");
 
                     if (parts[1] === "1") {
-                        console.log("Successfully marked as unread/read");
-                        window.location.reload(true);
+                        log("markAsReadArgs - Successfully marked as unread/read");
                     }
                 }
             })
             .catch(error => {
-                console.error("Request failed:", error);
+                log("markAsReadArgs - Request failed:", error);
             });
         }
 
+        /*
+         * Individual posts page
+         *   display the read_status icon and mark as unread button
+         * 
+         */
         function displayIcon(postid, read_status, query_selector) {
             
+            log("displayIcon - postid: ", postid, ", read_status: ", read_status);
+
             const targetElement = document.querySelector(query_selector);
             
             if (targetElement) {
                 const iconContainer = document.createElement("div");
                 iconContainer.title = "Read";
+                iconContainer.className = "qa-q-read-status unread";
                 
                 const icon = document.createElement("i");
                 icon.setAttribute("data-lucide", "circle");
                 icon.style.fill = "#007bff"; 
                 icon.style.width = "12px";
                 icon.style.height = "12px";
-                
+
                 iconContainer.appendChild(icon);
                 targetElement.appendChild(iconContainer);
                 
@@ -295,9 +412,9 @@ class qa_html_theme extends qa_html_theme_base
                     lucide.createIcons();
                 }
                 
-                console.log("Icon added to qa-q-view-stats!");
+                log("displayIcon - Icon added to qa-q-view-stats!");
             } else {
-                console.log("Element with class qa-q-view-stats not found!");
+                log("displayIcon - Element with class qa-q-view-stats not found!");
             }
             
             // Find the farthest right button (answer or comment) and add a button next to it
@@ -306,8 +423,11 @@ class qa_html_theme extends qa_html_theme_base
             furthestRightButton = null;
             if (commentButton) {
               furthestRightButton = commentButton;
-            } else {
+            } else if (answerButton) {
               furthestRightButton = answerButton;
+            } else {
+              log("displayIcon - Error, furthest right button NOT comment nor answer");
+              return;
             }
 
             if (furthestRightButton) {
@@ -320,7 +440,7 @@ class qa_html_theme extends qa_html_theme_base
                 newButton.style.height = height;
 
                 newButton.setAttribute("data-post-id", postid);
-                newButton.setAttribute("data-read-status", read_status);
+                newButton.setAttribute("data-read-status", "0");
 
                 newButton.onclick = function () {
                     markAsRead(this);
@@ -343,15 +463,20 @@ class qa_html_theme extends qa_html_theme_base
                     lucide.createIcons();
                 }
                 
-                console.log("Button added next to answer button!");
+                log("displayIcon - Button added next to answer button!");
             } else {
-                console.log("Answer button with name q_doanswer not found!");
+                log("displayIcon - Answer button with name q_doanswer not found!");
             }
 
             markAsReadArgs(postid, read_status);
 
         }
 
+        /*
+         *
+         * Wait seconds (argument) and then return
+         * 
+         */
         function wait(seconds, callback) {
             setTimeout(function() {
                 if (callback) {
@@ -360,7 +485,11 @@ class qa_html_theme extends qa_html_theme_base
             }, seconds);
         }
 
-        // Extract number from URL using two methods
+        /*
+         * 
+         * Extract number from URL using two methods
+         * 
+         */
         function getPostIdFromUrl() {
             var url = window.location.href;
             var number = null;
@@ -379,17 +508,32 @@ class qa_html_theme extends qa_html_theme_base
             return number;
         }
 
+        log("HEAD section start");
+
+        // Initialization
         var postId = getPostIdFromUrl();
-        if (postId) {
+        if (postId && postId !== "questions") {
+            log("HEAD section - individual post page");
+
             // individual post page
             // Use Promise to get read_status
             getReadStatus(postId).then(function(read_status) {
+
+              log("HEAD section - after getReadStatus, read_status: ", read_status);
+
               if (read_status === "0") {
                   wait(2000, function() {
                       displayIcon(postId, 1, ".qa-q-view-stats");
                   });
               } 
             });
+        } else {
+            // list of posts page
+            log("HEAD section - list of posts page");
+            
+            // Wait for DOM to be fully loaded
+            document.addEventListener(\'DOMContentLoaded\', updateReadStatuses);
+
         }
         </script>
         ');
@@ -1030,13 +1174,16 @@ class qa_html_theme extends qa_html_theme_base
      */
     function q_item_stats($q_item)
     {
-        $this->output('<div class="qa-q-item-stats">');
+        $postid = isset($q_item['raw']['postid']) ? $q_item['raw']['postid'] : null;
+        $this->output('<div class="qa-q-item-stats" data-post-id="' . $postid . '">');
 
         $this->voting($q_item);
         $this->a_count($q_item);
 
+        /*
 		$read_status_value = $this->q_get_read_status_value($q_item);
 		$this->q_read_status($q_item, $read_status_value);
+        */
 
         $this->output('</div>');
 

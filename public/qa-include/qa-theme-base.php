@@ -2181,7 +2181,10 @@ class qa_html_theme_base
 	{
 		if ($read_status_value)
 		{
-			$this->output('<div class="qa-read-status unread" title="Read">');
+
+			$postid = isset($q_view['raw']['postid']) ? $q_view['raw']['postid'] : null;
+
+			$this->output('<div class="qa-q-read-status unread" data-post-id="' . $postid . '" title="Read">');
         	$this->output('<i data-lucide="circle" style="fill: #007bff; width: 12px; height: 12px; "></i>');
         	$this->output('</div>');
 		}
