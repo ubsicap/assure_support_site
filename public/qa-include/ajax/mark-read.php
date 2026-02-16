@@ -23,7 +23,7 @@ if ($int_postid == 0) {
 // Get and validate read_status
 $read_status = qa_post_text('read_status');
 
-error_log("MARK-READ: updating postid: " . $int_postid . ", read_status: " . $read_status);
+//error_log("MARK-READ: updating postid: " . $int_postid . ", read_status: " . $read_status);
 
 // Perform the SQL UPDATE
 $result = qa_db_query_sub(

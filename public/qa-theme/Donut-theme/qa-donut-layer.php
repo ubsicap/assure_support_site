@@ -178,7 +178,7 @@ class qa_html_theme extends qa_html_theme_base
         $this->output('
         <script>
         function log(...args) {
-            console.log(...args);
+            //console.log(...args);
         }
 
         /*
@@ -199,48 +199,55 @@ class qa_html_theme extends qa_html_theme_base
             divs.forEach((div, index) => {
                 const postid = div.dataset.postId;
 
-                log("updateReadStatuses - Processing index: ", index, "postid:", postid);
+                // get read_status from localStorage while ajax is updating
+                // the read_status field in table posts
+                var read_status = localStorage.getItem(postid);
 
-                read_status = getReadStatus(postid).then(read_status => {
-                    log("updateReadStatuses - after getReadStatus - read_status: ",  read_status);
+                log("updateReadStatuses - postid: ", postid, ", read_status: ", read_status);
 
-                    if (read_status === "1") {
+                // find the readStatusIcons
+                const childElement = div.querySelectorAll(\'.qa-q-read-status.unread\')[0];
 
-                        // Get the first child of the div
-                        const firstChild = div.firstElementChild;
+                if (read_status === "1") {
+
+                    if ( ! childElement) {
+                        // add read status icon
+                        const iconContainer = document.createElement("div");
+                        iconContainer.title = "Read";
+                        iconContainer.className = "qa-q-read-status unread";
                         
-                        if (firstChild) {
-                            // Find the last sibling at the same level as firstChild
-                            let lastSibling = firstChild;
-                            while (lastSibling.nextElementSibling) {
-                                lastSibling = lastSibling.nextElementSibling;
-                            }
-                            
-                            const iconContainer = document.createElement("div");
-                            iconContainer.title = "Read";
-                            iconContainer.className = "qa-q-read-status unread";
-                            
-                            const icon = document.createElement("i");
-                            icon.setAttribute("data-lucide", "circle");
-                            icon.style.fill = "#007bff"; 
-                            icon.style.width = "12px";
-                            icon.style.height = "12px";
+                        const icon = document.createElement("i");
+                        icon.setAttribute("data-lucide", "circle");
+                        icon.style.fill = "#007bff"; 
+                        icon.style.width = "12px";
+                        icon.style.height = "12px";
 
-                            iconContainer.appendChild(icon);
-                            
-                            // Insert the icon container after the last sibling
-                            lastSibling.insertAdjacentElement(\'afterend\', iconContainer);
+                        iconContainer.appendChild(icon);
 
-                            // If you are using Lucide icons, reinitialize them
-                            if (typeof lucide !== "undefined") {
-                                lucide.createIcons();
-                            }
-
-                            log("updateReadStatuses - read_status icon added");
+                        // find last element - append icon container to it
+                        div.appendChild(iconContainer);
+                        
+                        // If you are using Lucide icons, reinitialize them
+                        if (typeof lucide !== "undefined") {
+                            lucide.createIcons();
                         }
+
                     }
 
-                });
+
+                } else if (read_status == "0") {
+
+                    if (childElement) {
+                        // remove read status icon
+                        childElement.remove();
+                    }
+
+                } else {
+
+                        log("updateReadStatus - read_status not valid");
+                        return;
+
+                }
 
             });
         }
@@ -258,6 +265,8 @@ class qa_html_theme extends qa_html_theme_base
 
             const postid = button.getAttribute("data-post-id");
             const read_status = button.getAttribute("data-read-status");
+
+            localStorage.setItem(postid, read_status);
 
             log("markAsRead - button - postid: ", postid, ", read_status: ", read_status);
 
@@ -359,6 +368,8 @@ class qa_html_theme extends qa_html_theme_base
             
             log("markAsReadArgs - postid: ", postid, ", read_status: ", read_status);
 
+            localStorage.setItem(postid, read_status);
+
             return fetch(qa_root + "qa-ajax-mark-read", {
                 method: "POST",
                 headers: {
@@ -390,6 +401,7 @@ class qa_html_theme extends qa_html_theme_base
         function displayIcon(postid, read_status, query_selector) {
             
             log("displayIcon - postid: ", postid, ", read_status: ", read_status);
+            localStorage.setItem(postid, read_status);
 
             const targetElement = document.querySelector(query_selector);
             
@@ -512,6 +524,9 @@ class qa_html_theme extends qa_html_theme_base
 
         // Initialization
         var postId = getPostIdFromUrl();
+
+        log("typeof postId: ", typeof postId);
+
         if (postId && postId !== "questions") {
             log("HEAD section - individual post page");
 
@@ -525,7 +540,19 @@ class qa_html_theme extends qa_html_theme_base
                   wait(2000, function() {
                       displayIcon(postId, 1, ".qa-q-view-stats");
                   });
-              } 
+
+                  
+                localStorage.setItem(postId, 0);
+                log("localStorage setItem for postId: ", postId);
+
+              } else {
+
+                localStorage.setItem(postId, 1);
+                log("localStorage setItem for postId: ", postId);
+
+              }
+
+
             });
         } else {
             // list of posts page

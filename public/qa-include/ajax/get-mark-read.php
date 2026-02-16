@@ -30,7 +30,7 @@ if (qa_db_num_rows($result) > 0) {
     $read_status = $row['read_status'];
 
 
-    error_log("GET-MARK-READ: retrieving postid: " . $int_postid . ", read_status: " . $read_status);
+    //error_log("GET-MARK-READ: retrieving postid: " . $int_postid . ", read_status: " . $read_status);
 
     if ($read_status == null) {
         $read_status = 0;
