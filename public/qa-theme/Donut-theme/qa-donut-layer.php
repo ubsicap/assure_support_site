@@ -178,7 +178,7 @@ class qa_html_theme extends qa_html_theme_base
         $this->output('
         <script>
         function log(...args) {
-            //console.log(...args);
+            console.log(...args);
         }
 
         /*
@@ -270,93 +270,26 @@ class qa_html_theme extends qa_html_theme_base
 
             log("markAsRead - button - postid: ", postid, ", read_status: ", read_status);
 
-            fetch(qa_root + "qa-ajax-mark-read", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: "postid=" + encodeURIComponent(postid) + "&read_status=" + encodeURIComponent(read_status)
-            })
-            .then(response => response.text())
-            .then(data => {
+            markAsReadArgs(postid, read_status);
 
-                if (data.indexOf("QA_AJAX_RESPONSE") !== -1) {
-                    const parts = data.split("\n");
+            if (read_status === "0") {
+                // Remove the read status icon
+                const readStatusIcon = document.querySelector(\'.qa-q-view-stats .qa-q-read-status.unread\');
 
-                    if (parts[1] === "1") {
-                        log("markAsRead - Successfully marked as unread/read");
-
-                        // Remove the read status icon
-                        const readStatusIcon = document.querySelector(\'.qa-q-view-stats .qa-q-read-status.unread\');
-
-                        if (readStatusIcon) {
-                            readStatusIcon.remove();
-                            log("markAsRead - Read status icon removed");
-                        } else {
-                            log("markAsRead - readStatusIcon NOT FOUND");
-                        }
-                        
-                        // Remove the Mark as Unread button
-                        button.remove();
-                        log("markAsRead - Mark as Unread button removed");
-
-                    } else {
-                        button.disabled = false;
-                    }
-                }
-            })
-            .catch(error => {
-                log("Request failed:", error);
-                button.disabled = false;
-            });
-        }
-
-        /*
-         *
-         * Individual post page (postid argument)
-         *   get read_status from database
-         *   return read_status
-         * 
-         */
-        function getReadStatus(postid) {
-
-            if (!postid) {
-                console.error("getReadStatus - No postid provided");
-                return Promise.resolve("0");
-            }
-            log("getReadStatus start - postid: " + postid);
-            
-            return fetch(qa_root + "qa-ajax-get-mark-read?postid=" + encodeURIComponent(postid), {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                }
-            })
-            .then(response => response.text())
-            .then(data => {
-
-                if (data.indexOf("QA_AJAX_RESPONSE") !== -1) {
-
-                    const parts = data.split("\n");
-
-                    if (parts[1] === "1") {
-                        const read_status = parts[2][0];
-                        log("getReadStatus - Read status retrieved: " + read_status);
-                        return read_status;
-                    } else {
-                        log("Error: " + parts[2]);
-                        return "0";
-                    }
+                if (readStatusIcon) {
+                    readStatusIcon.remove();
+                    log("markAsRead - Read status icon removed");
                 } else {
-                    log("getReadStatus - DID NOT found QA_AJAX_RESPONSE");
-                    return "0";
+                    log("markAsRead - readStatusIcon NOT FOUND");
                 }
-            })
-            .catch(error => {
-                log("getReadStatus - Request failed:", error);
-                return "0";
-            });
+
+                if (button) {
+                    button.remove();
+                    log("markAsRead - Button removed");
+                }
+            }
         }
+
 
         /*
          *
@@ -370,27 +303,32 @@ class qa_html_theme extends qa_html_theme_base
 
             localStorage.setItem(postid, read_status);
 
-            return fetch(qa_root + "qa-ajax-mark-read", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: "postid=" + encodeURIComponent(postid) + "&read_status=" + encodeURIComponent(read_status)
-            })
-            .then(response => response.text())
-            .then(data => {
-
-                if (data.indexOf("QA_AJAX_RESPONSE") !== -1) {
-                    const parts = data.split("\n");
-
-                    if (parts[1] === "1") {
-                        log("markAsReadArgs - Successfully marked as unread/read");
-                    }
-                }
-            })
-            .catch(error => {
-                log("markAsReadArgs - Request failed:", error);
+            const payload = new URLSearchParams({
+                postid: postid,
+                read_status: read_status
             });
+
+            if (navigator.sendBeacon) {
+                var sent = navigator.sendBeacon(qa_root + "qa-ajax-mark-read", payload);
+                if (!sent) {
+                    // Browser rejected the beacon (e.g. payload too large, or called too early)
+                    log("markAsReadArgs - sendBeacon failed to queue");
+                    button.disabled = false;
+                } else {
+                    log("markAsReadArgs - beacon queued successfully");
+                }
+            } else {
+                // Fallback for older browsers or if blocked
+                // (e.g., use fetch with keepalive: true)
+                fetch(qa_root + "qa-ajax-mark-read", {
+                    method: \'POST\',
+                    body: payload,
+                    keepalive: true
+                });
+                log("markAsReadArgs - sendBeacon not available, sent fetch instead");
+            }
+
+
         }
 
         /*
@@ -401,7 +339,6 @@ class qa_html_theme extends qa_html_theme_base
         function displayIcon(postid, read_status, query_selector) {
             
             log("displayIcon - postid: ", postid, ", read_status: ", read_status);
-            localStorage.setItem(postid, read_status);
 
             const targetElement = document.querySelector(query_selector);
             
@@ -525,35 +462,31 @@ class qa_html_theme extends qa_html_theme_base
         // Initialization
         var postId = getPostIdFromUrl();
 
-        log("typeof postId: ", typeof postId);
-
         if (postId && postId !== "questions") {
             log("HEAD section - individual post page");
 
             // individual post page
-            // Use Promise to get read_status
-            getReadStatus(postId).then(function(read_status) {
+            // get read_status from localStorage 
+            var read_status = localStorage.getItem(postId);
 
-              log("HEAD section - after getReadStatus, read_status: ", read_status);
+            log("HEAD section - after localStorage.getItem(), postId: ", postId, ", read_status: ", read_status);
 
-              if (read_status === "0") {
-                  wait(2000, function() {
-                      displayIcon(postId, 1, ".qa-q-view-stats");
-                  });
+            if (read_status === "0") {
+                wait(2000, function() {
+                  displayIcon(postId, "1", ".qa-q-view-stats");
+                });
+                localStorage.setItem(postId, "0");
+                log("localStorage setItem 0 for postId: ", postId);
 
-                  
-                localStorage.setItem(postId, 0);
-                log("localStorage setItem for postId: ", postId);
+            } else {
+                // read_status = 1
+                localStorage.setItem(postId, "1");
+                log("localStorage setItem 1 for postId: ", postId);
+                // database set
+                markAsReadArgs(postId, "1");
 
-              } else {
+            }
 
-                localStorage.setItem(postId, 1);
-                log("localStorage setItem for postId: ", postId);
-
-              }
-
-
-            });
         } else {
             // list of posts page
             log("HEAD section - list of posts page");
