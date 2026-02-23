@@ -178,7 +178,7 @@ class qa_html_theme extends qa_html_theme_base
         $this->output('
         <script>
         function log(...args) {
-            console.log(...args);
+            //console.log(...args);
         }
 
         /*
@@ -383,7 +383,7 @@ class qa_html_theme extends qa_html_theme_base
                 // Create the new button
                 const newButton = document.createElement("button");
                 newButton.type = "button";
-                newButton.className = "qa-form-light-button-unread";
+                newButton.className = "qa-form-light-button qa-form-light-button-unread";
                 newButton.title = "Mark as Unread";
                 var height = furthestRightButton.offsetHeight;
                 newButton.style.height = height;

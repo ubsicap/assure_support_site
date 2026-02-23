@@ -4154,30 +4154,18 @@ a.qa-category-link:hover {
 }
 
 .qa-form-light-button span {
-    line-height: 1;
     display: block;
 }
 
 .qa-form-light-button-unread {
-  position: relative;
-  top: 4px;
-  font-size: 12px;
-  line-height: 1.5;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 5px 10px;           /* ← main adjustment */
-  width: fit-content;
-  min-width: 32px;
-  box-sizing: border-box;
-  white-space: nowrap;
-  background-color: #ffffff;        /* ← white fill */
-  color: #000000;                   /* readable text */
-  border: 1px solid #ced4da;        /* visible border */
-  border-radius: 3px;               /* usually good for buttons */
-  text-transform: capitalize;
-  margin-bottom: 5px;
+  gap: 4px;
+  padding: 5px 10px;  /* match the light button padding exactly */
+  line-height: 1.5;
+  height: auto;
+  position: static;
+  vertical-align: middle;
 }
 
 .qa-form-light-button-unread:hover {
@@ -4186,11 +4174,11 @@ a.qa-category-link:hover {
 }
 .qa-form-light-button-unread i[data-lucide],
 .qa-form-light-button-unread svg {
-  width: 18px;
-  height: 18px;
   flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .qa-form-light-button-unread span {
-  line-height: 1;
+  line-height: 1.5;
 }

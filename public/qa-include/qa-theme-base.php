@@ -2324,7 +2324,7 @@ class qa_html_theme_base
 				$postid = isset($q_view['raw']['postid']) ? $q_view['raw']['postid'] : null;
 				$this->output(
 				'<button type="button"
-					class="qa-form-light-button-unread"
+					class="qa-form-light-button qa-form-light-button-unread"
 					title="Mark as Unread"
 					onclick="markAsRead(this)"
 					data-post-id="' . $postid . '"
