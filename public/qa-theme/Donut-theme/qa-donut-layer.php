@@ -461,8 +461,8 @@ class qa_html_theme extends qa_html_theme_base
 
         // Initialization
         var postId = getPostIdFromUrl();
-
-        if (postId && postId !== "questions") {
+        int_postId = parseInt(postId, 10);
+        if (! Number.isNaN(int_postId)) {
             log("HEAD section - individual post page");
 
             // individual post page
@@ -933,7 +933,7 @@ class qa_html_theme extends qa_html_theme_base
 
     public function form_text_single_row($field, $style)
     {
-        $this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text form-control" required/>');
+        $this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text form-control"/>');
     }
 
     public function form_text_multi_row($field, $style)
@@ -1139,12 +1139,7 @@ class qa_html_theme extends qa_html_theme_base
 
         $this->voting($q_item);
         $this->a_count($q_item);
-
-        /*
-		$read_status_value = $this->q_get_read_status_value($q_item);
-		$this->q_read_status($q_item, $read_status_value);
-        */
-
+        
         $this->output('</div>');
 
     }
