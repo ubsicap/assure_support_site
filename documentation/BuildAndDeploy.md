@@ -62,6 +62,9 @@ kubectl config use-context dallas-stage
 kubectl apply -f supportbible-deployment.yaml
 ```
 5. Check for any error in Rancher
+rancher.languagetechnology.org
+control.languagetechnology.org
+
 
 ## Connect to DB:
 1. Download and install MySQL Workbench
