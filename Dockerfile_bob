@@ -1,6 +1,8 @@
-# Note that q2a is incompatible with php 8.1 (Last checked 6/10/22)
-# 7.4 is the last version with stable support for reCAPTCHA
-FROM php:7.4-apache AS install
+# PHP 7.4 is end-of-life. This is php:7.4-apache rebuilt with PHP's official fix for
+# CVE-2026-109618/CVE-2026-109619 (php-src branch PHP-7.4-CVE-2026-109618-109619).
+# Source: https://github.com/mpyw/php-eol-CVE-2026-109618-109619 (tag v1.1.0), pinned by digest.
+# Stopgap only: plan the move to a supported PHP 8.x release.
+FROM ghcr.io/mpyw/php-eol-cve-2026-109618-109619:7.4.33-apache-bullseye-v1.1.0@sha256:84e87ad92400dfa7ae66aa475a5ccdc4d9c90e87e81f97ceb652c54a35b43d90 AS install
 
 # Install and enable the mysqli software to connect to our DB
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
@@ -24,6 +26,10 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 #Install Composer for downloading Google API and Facebook client with PHP
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /bin/composer
+# Composer blocks packages with security advisories. google/apiclient on PHP 7.4 can only use
+# firebase/php-jwt 6.x, and CVE-2025-45769 (low severity, PKSA-y2cr-5h3j-g3ys) is only fixed in
+# php-jwt 7, which needs PHP 8. Ignore just that advisory until we move to PHP 8.
+RUN echo '{"config":{"policy":{"advisories":{"ignore-id":["PKSA-y2cr-5h3j-g3ys"]}}}}' > composer.json
 RUN composer require google/apiclient:^2.12
 RUN composer require facebook/graph-sdk:~5.7
 RUN composer require guzzlehttp/guzzle:^7.0
